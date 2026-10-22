@@ -1,0 +1,12 @@
+Sudoku Grove gfx layout (art units; multiply by the _xN scale)
+board: 214x214, cell 20x20, frame 12
+cell offsets (same for x and y): 12, 33, 54, 76, 97, 118, 140, 161, 182
+tiles: 0=normal, 1=given, 2=peer, 3=same, 4=zone, 5=clash (each 20x20, left to right)
+digits: row0=given row1=player row2=clash; column = digit-1; each 20x20 on transparent
+cursor: 2 frames of 22x22 (normal, bright); draw at cell offset - 1
+panel: 88x124, parchment interior from 6,6 to 81,117
+menu: 150x84; dialog: 190x140; same 6px wood border
+icons: 8x8 each: clock, cross, leaf, trophy, star, arrow
+font_x2: 6x8 cells (5x7 glyphs) scaled x2 -> 12x16 (font_x3: 18x24, for 720p+ modes only, 954px wide); rows: 0 cream+shadow, 1 gold+shadow, 2 brown, 3 red, 4 green; chars: " !'()*+,-./0123456789:<>?ABCDEFGHIJKLMNOPQRSTUVWXYZ_~"
+screen text: no on-screen key hint lines; the side panel keeps only 'ESC PAUSE'; the key list lives in the pause/help dialog (dialog_xN)
+transparency: alpha=0 pixels are skipped by LOAD PNG; no sprite uses pure black, so BLIT ori 4 / PAGE COPY ,B work after CLS 0

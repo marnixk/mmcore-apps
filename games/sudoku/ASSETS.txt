@@ -1,0 +1,23 @@
+Sudoku Grove - asset list
+=========================================================
+gfx/  (PNG, RGBA; alpha 0 = skipped by LOAD PNG; no sprite pixel is pure black, so
+       BLIT ori 4 / PAGE COPY ,B transparency works from a CLS-0 sheet page)
+  bg_WxH.png / intro_WxH.png   in-game and intro backgrounds, drawn at W/4 x H/4 and scaled x4, RGB
+                               sizes: 640x480 800x600 848x480 1024x768 1280x720 1366x768
+  board_x2/x3.png              wooden 9x9 board 214x214 art (428 / 642 px)
+  tiles_x2/x3.png              6 cell tiles: normal, given, peer, same-digit, conflict-zone, clash
+  digits_x2/x3.png             9 digits x 3 styles: given (brown), player (blue), clash (red)
+  cursor_x2/x3.png             2-frame gold cursor (pulse)
+  panel / menu / dialog _x2/x3 wood-framed parchment panels (side HUD, intro menu, highscores/name entry)
+  icons_x2/x3.png              clock, cross, leaf, trophy, star, arrow (8x8 art)
+  font_x2/x3.png               5x7 pixel font, 5 colour rows (cream, gold, brown, red, green)
+  title_x3/x4.png              "SUDOKU GROVE" logo
+  layout.txt                   exact offsets for code
+sfx/
+  grove.mod     4-ch ProTracker M.K., 108.8 s, plays once in mmcore -> restart when PLAYING()=0
+  place/clear/select/conflict/win.wav   16-bit mono 22050 Hz PCM
+                NOTE: in mmcore PLAY WAV stops the running MOD (single audio voice).
+
+Sound is currently OFF (includes/music.inc: MUSIC_ON = 0, SFX_ON = 0) so the game
+can run alongside JUKE; mmcore has one global audio player and any PLAY command
+from the game would stop JUKE. The files in sfx/ are kept for later.
