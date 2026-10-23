@@ -5,11 +5,11 @@
 ' The game loops drain the buffer with key.get(), so a press that arrives
 ' while the screen is being redrawn is queued instead of lost.
 '
-' mmcore notes: only the general form ON KEY subname is supported (the
-' per-key ON KEY ascii, sub form is a syntax error), and the handler is
-' switched off with a bare ON KEY (ON KEY 0 is a syntax error).
-' The handler reads key.w only, the main code key.r only, so neither side
-' can corrupt the other. One slot stays free to tell full from empty.
+' mmcore supports every ON KEY form: ON KEY ascii, sub, ON KEY ascii, 0,
+' ON KEY 0 and a bare ON KEY. This module uses the general form ON KEY
+' subname so one handler serves every key, and switches it off with a bare
+' ON KEY. The handler reads key.w only, the main code key.r only, so neither
+' side can corrupt the other. One slot stays free to tell full from empty.
 
 const KEYQ = 32
 dim key.q(KEYQ - 1)
