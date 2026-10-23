@@ -1,8 +1,17 @@
 ' intro.inc - title screen with the forest clearing, logo, menu and fireflies
+'
+' Menu input follows the same model as gameplay (see game.inc): the ON KEY
+' handler only queues key codes, the loop drains every queued key, applies all
+' selection changes and then redraws just the rows that changed on the back
+' buffer before copying those rows to the display. No full title compose and
+' no sound on navigation.
 
 const MENU_START = 0, MENU_LEVEL = 1, MENU_SCORES = 2, MENU_QUIT = 3
 dim menu.level = LV_MEDIUM, menu.sel = 0
 dim intro.titleY, intro.titleH, intro.mx, intro.my
+
+' menu rows inside the panel: art-unit offsets from the panel top
+const MENU_ROW0 = 12, MENU_ROWH = 15
 
 const N_FLY = 18
 dim fly.x(N_FLY - 1), fly.y(N_FLY - 1), fly.ph(N_FLY - 1)
@@ -10,13 +19,35 @@ dim float fly.dx(N_FLY - 1), fly.dy(N_FLY - 1), fly.fx(N_FLY - 1), fly.fy(N_FLY 
 dim fly.ready = FALSE
 dim fly.ax, fly.ay, fly.aw, fly.ah   ' rectangle the fireflies keep away from
 
+' label for menu row i; LEVEL shows the current level
+function intro.item$(i)
+  if i = MENU_START then intro.item$ = "START GAME"
+  if i = MENU_LEVEL then intro.item$ = "LEVEL: < " + lv.name$(menu.level) + " >"
+  if i = MENU_SCORES then intro.item$ = "HIGH SCORES"
+  if i = MENU_QUIT then intro.item$ = "QUIT"
+end function
+
+function intro.rowY(i)
+  intro.rowY = intro.my + (MENU_ROW0 + i * MENU_ROWH) * scr.sc
+end function
+
+' paint one menu row (clean panel slice, icon when selected, label) on the
+' current write page. blitting the panel slice first erases the old highlight.
+sub intro.row(i)
+  local sc = scr.sc, y, r
+  y = intro.rowY(i)
+  blit 0, lay.menuY + (MENU_ROW0 + i * MENU_ROWH) * sc, intro.mx, y, lay.menuW, MENU_ROWH * sc, PG_PANELS, 4
+  if i = menu.sel then
+    r = F_GREEN
+    dlg.icon(2, intro.mx + 11 * sc, y)
+  else
+    r = F_BROWN
+  end if
+  txt intro.item$(i), intro.mx + 22 * sc, y, r
+end sub
+
 sub intro.compose()
-  local sc = scr.sc, i, y, r
-  local string items$(3)
-  items$(0) = "START GAME"
-  items$(1) = "LEVEL: < " + lv.name$(menu.level) + " >"
-  items$(2) = "HIGH SCORES"
-  items$(3) = "QUIT"
+  local i
   page write PG_BACK
   page copy PG_INTRO to PG_BACK
   intro.mx = (scr.W - lay.menuW) \ 2
@@ -27,16 +58,34 @@ sub intro.compose()
   fly.aw = lay.menuW
   fly.ah = lay.menuH
   for i = 0 to 3
-    y = intro.my + 12 * sc + i * 15 * sc
-    if i = menu.sel then
-      r = F_GREEN
-      dlg.icon(2, intro.mx + 11 * sc, y)
-    else
-      r = F_BROWN
-    end if
-    txt items$(i), intro.mx + 22 * sc, y, r
+    intro.row(i)
   next i
   scr.present()
+end sub
+
+' redraw only the rows whose look changed: the row that lost the selection,
+' the row that gained it, and the LEVEL row when the level changed. The rows
+' are rebuilt off-screen on PG_BACK, then copied to the display with one
+' small opaque BLIT each, so the title screen and the fireflies never flash.
+sub intro.refresh(sel0, sel1, lvChanged)
+  local i, y, draw
+  page write PG_BACK
+  for i = 0 to 3
+    draw = (i = sel1)
+    if i = sel0 and sel0 <> sel1 then draw = TRUE
+    if i = MENU_LEVEL and lvChanged then draw = TRUE
+    if draw then intro.row(i)
+  next i
+  page write 0
+  for i = 0 to 3
+    draw = (i = sel1)
+    if i = sel0 and sel0 <> sel1 then draw = TRUE
+    if i = MENU_LEVEL and lvChanged then draw = TRUE
+    if draw then
+      y = intro.rowY(i)
+      blit intro.mx, y, intro.mx, y, lay.menuW, MENU_ROWH * scr.sc, PG_BACK
+    end if
+  next i
 end sub
 
 ' little drifting fireflies; drawn straight onto the display, restored from
@@ -87,37 +136,58 @@ end sub
 
 ' returns MENU_START, MENU_SCORES or MENU_QUIT
 function intro.run()
-  local k
+  local k, sel0, lv0, pick = -1
   if not mus.on then music.start()
   intro.compose()
   key.flush()
   do
     music.poll()
     intro.fireflies()
-    k = key.get()
-    if k = K_UP then
-      menu.sel = (menu.sel + 3) mod 4
-      intro.compose()
-    elseif k = K_DOWN then
-      menu.sel = (menu.sel + 1) mod 4
-      intro.compose()
-    elseif k = K_LEFT and menu.sel = MENU_LEVEL then
-      menu.level = (menu.level + 2) mod 3
-      intro.compose()
-    elseif k = K_RIGHT and menu.sel = MENU_LEVEL then
-      menu.level = (menu.level + 1) mod 3
-      intro.compose()
-    elseif (k = K_ENTER or k = K_LF) and menu.sel = MENU_LEVEL then
-      menu.level = (menu.level + 1) mod 3
-      intro.compose()
-    elseif k = K_ENTER or k = K_LF then
-      intro.run = menu.sel
-      exit do
-    elseif k = K_ESC then
-      menu.sel = MENU_QUIT
-      intro.compose()
+    ' drain every queued key first and remember what the menu looked like, so
+    ' several fast presses or OS key-repeats cost one small redraw, and a press
+    ' that arrives during a redraw is queued instead of lost
+    sel0 = menu.sel
+    lv0 = menu.level
+    do
+      k = key.get()
+      if k = 0 then exit do
+      if k >= K_UP and k <= K_RIGHT then k = key.arrowKeep(k)
+      if k = K_UP then
+        menu.sel = (menu.sel + 3) mod 4
+      elseif k = K_DOWN then
+        menu.sel = (menu.sel + 1) mod 4
+      elseif k = K_LEFT and menu.sel = MENU_LEVEL then
+        menu.level = (menu.level + 2) mod 3
+      elseif k = K_RIGHT and menu.sel = MENU_LEVEL then
+        menu.level = (menu.level + 1) mod 3
+      elseif key.isEnter(k) and menu.sel = MENU_LEVEL then
+        menu.level = (menu.level + 1) mod 3
+      elseif key.isEnter(k) then
+        pick = menu.sel
+      elseif k = K_ESC then
+        menu.sel = MENU_QUIT
+      end if
+      if pick >= 0 then exit do
+    loop
+    ' a held arrow keeps moving (KEYDOWN auto-repeat, same timing as gameplay)
+    if pick < 0 then
+      k = key.repeat()
+      if k = K_UP then
+        menu.sel = (menu.sel + 3) mod 4
+      elseif k = K_DOWN then
+        menu.sel = (menu.sel + 1) mod 4
+      elseif k = K_LEFT and menu.sel = MENU_LEVEL then
+        menu.level = (menu.level + 2) mod 3
+      elseif k = K_RIGHT and menu.sel = MENU_LEVEL then
+        menu.level = (menu.level + 1) mod 3
+      end if
+    end if
+    if pick >= 0 then exit do
+    if menu.sel <> sel0 or menu.level <> lv0 then
+      intro.refresh(sel0, menu.sel, menu.level <> lv0)
     end if
     if not key.waiting() then pause 15
   loop
+  intro.run = pick
   key.flush()
 end function
