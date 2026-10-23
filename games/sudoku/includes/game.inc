@@ -20,23 +20,20 @@ end function
 ' (it is still computed and shown on the win screen); the timer shows whole
 ' minutes only, so the panel changes at most once a minute.
 sub game.panel()
-  local sc = scr.sc, ix, iy, n, t$
+  local sc = scr.sc, ix, iy, t$
   blit lay.panX, 0, lay.px, lay.py, lay.pw, lay.ph, PG_PANELS, 4
   ix = lay.px + 10 * sc
   iy = lay.py + 10 * sc
   dlg.icon(2, ix, iy)
   txt lv.name$(gm.level), ix + 11 * sc, iy, F_GREEN
   dlg.icon(0, ix, iy + 25 * sc)
-  n = gm.secs() \ 60
-  t$ = fmtMins$(n)
-  txt t$, ix + 11 * sc, iy + 25 * sc, F_BROWN
+  txt fmtMins$(gm.secs() \ 60), ix + 11 * sc, iy + 25 * sc, F_BROWN
   dlg.icon(1, ix, iy + 50 * sc)
   txt str$(gm.misses) + " MISS", ix + 11 * sc, iy + 50 * sc, F_BROWN
   dlg.icon(4, ix, iy + 75 * sc)
-  n = bd.empties()
-  txt str$(n) + " LEFT", ix + 11 * sc, iy + 75 * sc, F_BROWN
+  txt str$(bd.empties()) + " LEFT", ix + 11 * sc, iy + 75 * sc, F_BROWN
   t$ = "ESC PAUSE"
-  txt t$, lay.px + (lay.pw - len(t$) * 6 * sc) \ 2, lay.py + lay.ph - 17 * sc, F_BROWN
+  txt t$, lay.px + (lay.pw - txtW(t$)) \ 2, lay.py + lay.ph - 17 * sc, F_BROWN
 end sub
 
 ' redraw just the side panel without flicker: rebuild it on the back buffer
@@ -164,8 +161,7 @@ sub game.run(lv)
     ' a held arrow keeps moving (KEYDOWN auto-repeat)
     k = 0
     if not (quitReq or won) then k = key.repeat()
-    if k > 0 then game.move(k)
-    if k > 0 then moved = TRUE
+    if k > 0 then game.move(k) : moved = TRUE
     if moved or dig then game.update(FALSE, dig)
     ' once a minute: rebuild the side panel off-screen and copy it in one go
     mins = gm.secs() \ 60

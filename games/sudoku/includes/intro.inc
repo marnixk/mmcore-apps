@@ -104,7 +104,7 @@ sub intro.fireflies()
   local i, s = scr.sc, c, ox, oy
   if not fly.ready then
     for i = 0 to N_FLY - 1
-    intro.flyInit(i)
+      intro.flyInit(i)
     next i
     fly.ready = TRUE
   end if

@@ -40,14 +40,8 @@ function dlg.pause()
   do
     music.poll()
     k = key.get()
-    if k = K_ESC then
-      dlg.pause = FALSE
-      exit do
-    end if
-    if k = asc("q") or k = asc("Q") then
-      dlg.pause = TRUE
-      exit do
-    end if
+    if k = K_ESC then dlg.pause = FALSE : exit do
+    if k = asc("q") or k = asc("Q") then dlg.pause = TRUE : exit do
     pause 15
   loop
   key.flush()
@@ -55,7 +49,7 @@ end function
 
 ' ---- win summary; returns when a key is pressed
 sub dlg.win(lv, secs, misses, score, qualifies)
-  local sc = scr.sc, x, y, k, t = timer, tm$
+  local sc = scr.sc, x, y, k, t = timer
   game.compose()
   dlg.frame()
   dlg.header(4, "WELL DONE!", F_GREEN)
@@ -64,8 +58,7 @@ sub dlg.win(lv, secs, misses, score, qualifies)
   txt "LEVEL", x, y, F_BROWN
   txt lv.name$(lv), x + 54 * sc, y, F_GREEN
   txt "TIME", x, y + 14 * sc, F_BROWN
-  tm$ = fmtClock$(secs)
-  txt tm$, x + 54 * sc, y + 14 * sc, F_BROWN
+  txt fmtClock$(secs), x + 54 * sc, y + 14 * sc, F_BROWN
   txt "MISSES", x, y + 28 * sc, F_BROWN
   txt str$(misses), x + 54 * sc, y + 28 * sc, F_BROWN
   txt "SCORE", x, y + 42 * sc, F_BROWN
@@ -87,13 +80,9 @@ sub dlg.win(lv, secs, misses, score, qualifies)
   key.flush()
 end sub
 
-' one table line: rank, name, score, time. mmcore (v0.273) garbles string
-' expressions that contain more than one user function call, so every
-' piece is built in its own statement.
+' one table line: rank, name, score, time
 function dlg.row$(i, n$, score, secs)
-  local a$, b$, c$, d$
-  a$ = rjust$(str$(i + 1), 2)
-  b$ = ljust$(n$, HS_MAXNAME + 1)
+  local c$, d$
   if score > 0 then
     c$ = rjust$(str$(score), 6)
     d$ = fmtTime$(secs)
@@ -101,12 +90,12 @@ function dlg.row$(i, n$, score, secs)
     c$ = "     -"
     d$ = ""
   end if
-  dlg.row$ = a$ + " " + b$ + c$ + " " + d$
+  dlg.row$ = rjust$(str$(i + 1), 2) + " " + ljust$(n$, HS_MAXNAME + 1) + c$ + " " + d$
 end function
 
 ' ---- high score table on the current write page; editRow = row being typed (-1 none)
 sub dlg.table(lv, hilite, editRow, nm$, blink)
-  local sc = scr.sc, i, y, r, n$, s$, sc2, sx2
+  local sc = scr.sc, i, y, r, n$, s$
   dlg.frame()
   if editRow >= 0 then
     dlg.header(3, "NEW HIGH SCORE!", F_RED)
@@ -118,15 +107,10 @@ sub dlg.table(lv, hilite, editRow, nm$, blink)
     if i = editRow then
       n$ = nm$
       if blink then n$ = n$ + "_"
-      sc2 = hs.score(lv, i)
-      sx2 = hs.secs(lv, i)
-      s$ = dlg.row$(i, n$, sc2, sx2)
+      s$ = dlg.row$(i, n$, hs.score(lv, i), hs.secs(lv, i))
       r = F_RED
     elseif hs.score(lv, i) > 0 then
-      n$ = hs.name$(lv, i)
-      sc2 = hs.score(lv, i)
-      sx2 = hs.secs(lv, i)
-      s$ = dlg.row$(i, n$, sc2, sx2)
+      s$ = dlg.row$(i, hs.name$(lv, i), hs.score(lv, i), hs.secs(lv, i))
       if i = hilite then r = F_RED else r = F_BROWN
     else
       s$ = dlg.row$(i, "---", 0, 0)

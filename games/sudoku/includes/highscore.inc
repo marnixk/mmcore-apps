@@ -20,17 +20,14 @@ end sub
 ' split helper: field n (1-based) of a comma separated line
 function hs.field$(s$, n)
   local i, p = 1, q
-  ' DO WHILE, not FOR: mmcore runs a FOR body once even when the range is empty
-  i = 1
-  do while i < n
+  for i = 1 to n - 1
     q = instr(p, s$, ",")
     if q = 0 then
       hs.field$ = ""
       exit function
     end if
     p = q + 1
-    i = i + 1
-  loop
+  next i
   q = instr(p, s$, ",")
   if n = 4 or q = 0 then
     hs.field$ = mid$(s$, p)
@@ -60,15 +57,8 @@ sub hs.load()
   close #1
 end sub
 
-' DIR$ needs a wildcard on mmcore, so scan *.hi for the file
 function hs.exists()
-  local f$
-  hs.exists = FALSE
-  f$ = dir$("*.hi", "FILE")
-  do while f$ <> ""
-    if ucase$(f$) = ucase$(HS_FILE$) then hs.exists = TRUE
-    f$ = dir$("")
-  loop
+  hs.exists = (dir$(HS_FILE$, FILE) <> "")
 end function
 
 sub hs.save()
@@ -98,13 +88,11 @@ end function
 
 sub hs.insert(lv, rk, n$, sc, sx)
   local i
-  i = 9
-  do while i > rk
+  for i = 9 to rk + 1 step -1
     hs.name$(lv, i) = hs.name$(lv, i - 1)
     hs.score(lv, i) = hs.score(lv, i - 1)
     hs.secs(lv, i) = hs.secs(lv, i - 1)
-    i = i - 1
-  loop
+  next i
   hs.name$(lv, rk) = n$
   hs.score(lv, rk) = sc
   hs.secs(lv, rk) = sx

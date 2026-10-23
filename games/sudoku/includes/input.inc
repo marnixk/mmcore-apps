@@ -5,11 +5,14 @@
 ' The game loops drain the buffer with key.get(), so a press that arrives
 ' while the screen is being redrawn is queued instead of lost.
 '
-' mmcore supports every ON KEY form: ON KEY ascii, sub, ON KEY ascii, 0,
-' ON KEY 0 and a bare ON KEY. This module uses the general form ON KEY
-' subname so one handler serves every key, and switches it off with a bare
-' ON KEY. The handler reads key.w only, the main code key.r only, so neither
-' side can corrupt the other. One slot stays free to tell full from empty.
+' mmcore supports every ON KEY form: ON KEY sub, ON KEY ascii, sub,
+' ON KEY ascii, 0 and ON KEY 0. This module uses the general form ON KEY sub
+' because one handler has to serve every key (arrows, digits, Esc, Enter,
+' Backspace, Delete and all the letters of the name entry); the per-key form
+' would need a handler per key and does not hand the key over for the queue.
+' ON KEY 0 switches it off. The handler reads key.w only, the main code
+' key.r only, so neither side can corrupt the other. One slot stays free to
+' tell full from empty.
 
 const KEYQ = 32
 dim key.q(KEYQ - 1)
@@ -37,7 +40,7 @@ sub key.start()
 end sub
 
 sub key.stop()
-  on key
+  on key 0
   key.on = FALSE
 end sub
 
@@ -83,11 +86,9 @@ dim key.rpt = 0, key.rptStart, key.rptNext
 
 ' TRUE when the key with CMM2 code k is held right now
 function key.held(k)
-  local i, n
+  local i
   key.held = FALSE
-  n = keydown(0)
-  if n < 1 then exit function
-  for i = 1 to n
+  for i = 1 to keydown(0)
     if keydown(i) = k then key.held = TRUE
   next i
 end function
@@ -95,12 +96,10 @@ end function
 ' a queued arrow: returns k when it is a fresh press, -1 when it is an OS
 ' repeat of the arrow we are already auto-repeating
 function key.arrowKeep(k)
-  local ign
-  ign = (k = key.rpt)
-  if ign then ign = (timer - key.rptStart >= KEY_OSREP)
-  if ign then ign = key.held(k)
-  key.arrowKeep = -1
-  if ign then exit function
+  if k = key.rpt and timer - key.rptStart >= KEY_OSREP and key.held(k) then
+    key.arrowKeep = -1
+    exit function
+  end if
   key.arrowKeep = k
   key.rpt = k
   key.rptStart = timer

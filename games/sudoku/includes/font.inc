@@ -24,10 +24,7 @@ function pad2$(n)
 end function
 
 function fmtTime$(secs)
-  local a$, b$
-  a$ = right$("0" + str$(secs \ 60), 2)
-  b$ = right$("0" + str$(secs mod 60), 2)
-  fmtTime$ = a$ + ":" + b$
+  fmtTime$ = pad2$(secs \ 60) + ":" + pad2$(secs mod 60)
 end function
 
 ' in-game timer: whole minutes only ("<1 MIN", "3 MIN")
@@ -41,16 +38,15 @@ end function
 
 ' exact time for the win screen: m:ss, or h:mm:ss from one hour on
 function fmtClock$(secs)
-  local h, m, a$, b$
+  local h, m, a$
   h = secs \ 3600
   m = (secs mod 3600) \ 60
-  b$ = right$("0" + str$(secs mod 60), 2)
   if h > 0 then
-    a$ = str$(h) + ":" + right$("0" + str$(m), 2)
+    a$ = str$(h) + ":" + pad2$(m)
   else
     a$ = str$(m)
   end if
-  fmtClock$ = a$ + ":" + b$
+  fmtClock$ = a$ + ":" + pad2$(secs mod 60)
 end function
 
 ' right-align n in a field of w characters

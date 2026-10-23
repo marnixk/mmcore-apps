@@ -23,7 +23,7 @@ sub gen.makeMap(which)
   gen.tmp(2) = 2
   gen.shuffle3()
   for b = 0 to 2
-  band(b) = gen.tmp(b)
+    band(b) = gen.tmp(b)
   next b
   for b = 0 to 2
     gen.tmp(0) = 0
@@ -46,7 +46,7 @@ sub gen.deal(lv)
   s$ = bank$(lv * BANK_PER_LEVEL + int(rnd * BANK_PER_LEVEL))
   ' digit relabel
   for i = 1 to 9
-  gen.p(i) = i
+    gen.p(i) = i
   next i
   for i = 9 to 2 step -1
     j = 1 + int(rnd * i)
@@ -61,11 +61,7 @@ sub gen.deal(lv)
     for j = 0 to 8
       r = gen.rmap(i)
       c = gen.cmap(j)
-      if tr then
-        t = r
-        r = c
-        c = t
-      end if
+      if tr then t = r : r = c : c = t
       ch$ = mid$(s$, r * 9 + c + 1, 1)
       if ch$ = "." then
         bd.g(i * 9 + j) = 0

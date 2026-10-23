@@ -17,12 +17,11 @@ dim lay.off(8)
 dim lay.curY, lay.iconY, lay.cur
 dim lay.dlgW, lay.dlgH, lay.menuY, lay.menuW, lay.menuH, lay.panX
 
-' layouts we have art for (index 6 is a spare: mmcore evaluates IF conditions
-' inside skipped blocks, so a loop variable that ran past 5 must stay in range)
-dim scr.mm(6) = (19, 11, 10, 9, 1, 8, 0)
-dim scr.mw(6) = (1366, 1280, 848, 1024, 800, 640, 0)
-dim scr.mh(6) = (768, 720, 480, 768, 600, 480, 0)
-dim scr.mwide(6) = (1, 1, 1, 0, 0, 0, 9)
+' layouts we have art for
+dim scr.mm(5) = (19, 11, 10, 9, 1, 8)
+dim scr.mw(5) = (1366, 1280, 848, 1024, 800, 640)
+dim scr.mh(5) = (768, 720, 480, 768, 600, 480)
+dim scr.mwide(5) = (1, 1, 1, 0, 0, 0)
 
 ' choose the MODE to play in from the current mode and resolution:
 '  - MODE 19 / MODE 20 (Chromebook panel 1366x768 and its exact half 683x384)
@@ -72,7 +71,7 @@ end function
 
 sub scr.init()
   local w, h, m, cm
-  scr.oldMode = MM.INFO("MODE")
+  scr.oldMode = MM.INFO(MODE)
   cm = int(scr.oldMode)
   w = MM.HRES
   h = MM.VRES
@@ -97,7 +96,7 @@ sub scr.init()
   lay.px = lay.bx + lay.B + 12 * sc
   lay.py = lay.by + (lay.B - lay.ph) \ 2
   for i = 0 to 8
-  lay.off(i) = arts(i) * sc
+    lay.off(i) = arts(i) * sc
   next i
   ' sprite sheet rows on PG_SHEET
   lay.cur = lay.cs + 2 * sc

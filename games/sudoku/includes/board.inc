@@ -6,7 +6,7 @@ dim bd.g(80)        ' digit in each cell, 0 = empty
 dim bd.giv(80)      ' TRUE for the locked starting clues
 dim bd.zone(80)     ' cell sits in a row/column/box that breaks the rules
 dim bd.clash(80)    ' cell holds a digit that is duplicated in one of its units
-dim bd.cnt(10)     ' 10 spare: skipped IF conditions are still evaluated by mmcore
+dim bd.cnt(9)      ' how often each digit 1..9 occurs in the unit being checked
 dim bd.r = 4, bd.c = 4        ' cursor
 dim bd.nClash
 dim bd.tShown(80)   ' tile * 16 + digit look last drawn on the back buffer, -1 = unknown
@@ -15,7 +15,7 @@ dim bd.tShown(80)   ' tile * 16 + digit look last drawn on the back buffer, -1 =
 sub bd.checkUnit(kind, u)
   local k, cell, d, bad
   for d = 1 to 9
-  bd.cnt(d) = 0
+    bd.cnt(d) = 0
   next d
   for k = 0 to 8
     cell = bd.unitCell(kind, u, k)
@@ -53,8 +53,8 @@ end function
 function bd.check()
   local i, u
   for i = 0 to 80
-  bd.zone(i) = FALSE
-  bd.clash(i) = FALSE
+    bd.zone(i) = FALSE
+    bd.clash(i) = FALSE
   next i
   for u = 0 to 8
     bd.checkUnit(0, u)
@@ -144,8 +144,7 @@ function bd.refresh(all, r0, c0)
       if cand then
         t = bd.tileFor(r, c)
         t = t * 64 + bd.lookFor(cell)
-        if t <> bd.tShown(cell) then n = n + 1
-        if t <> bd.tShown(cell) then bd.drawCell(r, c)
+        if t <> bd.tShown(cell) then n = n + 1 : bd.drawCell(r, c)
       end if
     next c
   next r
