@@ -7,3 +7,4 @@ into the game's folder, so its gfx/, sfx/ and data files resolve relative to it)
 | Game | Folder | Run |
 |------|--------|-----|
 | Sudoku Grove - a calm forest sudoku | [sudoku/](sudoku/) | `RUN "games/sudoku/sudoku.bas"` |
+| Tetris - mmcore edition, Soviet-style falling blocks | [tetris/](tetris/) | `RUN "games/tetris/tetris.bas"` |

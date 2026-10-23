@@ -1,0 +1,56 @@
+Tetris (mmcore edition) - gfx layout
+=====================================
+
+All art is drawn in ART UNITS and pre-scaled by an integer sc (1, 2 or 3) per layout by
+the generator (src/gen_game.py, not shipped). The game never scales at run time: it picks
+the layout for the screen, switches to that MODE and blits 1:1. Every number the code uses
+is in includes/layouts.inc (generated, screen pixels). This file is a human summary.
+
+Layouts (W x H, MODE, sc = pixels per art unit, board cell, NEXT/HOLD mini cell, well origin):
+
+  res        mode  sc  art size   cell  mini  well (x,y)   sheet
+  1366x768     19   2  683x384      30    24  (532,84)     sheet_s2c15.png
+  683x384      20   1  683x384      15    12  (266,42)     sheet_s1c15.png
+  1920x1080    16   3  640x360      45    36  (735,90)     sheet_s3c15.png
+  1280x720     11   2  640x360      30    24  (490,60)     sheet_s2c15.png
+  1024x768      9   2  512x384      30    24  (362,84)     sheet_s2c15.png
+  800x600       1   1  800x600      26    18  (270,40)     sheet_s1c26.png
+  848x480      10   1  848x480      20    15  (324,40)     sheet_s1c20.png
+  640x480       8   1  640x480      20    15  (220,40)     sheet_s1c20.png
+
+  1920x1080 and 1280x720 share one 640x360 art layout (x3 / x2). 1366x768 (MODE 19) is the
+  683x384 layout at x2; MODE 20 (683x384, the Chromebook half-res mode) runs the same layout
+  at x1 natively - the panel doubles every pixel, so it looks identical to MODE 19. The x1 VGA
+  sizes use bigger board cells (20 / 26 px) so the well fills the height. Any other screen
+  size gets the nearest layout of the same shape (the smallest one that is at least as big,
+  else the biggest), and the game switches to that MODE, so it is always full screen.
+
+Per resolution (WxH):
+  game_WxH.png    game scene: backdrop, ornate well frame + empty well, HOLD / NEXT / STATS
+                  panels with labels, St Basil's arch window (left)
+  dim_WxH.png     the same scene dimmed with the well hidden (pause / dialogs)
+  intro_WxH.png   title screen: backdrop, TETRIS block title, MMCORE EDITION ribbon, empty
+                  menu panel and prompt panel (menu text drawn at run time)
+  scores_WxH.png  high-score screen: heading, 3 panels with EASY / MEDIUM / HARD ribbons,
+                  footer ESC - BACK TO MENU
+
+Sprite sheets sheet_s<sc>c<cell>.png (black background, no sprite pixel is pure black):
+  small font   9x9 art cells, advance 8, 9 colour rows (cream, gold, gold3, grey, dim, red,
+               green, keycap ink, silver) - chars: " !#%'()*+,-./0-9:<>?A-Z_"
+  big font     18x18 art cells, advance 16, 28 glyphs per row, 2 rows per colour
+               (cream, gold, red, white) - chars: " !-.0-9?A-Z_"
+  tiles        row 0: I O T S Z J L + grey (game over), opaque, cell x cell
+               row 1: ghost tiles I..L (blit with ori 4)
+               row 2: well cell, flash frames 0..3 (line clear)
+  mini tiles   I..L at mini size (NEXT / HOLD), then 7x7-art arrows L R U D (keycaps)
+  Row y positions per layout: lay.fontY, lay.bigY, lay.tileY, lay.miniY, lay.arrowX.
+
+Screen geometry (art units; x sc for pixels), 683x384 example:
+  frame  10*cell+18 x 20*cell+18, centred; well inside at +9,+9
+  HOLD panel left of the frame (gap 12), slot 4*mini+44 x 2*mini+5
+  arch window below HOLD; NEXT panel (3 slots) right of the frame; STATS panel below it
+  STATS: difficulty plaque, LEVEL / LINES / SCORE values right-aligned at lay.valR (big font),
+         BEST line at lay.bestY (small font)
+  dialogs drawn at run time, centred: pause 300x212, name entry 290x196
+  intro menu panel 250x142 at (lay.mx, lay.my), prompt panel 250x46 at (lay.px, lay.py)
+  high scores: 3 columns at lay.sx0 + c*(lay.spw+lay.sgap), rows lay.sy0 + i*lay.sstep
