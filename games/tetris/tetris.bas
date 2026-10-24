@@ -15,7 +15,7 @@ const FALSE = 0
 
 ' ---- key codes (classic CMM2 INKEY$ / KEYDOWN values)
 const K_UP = 128, K_DOWN = 129, K_LEFT = 130, K_RIGHT = 131
-const K_ENTER = 13, K_LF = 10, K_ESC = 27, K_BKSP = 8, K_DEL = 127
+const K_ENTER = 13, K_LF = 10, K_ESC = 27, K_BKSP = 8, K_DEL = 127, K_SPACE = 32
 
 ' ---- difficulty: changes how many lines it takes to go up a level
 const LV_EASY = 0, LV_MEDIUM = 1, LV_HARD = 2

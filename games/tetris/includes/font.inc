@@ -60,9 +60,17 @@ sub bigR(s$, rx, y, r)
 end sub
 
 function rjust$(s$, w)
-  if len(s$) >= w then rjust$ = s$ else rjust$ = space$(w - len(s$)) + s$
+  if len(s$) >= w then
+    rjust$ = s$
+  else
+    rjust$ = space$(w - len(s$)) + s$
+  end if
 end function
 
 function ljust$(s$, w)
-  if len(s$) >= w then ljust$ = left$(s$, w) else ljust$ = s$ + space$(w - len(s$))
+  if len(s$) >= w then
+    ljust$ = left$(s$, w)
+  else
+    ljust$ = s$ + space$(w - len(s$))
+  end if
 end function

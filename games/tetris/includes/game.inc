@@ -1,18 +1,26 @@
 ' game.inc - the play loop: gravity, lock delay, moves, SRS rotation, hold,
-' hard drop, line clears, scoring, levels and the HUD.
+' soft drop, hard drop, line clears, scoring, levels and the HUD.
+'
+' Controls: Left/Right move (DAS/ARR), Down soft drop (held), Space hard drop,
+' X or Up rotate clockwise, Z rotate counter-clockwise, C hold, Esc pause.
 '
 ' Scoring (modern guideline): 1/2/3/4 lines = 100/300/500/800 x level,
-' hard drop 2 points per cell. Difficulty sets the lines per level
+' soft drop 1 point per cell, hard drop 2 points per cell. Difficulty sets the lines per level
 ' (easy 15, medium 10, hard 5). Gravity follows the guideline curve
 ' (0.8 - (level - 1) * 0.007) ^ (level - 1) seconds per row, capped at
 ' GM_MINGRAV ms so the top levels stay playable.
 
 const LOCK_MS = 500, LOCK_RESETS = 15, GM_MINGRAV = 50, GM_MAXLEVEL = 99
 const CLEAR_STEP = 35, TETRIS_HOLD = 450
+' soft drop: a press moves one row at once; while Down stays held the piece
+' keeps falling every gm.sdStep() ms (20x gravity or SD_MAXMS, whichever is
+' faster) after an initial SD_DELAY so a single tap moves exactly one row.
+const SD_MAXMS = 40, SD_DELAY = 100
 
 dim gm.lv, gm.level, gm.lines, gm.score, gm.grav
 dim gm.next(2), gm.hold, gm.holdUsed
 dim gm.fallT, gm.lockT, gm.resets, gm.over, gm.quit, gm.dirty
+dim gm.sd = FALSE, gm.sdStart = 0, gm.sdNext = 0
 dim p.k, p.r, p.x, p.y, p.lowest
 ' values currently shown in the HUD (redraw only on change)
 dim sh.level, sh.lines, sh.score
@@ -187,8 +195,16 @@ end sub
 sub gm.rotate(dir)
   local nr, t, tr, i, nx, ny
   if p.k = 1 then exit sub
-  if dir = 0 then nr = (p.r + 1) mod 4 else nr = (p.r + 3) mod 4
-  if p.k = 0 then t = 1 else t = 0
+  if dir = 0 then
+    nr = (p.r + 1) mod 4
+  else
+    nr = (p.r + 3) mod 4
+  end if
+  if p.k = 0 then
+    t = 1
+  else
+    t = 0
+  end if
   tr = p.r * 2 + dir
   for i = 0 to 4
     nx = p.x + pc.kx(t, tr, i)
@@ -226,6 +242,61 @@ sub gm.hardDrop()
   gm.score = gm.score + 2 * (ny - p.y)
   p.y = ny
   gm.lockPiece()
+end sub
+
+' ---- soft drop (Down)
+function gm.sdStep()
+  local t
+  t = gm.grav \ 20
+  if t > SD_MAXMS then t = SD_MAXMS
+  if t < 1 then t = 1
+  gm.sdStep = t
+end function
+
+' one row down, 1 point; FALSE when the piece is resting
+function gm.softStep()
+  gm.softStep = FALSE
+  if not bd.fits(p.k, p.r, p.x, p.y + 1) then exit function
+  p.y = p.y + 1
+  gm.score = gm.score + 1
+  gm.fallT = timer + gm.grav
+  gm.moved()
+  gm.softStep = TRUE
+end function
+
+' queued Down: a fresh press steps one row and starts the held soft drop.
+' copies queued while Down stays held are OS key repeats and are dropped.
+sub gm.softPress()
+  local ign
+  ign = gm.sd
+  if ign then ign = (timer - gm.sdStart >= KEY_OSREP)
+  if ign then ign = key.held(K_DOWN)
+  if ign then exit sub
+  gm.sd = TRUE
+  gm.sdStart = timer
+  gm.sdNext = timer + SD_DELAY
+  if gm.softStep() then gm.dirty = TRUE
+end sub
+
+' held Down (KEYDOWN): keep stepping while it stays held
+sub gm.softHeld()
+  local n = 0
+  if not gm.sd then exit sub
+  if not key.held(K_DOWN) then
+    gm.sd = FALSE
+    exit sub
+  end if
+  ' (no EXIT SUB from inside the DO loop: leave it through its condition)
+  do while timer >= gm.sdNext and n < 22
+    if gm.softStep() then
+      gm.sdNext = gm.sdNext + gm.sdStep()
+      n = n + 1
+    else
+      gm.sdNext = timer + gm.sdStep()
+      n = 99
+    end if
+  loop
+  if gm.sdNext < timer then gm.sdNext = timer + gm.sdStep()
 end sub
 
 ' TETRIS! callout across the well (current write page)
@@ -323,7 +394,7 @@ end sub
 
 ' ---- one game; returns when it is over or the player quit
 sub game.run(lv)
-  local k, t0, rk, n$
+  local k, t0, rk, n$, gs, ge
   gm.lv = lv
   gm.level = 1
   gm.lines = 0
@@ -350,6 +421,7 @@ sub game.run(lv)
   gm.spawnNext()
   gm.redrawAll()
   key.flush()
+  gm.sd = FALSE
   do
     key.nrPoll()
     do
@@ -360,14 +432,18 @@ sub game.run(lv)
         gm.shift(-1)
       elseif k = K_RIGHT then
         gm.shift(1)
+      elseif k = K_DOWN then
+        gm.softPress()
+      elseif k = K_SPACE then
+        if key.once(k, K_SPACE) then gm.hardDrop()
+      elseif k = asc("x") or k = asc("X") then
+        if key.once(k, asc("x")) then gm.rotate(0)
       elseif k = K_UP then
         if key.once(k, K_UP) then gm.rotate(0)
       elseif k = asc("z") or k = asc("Z") then
         if key.once(k, asc("z")) then gm.rotate(1)
       elseif k = asc("c") or k = asc("C") then
         if key.once(k, asc("c")) then gm.doHold()
-      elseif k = K_DOWN then
-        if key.once(k, K_DOWN) then gm.hardDrop()
       elseif k = K_ESC then
         if gm.dirty then gm.drawWell()
         t0 = timer
@@ -376,6 +452,7 @@ sub game.run(lv)
           t0 = timer - t0
           gm.fallT = gm.fallT + t0
           if gm.lockT <> 0 then gm.lockT = gm.lockT + t0
+          gm.sd = FALSE
           gm.redrawAll()
         end if
       end if
@@ -385,7 +462,9 @@ sub game.run(lv)
     k = key.repeat()
     if k = K_LEFT then gm.shift(-1)
     if k = K_RIGHT then gm.shift(1)
+    gm.softHeld()
     gm.tick()
+    if sh.score <> gm.score then gm.hudStats(FALSE)
     if gm.dirty and not gm.over then gm.drawWell()
     if not key.waiting() then pause 2
   loop until gm.over or gm.quit
@@ -401,10 +480,23 @@ sub game.run(lv)
   blit lay.wx, lay.wy, lay.wx, lay.wy, 10 * lay.cell, 20 * lay.cell, PG_STACK
   pause 700
   key.flush()
+  ' a key still held from play (e.g. the Space hard drop that topped out)
+  ' only counts once it has been released and pressed again
+  gs = key.held(K_SPACE)
+  ge = key.held(K_ENTER)
+  if not ge then ge = key.held(K_LF)
   do
+    if gs then gs = key.held(K_SPACE)
+    if ge then ge = key.held(K_ENTER) or key.held(K_LF)
     k = key.get()
-    if k = 0 then pause 15
-  loop until key.isEnter(k) or k = K_ESC or k = asc(" ")
+    if k = 0 then
+      pause 15
+    elseif k = K_SPACE and gs then
+      k = 0
+    elseif key.isEnter(k) and ge then
+      k = 0
+    end if
+  loop until key.isEnter(k) or k = K_ESC or k = K_SPACE
   rk = hs.rank(lv, gm.score)
   if rk >= 0 then
     n$ = dlg.enterName$(lv, rk)

@@ -31,7 +31,11 @@ sub intro.drawMenu()
     if r = MENU_LEVEL then t$ = "DIFFICULTY"
     if r = MENU_SCORES then t$ = "HIGH SCORES"
     if r = MENU_QUIT then t$ = "QUIT"
-    if r = menu.row then c = F_GOLD else c = F_CREAM
+    if r = menu.row then
+      c = F_GOLD
+    else
+      c = F_CREAM
+    end if
     txt t$, lay.mx + 40 * s, y, c
     if r = menu.row then
       blit 2 * mn, lay.miniY, lay.mx + 18 * s, y - s, mn, mn, PG_SHEET

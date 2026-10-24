@@ -22,7 +22,7 @@ end sub
 function dlg.pause()
   local s = scr.sc, w, h, x, y, ry, tx, k, kw
   w = 300 * s
-  h = 212 * s
+  h = 232 * s
   x = (scr.W - w) \ 2
   y = (scr.H - h) \ 2
   page copy PG_DIM to PG_BACK
@@ -30,20 +30,24 @@ function dlg.pause()
   ui.panel(x, y, w, h)
   ui.ribbon(x + 80 * s, y + 12 * s, w - 160 * s, 14 * s, "PAUSED", F_GOLD)
   ry = y + 36 * s
-  tx = x + 92 * s
+  tx = x + 110 * s
   ' move
   kw = ui.keycap(x + 28 * s, ry, "", 0)
   kw = ui.keycap(x + 46 * s, ry, "", 1)
   txt "MOVE", tx, ry + 4 * s, F_CREAM
   ry = ry + 20 * s
-  kw = ui.keycap(x + 28 * s, ry, "", 2)
+  kw = ui.keycap(x + 28 * s, ry, "", 3)
+  txt "SOFT DROP", tx, ry + 4 * s, F_CREAM
+  ry = ry + 20 * s
+  kw = ui.keycap(x + 28 * s, ry, "SPACE", -1)
+  txt "HARD DROP", tx, ry + 4 * s, F_CREAM
+  ry = ry + 20 * s
+  kw = ui.keycap(x + 28 * s, ry, "X", -1)
+  kw = ui.keycap(x + 28 * s + kw + 3 * s, ry, "", 2)
   txt "ROTATE RIGHT", tx, ry + 4 * s, F_CREAM
   ry = ry + 20 * s
   kw = ui.keycap(x + 28 * s, ry, "Z", -1)
   txt "ROTATE LEFT", tx, ry + 4 * s, F_CREAM
-  ry = ry + 20 * s
-  kw = ui.keycap(x + 28 * s, ry, "", 3)
-  txt "HARD DROP", tx, ry + 4 * s, F_CREAM
   ry = ry + 20 * s
   kw = ui.keycap(x + 28 * s, ry, "C", -1)
   txt "HOLD PIECE", tx, ry + 4 * s, F_CREAM
@@ -172,7 +176,11 @@ sub dlg.scores(hlLv, hlRank)
   page write PG_BACK
   for c = 0 to 2
     x = lay.sx0 + c * (lay.spw + lay.sgap)
-    if lay.slv then sr = x + 154 * s else sr = x + lay.spw - 12 * s
+    if lay.slv then
+      sr = x + 154 * s
+    else
+      sr = x + lay.spw - 12 * s
+    end if
     for i = 0 to 9
       y = lay.sy0 + i * lay.sstep
       if c = hlLv and i = hlRank then
