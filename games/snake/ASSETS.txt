@@ -1,0 +1,39 @@
+Snake (mmcore edition) - asset list
+=========================================================
+Art direction: modern pixel art - a green garden snake with yellow diamond markings on
+checkered grass, grey stone-brick walls with moss and cracks, eight fruits (apple, cherry,
+banana, grapes, strawberry, orange, pear, melon) each sitting on a pulsing bright patch so
+it is easy to spot. Hard-edged pixels, dithering, no antialiasing, alpha 0/255 only.
+
+Playfield: 42 x 23 cells plus one HUD row on top, at every resolution:
+  MODE 19 1366x768  cell 32 (art x2)    MODE 20 683x384   cell 16 (art x1)
+  1920x1080 (16)    cell 45 (art x3)    1280x720 (11)     cell 30 (art x2)
+The few pixels left over at the sides are filled with a partial stone wall.
+
+gfx/  (PNG; alpha 0 = skipped by LOAD PNG; no sprite pixel is pure black, so BLIT ori 4
+       transparency works from a CLS-black sheet page)
+  sheet_WxH.png    sprite sheet, 16 cells per row:
+                    0-3 head R D L U, 4-7 stone head (crash / lost life) R D L U,
+                    8 body horizontal, 9 body vertical, 10-13 corners LU UR RD DL,
+                    14-17 tail (tip pointing) R D L U, 18 life icon, 19-20 fruit glow
+                    (2 pulse frames), 21-28 fruits, 29-32 wall variants, 33-36 floor
+                    (2 tones x plain/tuft), 37-44 floor with wall shadow (T L TL corner)
+                    for both tones, 45 dither (pause dim), 46-49 tongue (unused in play)
+                   then the small font (8 colour rows) and the big font (4 colour rows)
+  intro_WxH.png    title screen (SNAKE logo, MMCORE EDITION ribbon, fruit parade); the
+                   menu panel is drawn at run time
+  scores_WxH.png   high-score screen background (title + PRESS ENTER); the table is drawn
+                   at run time
+                   WxH = 1366x768 683x384 1920x1080 1280x720
+
+includes/layouts.inc  GENERATED: per resolution cell size, offsets, sheet rows, panels
+includes/levels.inc   GENERATED: the 10 level layouts (start position + wall pieces)
+
+No sound at all (includes/music.inc: MUSIC_ON = 0, SFX_ON = 0) so it can run alongside
+JUKE; mmcore has one global audio player and any PLAY command would stop it.
+
+snake.hi           created on the first high score (score,level,difficulty,name per line,
+                   top 10). Not shipped.
+
+All gfx and the two generated includes come from the art generator (Python + Pillow,
+kept out of the app folder); each resolution has its own pre-scaled set.

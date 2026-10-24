@@ -8,3 +8,4 @@ into the game's folder, so its gfx/, sfx/ and data files resolve relative to it)
 |------|--------|-----|
 | Sudoku Grove - a calm forest sudoku | [sudoku/](sudoku/) | `RUN "games/sudoku/sudoku.bas"` |
 | Tetris - mmcore edition, Soviet-style falling blocks | [tetris/](tetris/) | `RUN "games/tetris/tetris.bas"` |
+| Snake - mmcore edition, 10 garden levels, high scores | [snake/](snake/) | `RUN "games/snake/snake.bas"` |
