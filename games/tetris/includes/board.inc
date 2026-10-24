@@ -118,8 +118,11 @@ sub bd.flashTile(f, c, r)
   if f >= 0 and f <= 3 then blit (f + 1) * s, lay.tileY + 2 * s, x, y, s, s, PG_SHEET, 4
 end sub
 
-' redraw the whole locked stack on PG_STACK (grey = game-over look)
-sub bd.drawStack(grey)
+' redraw the whole locked stack on PG_STACK, every cell in its own piece colour;
+' dead = TRUE gives the grey game-over look. The parameter must not be called GREY:
+' that is a built-in colour constant (&H808080) which wins over a parameter of the
+' same name, so every redraw after a line clear used to come out grey.
+sub bd.drawStack(dead)
   local r, c, v
   page write PG_STACK
   blit lay.wx, lay.wy, lay.wx, lay.wy, 10 * lay.cell, 20 * lay.cell, PG_GAME
@@ -127,7 +130,7 @@ sub bd.drawStack(grey)
     for c = 0 to BD_W - 1
       v = bd.c(r * BD_W + c)
       if v > 0 then
-        if grey then
+        if dead then
           bd.tile(7, c, r)
         else
           bd.tile(v - 1, c, r)

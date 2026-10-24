@@ -10,404 +10,84 @@ dim lay.hs(LAY_N - 1) = (768, 384, 1080, 720, 768, 600, 480, 480)
 sub lay.set(i)
   select case i
     case 0  ' MODE 19 1366x768
-      lay.mode = 19
-      lay.W = 1366
-      lay.H = 768
-      lay.sc = 2
-      lay.res$ = "1366x768"
-      lay.sheet$ = "s2c15"
-      lay.cell = 30
-      lay.mini = 24
-      lay.wx = 532
-      lay.wy = 84
-      lay.holdX = 278
-      lay.holdY = 116
-      lay.slotW = 184
-      lay.slotH = 58
-      lay.nextX = 902
-      lay.nextY = 114
-      lay.nextStep = 68
-      lay.stX = 874
-      lay.stY = 346
-      lay.stW = 240
-      lay.stH = 356
-      lay.diffX = 902
-      lay.diffY = 366
-      lay.diffW = 184
-      lay.diffH = 14
-      lay.valR = 1088
-      lay.valY0 = 422
-      lay.valStep = 82
-      lay.bestY = 662
-      lay.fontY = 0
-      lay.bigY = 162
-      lay.tileY = 450
-      lay.miniY = 540
-      lay.arrowX = 176
-      lay.tTitle = 26
-      lay.mx = 760
-      lay.my = 256
-      lay.mw = 500
-      lay.mh = 284
-      lay.px = 760
-      lay.py = 560
-      lay.pw = 500
-      lay.ph = 92
-      lay.sx0 = 30
-      lay.spw = 424
-      lay.sgap = 16
-      lay.sy0 = 172
-      lay.sstep = 44
+      lay.mode = 19 : lay.W = 1366 : lay.H = 768 : lay.sc = 2 : lay.res$ = "1366x768" : lay.sheet$ = "s2c15"
+      lay.cell = 30 : lay.mini = 24 : lay.wx = 532 : lay.wy = 84 : lay.holdX = 278 : lay.holdY = 116
+      lay.slotW = 184 : lay.slotH = 58 : lay.nextX = 902 : lay.nextY = 114 : lay.nextStep = 68 : lay.stX = 874
+      lay.stY = 346 : lay.stW = 240 : lay.stH = 356 : lay.diffX = 902 : lay.diffY = 366 : lay.diffW = 184
+      lay.diffH = 14 : lay.valR = 1088 : lay.valY0 = 422 : lay.valStep = 82 : lay.bestY = 662 : lay.fontY = 0
+      lay.bigY = 162 : lay.tileY = 450 : lay.miniY = 540 : lay.arrowX = 176 : lay.tTitle = 26 : lay.mx = 760
+      lay.my = 256 : lay.mw = 500 : lay.mh = 284 : lay.px = 760 : lay.py = 560 : lay.pw = 500
+      lay.ph = 92 : lay.sx0 = 30 : lay.spw = 424 : lay.sgap = 16 : lay.sy0 = 172 : lay.sstep = 44
       lay.slv = 1
     case 1  ' MODE 20 683x384
-      lay.mode = 20
-      lay.W = 683
-      lay.H = 384
-      lay.sc = 1
-      lay.res$ = "683x384"
-      lay.sheet$ = "s1c15"
-      lay.cell = 15
-      lay.mini = 12
-      lay.wx = 266
-      lay.wy = 42
-      lay.holdX = 139
-      lay.holdY = 58
-      lay.slotW = 92
-      lay.slotH = 29
-      lay.nextX = 451
-      lay.nextY = 57
-      lay.nextStep = 34
-      lay.stX = 437
-      lay.stY = 173
-      lay.stW = 120
-      lay.stH = 178
-      lay.diffX = 451
-      lay.diffY = 183
-      lay.diffW = 92
-      lay.diffH = 7
-      lay.valR = 544
-      lay.valY0 = 211
-      lay.valStep = 41
-      lay.bestY = 331
-      lay.fontY = 0
-      lay.bigY = 81
-      lay.tileY = 225
-      lay.miniY = 270
-      lay.arrowX = 88
-      lay.tTitle = 13
-      lay.mx = 380
-      lay.my = 128
-      lay.mw = 250
-      lay.mh = 142
-      lay.px = 380
-      lay.py = 280
-      lay.pw = 250
-      lay.ph = 46
-      lay.sx0 = 15
-      lay.spw = 212
-      lay.sgap = 8
-      lay.sy0 = 86
-      lay.sstep = 22
+      lay.mode = 20 : lay.W = 683 : lay.H = 384 : lay.sc = 1 : lay.res$ = "683x384" : lay.sheet$ = "s1c15"
+      lay.cell = 15 : lay.mini = 12 : lay.wx = 266 : lay.wy = 42 : lay.holdX = 139 : lay.holdY = 58
+      lay.slotW = 92 : lay.slotH = 29 : lay.nextX = 451 : lay.nextY = 57 : lay.nextStep = 34 : lay.stX = 437
+      lay.stY = 173 : lay.stW = 120 : lay.stH = 178 : lay.diffX = 451 : lay.diffY = 183 : lay.diffW = 92
+      lay.diffH = 7 : lay.valR = 544 : lay.valY0 = 211 : lay.valStep = 41 : lay.bestY = 331 : lay.fontY = 0
+      lay.bigY = 81 : lay.tileY = 225 : lay.miniY = 270 : lay.arrowX = 88 : lay.tTitle = 13 : lay.mx = 380
+      lay.my = 128 : lay.mw = 250 : lay.mh = 142 : lay.px = 380 : lay.py = 280 : lay.pw = 250
+      lay.ph = 46 : lay.sx0 = 15 : lay.spw = 212 : lay.sgap = 8 : lay.sy0 = 86 : lay.sstep = 22
       lay.slv = 1
     case 2  ' MODE 16 1920x1080
-      lay.mode = 16
-      lay.W = 1920
-      lay.H = 1080
-      lay.sc = 3
-      lay.res$ = "1920x1080"
-      lay.sheet$ = "s3c15"
-      lay.cell = 45
-      lay.mini = 36
-      lay.wx = 735
-      lay.wy = 90
-      lay.holdX = 354
-      lay.holdY = 138
-      lay.slotW = 276
-      lay.slotH = 87
-      lay.nextX = 1290
-      lay.nextY = 135
-      lay.nextStep = 102
-      lay.stX = 1248
-      lay.stY = 483
-      lay.stW = 360
-      lay.stH = 534
-      lay.diffX = 1290
-      lay.diffY = 513
-      lay.diffW = 276
-      lay.diffH = 21
-      lay.valR = 1569
-      lay.valY0 = 597
-      lay.valStep = 123
-      lay.bestY = 957
-      lay.fontY = 0
-      lay.bigY = 243
-      lay.tileY = 675
-      lay.miniY = 810
-      lay.arrowX = 264
-      lay.tTitle = 36
-      lay.mx = 1023
-      lay.my = 336
-      lay.mw = 750
-      lay.mh = 426
-      lay.px = 1023
-      lay.py = 792
-      lay.pw = 750
-      lay.ph = 138
-      lay.sx0 = 27
-      lay.spw = 606
-      lay.sgap = 24
-      lay.sy0 = 258
-      lay.sstep = 66
+      lay.mode = 16 : lay.W = 1920 : lay.H = 1080 : lay.sc = 3 : lay.res$ = "1920x1080" : lay.sheet$ = "s3c15"
+      lay.cell = 45 : lay.mini = 36 : lay.wx = 735 : lay.wy = 90 : lay.holdX = 354 : lay.holdY = 138
+      lay.slotW = 276 : lay.slotH = 87 : lay.nextX = 1290 : lay.nextY = 135 : lay.nextStep = 102 : lay.stX = 1248
+      lay.stY = 483 : lay.stW = 360 : lay.stH = 534 : lay.diffX = 1290 : lay.diffY = 513 : lay.diffW = 276
+      lay.diffH = 21 : lay.valR = 1569 : lay.valY0 = 597 : lay.valStep = 123 : lay.bestY = 957 : lay.fontY = 0
+      lay.bigY = 243 : lay.tileY = 675 : lay.miniY = 810 : lay.arrowX = 264 : lay.tTitle = 36 : lay.mx = 1023
+      lay.my = 336 : lay.mw = 750 : lay.mh = 426 : lay.px = 1023 : lay.py = 792 : lay.pw = 750
+      lay.ph = 138 : lay.sx0 = 27 : lay.spw = 606 : lay.sgap = 24 : lay.sy0 = 258 : lay.sstep = 66
       lay.slv = 1
     case 3  ' MODE 11 1280x720
-      lay.mode = 11
-      lay.W = 1280
-      lay.H = 720
-      lay.sc = 2
-      lay.res$ = "1280x720"
-      lay.sheet$ = "s2c15"
-      lay.cell = 30
-      lay.mini = 24
-      lay.wx = 490
-      lay.wy = 60
-      lay.holdX = 236
-      lay.holdY = 92
-      lay.slotW = 184
-      lay.slotH = 58
-      lay.nextX = 860
-      lay.nextY = 90
-      lay.nextStep = 68
-      lay.stX = 832
-      lay.stY = 322
-      lay.stW = 240
-      lay.stH = 356
-      lay.diffX = 860
-      lay.diffY = 342
-      lay.diffW = 184
-      lay.diffH = 14
-      lay.valR = 1046
-      lay.valY0 = 398
-      lay.valStep = 82
-      lay.bestY = 638
-      lay.fontY = 0
-      lay.bigY = 162
-      lay.tileY = 450
-      lay.miniY = 540
-      lay.arrowX = 176
-      lay.tTitle = 24
-      lay.mx = 682
-      lay.my = 224
-      lay.mw = 500
-      lay.mh = 284
-      lay.px = 682
-      lay.py = 528
-      lay.pw = 500
-      lay.ph = 92
-      lay.sx0 = 18
-      lay.spw = 404
-      lay.sgap = 16
-      lay.sy0 = 172
-      lay.sstep = 44
+      lay.mode = 11 : lay.W = 1280 : lay.H = 720 : lay.sc = 2 : lay.res$ = "1280x720" : lay.sheet$ = "s2c15"
+      lay.cell = 30 : lay.mini = 24 : lay.wx = 490 : lay.wy = 60 : lay.holdX = 236 : lay.holdY = 92
+      lay.slotW = 184 : lay.slotH = 58 : lay.nextX = 860 : lay.nextY = 90 : lay.nextStep = 68 : lay.stX = 832
+      lay.stY = 322 : lay.stW = 240 : lay.stH = 356 : lay.diffX = 860 : lay.diffY = 342 : lay.diffW = 184
+      lay.diffH = 14 : lay.valR = 1046 : lay.valY0 = 398 : lay.valStep = 82 : lay.bestY = 638 : lay.fontY = 0
+      lay.bigY = 162 : lay.tileY = 450 : lay.miniY = 540 : lay.arrowX = 176 : lay.tTitle = 24 : lay.mx = 682
+      lay.my = 224 : lay.mw = 500 : lay.mh = 284 : lay.px = 682 : lay.py = 528 : lay.pw = 500
+      lay.ph = 92 : lay.sx0 = 18 : lay.spw = 404 : lay.sgap = 16 : lay.sy0 = 172 : lay.sstep = 44
       lay.slv = 1
     case 4  ' MODE 9 1024x768
-      lay.mode = 9
-      lay.W = 1024
-      lay.H = 768
-      lay.sc = 2
-      lay.res$ = "1024x768"
-      lay.sheet$ = "s2c15"
-      lay.cell = 30
-      lay.mini = 24
-      lay.wx = 362
-      lay.wy = 84
-      lay.holdX = 108
-      lay.holdY = 116
-      lay.slotW = 184
-      lay.slotH = 58
-      lay.nextX = 732
-      lay.nextY = 114
-      lay.nextStep = 68
-      lay.stX = 704
-      lay.stY = 346
-      lay.stW = 240
-      lay.stH = 356
-      lay.diffX = 732
-      lay.diffY = 366
-      lay.diffW = 184
-      lay.diffH = 14
-      lay.valR = 918
-      lay.valY0 = 422
-      lay.valStep = 82
-      lay.bestY = 662
-      lay.fontY = 0
-      lay.bigY = 162
-      lay.tileY = 450
-      lay.miniY = 540
-      lay.arrowX = 176
-      lay.tTitle = 26
-      lay.mx = 446
-      lay.my = 242
-      lay.mw = 500
-      lay.mh = 284
-      lay.px = 446
-      lay.py = 546
-      lay.pw = 500
-      lay.ph = 92
-      lay.sx0 = 16
-      lay.spw = 320
-      lay.sgap = 16
-      lay.sy0 = 172
-      lay.sstep = 44
+      lay.mode = 9 : lay.W = 1024 : lay.H = 768 : lay.sc = 2 : lay.res$ = "1024x768" : lay.sheet$ = "s2c15"
+      lay.cell = 30 : lay.mini = 24 : lay.wx = 362 : lay.wy = 84 : lay.holdX = 108 : lay.holdY = 116
+      lay.slotW = 184 : lay.slotH = 58 : lay.nextX = 732 : lay.nextY = 114 : lay.nextStep = 68 : lay.stX = 704
+      lay.stY = 346 : lay.stW = 240 : lay.stH = 356 : lay.diffX = 732 : lay.diffY = 366 : lay.diffW = 184
+      lay.diffH = 14 : lay.valR = 918 : lay.valY0 = 422 : lay.valStep = 82 : lay.bestY = 662 : lay.fontY = 0
+      lay.bigY = 162 : lay.tileY = 450 : lay.miniY = 540 : lay.arrowX = 176 : lay.tTitle = 26 : lay.mx = 446
+      lay.my = 242 : lay.mw = 500 : lay.mh = 284 : lay.px = 446 : lay.py = 546 : lay.pw = 500
+      lay.ph = 92 : lay.sx0 = 16 : lay.spw = 320 : lay.sgap = 16 : lay.sy0 = 172 : lay.sstep = 44
       lay.slv = 0
     case 5  ' MODE 1 800x600
-      lay.mode = 1
-      lay.W = 800
-      lay.H = 600
-      lay.sc = 1
-      lay.res$ = "800x600"
-      lay.sheet$ = "s1c26"
-      lay.cell = 26
-      lay.mini = 18
-      lay.wx = 270
-      lay.wy = 40
-      lay.holdX = 119
-      lay.holdY = 56
-      lay.slotW = 116
-      lay.slotH = 41
-      lay.nextX = 565
-      lay.nextY = 55
-      lay.nextStep = 46
-      lay.stX = 551
-      lay.stY = 207
-      lay.stW = 144
-      lay.stH = 362
-      lay.diffX = 565
-      lay.diffY = 217
-      lay.diffW = 116
-      lay.diffH = 7
-      lay.valR = 682
-      lay.valY0 = 245
-      lay.valStep = 103
-      lay.bestY = 549
-      lay.fontY = 0
-      lay.bigY = 81
-      lay.tileY = 225
-      lay.miniY = 303
-      lay.arrowX = 130
-      lay.tTitle = 21
-      lay.mx = 488
-      lay.my = 247
-      lay.mw = 250
-      lay.mh = 142
-      lay.px = 488
-      lay.py = 399
-      lay.pw = 250
-      lay.ph = 46
-      lay.sx0 = 74
-      lay.spw = 212
-      lay.sgap = 8
-      lay.sy0 = 118
-      lay.sstep = 22
+      lay.mode = 1 : lay.W = 800 : lay.H = 600 : lay.sc = 1 : lay.res$ = "800x600" : lay.sheet$ = "s1c26"
+      lay.cell = 26 : lay.mini = 18 : lay.wx = 270 : lay.wy = 40 : lay.holdX = 119 : lay.holdY = 56
+      lay.slotW = 116 : lay.slotH = 41 : lay.nextX = 565 : lay.nextY = 55 : lay.nextStep = 46 : lay.stX = 551
+      lay.stY = 207 : lay.stW = 144 : lay.stH = 362 : lay.diffX = 565 : lay.diffY = 217 : lay.diffW = 116
+      lay.diffH = 7 : lay.valR = 682 : lay.valY0 = 245 : lay.valStep = 103 : lay.bestY = 549 : lay.fontY = 0
+      lay.bigY = 81 : lay.tileY = 225 : lay.miniY = 303 : lay.arrowX = 130 : lay.tTitle = 21 : lay.mx = 488
+      lay.my = 247 : lay.mw = 250 : lay.mh = 142 : lay.px = 488 : lay.py = 399 : lay.pw = 250
+      lay.ph = 46 : lay.sx0 = 74 : lay.spw = 212 : lay.sgap = 8 : lay.sy0 = 118 : lay.sstep = 22
       lay.slv = 1
     case 6  ' MODE 10 848x480
-      lay.mode = 10
-      lay.W = 848
-      lay.H = 480
-      lay.sc = 1
-      lay.res$ = "848x480"
-      lay.sheet$ = "s1c20"
-      lay.cell = 20
-      lay.mini = 15
-      lay.wx = 324
-      lay.wy = 40
-      lay.holdX = 185
-      lay.holdY = 56
-      lay.slotW = 104
-      lay.slotH = 35
-      lay.nextX = 559
-      lay.nextY = 55
-      lay.nextStep = 40
-      lay.stX = 545
-      lay.stY = 189
-      lay.stW = 132
-      lay.stH = 260
-      lay.diffX = 559
-      lay.diffY = 199
-      lay.diffW = 104
-      lay.diffH = 7
-      lay.valR = 664
-      lay.valY0 = 227
-      lay.valStep = 69
-      lay.bestY = 429
-      lay.fontY = 0
-      lay.bigY = 81
-      lay.tileY = 225
-      lay.miniY = 285
-      lay.arrowX = 109
-      lay.tTitle = 17
-      lay.mx = 532
-      lay.my = 185
-      lay.mw = 250
-      lay.mh = 142
-      lay.px = 532
-      lay.py = 337
-      lay.pw = 250
-      lay.ph = 46
-      lay.sx0 = 98
-      lay.spw = 212
-      lay.sgap = 8
-      lay.sy0 = 101
-      lay.sstep = 22
+      lay.mode = 10 : lay.W = 848 : lay.H = 480 : lay.sc = 1 : lay.res$ = "848x480" : lay.sheet$ = "s1c20"
+      lay.cell = 20 : lay.mini = 15 : lay.wx = 324 : lay.wy = 40 : lay.holdX = 185 : lay.holdY = 56
+      lay.slotW = 104 : lay.slotH = 35 : lay.nextX = 559 : lay.nextY = 55 : lay.nextStep = 40 : lay.stX = 545
+      lay.stY = 189 : lay.stW = 132 : lay.stH = 260 : lay.diffX = 559 : lay.diffY = 199 : lay.diffW = 104
+      lay.diffH = 7 : lay.valR = 664 : lay.valY0 = 227 : lay.valStep = 69 : lay.bestY = 429 : lay.fontY = 0
+      lay.bigY = 81 : lay.tileY = 225 : lay.miniY = 285 : lay.arrowX = 109 : lay.tTitle = 17 : lay.mx = 532
+      lay.my = 185 : lay.mw = 250 : lay.mh = 142 : lay.px = 532 : lay.py = 337 : lay.pw = 250
+      lay.ph = 46 : lay.sx0 = 98 : lay.spw = 212 : lay.sgap = 8 : lay.sy0 = 101 : lay.sstep = 22
       lay.slv = 1
     case 7  ' MODE 8 640x480
-      lay.mode = 8
-      lay.W = 640
-      lay.H = 480
-      lay.sc = 1
-      lay.res$ = "640x480"
-      lay.sheet$ = "s1c20"
-      lay.cell = 20
-      lay.mini = 15
-      lay.wx = 220
-      lay.wy = 40
-      lay.holdX = 81
-      lay.holdY = 56
-      lay.slotW = 104
-      lay.slotH = 35
-      lay.nextX = 455
-      lay.nextY = 55
-      lay.nextStep = 40
-      lay.stX = 441
-      lay.stY = 189
-      lay.stW = 132
-      lay.stH = 260
-      lay.diffX = 455
-      lay.diffY = 199
-      lay.diffW = 104
-      lay.diffH = 7
-      lay.valR = 560
-      lay.valY0 = 227
-      lay.valStep = 69
-      lay.bestY = 429
-      lay.fontY = 0
-      lay.bigY = 81
-      lay.tileY = 225
-      lay.miniY = 285
-      lay.arrowX = 109
-      lay.tTitle = 17
-      lay.mx = 341
-      lay.my = 174
-      lay.mw = 250
-      lay.mh = 142
-      lay.px = 341
-      lay.py = 326
-      lay.pw = 250
-      lay.ph = 46
-      lay.sx0 = 9
-      lay.spw = 202
-      lay.sgap = 8
-      lay.sy0 = 101
-      lay.sstep = 22
+      lay.mode = 8 : lay.W = 640 : lay.H = 480 : lay.sc = 1 : lay.res$ = "640x480" : lay.sheet$ = "s1c20"
+      lay.cell = 20 : lay.mini = 15 : lay.wx = 220 : lay.wy = 40 : lay.holdX = 81 : lay.holdY = 56
+      lay.slotW = 104 : lay.slotH = 35 : lay.nextX = 455 : lay.nextY = 55 : lay.nextStep = 40 : lay.stX = 441
+      lay.stY = 189 : lay.stW = 132 : lay.stH = 260 : lay.diffX = 455 : lay.diffY = 199 : lay.diffW = 104
+      lay.diffH = 7 : lay.valR = 560 : lay.valY0 = 227 : lay.valStep = 69 : lay.bestY = 429 : lay.fontY = 0
+      lay.bigY = 81 : lay.tileY = 225 : lay.miniY = 285 : lay.arrowX = 109 : lay.tTitle = 17 : lay.mx = 341
+      lay.my = 174 : lay.mw = 250 : lay.mh = 142 : lay.px = 341 : lay.py = 326 : lay.pw = 250
+      lay.ph = 46 : lay.sx0 = 9 : lay.spw = 202 : lay.sgap = 8 : lay.sy0 = 101 : lay.sstep = 22
       lay.slv = 1
   end select
 end sub

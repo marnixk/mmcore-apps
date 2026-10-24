@@ -59,7 +59,7 @@ sub key.flush()
   do while inkey$ <> "" and timer - t < 500
   loop
   key.r = key.w
-  key.rpt = 0
+  key.arrowReset()
   key.nr = 0
 end sub
 
@@ -75,26 +75,81 @@ function key.held(k)
   next i
 end function
 
-' ---- held Left/Right: DAS / ARR auto-repeat driven by KEYDOWN, independent of
-' the OS key repeat. The first press arrives through the queue and moves once
-' at once; while that arrow stays held key.repeat() hands it out again after
-' KEY_DAS ms and then every KEY_ARR ms. Queued copies of the same arrow that
-' arrive while it is held are OS repeats and are dropped, so a single tap
-' moves exactly one cell.
-const KEY_DAS = 170, KEY_ARR = 50, KEY_OSREP = 120
-dim key.rpt = 0, key.rptStart, key.rptNext
+' ---- Left/Right: every physical press moves the piece once at once; while the arrow stays held
+' key.repeat() hands it out again after KEY_DAS ms and then every KEY_ARR ms (KEYDOWN driven,
+' independent of the OS key repeat). A press is taken from whichever source sees it first: the
+' ON KEY queue (key.arrowKeep) or a KEYDOWN rising edge (key.arrowPoll), so a press whose queued
+' code was flushed (game start, leaving the pause dialog) still moves the piece.
+' Per arrow i (0 = Left, 1 = Right): key.adn(i) = held at the last poll, key.aused(i) = this
+' press has already moved, key.aT(i) = when it moved, key.aEdge(i) = it moved from KEYDOWN.
+' Queued copies of an arrow that is held and has already moved are OS repeats, and the queued
+' copy of a press that already moved from KEYDOWN (within KEY_SAME ms) is the same press; both
+' are dropped. A press is over once it was seen held and then released (or KEY_SAME ms after an
+' unseen quick tap). key.flush() resets all arrow state, so nothing carries over from the menu,
+' a previous game or the pause dialog.
+const KEY_DAS = 170, KEY_ARR = 50, KEY_OSREP = 120, KEY_SAME = 100
+dim key.rpt = 0, key.rptStart = 0, key.rptNext = 0
+dim key.adn(1), key.aused(1), key.aT(1), key.aEdge(1)
 
-function key.arrowKeep(k)
-  local ign
-  ign = (k = key.rpt)
-  if ign then ign = (timer - key.rptStart >= KEY_OSREP)
-  if ign then ign = key.held(k)
-  key.arrowKeep = -1
-  if ign then exit function
-  key.arrowKeep = k
+sub key.arrowReset()
+  key.rpt = 0
+  key.adn(0) = FALSE
+  key.adn(1) = FALSE
+  key.aused(0) = FALSE
+  key.aused(1) = FALSE
+  key.aEdge(0) = FALSE
+  key.aEdge(1) = FALSE
+end sub
+
+' a new press of arrow k: it moves now and (re)starts the DAS timer
+sub key.arrowStart(k, edge)
+  key.aused(k - K_LEFT) = TRUE
+  key.aT(k - K_LEFT) = timer
+  key.aEdge(k - K_LEFT) = edge
   key.rpt = k
   key.rptStart = timer
   key.rptNext = timer + KEY_DAS
+end sub
+
+' queued arrow k: returns k when it should move, -1 for an OS repeat
+function key.arrowKeep(k)
+  local i, ign
+  i = k - K_LEFT
+  ign = key.aused(i)
+  if ign then ign = key.adn(i)
+  if ign then ign = key.held(k)
+  if not ign then
+    if key.aEdge(i) then ign = (timer - key.aT(i) < KEY_SAME)
+  end if
+  key.aEdge(i) = FALSE
+  key.arrowKeep = -1
+  if ign then exit function
+  key.arrowStart(k, FALSE)
+  key.arrowKeep = k
+end function
+
+' once per loop pass: K_LEFT / K_RIGHT for an arrow that KEYDOWN shows newly held and that has
+' not moved yet, else 0. Released arrows are forgotten.
+function key.arrowPoll()
+  local i, k, h
+  key.arrowPoll = 0
+  for i = 0 to 1
+    k = K_LEFT + i
+    h = key.held(k)
+    if h then
+      if not key.adn(i) then
+        if not key.aused(i) then
+          key.arrowStart(k, TRUE)
+          key.arrowPoll = k
+        end if
+      end if
+    elseif key.adn(i) then
+      key.aused(i) = FALSE
+    elseif timer - key.aT(i) >= KEY_SAME then
+      key.aused(i) = FALSE
+    end if
+    key.adn(i) = h
+  next i
 end function
 
 function key.repeat()

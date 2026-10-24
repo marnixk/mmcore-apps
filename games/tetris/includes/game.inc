@@ -427,7 +427,9 @@ sub game.run(lv)
     do
       k = key.get()
       if k = 0 then exit do
-      if k = K_LEFT or k = K_RIGHT then k = key.arrowKeep(k)
+      if k = K_LEFT or k = K_RIGHT then
+        k = key.arrowKeep(k)
+      end if
       if k = K_LEFT then
         gm.shift(-1)
       elseif k = K_RIGHT then
@@ -459,6 +461,9 @@ sub game.run(lv)
       if gm.over or gm.quit then exit do
     loop
     if gm.over or gm.quit then exit do
+    k = key.arrowPoll()
+    if k = K_LEFT then gm.shift(-1)
+    if k = K_RIGHT then gm.shift(1)
     k = key.repeat()
     if k = K_LEFT then gm.shift(-1)
     if k = K_RIGHT then gm.shift(1)
