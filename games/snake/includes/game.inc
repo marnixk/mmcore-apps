@@ -5,13 +5,13 @@
 ' need to pick the head, body, corner and tail sprites. Only the cells that
 ' change are redrawn on the back page; each loop pass shows the frame once.
 
-const SN_MAX = 1024, GROW = 2, FRUIT_GOAL = 10, START_LIVES = 3, PULSE_MS = 420, TQ = 3
+const SN_MAX = 1024, GROW = 2, FRUIT_GOAL = 10, START_LIVES = 3, PULSE_MS = 420, TQ = 2
 
 dim sn.x(SN_MAX - 1), sn.y(SN_MAX - 1), sn.d(SN_MAX - 1)
 dim sn.h, sn.t, sn.n, sn.grow
 dim gm.diff, gm.lvn, gm.lay, gm.lives, gm.eaten, gm.fruits, gm.score, gm.speed, gm.due
 dim gm.over, gm.quit, gm.clear, gm.dead
-dim gm.tq(TQ - 1), gm.tn
+dim gm.tq(TQ - 1), gm.tn, gm.now, gm.early
 dim gm.fx, gm.fy, gm.ft, gm.fp, gm.pt
 ' arrow key (Up Down Left Right) -> direction (0 right, 1 down, 2 left, 3 up)
 dim kdir(3) = (3, 1, 2, 0)
@@ -170,8 +170,8 @@ sub gm.resetLevel(newLayout)
   gm.redrawAll()
 end sub
 
-' a message panel over the field for ms milliseconds. Arrow presses are kept
-' as turns, and once one is in the banner ends early.
+' a message panel over the field for ms milliseconds. Arrow presses (KEYDOWN)
+' are kept as turns, and once one is in the banner ends early.
 sub gm.banner(t1$, r1, t2$, t3$, ms)
   local s = scr.sc, x, k, t0
   scr.save()
@@ -183,26 +183,23 @@ sub gm.banner(t1$, r1, t2$, t3$, ms)
   key.flush()
   t0 = timer
   do
-    k = key.get()
-    if key.isArrow(k) then
-      k = key.arrowKeep(k)
-      if k then gm.turn(kdir(k - K_UP))
-    end if
-    k = key.arrowPoll()
-    if k then gm.turn(kdir(k - K_UP))
+    k = key.get()      ' queued codes are dropped: arrows steer via KEYDOWN
+    k = gm.arrows()
     if gm.tn > 0 and timer - t0 > 300 then exit do
-    pause 10
+    pause 1
   loop until timer - t0 >= ms
   scr.unsave()
   gm.due = timer + gm.speed
+  gm.early = FALSE
 end sub
 
 sub gm.levelBanner()
   gm.banner("LEVEL " + zpad$(gm.lvn, 2), B_GOLD, lv.name$(gm.lay), "GET READY", 1800)
 end sub
 
-' ---- steering: queue up to TQ turns so quick taps all count on successive
-' steps; a repeat of the last direction or a 180 degree reversal is ignored
+' ---- steering: queue up to TQ (2) turns so a quick double tap counts on two
+' successive steps; a repeat of the last direction or a 180 degree reversal is
+' ignored
 sub gm.turn(d)
   local last
   last = sn.d(sn.h)
@@ -214,6 +211,21 @@ sub gm.turn(d)
   end if
 end sub
 
+' every arrow that went down since the last pass becomes a turn, oldest first.
+' Returns TRUE when a turn went into an empty queue (the next step uses it).
+function gm.arrows()
+  local e, k, d, was
+  gm.arrows = FALSE
+  key.scan()
+  for e = 0 to key.evn - 1
+    k = key.ev(e)
+    d = kdir(k - K_UP)
+    was = gm.tn
+    gm.turn(d)
+    if was = 0 and gm.tn > 0 then gm.arrows = TRUE
+  next e
+end function
+
 ' ---- one move of the snake
 sub gm.step()
   local d, nx, ny, eat, moves, ot, oh, tx, ty
@@ -221,7 +233,6 @@ sub gm.step()
   if gm.tn > 0 then
     d = gm.tq(0)
     gm.tq(0) = gm.tq(1)
-    gm.tq(1) = gm.tq(2)
     gm.tn = gm.tn - 1
   end if
   nx = sn.x(sn.h) + dx(d)
@@ -308,7 +319,7 @@ sub gm.pauseGame()
 end sub
 
 sub game.run(diff)
-  local k
+  local k, st
   gm.diff = diff
   gm.lvn = 1
   gm.lives = START_LIVES
@@ -321,24 +332,34 @@ sub game.run(diff)
   gm.resetLevel(TRUE)
   gm.levelBanner()
   gm.pt = timer + PULSE_MS
+  gm.early = FALSE
   do
+    ' ON KEY queue: only P / Esc matter here (arrow codes are dropped, KEYDOWN
+    ' steers)
     do
       k = key.get()
       if k = 0 then exit do
-      if key.isArrow(k) then
-        k = key.arrowKeep(k)
-        if k then gm.turn(kdir(k - K_UP))
-      elseif key.isPause(k) then
+      if key.isPause(k) then
         gm.pauseGame()
         if gm.quit then exit do
       end if
     loop
     if gm.quit then exit do
-    k = key.arrowPoll()
-    if k then gm.turn(kdir(k - K_UP))
-    if timer >= gm.due then
+    ' a first queued turn more than half a step after the last move is taken
+    ' at once; never twice in a row, so the snake is not faster overall
+    st = gm.arrows()
+    gm.now = timer
+    if st then st = (gm.due - gm.now < gm.speed \ 2)
+    if st then st = not gm.early
+    if st then
+      gm.early = TRUE
+      gm.due = gm.now + gm.speed
+      gm.step()
+      if gm.clear then gm.levelUp()
+    elseif gm.now >= gm.due then
+      gm.early = FALSE
       gm.due = gm.due + gm.speed
-      if gm.due < timer then gm.due = timer + gm.speed
+      if gm.due < gm.now then gm.due = gm.now + gm.speed
       gm.step()
       if gm.clear then gm.levelUp()
     end if
