@@ -1,12 +1,18 @@
 ' screen.inc - pick a screen mode + asset set from the current mode and
 ' resolution, load the art into off-screen pages, restore the mode on quit.
 '
-' Pages:  0 display      1 sprite sheet (tiles, small + big font)
+' Page flipping: nothing is ever drawn on the visible page 0. Every frame is
+' built on the back page 1 (PAGE WRITE 1 stays selected) and shown in one go with
+' PAGE COPY 1 TO 0 (scr.present), so a half-drawn frame can never be seen.
+'
+' Pages:  0 display      1 back page (the frame being built)
 '         2 intro scene  3 high-score scene
-'         4 clean level (HUD bar, floor, walls)   5 live scene (4 + snake, fruit, HUD)
-'         6 dim overlay (checker of dark ink, black = see-through)   7 dialog scratch
+'         4 clean level (floor, walls)   5 sprite sheet (tiles, small + big font)
+'         6 dim overlay (checker of dark ink, black = see-through)
+'         7 the game scene kept while a banner or dialog covers the back page
 
-const PG_SHEET = 1, PG_INTRO = 2, PG_SCORES = 3, PG_FIELD = 4, PG_LIVE = 5, PG_DIM = 6, PG_TMP = 7
+const PG_BACK = 1, PG_INTRO = 2, PG_SCORES = 3, PG_FIELD = 4, PG_SHEET = 5, PG_DIM = 6, PG_SAVE = 7
+dim scr.dirty = 0
 
 dim float scr.oldMode
 dim scr.W, scr.H, scr.sc, scr.lay
@@ -83,25 +89,25 @@ sub scr.loadAssets()
       blit (T_DITHER mod 16) * c, (T_DITHER \ 16) * c, x, y, min(c, scr.W - x), min(c, scr.H - y), PG_SHEET
     next x
   next y
-  page write 0
+  page write PG_BACK
 end sub
 
-' copy the live scene to the display
+' show the finished back page (one opaque PAGE COPY = one whole frame)
 sub scr.present()
-  page copy PG_LIVE to 0
-  page write 0
+  page copy PG_BACK to 0
+  page write PG_BACK
+  scr.dirty = FALSE
 end sub
 
-' copy one rectangle of the live scene to the display
-sub scr.show(x, y, w, h)
-  page write 0
-  blit x, y, x, y, w, h, PG_LIVE
+' keep the game scene aside while a banner or dialog is drawn over it
+sub scr.save()
+  page copy PG_BACK to PG_SAVE
+  page write PG_BACK
 end sub
 
-' a dialog scene built on PG_TMP goes to the display
-sub scr.presentTmp()
-  page copy PG_TMP to 0
-  page write 0
+sub scr.unsave()
+  page copy PG_SAVE to PG_BACK
+  scr.present()
 end sub
 
 sub scr.restore()
@@ -114,5 +120,4 @@ sub scr.restore()
   else
     mode m
   end if
-  cls
 end sub

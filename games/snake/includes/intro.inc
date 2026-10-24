@@ -8,8 +8,8 @@ dim menu.row = MENU_START
 
 sub intro.draw()
   local s = scr.sc, r, ty, t$, i, x = lay.mx, y = lay.my, w = lay.mw
-  page copy PG_INTRO to PG_TMP
-  page write PG_TMP
+  page copy PG_INTRO to PG_BACK
+  page write PG_BACK
   ui.panel(x, y, w, lay.mh)
   for r = MENU_START to MENU_QUIT
     if r = MENU_START then
@@ -36,7 +36,7 @@ sub intro.draw()
   for i = 0 to 2
     ui.pill(x + (22 + i * 66) * s, y + 54 * s, 60 * s, df.name$(i), i = menu.diff, df.row(i))
   next i
-  scr.presentTmp()
+  scr.present()
 end sub
 
 ' returns MENU_START, MENU_SCORES or MENU_QUIT

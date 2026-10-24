@@ -1,11 +1,11 @@
 ' dialogs.inc - pause, game over with name entry, and the high-score table.
-' Dialogs are drawn at run time on PG_TMP over the dimmed live scene.
+' Dialogs are drawn at run time on the back page over the dimmed game scene.
 
-' PG_TMP = live scene seen through the dark checker overlay
+' back page = game scene seen through the dark checker overlay (scene kept on PG_SAVE)
 sub dlg.dimScene()
-  page copy PG_LIVE to PG_TMP
-  page copy PG_DIM to PG_TMP, B
-  page write PG_TMP
+  scr.save()
+  page copy PG_DIM to PG_BACK, B
+  page write PG_BACK
 end sub
 
 ' pause dialog with the controls. returns TRUE when the player quits (Q)
@@ -32,7 +32,7 @@ function dlg.pause()
   y = y + 26 * s
   ui.rule(x + 18 * s, y + 2 * s, 264 * s)
   txtC "P OR ESC TO CONTINUE", x + 150 * s, y + 12 * s, F_GREEN
-  scr.presentTmp()
+  scr.present()
   key.flush()
   dlg.pause = FALSE
   do
@@ -101,7 +101,7 @@ sub dlg.gameOver()
     txtC "NOT IN THE TOP 10 THIS TIME", cx, y + 104 * s, F_GREY
     txtC "PRESS ENTER", cx, y + 128 * s, F_GOLD
   end if
-  scr.presentTmp()
+  scr.present()
   pause 600
   if rk < 0 then
     dlg.waitEnter()
@@ -116,10 +116,8 @@ sub dlg.gameOver()
       if timer - tb > 400 then
         cur = not cur
         tb = timer
-        page write PG_TMP
         dlg.slots(bx, by, n$, cur)
-        page write 0
-        blit bx, by, bx, by, 96 * s, 14 * s, PG_TMP
+        scr.present()
       end if
       pause 15
     else
@@ -134,10 +132,8 @@ sub dlg.gameOver()
       end if
       cur = TRUE
       tb = timer
-      page write PG_TMP
       dlg.slots(bx, by, n$, cur)
-      page write 0
-      blit bx, by, bx, by, 96 * s, 14 * s, PG_TMP
+      scr.present()
     end if
   loop
   do while right$(n$, 1) = " "
@@ -152,8 +148,8 @@ end sub
 ' high-score table; hl = row to highlight (-1 none)
 sub dlg.scores(hl)
   local s = scr.sc, x = lay.sx, y = lay.sy, w = lay.sw, hy, ry, i, r
-  page copy PG_SCORES to PG_TMP
-  page write PG_TMP
+  page copy PG_SCORES to PG_BACK
+  page write PG_BACK
   ui.panel(x, y, w, lay.sh)
   hy = y + 14 * s
   txt "#", x + 22 * s, hy, F_GREY
@@ -179,6 +175,6 @@ sub dlg.scores(hl)
       txt "---", x + 50 * s, ry, F_DIM
     end if
   next i
-  scr.presentTmp()
+  scr.present()
   dlg.waitEnter()
 end sub

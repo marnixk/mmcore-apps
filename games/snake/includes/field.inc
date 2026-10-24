@@ -142,6 +142,7 @@ sub fld.build()
       blit (t mod 16) * c, (t \ 16) * c, rx, (y + 1) * c, gr, c, PG_SHEET
     end if
   next y
+  page write PG_BACK
 end sub
 
 ' draw field cell fx, fy on the current write page: floor/wall from PG_FIELD,
@@ -155,13 +156,9 @@ sub cel.draw(fx, fy, t1, t2)
   if t2 >= 0 then blit (t2 mod 16) * c, (t2 \ 16) * c, x, y, c, c, PG_SHEET, 4
 end sub
 
-' redraw a cell on the live scene and show just that cell (no flicker)
+' redraw a cell on the back page; the game loop presents the frame once per pass
 sub cel.put(fx, fy, t1, t2)
-  local c = lay.cell, x, y
-  page write PG_LIVE
+  page write PG_BACK
   cel.draw(fx, fy, t1, t2)
-  x = lay.ox + fx * c
-  y = (fy + 1) * c
-  page write 0
-  blit x, y, x, y, c, c, PG_LIVE
+  scr.dirty = TRUE
 end sub

@@ -3,7 +3,7 @@
 ' The snake is a ring buffer of segments from sn.t (tail) to sn.h (head);
 ' sn.d(i) is the direction the snake moved to enter segment i, which is all we
 ' need to pick the head, body, corner and tail sprites. Only the cells that
-' change are redrawn: on PG_LIVE first, then copied to the display.
+' change are redrawn on the back page; each loop pass shows the frame once.
 
 const SN_MAX = 1024, GROW = 2, FRUIT_GOAL = 10, START_LIVES = 3, PULSE_MS = 420, TQ = 3
 
@@ -58,7 +58,8 @@ function gm.speedFor()
   gm.speedFor = max(SPEED_MIN, df.start(gm.diff) - (gm.lvn - 1) * df.faster(gm.diff))
 end function
 
-' ---- HUD (top cell row): SNAKE | LEVEL nn NAME .... lives | fruit + 10 pips
+' ---- status bar (top cell row):
+'   LEVEL nn NAME | SCORE nnnnnn | LIVES (head icons, stone = lost) | fruit + 10 pips
 sub gm.hud()
   local s = scr.sc, c = lay.cell, ty, x, i, bx, fx, lx
   ty = ((c \ s - 8) \ 2) * s
@@ -66,15 +67,18 @@ sub gm.hud()
   rfill 0, 0, scr.W, s, C_K3
   rfill 0, c - s, scr.W, s, C_K
   x = 8 * s
-  txt "SNAKE", x, ty, F_GREEN
-  x = x + 47 * s
-  rfill x, ty - s, s, 10 * s, C_K3
-  x = x + 8 * s
   txt "LEVEL", x, ty, F_GOLD
   x = x + 48 * s
   txt zpad$(gm.lvn, 2), x, ty, F_CREAM
   x = x + txtW(zpad$(gm.lvn, 2)) + 8 * s
   txt lv.name$(gm.lay), x, ty, F_GREY
+  ' score block: fixed place right of the longest level name
+  x = 172 * s
+  rfill x, ty - s, s, 10 * s, C_K3
+  x = x + 10 * s
+  txt "SCORE", x, ty, F_GOLD
+  txt zpad$(gm.score, 6), x + 48 * s, ty, F_CREAM
+  ' right: fruit + progress pips, lives to their left
   bx = scr.W - 86 * s
   for i = 0 to FRUIT_GOAL - 1
     x = bx + i * 8 * s
@@ -88,7 +92,8 @@ sub gm.hud()
   next i
   fx = bx - 4 * s - c
   ui.tile(T_FRUIT + gm.ft, fx, 0)
-  lx = fx - 6 * s - 3 * c
+  rfill fx - 6 * s, ty - s, s, 10 * s, C_K3
+  lx = fx - 10 * s - 3 * c
   for i = 0 to START_LIVES - 1
     if i < gm.lives then
       ui.tile(T_LIFE, lx + i * c, 0)
@@ -96,13 +101,14 @@ sub gm.hud()
       ui.tile(T_DEAD, lx + i * c, 0)
     end if
   next i
-  rfill lx - 5 * s, ty - s, s, 10 * s, C_K3
+  txt "LIVES", lx - 44 * s, ty, F_GOLD
+  rfill lx - 52 * s, ty - s, s, 10 * s, C_K3
 end sub
 
 sub gm.hudShow()
-  page write PG_LIVE
+  page write PG_BACK
   gm.hud()
-  scr.show(0, 0, scr.W, lay.cell)
+  scr.dirty = TRUE
 end sub
 
 ' ---- level set-up
@@ -123,8 +129,8 @@ end sub
 ' whole live scene from scratch
 sub gm.redrawAll()
   local i
-  page copy PG_FIELD to PG_LIVE
-  page write PG_LIVE
+  page copy PG_FIELD to PG_BACK
+  page write PG_BACK
   gm.hud()
   i = sn.t
   do
@@ -133,7 +139,7 @@ sub gm.redrawAll()
     i = sn.nxt(i)
   loop
   if not gm.clear then cel.draw(gm.fx, gm.fy, T_GLOW + gm.fp, T_FRUIT + gm.ft)
-  scr.present()
+  scr.dirty = TRUE
 end sub
 
 ' (re)start the current level with a fresh snake; newLayout rebuilds the picture
@@ -168,13 +174,12 @@ end sub
 ' as turns, and once one is in the banner ends early.
 sub gm.banner(t1$, r1, t2$, t3$, ms)
   local s = scr.sc, x, k, t0
-  page copy PG_LIVE to PG_TMP
-  page write PG_TMP
+  scr.save()
   x = ui.centre(240, 84) + 120 * s
   bigC t1$, x, ui.py + 14 * s, r1
   txtC t2$, x, ui.py + 42 * s, F_CREAM
   txtC t3$, x, ui.py + 60 * s, F_GREEN
-  scr.presentTmp()
+  scr.present()
   key.flush()
   t0 = timer
   do
@@ -188,7 +193,7 @@ sub gm.banner(t1$, r1, t2$, t3$, ms)
     if gm.tn > 0 and timer - t0 > 300 then exit do
     pause 10
   loop until timer - t0 >= ms
-  scr.present()
+  scr.unsave()
   gm.due = timer + gm.speed
 end sub
 
@@ -273,6 +278,7 @@ sub gm.die()
   sn.putAt(sn.h)
   gm.lives = gm.lives - 1
   gm.hudShow()
+  scr.present()
   pause 1100
   if gm.lives <= 0 then
     gm.over = TRUE
@@ -296,7 +302,7 @@ end sub
 sub gm.pauseGame()
   gm.quit = dlg.pause()
   if not gm.quit then
-    scr.present()
+    scr.unsave()
     gm.due = timer + gm.speed
   end if
 end sub
@@ -341,6 +347,7 @@ sub game.run(diff)
       cel.put(gm.fx, gm.fy, T_GLOW + gm.fp, T_FRUIT + gm.ft)
       gm.pt = timer + PULSE_MS
     end if
+    if scr.dirty then scr.present()
     if not key.waiting() then pause 1
   loop until gm.over or gm.quit
   if not gm.quit then dlg.gameOver()
