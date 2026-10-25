@@ -1,0 +1,31 @@
+VOID RUNNER (mmcore edition) - asset list
+=========================================================
+Art direction: warm purple / crimson deep-space pixel art. Ship "Arrow" (white/red hull,
+cyan canopy, orange flame), asteroid pillars with cratered caps, fixed laser gates (two
+steel emitters, crimson beams running to the screen edge), pink crystals (GEMS) with a
+soft glow. Hard-edged pixels, dithering, no antialiasing.
+
+Art canvas = MODE 20 pixels; scale per resolution:
+  MODE 19 1366x768  art x2 (683x384)     MODE 20 683x384   art x1 (683x384)
+  1920x1080 (16)    art x3 (640x360)     1280x720 (11)     art x2 (640x360)
+The game fills the whole screen at every resolution (no borders).
+
+gfx/  (PNG, RGB; pure black = transparent for BLIT ori 4 and SPRITE READ)
+  sheet_WxH.png    sprite sheet: ship poses (idle 2, thrust 2, fall, dive, hit, icon),
+                   explosion (4 frames), small rocks, crystal (4) + glow (2), pillar caps
+                   up/down + pillar body tile, laser emitters top/bottom + 3 beam tiles,
+                   pause dither tile, small font (10 colours) and big font (4 colours)
+  play_WxH.png     static gameplay backdrop (nebula, stars, ringed planet, moon, rocks)
+  intro_WxH.png    title screen (VOID RUNNER logo, THREAD THE VOID ribbon, demo scene);
+                   the menu panel is drawn at run time
+  scores_WxH.png   high-score screen background (title + PRESS ENTER); the table is drawn
+                   at run time
+                   WxH = 1366x768 683x384 1920x1080 1280x720
+
+includes/layouts.inc  GENERATED: per-resolution scale, menu/score panel positions, sheet
+                      coordinates (SP_*), font tables, palette constants
+
+Sound: none. Play is silent by design (JUKE can play in the background); music.inc holds
+the switched-off hooks.
+
+High scores: voidrunner.hi next to the program (score,gems,difficulty,name; top 10).
