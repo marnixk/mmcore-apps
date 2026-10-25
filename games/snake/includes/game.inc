@@ -3,9 +3,10 @@
 ' The snake is a ring buffer of segments from sn.t (tail) to sn.h (head);
 ' sn.d(i) is the direction the snake moved to enter segment i, which is all we
 ' need to pick the head, body, corner and tail sprites. Only the cells that
-' change are redrawn on the back page; each loop pass shows the frame once.
+' change are redrawn on the back page; each loop pass then copies just those
+' cells (and the HUD bar when it changed) to the screen.
 
-const SN_MAX = 1024, GROW = 2, FRUIT_GOAL = 10, START_LIVES = 3, PULSE_MS = 420, TQ = 2
+const SN_MAX = 1024, GROW = 2, FRUIT_GOAL = 10, START_LIVES = 3, PULSE_MS = 420, TQ = 2, IDLE_MS = 4
 
 dim sn.x(SN_MAX - 1), sn.y(SN_MAX - 1), sn.d(SN_MAX - 1)
 dim sn.h, sn.t, sn.n, sn.grow
@@ -108,7 +109,7 @@ end sub
 sub gm.hudShow()
   page write PG_BACK
   gm.hud()
-  scr.dirty = TRUE
+  scr.mark(0, 0, scr.W, lay.cell)
 end sub
 
 ' ---- level set-up
@@ -139,7 +140,7 @@ sub gm.redrawAll()
     i = sn.nxt(i)
   loop
   if not gm.clear then cel.draw(gm.fx, gm.fy, T_GLOW + gm.fp, T_FRUIT + gm.ft)
-  scr.dirty = TRUE
+  scr.markAll()
 end sub
 
 ' (re)start the current level with a fresh snake; newLayout rebuilds the picture
@@ -289,7 +290,7 @@ sub gm.die()
   sn.putAt(sn.h)
   gm.lives = gm.lives - 1
   gm.hudShow()
-  scr.present()
+  scr.flush()
   pause 1100
   if gm.lives <= 0 then
     gm.over = TRUE
@@ -368,8 +369,11 @@ sub game.run(diff)
       cel.put(gm.fx, gm.fy, T_GLOW + gm.fp, T_FRUIT + gm.ft)
       gm.pt = timer + PULSE_MS
     end if
-    if scr.dirty then scr.present()
-    if not key.waiting() then pause 1
+    ' one present per pass: only the cells (and HUD) that changed
+    if scr.dirty then scr.flush()
+    ' idle until the next step or pulse is due, waking every few ms to read
+    ' the arrows (P / Esc arrive through ON KEY)
+    if not key.waiting() then pause max(1, min(IDLE_MS, min(gm.due, gm.pt) - timer))
   loop until gm.over or gm.quit
   if not gm.quit then dlg.gameOver()
   key.flush()

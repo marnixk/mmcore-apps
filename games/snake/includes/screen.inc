@@ -2,8 +2,10 @@
 ' resolution, load the art into off-screen pages, restore the mode on quit.
 '
 ' Page flipping: nothing is ever drawn on the visible page 0. Every frame is
-' built on the back page 1 (PAGE WRITE 1 stays selected) and shown in one go with
-' PAGE COPY 1 TO 0 (scr.present), so a half-drawn frame can never be seen.
+' built on the back page 1 (PAGE WRITE 1 stays selected). A full redraw is shown
+' with PAGE COPY 1 TO 0 (scr.present); during play only the changed rectangles
+' (scr.mark) are blitted across, opaque and whole (scr.flush), which is far
+' cheaper on a Pi than copying the full screen every snake step.
 '
 ' Pages:  0 display      1 back page (the frame being built)
 '         2 intro scene  3 high-score scene
@@ -13,6 +15,11 @@
 
 const PG_BACK = 1, PG_INTRO = 2, PG_SCORES = 3, PG_FIELD = 4, PG_SHEET = 5, PG_DIM = 6, PG_SAVE = 7
 dim scr.dirty = 0
+
+' changed rectangles waiting for scr.flush; scr.full = copy the whole page
+const DR_MAX = 16
+dim dr.x(DR_MAX - 1), dr.y(DR_MAX - 1), dr.w(DR_MAX - 1), dr.h(DR_MAX - 1)
+dim dr.n = 0, scr.full = 0
 
 dim float scr.oldMode
 dim scr.W, scr.H, scr.sc, scr.lay
@@ -96,6 +103,44 @@ end sub
 sub scr.present()
   page copy PG_BACK to 0
   page write PG_BACK
+  scr.dirty = FALSE
+  scr.full = FALSE
+  dr.n = 0
+end sub
+
+' note a changed back-page rectangle; too many = one full copy instead
+sub scr.mark(x, y, w, h)
+  scr.dirty = TRUE
+  if scr.full then exit sub
+  if dr.n >= DR_MAX then
+    scr.full = TRUE
+    exit sub
+  end if
+  dr.x(dr.n) = x
+  dr.y(dr.n) = y
+  dr.w(dr.n) = w
+  dr.h(dr.n) = h
+  dr.n = dr.n + 1
+end sub
+
+sub scr.markAll()
+  scr.dirty = TRUE
+  scr.full = TRUE
+end sub
+
+' show what changed: the marked rectangles, or the whole page after a redraw
+sub scr.flush()
+  local i
+  if scr.full then
+    scr.present()
+    exit sub
+  end if
+  page write 0
+  for i = 0 to dr.n - 1
+    blit dr.x(i), dr.y(i), dr.x(i), dr.y(i), dr.w(i), dr.h(i), PG_BACK
+  next i
+  page write PG_BACK
+  dr.n = 0
   scr.dirty = FALSE
 end sub
 

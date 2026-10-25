@@ -156,9 +156,10 @@ sub cel.draw(fx, fy, t1, t2)
   if t2 >= 0 then blit (t2 mod 16) * c, (t2 \ 16) * c, x, y, c, c, PG_SHEET, 4
 end sub
 
-' redraw a cell on the back page; the game loop presents the frame once per pass
+' redraw a cell on the back page and mark it; the game loop shows it once per pass
 sub cel.put(fx, fy, t1, t2)
+  local c = lay.cell
   page write PG_BACK
   cel.draw(fx, fy, t1, t2)
-  scr.dirty = TRUE
+  scr.mark(lay.ox + fx * c, (fy + 1) * c, c, c)
 end sub
