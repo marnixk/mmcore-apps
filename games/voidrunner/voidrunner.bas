@@ -50,12 +50,12 @@ const RAMP_GAPS = 10
 dim menuPick
 
 randomize timer
+on key 0   ' no ON KEY handler: every loop reads INKEY$ itself
 scr.init()
 scr.loadAssets()
 gm.sprites()
 hs.load()
 music.start()
-key.start()
 
 do
   menuPick = intro.run()
@@ -67,7 +67,6 @@ do
 loop until menuPick = MENU_QUIT
 
 sprite close all
-key.stop()
 music.stop()
 scr.restore()
 end

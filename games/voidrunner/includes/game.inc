@@ -315,7 +315,7 @@ sub gm.pauseGame()
 end sub
 
 sub game.run(diff)
-  local k, n, now, s
+  local k, k$, n, now, s
   s = scr.sc
   gm.diff = diff
   gm.gaps = 0
@@ -358,17 +358,14 @@ sub game.run(diff)
   sprite show SPR_SHIP + sh.cur, SHX * s, sh.oy * s, 4
   cue.show(0, lay.ah \ 2 - 70)
   scr.present()
-  key.flush()
+  key.thrustReset()
   gm.due = timer + TICK
   do
-    ' ON KEY queue: only P / Esc matter here (the thruster is read via KEYDOWN)
-    do
-      k = key.get()
-      if k = 0 then exit do
-      if key.isPause(k) then
-        gm.pauseGame()
-        if gm.quit then exit do
-      end if
+    ' P / Esc pause; anything else typed during play (e.g. Space) is ignored
+    k$ = inkey$
+    do while k$ <> "" and not gm.quit
+      if key.isPause(k$) then gm.pauseGame()
+      k$ = inkey$
     loop
     if gm.quit then exit do
     if key.scan() then gm.flap = TRUE
@@ -386,7 +383,7 @@ sub game.run(diff)
       if scr.dirty then scr.flush()
     end if
     if gm.dead then exit do
-    if not key.waiting() then pause max(1, min(IDLE_MS, gm.due - timer))
+    pause max(1, min(IDLE_MS, gm.due - timer))
   loop
   gm.score = gm.gaps + GEM_BONUS * gm.gems
   if gm.dead then
@@ -396,5 +393,4 @@ sub game.run(diff)
   sprite close all
   gm.sprites()
   scr.reloadIntro()
-  key.flush()
 end sub
