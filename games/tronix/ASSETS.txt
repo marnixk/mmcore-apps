@@ -1,0 +1,40 @@
+TRONIX (mmcore edition) - asset list
+=========================================================
+Xonix (1984) on the neon Grid. Art direction: dark navy grid, cyan light-cycle
+player with a glowing white/blue light wall, red/orange orbs, orange
+sentinels on claimed land, claimed land as a raised cyan tile plate with a
+neon edge. Hard-edged pixels, dithering, no antialiasing.
+
+Art canvas = MODE 20 pixels; scale per resolution (the field is laid out in
+cells, so every mode is filled edge to edge):
+  MODE 20 683x384    art x1  cells 8 px   field 85x46
+  MODE 19 1366x768   art x2  cells 16 px  field 85x46
+  MODE 1  800x600    art x2  cells 16 px  field 50x35
+  MODE 11 1280x720   art x2  cells 16 px  field 80x43
+  MODE 16 1920x1080  art x3  cells 24 px  field 80x43
+The game starts in the current mode (picks the nearest layout, switching to
+16-bit colour if needed) and restores the original mode on exit.
+
+gfx/  (PNG; alpha-0 / pure black = transparent for BLIT mode 4 and LOAD PNG)
+  sheet_WxH.png    sprite sheet: player (2), derez (3), spark (3), orb (4),
+                   sentinel (2), grid/land/flash tiles, life icon, light-wall
+                   pieces (straight, corners, ends), vertical edge pieces,
+                   horizontal edge strips, dither tile, small font (9 styles),
+                   difficulty pills, name-entry box
+  title_WxH.png    title screen: logo B "Light Slab", CLAIM THE GRID ribbon,
+                   perspective grid with two light walls, empty menu panel
+  scores_WxH.png   high-score screen: small logo, HIGH SCORES, table panel with
+                   column headers (#, NAME, SKILL, LVL, SCORE)
+  pause_WxH.png    PAUSED dialog with the control list
+  clear_WxH.png    LEVEL CLEAR dialog (labels; values drawn at run time)
+  over_WxH.png     GAME OVER dialog (labels; values drawn at run time)
+                   WxH = 683x384 1366x768 800x600 1280x720 1920x1080
+
+includes/layouts.inc  GENERATED: per-resolution scale, field size and origin,
+                      HUD bar, menu/score panel positions, sheet coordinates
+                      (SH_*), tile/sprite/font ids, palette constants
+
+Sound: none. Play is silent by design; music.inc holds the switched-off hooks.
+
+High scores: C:/.tronix (score,level,difficulty,name; top 10). A missing file
+is an empty table; if C: is missing or read-only the game runs without saving.

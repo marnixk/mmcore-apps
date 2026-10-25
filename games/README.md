@@ -10,3 +10,4 @@ into the game's folder, so its gfx/, sfx/ and data files resolve relative to it)
 | Tetris - mmcore edition, Soviet-style falling blocks | [tetris/](tetris/) | `RUN "games/tetris/tetris.bas"` |
 | Snake - mmcore edition, 10 garden levels, high scores | [snake/](snake/) | `RUN "games/snake/snake.bas"` |
 | Void Runner - Flappy-style space flight through asteroid and laser gaps, speed ramps up | [voidrunner/](voidrunner/) | `RUN "games/voidrunner/voidrunner.bas"` |
+| TRONIX - Xonix on the neon Grid: claim 75% of the grid, dodge orbs and sentinels | [tronix/](tronix/) | `RUN "games/tronix/tronix.bas"` |
