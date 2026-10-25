@@ -1,6 +1,11 @@
-' highscore.inc - top 10 per level, kept in sudoku.hi next to the program
+' highscore.inc - top 10 per level, kept in C:/.sudoku
+' (on C: so it also works when the game runs as a package from read-only B:)
 ' file format: one line per entry  level,score,seconds,name
-const HS_FILE$ = "sudoku.hi"
+const HS_FILE$ = "C:/.sudoku"
+const HS_OLD$ = "sudoku.hi"   ' old place next to the program, read once if C: has no file yet
+' hs.ok: FALSE once a save failed (no C: or read-only), then saving is skipped
+' hs.boot: TRUE during the start-up save in the main program (see hsSaveFail there)
+dim hs.ok = TRUE, hs.boot = FALSE
 const HS_MAXNAME = 10
 
 dim string hs.name$(2, 9)
@@ -37,10 +42,12 @@ function hs.field$(s$, n)
 end function
 
 sub hs.load()
-  local l$, lv, sc, sx, rk, n$
+  local l$, lv, sc, sx, rk, n$, f$
   hs.clear()
-  if not hs.exists() then exit sub
-  open HS_FILE$ for input as #1
+  f$ = HS_FILE$
+  if not hs.found(f$) then f$ = HS_OLD$
+  if not hs.found(f$) then exit sub
+  open f$ for input as #1
   do while not eof(#1)
     line input #1, l$
     if len(l$) > 4 then
@@ -57,12 +64,16 @@ sub hs.load()
   close #1
 end sub
 
-function hs.exists()
-  hs.exists = (dir$(HS_FILE$, FILE) <> "")
+' TRUE when file f$ exists (a missing file just means empty tables)
+function hs.found(f$)
+  hs.found = (dir$(f$, FILE) <> "")
 end function
 
 sub hs.save()
   local l, i
+  if not hs.ok then exit sub
+  ' a failed write jumps to hsSaveFail in the main program (no C:, read-only card)
+  on error goto hsSaveFail
   open HS_FILE$ for output as #1
   for l = 0 to 2
     for i = 0 to 9
@@ -72,6 +83,7 @@ sub hs.save()
     next i
   next l
   close #1
+  on error
 end sub
 
 ' table position a score would take (0..9), or -1 if it doesn't make the top 10

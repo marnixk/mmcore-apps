@@ -2,7 +2,7 @@
 '   SUDOKU GROVE - a calm forest sudoku for mmcore
 '
 '   Run from its own folder:  RUN "sudoku.bas"  (RUN changes into this folder,
-'   so gfx/, sfx/ and the highscore file resolve relative to it).
+'   so gfx/ and sfx/ resolve relative to it). High scores live in C:/.sudoku.
 '
 '   Modules live in includes/ and are pulled in with #include below.
 '
@@ -40,8 +40,17 @@ scr.init()
 scr.loadAssets()
 bank.init()
 hs.load()
+' write the table back once at start: this moves an old sudoku.hi over to C: and
+' finds out early whether C: can be written (if not, hsSaveFail turns saving off)
+hs.boot = TRUE
+hs.save()
+hsBootDone:
+on error
+hs.boot = FALSE
 music.start()
 
+mainMenu:
+on error
 do
   menuPick = intro.run()
   if menuPick = MENU_START then
@@ -54,3 +63,11 @@ loop until menuPick = MENU_QUIT
 music.stop()
 scr.restore()
 end
+
+' a high-score write failed (no C: drive, read-only card): the game carries on
+' without saving. Entering this handler drops the SUB frames, so continue at a
+' top-level label: after the start-up save, or back at the menu.
+hsSaveFail:
+hs.ok = FALSE
+if hs.boot then resume hsBootDone
+resume mainMenu

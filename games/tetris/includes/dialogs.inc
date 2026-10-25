@@ -39,17 +39,17 @@ function dlg.pause()
   kw = ui.keycap(x + 28 * s, ry, "", 3)
   txt "SOFT DROP", tx, ry + 4 * s, F_CREAM
   ry = ry + 20 * s
-  kw = ui.keycap(x + 28 * s, ry, "SPACE", -1)
+  kw = ui.keycap(x + 28 * s, ry, "", 2)
   txt "HARD DROP", tx, ry + 4 * s, F_CREAM
   ry = ry + 20 * s
   kw = ui.keycap(x + 28 * s, ry, "X", -1)
-  kw = ui.keycap(x + 28 * s + kw + 3 * s, ry, "", 2)
   txt "ROTATE RIGHT", tx, ry + 4 * s, F_CREAM
   ry = ry + 20 * s
   kw = ui.keycap(x + 28 * s, ry, "Z", -1)
   txt "ROTATE LEFT", tx, ry + 4 * s, F_CREAM
   ry = ry + 20 * s
-  kw = ui.keycap(x + 28 * s, ry, "C", -1)
+  kw = ui.keycap(x + 28 * s, ry, "SPACE", -1)
+  kw = ui.keycap(x + 28 * s + kw + 3 * s, ry, "C", -1)
   txt "HOLD PIECE", tx, ry + 4 * s, F_CREAM
   ry = ry + 20 * s
   kw = ui.keycap(x + 28 * s, ry, "ESC", -1)

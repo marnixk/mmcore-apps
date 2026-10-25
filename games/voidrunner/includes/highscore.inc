@@ -1,6 +1,11 @@
-' highscore.inc - one top 10, kept in voidrunner.hi next to the program
+' highscore.inc - one top 10, kept in C:/.voidrunner
+' (on C: so it also works when the game runs as a package from read-only B:)
 ' file format: one line per entry  score,gems,difficulty,name
-const HS_FILE$ = "voidrunner.hi"
+const HS_FILE$ = "C:/.voidrunner"
+const HS_OLD$ = "voidrunner.hi"   ' old place next to the program, read once if C: has no file yet
+' hs.ok: FALSE once a save failed (no C: or read-only), then saving is skipped
+' hs.boot: TRUE during the start-up save in the main program (see hsSaveFail there)
+dim hs.ok = TRUE, hs.boot = FALSE
 const HS_MAXNAME = 8
 
 dim string hs.name$(9)
@@ -39,10 +44,12 @@ function hs.field$(s$, n)
 end function
 
 sub hs.load()
-  local l$, sc, gm, df, rk
+  local l$, sc, gm, df, rk, f$
   hs.clear()
-  if not hs.exists() then exit sub
-  open HS_FILE$ for input as #1
+  f$ = HS_FILE$
+  if not hs.found(f$) then f$ = HS_OLD$
+  if not hs.found(f$) then exit sub
+  open f$ for input as #1
   do while not eof(#1)
     line input #1, l$
     if len(l$) > 6 then
@@ -58,19 +65,16 @@ sub hs.load()
   close #1
 end sub
 
-' DIR$ needs a wildcard, so scan *.hi for the file
-function hs.exists()
-  local f$
-  hs.exists = FALSE
-  f$ = dir$("*.hi", "FILE")
-  do while f$ <> ""
-    if ucase$(f$) = ucase$(HS_FILE$) then hs.exists = TRUE
-    f$ = dir$("")
-  loop
+' TRUE when file f$ exists (a missing file just means empty tables)
+function hs.found(f$)
+  hs.found = (dir$(f$, FILE) <> "")
 end function
 
 sub hs.save()
   local i
+  if not hs.ok then exit sub
+  ' a failed write jumps to hsSaveFail in the main program (no C:, read-only card)
+  on error goto hsSaveFail
   open HS_FILE$ for output as #1
   for i = 0 to 9
     if hs.score(i) > 0 then
@@ -78,6 +82,7 @@ sub hs.save()
     end if
   next i
   close #1
+  on error
 end sub
 
 ' position a score would take (0..9), or -1 if it doesn't make the top 10

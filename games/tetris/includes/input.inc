@@ -7,7 +7,7 @@
 ' the held-key timing for the arrows, soft drop and the one-shot keys.
 
 ' throw away typed-ahead keys (used once: when the game-over banner has been
-' up for a moment, so a hard drop still bouncing on Space does not skip it)
+' up for a moment, so keys still buffered from play do not skip it)
 sub key.drain()
   do while inkey$ <> ""
   loop
@@ -16,8 +16,11 @@ end sub
 ' forget held-key state, so nothing carries over from the menu, a previous
 ' game or the pause dialog
 sub key.reset()
+  local i
   key.arrowReset()
-  key.nr = 0
+  for i = 0 to KEY_NR - 1
+    key.nr(i) = 0
+  next i
 end sub
 
 function key.isEnter(k$)
@@ -129,25 +132,35 @@ function key.repeat()
   if key.rptNext < timer then key.rptNext = timer + KEY_ARR
 end function
 
-' ---- one-shot keys (rotate, hard drop, hold): a key that is still held from
-' the press we already acted on only repeats through the OS, so its INKEY$
-' copies are ignored until it has been released (key.nrPoll notices that).
-dim key.nr = 0
+' ---- one-shot keys (hard drop, hold, rotate): one action per physical press.
+' A key we acted on stays in key.nr() until KEYDOWN shows it released; while it is
+' still held its INKEY$ copies are only OS repeats and are ignored. Each key is
+' tracked on its own, so holding Up while pressing another key never drops again.
+const KEY_NR = 5
+dim key.nr(KEY_NR - 1)
 
 ' k = INKEY$ code, kd = its KEYDOWN code. returns TRUE when it should act
 function key.once(k, kd)
-  key.once = TRUE
-  if kd = key.nr then
-    if key.held(kd) then
-      key.once = FALSE
-      exit function
+  local i, slot = -1
+  key.once = FALSE
+  for i = 0 to KEY_NR - 1
+    if key.nr(i) = kd then
+      if key.held(kd) then exit function
+      key.nr(i) = 0
     end if
-  end if
-  key.nr = kd
+    if key.nr(i) = 0 and slot < 0 then slot = i
+  next i
+  if slot < 0 then slot = 0
+  key.nr(slot) = kd
+  key.once = TRUE
 end function
 
+' once per pass: forget one-shot keys that have been released
 sub key.nrPoll()
-  if key.nr <> 0 then
-    if not key.held(key.nr) then key.nr = 0
-  end if
+  local i
+  for i = 0 to KEY_NR - 1
+    if key.nr(i) <> 0 then
+      if not key.held(key.nr(i)) then key.nr(i) = 0
+    end if
+  next i
 end sub

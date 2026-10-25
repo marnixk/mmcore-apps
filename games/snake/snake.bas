@@ -2,7 +2,7 @@
 '   SNAKE - mmcore edition
 '
 '   Run from its own folder:  RUN "snake.bas"  (RUN changes into this folder,
-'   so gfx/ and the high score file snake.hi resolve relative to it).
+'   so gfx/ resolves relative to it). High scores live in C:/.snake.
 '
 '   Steer with the arrow keys, eat 10 fruits to clear a level, 10 layouts,
 '   then they loop faster. Completely silent (plays nicely with JUKE).
@@ -47,8 +47,17 @@ scr.init()
 scr.loadAssets()
 fld.readLevels()
 hs.load()
+' write the table back once at start: this moves an old snake.hi over to C: and
+' finds out early whether C: can be written (if not, hsSaveFail turns saving off)
+hs.boot = TRUE
+hs.save()
+hsBootDone:
+on error
+hs.boot = FALSE
 music.start()
 
+mainMenu:
+on error
 do
   menuPick = intro.run()
   if menuPick = MENU_START then
@@ -61,3 +70,11 @@ loop until menuPick = MENU_QUIT
 music.stop()
 scr.restore()
 end
+
+' a high-score write failed (no C: drive, read-only card): the game carries on
+' without saving. Entering this handler drops the SUB frames, so continue at a
+' top-level label: after the start-up save, or back at the menu.
+hsSaveFail:
+hs.ok = FALSE
+if hs.boot then resume hsBootDone
+resume mainMenu
