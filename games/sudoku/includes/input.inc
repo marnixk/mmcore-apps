@@ -1,84 +1,39 @@
-' input.inc - keyboard input through ON KEY (classic CMM2 key codes)
+' input.inc - keyboard (classic CMM2 key codes)
 '
-' key.isr is the ON KEY interrupt handler: it only moves every waiting
-' INKEY$ code into a small ring buffer and returns (no drawing, no logic).
-' The game loops drain the buffer with key.get(), so a press that arrives
-' while the screen is being redrawn is queued instead of lost.
-'
-' mmcore supports every ON KEY form: ON KEY sub, ON KEY ascii, sub,
-' ON KEY ascii, 0 and ON KEY 0. This module uses the general form ON KEY sub
-' because one handler has to serve every key (arrows, digits, Esc, Enter,
-' Backspace, Delete and all the letters of the name entry); the per-key form
-' would need a handler per key and does not hand the key over for the queue.
-' ON KEY 0 switches it off. The handler reads key.w only, the main code
-' key.r only, so neither side can corrupt the other. One slot stays free to
-' tell full from empty.
+' Menus, dialogs and name entry read INKEY$ directly in a simple loop:
+'   do : k$ = inkey$ : if k$ <> "" then (handle it) else pause : loop
+' No ON KEY handler, no queue, no flushing: every press is handled once, in
+' order, and a held arrow auto-repeats through INKEY$ like any key.
+' The game loop reads INKEY$ the same way on every pass; on the board a held
+' arrow is repeated from KEYDOWN (below) so the cursor speed does not depend
+' on the OS key repeat.
 
-const KEYQ = 32
-dim key.q(KEYQ - 1)
-dim key.r = 0, key.w = 0
-dim key.on = FALSE
-
-sub key.isr()
-  local k$, nw
-  k$ = inkey$
-  do while k$ <> ""
-    nw = (key.w + 1) mod KEYQ
-    if nw <> key.r then
-      key.q(key.w) = asc(k$)
-      key.w = nw
-    end if
-    k$ = inkey$
+' throw away typed-ahead keys (used once: when the win dialog has been up for
+' a moment, so a digit still bouncing from the last move does not skip it)
+sub key.drain()
+  do while inkey$ <> ""
   loop
 end sub
 
-' start / stop the interrupt-driven input
-sub key.start()
-  key.r = key.w
-  on key key.isr
-  key.on = TRUE
-end sub
-
-sub key.stop()
-  on key 0
-  key.on = FALSE
-end sub
-
-' next key code from the queue, 0 if none
-function key.get()
-  local k$
-  if key.r <> key.w then
-    key.get = key.q(key.r)
-    key.r = (key.r + 1) mod KEYQ
-    exit function
-  end if
-  key.get = 0
-  ' fallback while the handler is off
-  if key.on then exit function
-  k$ = inkey$
-  if k$ <> "" then key.get = asc(k$)
-end function
-
-' TRUE when another key is already waiting in the queue
-function key.waiting()
-  key.waiting = (key.r <> key.w)
-end function
-
-' throw away anything typed so far
-sub key.flush()
-  local t = timer
-  do while inkey$ <> "" and timer - t < 500
-  loop
-  key.r = key.w
+' forget the held arrow (game start, leaving the pause dialog)
+sub key.reset()
   key.rpt = 0
 end sub
+
+function key.isEnter(k$)
+  key.isEnter = (k$ = chr$(K_ENTER) or k$ = chr$(K_LF))
+end function
+
+function key.isQuit(k$)
+  key.isQuit = (k$ = "q" or k$ = "Q")
+end function
 
 ' ---- held arrows: auto-repeat driven by KEYDOWN, independent of OS repeat
 ' KEYDOWN(0) = number of keys held, KEYDOWN(1..n) = their CMM2 codes
 ' (arrows 128-131, the same values INKEY$ gives).
-' The first press of an arrow arrives through the ON KEY queue and moves at
-' once; while that arrow stays held, key.repeat() hands it out again after
-' KEY_RDELAY ms and then every KEY_RRATE ms. Queued copies of the same arrow
+' The first press of an arrow arrives through INKEY$ and moves at once; while
+' that arrow stays held, key.repeat() hands it out again after KEY_RDELAY ms
+' and then every KEY_RRATE ms. INKEY$ copies of the same arrow
 ' that arrive while it is held past the first moment are OS key-repeats and
 ' are dropped, so nothing moves twice.
 const KEY_RDELAY = 250, KEY_RRATE = 70, KEY_OSREP = 150
@@ -93,7 +48,7 @@ function key.held(k)
   next i
 end function
 
-' a queued arrow: returns k when it is a fresh press, -1 when it is an OS
+' an INKEY$ arrow: returns k when it is a fresh press, -1 when it is an OS
 ' repeat of the arrow we are already auto-repeating
 function key.arrowKeep(k)
   if k = key.rpt and timer - key.rptStart >= KEY_OSREP and key.held(k) then
@@ -118,8 +73,4 @@ function key.repeat()
   key.repeat = key.rpt
   key.rptNext = key.rptNext + KEY_RRATE
   if key.rptNext < timer then key.rptNext = timer + KEY_RRATE
-end function
-
-function key.isEnter(k)
-  key.isEnter = (k = K_ENTER or k = K_LF)
 end function

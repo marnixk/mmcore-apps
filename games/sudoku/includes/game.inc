@@ -113,7 +113,7 @@ sub game.put(d)
 end sub
 
 sub game.run(lv)
-  local k, quitReq = FALSE, won = FALSE, secs, mins, score, rk, n$, moved, dig
+  local k, k$, quitReq = FALSE, won = FALSE, secs, mins, score, rk, n$, moved, dig
   gm.level = lv
   gm.misses = 0
   gm.elapsed = 0
@@ -127,16 +127,17 @@ sub game.run(lv)
   gm.tPulse = timer
   if not mus.on then music.start()
   game.redraw()
-  key.flush()
+  key.reset()
   do
     music.poll()
-    ' drain every queued key first, then draw once: held or fast repeated
-    ' arrows never wait for a redraw per press
+    ' read every key typed since the last pass first, then draw once: held or
+    ' fast repeated arrows never wait for a redraw per press
     moved = FALSE
     dig = FALSE
     do
-      k = key.get()
-      if k = 0 then exit do
+      k$ = inkey$
+      if k$ = "" then exit do
+      k = asc(k$)
       if k >= K_UP and k <= K_RIGHT then k = key.arrowKeep(k)
       if k >= K_UP and k <= K_RIGHT then
         game.move(k)
@@ -155,6 +156,7 @@ sub game.run(lv)
         gm.elapsed = gm.elapsed + (timer - gm.t0)
         quitReq = dlg.pause()
         gm.t0 = timer
+        key.reset()
         if not quitReq then game.redraw()
       end if
     loop until quitReq or won
@@ -175,7 +177,7 @@ sub game.run(lv)
       gm.frame = 1 - gm.frame
       game.update(TRUE, FALSE)
     end if
-    if not key.waiting() then pause 10
+    pause 10
   loop until quitReq or won
 
   if won then
@@ -192,20 +194,16 @@ sub game.run(lv)
       game.showTable(lv, rk)
     end if
   end if
-  key.flush()
 end sub
 
 ' show the table after entering a name, until a key is pressed
 sub game.showTable(lv, rk)
-  local k
   page write PG_BACK
   page copy PG_GAME to PG_BACK
   bd.drawAll()
   dlg.table(lv, rk, -1, "", FALSE)
   scr.present()
-  key.flush()
-  do
-    k = key.get()
+  do while inkey$ = ""
     pause 15
-  loop until k <> 0
+  loop
 end sub

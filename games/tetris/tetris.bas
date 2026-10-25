@@ -44,7 +44,6 @@ scr.loadAssets()
 pc.init()
 hs.load()
 music.start()
-key.start()
 
 do
   menuPick = intro.run()
@@ -55,7 +54,6 @@ do
   end if
 loop until menuPick = MENU_QUIT
 
-key.stop()
 music.stop()
 scr.restore()
 end

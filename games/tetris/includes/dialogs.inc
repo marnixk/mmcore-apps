@@ -20,7 +20,7 @@ end sub
 
 ' pause dialog with the controls. returns TRUE when the player quits (Q)
 function dlg.pause()
-  local s = scr.sc, w, h, x, y, ry, tx, k, kw
+  local s = scr.sc, w, h, x, y, ry, tx, k$, kw
   w = 300 * s
   h = 232 * s
   x = (scr.W - w) \ 2
@@ -60,20 +60,18 @@ function dlg.pause()
   ui.divider(x + 20 * s, y + h - 34 * s, w - 40 * s)
   txtC "ESC TO RESUME  -  Q TO QUIT", x + w \ 2, y + h - 22 * s, F_GOLD
   scr.present()
-  key.flush()
   dlg.pause = FALSE
   do
-    k = key.get()
-    if k = 0 then
-      pause 15
-    elseif k = K_ESC then
+    k$ = inkey$
+    if k$ = "" then
+      pause 5
+    elseif k$ = chr$(K_ESC) then
       exit do
-    elseif k = asc("q") or k = asc("Q") then
+    elseif key.isQuit(k$) then
       dlg.pause = TRUE
       exit do
     end if
   loop
-  key.flush()
 end function
 
 ' name slots of the name-entry dialog (current write page = PG_BACK)
@@ -97,7 +95,7 @@ end sub
 
 ' new high score: ask for a name (Enter or Esc saves; empty = PLAYER)
 function dlg.enterName$(lv, rk)
-  local s = scr.sc, w, h, x, y, k, n$, sx, sy, cur = TRUE, tb, r, c$
+  local s = scr.sc, w, h, x, y, k, k$, n$, sx, sy, cur = TRUE, tb, r, c$
   w = 290 * s
   h = 196 * s
   x = (scr.W - w) \ 2
@@ -124,11 +122,10 @@ function dlg.enterName$(lv, rk)
   n$ = ""
   dlg.nameSlots(sx, sy, n$, cur)
   scr.present()
-  key.flush()
   tb = timer
   do
-    k = key.get()
-    if k = 0 then
+    k$ = inkey$
+    if k$ = "" then
       if timer - tb > 400 then
         cur = not cur
         tb = timer
@@ -136,13 +133,14 @@ function dlg.enterName$(lv, rk)
         dlg.nameSlots(sx, sy, n$, cur)
         scr.show(sx, sy, HS_MAXNAME * 24 * s, 24 * s)
       end if
-      pause 15
+      pause 5
     else
-      if key.isEnter(k) or k = K_ESC then exit do
+      k = asc(k$)
+      if key.isEnter(k$) or k = K_ESC then exit do
       if (k = K_BKSP or k = K_DEL or k = K_LEFT) and len(n$) > 0 then
         n$ = left$(n$, len(n$) - 1)
       elseif k >= 32 and k < 127 and len(n$) < HS_MAXNAME then
-        c$ = ucase$(chr$(k))
+        c$ = ucase$(k$)
         if instr(BIG$, c$) > 0 and c$ <> "_" and c$ <> "?" then
           if not (c$ = " " and len(n$) = 0) then n$ = n$ + c$
         end if
@@ -156,7 +154,6 @@ function dlg.enterName$(lv, rk)
   loop
   n$ = rtrim$(n$)
   if n$ = "" then n$ = "PLAYER"
-  key.flush()
   dlg.enterName$ = n$
 end function
 
@@ -171,7 +168,7 @@ end function
 
 ' high-score table, three columns. hlLv/hlRank highlight a new entry (-1 none)
 sub dlg.scores(hlLv, hlRank)
-  local s = scr.sc, c, i, x, y, r, sr, k, t$
+  local s = scr.sc, c, i, x, y, r, sr, k$, t$
   page copy PG_SCORES to PG_BACK
   page write PG_BACK
   for c = 0 to 2
@@ -207,10 +204,8 @@ sub dlg.scores(hlLv, hlRank)
     next i
   next c
   scr.present()
-  key.flush()
   do
-    k = key.get()
-    if k = 0 then pause 15
-  loop until k = K_ESC or key.isEnter(k) or k = asc("q") or k = asc("Q") or k = asc(" ")
-  key.flush()
+    k$ = inkey$
+    if k$ = "" then pause 5
+  loop until k$ = chr$(K_ESC) or key.isEnter(k$) or key.isQuit(k$) or k$ = " "
 end sub

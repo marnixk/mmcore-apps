@@ -181,10 +181,9 @@ sub gm.banner(t1$, r1, t2$, t3$, ms)
   txtC t2$, x, ui.py + 42 * s, F_CREAM
   txtC t3$, x, ui.py + 60 * s, F_GREEN
   scr.present()
-  key.flush()
+  key.arrowReset()
   t0 = timer
   do
-    k = key.get()      ' queued codes are dropped: arrows steer via KEYDOWN
     k = gm.arrows()
     if gm.tn > 0 and timer - t0 > 300 then exit do
     pause 1
@@ -315,12 +314,13 @@ sub gm.pauseGame()
   gm.quit = dlg.pause()
   if not gm.quit then
     scr.unsave()
+    key.arrowReset()
     gm.due = timer + gm.speed
   end if
 end sub
 
 sub game.run(diff)
-  local k, st
+  local k$, st
   gm.diff = diff
   gm.lvn = 1
   gm.lives = START_LIVES
@@ -335,15 +335,12 @@ sub game.run(diff)
   gm.pt = timer + PULSE_MS
   gm.early = FALSE
   do
-    ' ON KEY queue: only P / Esc matter here (arrow codes are dropped, KEYDOWN
-    ' steers)
-    do
-      k = key.get()
-      if k = 0 then exit do
-      if key.isPause(k) then
-        gm.pauseGame()
-        if gm.quit then exit do
-      end if
+    ' P / Esc pause; anything else typed during play (e.g. the arrows, which
+    ' steer via KEYDOWN) is ignored
+    k$ = inkey$
+    do while k$ <> "" and not gm.quit
+      if key.isPause(k$) then gm.pauseGame()
+      k$ = inkey$
     loop
     if gm.quit then exit do
     ' a first queued turn more than half a step after the last move is taken
@@ -372,9 +369,8 @@ sub game.run(diff)
     ' one present per pass: only the cells (and HUD) that changed
     if scr.dirty then scr.flush()
     ' idle until the next step or pulse is due, waking every few ms to read
-    ' the arrows (P / Esc arrive through ON KEY)
-    if not key.waiting() then pause max(1, min(IDLE_MS, min(gm.due, gm.pt) - timer))
+    ' the keys
+    pause max(1, min(IDLE_MS, min(gm.due, gm.pt) - timer))
   loop until gm.over or gm.quit
   if not gm.quit then dlg.gameOver()
-  key.flush()
 end sub

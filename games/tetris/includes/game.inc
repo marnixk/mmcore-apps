@@ -264,8 +264,8 @@ function gm.softStep()
   gm.softStep = TRUE
 end function
 
-' queued Down: a fresh press steps one row and starts the held soft drop.
-' copies queued while Down stays held are OS key repeats and are dropped.
+' Down from INKEY$: a fresh press steps one row and starts the held soft drop.
+' copies that arrive while Down stays held are OS key repeats and are dropped.
 sub gm.softPress()
   local ign
   ign = gm.sd
@@ -394,7 +394,7 @@ end sub
 
 ' ---- one game; returns when it is over or the player quit
 sub game.run(lv)
-  local k, t0, rk, n$, gs, ge
+  local k, k$, t0, rk, n$, gs, ge
   gm.lv = lv
   gm.level = 1
   gm.lines = 0
@@ -420,13 +420,16 @@ sub game.run(lv)
   gm.hudHold()
   gm.spawnNext()
   gm.redrawAll()
-  key.flush()
+  key.reset()
   gm.sd = FALSE
   do
     key.nrPoll()
+    ' every key typed since the last pass, in order (arrows, Down and the
+    ' one-shot keys also check KEYDOWN to tell a press from an OS repeat)
     do
-      k = key.get()
-      if k = 0 then exit do
+      k$ = inkey$
+      if k$ = "" then exit do
+      k = asc(k$)
       if k = K_LEFT or k = K_RIGHT then
         k = key.arrowKeep(k)
       end if
@@ -455,6 +458,7 @@ sub game.run(lv)
           gm.fallT = gm.fallT + t0
           if gm.lockT <> 0 then gm.lockT = gm.lockT + t0
           gm.sd = FALSE
+          key.reset()
           gm.redrawAll()
         end if
       end if
@@ -471,20 +475,18 @@ sub game.run(lv)
     gm.tick()
     if sh.score <> gm.score then gm.hudStats(FALSE)
     if gm.dirty and not gm.over then gm.drawWell()
-    if not key.waiting() then pause 2
+    pause 2
   loop until gm.over or gm.quit
-  if gm.quit then
-    key.flush()
-    exit sub
-  end if
+  if gm.quit then exit sub
   ' ---- game over
   bd.drawStack(TRUE)
   page write PG_STACK
   dlg.gameOver()
   page write 0
   blit lay.wx, lay.wy, lay.wx, lay.wy, 10 * lay.cell, 20 * lay.cell, PG_STACK
+  ' a short guard, then drop the keys still buffered from play
   pause 700
-  key.flush()
+  key.drain()
   ' a key still held from play (e.g. the Space hard drop that topped out)
   ' only counts once it has been released and pressed again
   gs = key.held(K_SPACE)
@@ -493,15 +495,15 @@ sub game.run(lv)
   do
     if gs then gs = key.held(K_SPACE)
     if ge then ge = key.held(K_ENTER) or key.held(K_LF)
-    k = key.get()
-    if k = 0 then
-      pause 15
-    elseif k = K_SPACE and gs then
-      k = 0
-    elseif key.isEnter(k) and ge then
-      k = 0
+    k$ = inkey$
+    if k$ = "" then
+      pause 5
+    elseif k$ = " " and gs then
+      k$ = ""
+    elseif key.isEnter(k$) and ge then
+      k$ = ""
     end if
-  loop until key.isEnter(k) or k = K_ESC or k = K_SPACE
+  loop until key.isEnter(k$) or k$ = chr$(K_ESC) or k$ = " "
   rk = hs.rank(lv, gm.score)
   if rk >= 0 then
     n$ = dlg.enterName$(lv, rk)
@@ -509,5 +511,4 @@ sub game.run(lv)
     hs.save()
     dlg.scores(lv, rk)
   end if
-  key.flush()
 end sub

@@ -61,37 +61,35 @@ sub intro.show()
   scr.show(lay.px, lay.py, lay.pw, lay.ph)
 end sub
 
-' returns MENU_START, MENU_SCORES or MENU_QUIT
+' returns MENU_START, MENU_SCORES or MENU_QUIT. One key press = one move; the
+' menu panel is redrawn on the back page and only that panel (and the prompt
+' below it) is copied to the screen.
 function intro.run()
-  local k
+  local k$, old, ol
   page copy PG_INTRO to PG_BACK
   intro.drawMenu()
   scr.present()
-  key.flush()
   do
-    k = key.get()
-    if k = 0 then
-      pause 15
+    k$ = inkey$
+    if k$ = "" then
+      pause 5
     else
-      if k = K_UP then menu.row = (menu.row + 3) mod 4
-      if k = K_DOWN then menu.row = (menu.row + 1) mod 4
-      if k = K_LEFT then menu.level = max(LV_EASY, menu.level - 1)
-      if k = K_RIGHT then menu.level = min(LV_HARD, menu.level + 1)
-      if k = K_ESC then menu.row = MENU_QUIT
-      if k = asc("q") or k = asc("Q") then menu.row = MENU_QUIT
-      if key.isEnter(k) then
-        if menu.row = MENU_START or menu.row = MENU_LEVEL then
-          intro.run = MENU_START
-          exit do
-        end if
-        if menu.row = MENU_SCORES or menu.row = MENU_QUIT then
-          intro.run = menu.row
-          exit do
-        end if
+      old = menu.row
+      ol = menu.level
+      if k$ = chr$(K_UP) then menu.row = (menu.row + 3) mod 4
+      if k$ = chr$(K_DOWN) then menu.row = (menu.row + 1) mod 4
+      if k$ = chr$(K_LEFT) then menu.level = max(LV_EASY, menu.level - 1)
+      if k$ = chr$(K_RIGHT) then menu.level = min(LV_HARD, menu.level + 1)
+      if k$ = chr$(K_ESC) or key.isQuit(k$) then menu.row = MENU_QUIT
+      if key.isEnter(k$) then
+        intro.run = menu.row
+        if menu.row = MENU_LEVEL then intro.run = MENU_START
+        exit do
       end if
-      intro.drawMenu()
-      intro.show()
+      if menu.row <> old or menu.level <> ol then
+        intro.drawMenu()
+        intro.show()
+      end if
     end if
   loop
-  key.flush()
 end function

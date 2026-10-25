@@ -10,7 +10,7 @@ end sub
 
 ' pause dialog with the controls. returns TRUE when the player quits (Q)
 function dlg.pause()
-  local s = scr.sc, x, y, kx, i, k
+  local s = scr.sc, x, y, kx, i, k$
   dlg.dimScene()
   x = ui.centre(300, 176)
   y = ui.py
@@ -33,31 +33,27 @@ function dlg.pause()
   ui.rule(x + 18 * s, y + 2 * s, 264 * s)
   txtC "P OR ESC TO CONTINUE", x + 150 * s, y + 12 * s, F_GREEN
   scr.present()
-  key.flush()
   dlg.pause = FALSE
   do
-    k = key.get()
-    if k = 0 then
-      pause 15
-    elseif key.isPause(k) then
+    k$ = inkey$
+    if k$ = "" then
+      pause 5
+    elseif key.isPause(k$) then
       exit do
-    elseif k = asc("q") or k = asc("Q") then
+    elseif key.isQuit(k$) then
       dlg.pause = TRUE
       exit do
     end if
   loop
-  key.flush()
 end function
 
 ' wait for Enter (or Esc / Space)
 sub dlg.waitEnter()
-  local k
-  key.flush()
+  local k$
   do
-    k = key.get()
-    if k = 0 then pause 15
-  loop until key.isEnter(k) or k = K_ESC or k = K_SPACE or k = asc("q") or k = asc("Q")
-  key.flush()
+    k$ = inkey$
+    if k$ = "" then pause 5
+  loop until key.isEnter(k$) or k$ = chr$(K_ESC) or k$ = " " or key.isQuit(k$)
 end sub
 
 ' name slots of the name-entry dialog (current write page)
@@ -76,9 +72,16 @@ sub dlg.slots(x, y, n$, cur)
   next i
 end sub
 
+' redraw the name slots and copy just that strip to the screen
+sub dlg.nameShow(x, y, n$, cur)
+  dlg.slots(x, y, n$, cur)
+  scr.mark(x, y, HS_MAXNAME * 12 * scr.sc, 14 * scr.sc)
+  scr.flush()
+end sub
+
 ' game over: score summary; a top-10 score asks for a name, saves it and shows the table
 sub dlg.gameOver()
-  local s = scr.sc, x, y, cx, rk, k, n$, c$, cur = TRUE, tb, bx, by, i
+  local s = scr.sc, x, y, cx, rk, k, k$, n$, c$, cur = TRUE, tb, bx, by, i
   rk = hs.rank(gm.score)
   dlg.dimScene()
   x = ui.centre(300, 168)
@@ -102,38 +105,38 @@ sub dlg.gameOver()
     txtC "PRESS ENTER", cx, y + 128 * s, F_GOLD
   end if
   scr.present()
+  ' a short guard, then drop the arrow presses still buffered from play
   pause 600
+  key.drain()
   if rk < 0 then
     dlg.waitEnter()
     exit sub
   end if
-  key.flush()
   n$ = ""
   tb = timer
   do
-    k = key.get()
-    if k = 0 then
+    k$ = inkey$
+    if k$ = "" then
       if timer - tb > 400 then
         cur = not cur
         tb = timer
-        dlg.slots(bx, by, n$, cur)
-        scr.present()
+        dlg.nameShow(bx, by, n$, cur)
       end if
-      pause 15
+      pause 5
     else
-      if key.isEnter(k) or k = K_ESC then exit do
+      k = asc(k$)
+      if key.isEnter(k$) or k = K_ESC then exit do
       if (k = K_BKSP or k = K_DEL or k = K_LEFT) and len(n$) > 0 then
         n$ = left$(n$, len(n$) - 1)
       elseif k >= 32 and k < 127 and len(n$) < HS_MAXNAME then
-        c$ = ucase$(chr$(k))
+        c$ = ucase$(k$)
         if instr("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 -!.", c$) > 0 then
           if not (c$ = " " and len(n$) = 0) then n$ = n$ + c$
         end if
       end if
       cur = TRUE
       tb = timer
-      dlg.slots(bx, by, n$, cur)
-      scr.present()
+      dlg.nameShow(bx, by, n$, cur)
     end if
   loop
   do while right$(n$, 1) = " "

@@ -1,74 +1,38 @@
-' input.inc - keyboard input through ON KEY (classic CMM2 key codes)
+' input.inc - keyboard (classic CMM2 key codes)
 '
-' key.isr is the ON KEY interrupt handler: it only moves every waiting INKEY$
-' code into a small ring buffer and returns (no drawing, no logic). The loops
-' drain the buffer with key.get(), so a press that arrives while the screen is
-' being redrawn is queued instead of lost. The handler writes key.w only and the
-' main code moves key.r only. One slot stays free (full/empty). The queue serves
-' the menus, name entry and P / Esc / Q; in-game steering uses KEYDOWN (below).
+' Menus, dialogs and name entry read INKEY$ directly in a simple loop:
+'   do : k$ = inkey$ : if k$ <> "" then (handle it) else pause 5 : loop
+' No ON KEY handler, no queue, no flushing: every press is handled once, in order.
+'
+' In play the arrows are read from KEYDOWN instead (below), so a held arrow
+' turns once and OS auto-repeat never queues extra turns.
 
-const KEYQ = 32
-dim key.q(KEYQ - 1)
-dim key.r = 0, key.w = 0
-dim key.on = FALSE
-
-sub key.isr()
-  local k$, nw
-  k$ = inkey$
-  do while k$ <> ""
-    nw = (key.w + 1) mod KEYQ
-    if nw <> key.r then
-      key.q(key.w) = asc(k$)
-      key.w = nw
-    end if
-    k$ = inkey$
+' throw away typed-ahead keys (used once: when the game-over panel opens, so
+' arrows still buffered from play do not land in the name entry)
+sub key.drain()
+  do while inkey$ <> ""
   loop
 end sub
 
-sub key.start()
-  key.r = key.w
-  on key key.isr
-  key.on = TRUE
-end sub
-
-sub key.stop()
-  on key 0
-  key.on = FALSE
-end sub
-
-' next key code from the queue, 0 if none
-function key.get()
-  local k$
-  if key.r <> key.w then
-    key.get = key.q(key.r)
-    key.r = (key.r + 1) mod KEYQ
-    exit function
-  end if
-  key.get = 0
-  if key.on then exit function
-  k$ = inkey$
-  if k$ <> "" then key.get = asc(k$)
+function key.isEnter(k$)
+  key.isEnter = (k$ = chr$(K_ENTER) or k$ = chr$(K_LF))
 end function
 
-function key.waiting()
-  key.waiting = (key.r <> key.w)
+' P / Esc pause the game, Q quits from the pause dialog
+function key.isPause(k$)
+  key.isPause = (k$ = chr$(K_ESC) or k$ = "p" or k$ = "P")
 end function
 
-' throw away anything typed so far
-sub key.flush()
-  local t = timer
-  do while inkey$ <> "" and timer - t < 500
-  loop
-  key.r = key.w
-  key.arrowReset()
-end sub
+function key.isQuit(k$)
+  key.isQuit = (k$ = "q" or k$ = "Q")
+end function
 
 ' ---- arrows during play are read from KEYDOWN, not from the INKEY$ queue.
 ' key.scan() runs once per loop pass and lists every arrow that went down since
 ' the previous pass (a rising edge) in key.ev(0 .. key.evn - 1), in KEYDOWN
 ' order, so the newest press comes last. A held key counts once; OS auto-repeat
 ' never reaches KEYDOWN. key.adn(i) = arrow i (0 Up, 1 Down, 2 Left, 3 Right)
-' was held at the last scan. The loops drop arrow codes from the ON KEY queue.
+' was held at the last scan. Arrow codes that also reach INKEY$ are ignored.
 dim key.adn(3), key.ah(3), key.ev(3), key.evn
 
 ' forget held arrows: one still held after this counts as a fresh press
@@ -106,16 +70,3 @@ sub key.scan()
     key.adn(j) = key.ah(j)
   next j
 end sub
-
-function key.isEnter(k)
-  key.isEnter = (k = K_ENTER or k = K_LF)
-end function
-
-function key.isArrow(k)
-  key.isArrow = (k >= K_UP and k <= K_RIGHT)
-end function
-
-' P / Esc pause the game, Q quits from the pause dialog
-function key.isPause(k)
-  key.isPause = (k = K_ESC or k = asc("p") or k = asc("P"))
-end function

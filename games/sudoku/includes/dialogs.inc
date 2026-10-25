@@ -23,7 +23,7 @@ end sub
 
 ' ---- pause / help: returns TRUE when the player wants to quit to the menu
 function dlg.pause()
-  local k, sc = scr.sc, y, i
+  local k$, sc = scr.sc, y, i
   local string keys$(4) = ("ARROWS", "1-9", "0 DEL BKSP", "ESC", "Q")
   local string acts$(4) = ("MOVE", "PLACE DIGIT", "CLEAR CELL", "RESUME", "QUIT TO MENU")
   game.compose()
@@ -36,20 +36,24 @@ function dlg.pause()
   next i
   txt "GIVENS ARE LOCKED", dlg.x + 14 * sc, dlg.y + 29 * sc + 5 * 13 * sc + 6 * sc, F_GREEN
   scr.present()
-  key.flush()
   do
     music.poll()
-    k = key.get()
-    if k = K_ESC then dlg.pause = FALSE : exit do
-    if k = asc("q") or k = asc("Q") then dlg.pause = TRUE : exit do
-    pause 15
+    k$ = inkey$
+    if k$ = "" then
+      pause 15
+    elseif k$ = chr$(K_ESC) then
+      dlg.pause = FALSE
+      exit do
+    elseif key.isQuit(k$) then
+      dlg.pause = TRUE
+      exit do
+    end if
   loop
-  key.flush()
 end function
 
 ' ---- win summary; returns when a key is pressed
 sub dlg.win(lv, secs, misses, score, qualifies)
-  local sc = scr.sc, x, y, k, t = timer
+  local sc = scr.sc, x, y, k$, t = timer
   game.compose()
   dlg.frame()
   dlg.header(4, "WELL DONE!", F_GREEN)
@@ -69,15 +73,15 @@ sub dlg.win(lv, secs, misses, score, qualifies)
     txt "THE FOREST IS AT PEACE", dlg.x + (lay.dlgW - len("THE FOREST IS AT PEACE") * 6 * sc) \ 2, y + 64 * sc, F_GREEN
   end if
   scr.present()
-  ' ignore keys for a moment so a held digit doesn't skip the dialog
+  ' ignore keys for a moment so a held digit doesn't skip the dialog, then
+  ' drop whatever was typed meanwhile
   do while timer - t < 700
   loop
-  key.flush()
+  key.drain()
   do
-    k = key.get()
-    pause 15
-  loop until key.isEnter(k) or k = K_ESC or k = 32
-  key.flush()
+    k$ = inkey$
+    if k$ = "" then pause 15
+  loop until key.isEnter(k$) or k$ = chr$(K_ESC) or k$ = " "
 end sub
 
 ' one table line: rank, name, score, time
@@ -95,7 +99,7 @@ end function
 
 ' ---- high score table on the current write page; editRow = row being typed (-1 none)
 sub dlg.table(lv, hilite, editRow, nm$, blink)
-  local sc = scr.sc, i, y, r, n$, s$
+  local i
   dlg.frame()
   if editRow >= 0 then
     dlg.header(3, "NEW HIGH SCORE!", F_RED)
@@ -103,79 +107,107 @@ sub dlg.table(lv, hilite, editRow, nm$, blink)
     dlg.header(3, "BEST  < " + lv.name$(lv) + " >", F_GREEN)
   end if
   for i = 0 to 9
-    y = dlg.y + 25 * sc + i * 11 * sc
-    if i = editRow then
-      n$ = nm$
-      if blink then n$ = n$ + "_"
-      s$ = dlg.row$(i, n$, hs.score(lv, i), hs.secs(lv, i))
-      r = F_RED
-    elseif hs.score(lv, i) > 0 then
-      s$ = dlg.row$(i, hs.name$(lv, i), hs.score(lv, i), hs.secs(lv, i))
-      if i = hilite then r = F_RED else r = F_BROWN
-    else
-      s$ = dlg.row$(i, "---", 0, 0)
-      r = F_BROWN
-    end if
-    txt s$, dlg.x + 14 * sc, y, r
+    dlg.tableRow(lv, i, hilite, editRow, nm$, blink)
   next i
 end sub
 
-' ---- browse the tables from the menu; left/right switches level
+' one line of the table (drawn over the dialog frame)
+sub dlg.tableRow(lv, i, hilite, editRow, nm$, blink)
+  local sc = scr.sc, y, r, n$, s$
+  y = dlg.y + 25 * sc + i * 11 * sc
+  if i = editRow then
+    n$ = nm$
+    if blink then n$ = n$ + "_"
+    s$ = dlg.row$(i, n$, hs.score(lv, i), hs.secs(lv, i))
+    r = F_RED
+  elseif hs.score(lv, i) > 0 then
+    s$ = dlg.row$(i, hs.name$(lv, i), hs.score(lv, i), hs.secs(lv, i))
+    if i = hilite then r = F_RED else r = F_BROWN
+  else
+    s$ = dlg.row$(i, "---", 0, 0)
+    r = F_BROWN
+  end if
+  txt s$, dlg.x + 14 * sc, y, r
+end sub
+
+' redraw table line i on the back page over a clean slice of the parchment and
+' copy just that line to the screen
+sub dlg.tableRowShow(lv, i, editRow, nm$, blink)
+  local sc = scr.sc, x, y, w, h
+  x = dlg.x + 8 * sc
+  y = dlg.y + (24 + i * 11) * sc
+  w = lay.dlgW - 16 * sc
+  h = 11 * sc
+  page write PG_BACK
+  blit 8 * sc, (24 + i * 11) * sc, x, y, w, h, PG_PANELS
+  dlg.tableRow(lv, i, -1, editRow, nm$, blink)
+  page write 0
+  blit x, y, x, y, w, h, PG_BACK
+end sub
+
+' ---- browse the tables from the menu; left/right switches level (only the
+' dialog is redrawn and copied to the screen)
 sub dlg.scoreBrowser(lv)
-  local k
-  key.flush()
+  local k$
+  page write PG_BACK
+  page copy PG_CLEAN to PG_BACK
+  dlg.table(lv, -1, -1, "", FALSE)
+  fly.ax = dlg.x
+  fly.ay = dlg.y
+  fly.aw = lay.dlgW
+  fly.ah = lay.dlgH
+  scr.present()
   do
-    page write PG_BACK
-    page copy PG_CLEAN to PG_BACK
-    dlg.table(lv, -1, -1, "", FALSE)
-    fly.ax = dlg.x
-    fly.ay = dlg.y
-    fly.aw = lay.dlgW
-    fly.ah = lay.dlgH
-    scr.present()
-    do
-      music.poll()
-      intro.fireflies()
-      k = key.get()
+    music.poll()
+    intro.fireflies()
+    k$ = inkey$
+    if k$ = "" then
       pause 15
-    loop until k <> 0
-    if k = K_LEFT then lv = (lv + 2) mod 3
-    if k = K_RIGHT then lv = (lv + 1) mod 3
-  loop until k = K_ESC or key.isEnter(k)
-  key.flush()
+    elseif k$ = chr$(K_LEFT) or k$ = chr$(K_RIGHT) then
+      if k$ = chr$(K_LEFT) then lv = (lv + 2) mod 3 else lv = (lv + 1) mod 3
+      page write PG_BACK
+      blit dlg.x, dlg.y, dlg.x, dlg.y, lay.dlgW, lay.dlgH, PG_CLEAN
+      dlg.table(lv, -1, -1, "", FALSE)
+      page write 0
+      blit dlg.x, dlg.y, dlg.x, dlg.y, lay.dlgW, lay.dlgH, PG_BACK
+    end if
+  loop until k$ = chr$(K_ESC) or key.isEnter(k$)
 end sub
 
 ' ---- type a name for table row rk (already inserted); returns the name
+' (the whole dialog is drawn once; a key or the cursor blink redraws only the
+' row being typed)
 function dlg.enterName$(lv, rk)
-  local n$ = "", k, blink = TRUE, t = timer, redraw = TRUE, c$
-  key.flush()
+  local n$ = "", k, k$, blink = TRUE, t = timer, c$
+  page write PG_BACK
+  page copy PG_GAME to PG_BACK
+  bd.drawAll()
+  dlg.table(lv, -1, rk, n$, blink)
+  scr.present()
   do
-    if timer - t > 400 then
-      blink = not blink
+    k$ = inkey$
+    if k$ = "" then
+      if timer - t > 400 then
+        blink = not blink
+        t = timer
+        dlg.tableRowShow(lv, rk, rk, n$, blink)
+      end if
+      pause 15
+    else
+      k = asc(k$)
+      if key.isEnter(k$) or k = K_ESC then exit do
+      if k = K_BKSP or k = K_DEL then
+        if len(n$) > 0 then n$ = left$(n$, len(n$) - 1)
+      elseif k >= 32 and k < 127 then
+        c$ = ucase$(k$)
+        if instr(FONT_CHARS$, c$) > 0 and len(n$) < HS_MAXNAME then n$ = n$ + c$
+      end if
+      blink = TRUE
       t = timer
-      redraw = TRUE
+      dlg.tableRowShow(lv, rk, rk, n$, blink)
     end if
-    if redraw then
-      page write PG_BACK
-      page copy PG_GAME to PG_BACK
-      bd.drawAll()
-      dlg.table(lv, -1, rk, n$, blink)
-      scr.present()
-      redraw = FALSE
-    end if
-    k = key.get()
-    if k = K_BKSP or k = K_DEL then
-      if len(n$) > 0 then n$ = left$(n$, len(n$) - 1)
-      redraw = TRUE
-    elseif k >= 32 and k < 127 then
-      c$ = ucase$(chr$(k))
-      if instr(FONT_CHARS$, c$) > 0 and len(n$) < HS_MAXNAME then n$ = n$ + c$
-      redraw = TRUE
-    end if
-    pause 15
-  loop until key.isEnter(k) or k = K_ESC
+  loop
   n$ = trim$(n$)
   if n$ = "" then n$ = "PLAYER"
   dlg.enterName$ = n$
-  key.flush()
 end function
