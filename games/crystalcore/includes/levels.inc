@@ -25,92 +25,92 @@ end sub
 
 levelData:
 ' ---- 01 FIRST SPARK
-data "FIRST SPARK", 5, 15, 11, 9, 3300, 4300, 1, 1, 0, 18, 0, 0, 0, 0, 0, 0
+data "FIRST SPARK", 5, 21, 14, 11, 4000, 4500, 1, 1, 0, 18, 0, 0, 0, 0, 0, 0
 data ".........", ".ooooooo.", ".ooooooo.", ".ooooooo.", ".ooooooo.", ".ooooooo.", ".ooooooo.", ".ooooooo.", "........."
 ' ---- 02 AMBER VEIN
-data "AMBER VEIN", 5, 17, 13, 11, 5400, 6700, 1, 1, 1, 28, 0, 0, 0, 0, 0, 0
+data "AMBER VEIN", 5, 24, 16, 12, 6000, 6800, 1, 1, 1, 28, 0, 0, 0, 0, 0, 0
 data "..ooooo..", ".ooooooo.", "ooooooooo", "ooooooooo", "ooooooooo", "ooooooooo", "ooooooooo", ".ooooooo.", "..ooooo.."
 ' ---- 03 TWIN SEAMS
-data "TWIN SEAMS", 5, 23, 17, 14, 4600, 6100, 2, 1, 4, 22, 1, 3, 22, 0, 0, 0
+data "TWIN SEAMS", 5, 33, 22, 16, 5700, 6400, 2, 1, 4, 22, 1, 3, 22, 0, 0, 0
 data "ooooooooo", "ooooooooo", "ooooooooo", "ooo...ooo", "ooo...ooo", "ooo...ooo", "ooooooooo", "ooooooooo", "ooooooooo"
 ' ---- 04 THIN ICE
-data "THIN ICE", 5, 20, 15, 13, 7100, 9300, 1, 2, 0, 45, 0, 0, 0, 0, 0, 0
+data "THIN ICE", 5, 33, 22, 16, 8800, 9800, 1, 2, 0, 45, 0, 0, 0, 0, 0, 0
 data "..ooooo..", ".o11111o.", "o1111111o", "o1111111o", "o1111111o", "o1111111o", "o1111111o", ".o11111o.", "..ooooo.."
 ' ---- 05 FROZEN STEPS
-data "FROZEN STEPS", 5, 26, 20, 17, 9000, 12500, 1, 2, 0, 32, 0, 0, 0, 0, 0, 0
+data "FROZEN STEPS", 5, 36, 26, 20, 10600, 12000, 1, 2, 0, 32, 0, 0, 0, 0, 0, 0
 data "111oooooo", "1111ooooo", "o1111oooo", "oo1111ooo", "ooo1111oo", "oooo1111o", "ooooo1111", "oooooo111", "ooooooo11"
 ' ---- 06 COLD CROSS
-data "COLD CROSS", 5, 32, 24, 20, 6100, 7400, 2, 2, 0, 26, 1, 4, 18, 0, 0, 0
+data "COLD CROSS", 5, 50, 33, 24, 8400, 9100, 2, 2, 0, 26, 1, 4, 18, 0, 0, 0
 data "...o1o...", "...o1o...", "...o1o...", "ooo212ooo", "111121111", "ooo212ooo", "...o1o...", "...o1o...", "...o1o..."
 ' ---- 07 GLACIER
-data "GLACIER", 5, 20, 15, 13, 7700, 10400, 1, 2, 0, 40, 0, 0, 0, 0, 0, 0
+data "GLACIER", 5, 33, 22, 16, 9500, 10800, 1, 2, 0, 40, 0, 0, 0, 0, 0, 0
 data "ooooooooo", "o1111111o", "o1ooooo1o", "o1o222o1o", "o1o2o2o1o", "o1o222o1o", "o1ooooo1o", "o1111111o", "ooooooooo"
 ' ---- 08 ROCKFALL
-data "ROCKFALL", 5, 15, 11, 9, 4600, 7000, 1, 3, 0, 10, 0, 0, 0, 0, 0, 0
+data "ROCKFALL", 5, 25, 19, 13, 6900, 8000, 1, 3, 0, 10, 0, 0, 0, 0, 0, 0
 data "ooooooooo", "ooooooooo", "ooooooooo", "ooooooooo", "oobooobo.", "ooooooooo", "obooboobo", "ooooooooo", "bobobobob"
 ' ---- 09 HARD ROCK
-data "HARD ROCK", 5, 15, 11, 9, 4600, 6400, 1, 3, 0, 7, 0, 0, 0, 0, 0, 0
+data "HARD ROCK", 5, 25, 19, 13, 6600, 7500, 1, 3, 0, 7, 0, 0, 0, 0, 0, 0
 data "..ooooo..", ".ooooooo.", "ooooooooo", "oBooBooBo", "ooooooooo", "ooBoooBoo", "ooooooooo", ".oBoooBo.", "..ooooo.."
 ' ---- 10 ROCK AND ICE
-data "ROCK AND ICE", 5, 17, 13, 11, 6400, 9100, 2, 3, 0, 5, 2, 0, 24, 0, 0, 0
+data "ROCK AND ICE", 5, 30, 20, 15, 8000, 9100, 2, 3, 0, 5, 2, 0, 24, 0, 0, 0
 data "ooooooooo", "o1111111o", "o1ooooo1o", "o1obobo1o", "o1ooBoo1o", "o1obobo1o", "o1ooooo1o", "o1111111o", "ooooooooo"
 ' ---- 11 QUARRY
-data "QUARRY", 5, 17, 13, 11, 5300, 6700, 2, 3, 0, 6, 1, 2, 26, 0, 0, 0
+data "QUARRY", 5, 30, 20, 15, 6700, 7600, 2, 3, 0, 6, 1, 2, 26, 0, 0, 0
 data "ooo...ooo", "ooo...ooo", "ooooooooo", "BooBooBoo", "ooooooooo", "ooBooBooB", "ooooooooo", "ooooooooo", "ooooooooo"
 ' ---- 12 CAVE-IN
-data "CAVE-IN", 5, 30, 23, 20, 5800, 7300, 2, 3, 0, 9, 2, 0, 16, 0, 0, 0
+data "CAVE-IN", 5, 46, 35, 25, 8700, 9400, 2, 3, 0, 9, 2, 0, 16, 0, 0, 0
 data "oooo.oooo", "o11o.o11o", "o11o.o11o", "oooo.oooo", "bbbbbbbbb", "oooo.oooo", "o22o.o22o", "oooo.oooo", "oooo.oooo"
 ' ---- 13 CHAIN GANG
-data "CHAIN GANG", 5, 19, 14, 12, 6100, 8400, 1, 4, 0, 11, 0, 0, 0, 0, 0, 0
+data "CHAIN GANG", 5, 28, 20, 15, 7500, 8600, 1, 4, 0, 11, 0, 0, 0, 0, 0, 0
 data "ooooooooo", "ocoooooco", "oocooocoo", "ooooooooo", "ooocccooo", "ooooooooo", "oocooocoo", "ocoooooco", "ooooooooo"
 ' ---- 14 LOCKED VAULT
-data "LOCKED VAULT", 5, 24, 18, 15, 5900, 7900, 2, 4, 0, 16, 1, 0, 16, 0, 0, 0
+data "LOCKED VAULT", 5, 36, 26, 19, 8000, 8900, 2, 4, 0, 16, 1, 0, 16, 0, 0, 0
 data "..ooooo..", ".ooooooo.", "oocccccoo", "oocooocoo", "oocooocoo", "oocooocoo", "oocccccoo", ".ooooooo.", "..ooooo.."
 ' ---- 15 IRON AND ICE
-data "IRON AND ICE", 5, 25, 19, 16, 9000, 12200, 2, 4, 0, 6, 2, 0, 18, 0, 0, 0
+data "IRON AND ICE", 5, 42, 28, 22, 11000, 12400, 2, 4, 0, 6, 2, 0, 18, 0, 0, 0
 data "o1o1o1o1o", "1o1o1o1o1", "ooooooooo", "cooocoooc", "ooooooooo", "cooocoooc", "ooooooooo", "1o1o1o1o1", "o1o1o1o1o"
 ' ---- 16 HEAVY METAL
-data "HEAVY METAL", 5, 24, 18, 15, 8000, 11100, 2, 4, 0, 9, 3, 0, 6, 0, 0, 0
+data "HEAVY METAL", 5, 36, 26, 19, 9800, 11100, 2, 4, 0, 9, 3, 0, 6, 0, 0, 0
 data "ooooooooo", "ocooooocc", "ooooBoooo", "oBoooooco", "oBoocooBo", "oBoooooco", "ooooBoooo", "ocooooocc", "ooooooooo"
 ' ---- 17 DEEP SHAFT
-data "DEEP SHAFT", 5, 17, 13, 11, 4800, 6500, 3, 4, 0, 4, 2, 0, 10, 1, 4, 24
+data "DEEP SHAFT", 5, 30, 20, 16, 6100, 6900, 3, 4, 0, 4, 2, 0, 10, 1, 4, 24
 data "..ooooo..", "..o111o..", "..ocooo..", "ooo111ooo", "oooocoooo", "ooo111ooo", "..ooooo..", "..oc1co..", "..ooooo.."
 ' ---- 18 GEODE
-data "GEODE", 5, 32, 24, 20, 11100, 13800, 2, 2, 0, 60, 1, 3, 20, 0, 0, 0
+data "GEODE", 5, 60, 37, 28, 13900, 15200, 2, 2, 0, 60, 1, 3, 20, 0, 0, 0
 data "..11111..", ".1222221.", "12ooooo21", "12ooooo21", "1ooooooo1", "12ooooo21", "12ooooo21", ".1222221.", "..11111.."
 ' ---- 19 STALAGMITES
-data "STALAGMITES", 5, 26, 20, 17, 9500, 12500, 2, 3, 0, 14, 1, 1, 20, 0, 0, 0
+data "STALAGMITES", 5, 45, 32, 24, 12800, 14300, 2, 3, 0, 14, 1, 1, 20, 0, 0, 0
 data "ooooooooo", "ooooooooo", "ooooooooo", "ooooooooo", "boooboooo", "Boboooobo", "BoBobooBo", "BoBoBoBoB", "ooooooooo"
 ' ---- 20 CRYSTAL GATE
-data "CRYSTAL GATE", 5, 19, 14, 12, 4600, 6800, 3, 4, 0, 4, 2, 0, 12, 3, 0, 4
+data "CRYSTAL GATE", 5, 38, 27, 19, 7600, 8500, 3, 4, 0, 4, 2, 0, 12, 3, 0, 4
 data "ooooooooo", "o11ooo11o", "o1coooc1o", "ooo.b.ooo", "ooboooboo", "ooo.b.ooo", "o1coooc1o", "o11ooo11o", "ooooooooo"
 ' ---- 21 SIX FACETS
-data "SIX FACETS", 6, 24, 18, 15, 4500, 5700, 2, 1, 5, 22, 1, 2, 22, 0, 0, 0
+data "SIX FACETS", 6, 45, 27, 21, 6300, 7000, 2, 1, 5, 22, 1, 2, 22, 0, 0, 0
 data "..ooooo..", ".ooooooo.", "ooooooooo", "ooooooooo", "ooooooooo", "ooooooooo", "ooooooooo", ".ooooooo.", "..ooooo.."
 ' ---- 22 FROST HEART
-data "FROST HEART", 6, 29, 22, 19, 4500, 5900, 1, 2, 0, 40, 0, 0, 0, 0, 0, 0
+data "FROST HEART", 6, 57, 36, 27, 7600, 8300, 1, 2, 0, 40, 0, 0, 0, 0, 0, 0
 data ".oo...oo.", "o11o.o11o", "o1221221o", "o1222221o", "oo12221oo", ".oo121oo.", "..oo1oo..", "...ooo...", "....o...."
 ' ---- 23 BOULDER RUN
-data "BOULDER RUN", 6, 26, 20, 17, 5400, 6900, 2, 3, 0, 7, 1, 0, 16, 0, 0, 0
+data "BOULDER RUN", 6, 47, 35, 26, 8800, 9700, 2, 3, 0, 7, 1, 0, 16, 0, 0, 0
 data "ooooooooo", "ooBoooBoo", "ooooooooo", "Boooooooo", "ooooBoooo", "ooooooooB", "ooooooooo", "ooBoooBoo", "ooooooooo"
 ' ---- 24 IRON LATTICE
-data "IRON LATTICE", 6, 33, 25, 21, 6000, 7600, 1, 4, 0, 12, 0, 0, 0, 0, 0, 0
+data "IRON LATTICE", 6, 64, 47, 34, 11300, 12100, 1, 4, 0, 12, 0, 0, 0, 0, 0, 0
 data "ooooooooo", "ocococoo.", "ooooooooo", "ocococoo.", "ooooooooo", "ocococoo.", "ooooooooo", "ocococoo.", "ooooooooo"
 ' ---- 25 TWIN CAVERNS
-data "TWIN CAVERNS", 6, 43, 33, 28, 6100, 7600, 2, 2, 0, 16, 3, 0, 2, 0, 0, 0
+data "TWIN CAVERNS", 6, 102, 69, 45, 14600, 15600, 2, 2, 0, 16, 3, 0, 2, 0, 0, 0
 data "oooo.oooo", "o11o.o11o", "o11o.o11o", "oooo.oooo", "ooBo.oBoo", "oooo.oooo", "o11o.o11o", "o11o.o11o", "oooo.oooo"
 ' ---- 26 MOTHER LODE
-data "MOTHER LODE", 6, 25, 19, 16, 5200, 6800, 3, 1, 1, 24, 1, 4, 24, 1, 3, 24
+data "MOTHER LODE", 6, 48, 28, 22, 7000, 7900, 3, 1, 1, 24, 1, 4, 24, 1, 3, 24
 data "ooooooooo", "ooooooooo", "ooooooooo", "ooooooooo", "ooooooooo", "ooooooooo", "ooooooooo", "ooooooooo", "ooooooooo"
 ' ---- 27 CHAINED ICE
-data "CHAINED ICE", 6, 37, 28, 24, 6900, 8800, 2, 4, 0, 10, 2, 0, 35, 0, 0, 0
+data "CHAINED ICE", 6, 72, 48, 35, 11400, 12400, 2, 4, 0, 10, 2, 0, 35, 0, 0, 0
 data "..ooooo..", ".o11111o.", "o1c1c1c1o", "o1111111o", "oc1c1c1co", "o1111111o", "o1c1c1c1o", ".o11111o.", "..ooooo.."
 ' ---- 28 DIAMOND MINE
-data "DIAMOND MINE", 6, 33, 25, 21, 4400, 5500, 3, 2, 0, 20, 3, 0, 8, 1, 5, 16
+data "DIAMOND MINE", 6, 63, 39, 29, 7600, 8200, 3, 2, 0, 20, 3, 0, 8, 1, 5, 16
 data "....o....", "...o1o...", "..o121o..", ".o1bBb1o.", "o12BoB21o", ".o1bBb1o.", "..o121o..", "...o1o...", "....o...."
 ' ---- 29 THE VAULT
-data "THE VAULT", 6, 38, 29, 25, 7600, 9500, 3, 4, 0, 10, 3, 0, 8, 2, 0, 14
+data "THE VAULT", 6, 76, 53, 39, 13300, 14300, 3, 4, 0, 10, 3, 0, 8, 2, 0, 14
 data "ooooooooo", "ocooooooc", "oo11c11oo", "oc1BbB1co", "oo1bob1oo", "oc1BbB1co", "oo11c11oo", "ocooooooc", "ooooooooo"
 ' ---- 30 CRYSTAL CORE
-data "CRYSTAL CORE", 6, 59, 45, 38, 11000, 13000, 3, 2, 0, 54, 4, 0, 4, 3, 0, 6
+data "CRYSTAL CORE", 6, 117, 72, 58, 17000, 18400, 3, 2, 0, 54, 4, 0, 4, 3, 0, 6
 data "..11111..", ".1111111.", "12coooc21", "12obbbo21", "12ooooo21", "12obbbo21", "12coooc21", ".1111111.", "..11111.."
