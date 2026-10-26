@@ -3,7 +3,7 @@
 ' rows; Enter selects (on SKILL / ROUND it steps to the next value); Esc / Q
 ' jump to QUIT. The start round can be any round already reached on the
 ' chosen skill (saved with the high scores).
-const MENU_START = 0, MENU_DIFF = 1, MENU_RD = 2, MENU_SCORES = 3, MENU_QUIT = 4
+const MENU_START = 0, MENU_HOWTO = 1, MENU_DIFF = 2, MENU_RD = 3, MENU_SCORES = 4, MENU_QUIT = 5
 dim menu.diff = DF_NORMAL
 dim menu.rd = 0
 dim menu.row = MENU_START
@@ -22,6 +22,8 @@ sub intro.row(r)
   select case r
     case MENU_START
       t$ = "START GAME"
+    case MENU_HOWTO
+      t$ = "HOW TO PLAY"
     case MENU_DIFF
       t$ = "SKILL"
       v$ = df.name$(menu.diff)

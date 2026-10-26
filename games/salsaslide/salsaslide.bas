@@ -9,7 +9,8 @@
 '
 '   Run from its own folder:  RUN "salsaslide.bas"  (RUN changes into this
 '   folder, so gfx/ resolves relative to it). High scores and the rounds
-'   reached live in C:/.salsaslide. Modules live in includes/; the art in
+'   reached live in C:/.salsaslide. HOW TO PLAY (title menu) is in
+'   includes/howto.inc. Modules live in includes/; the art in
 '   gfx/ is generated per screen size (art/gen_game_assets.py).
 '
 option explicit
@@ -40,6 +41,7 @@ dim df.style(2) = (F_TQ, F_GOLD, F_RED)
 #include "includes/dialogs.inc"
 #include "includes/bonus.inc"
 #include "includes/game.inc"
+#include "includes/howto.inc"
 #include "includes/intro.inc"
 
 ' ------------------------------------------------------------ main
@@ -64,6 +66,8 @@ do
   menuPick = intro.run()
   if menuPick = MENU_START then
     game.run(menu.diff, menu.rd)
+  elseif menuPick = MENU_HOWTO then
+    howto.run()
   elseif menuPick = MENU_SCORES then
     dlg.scores(-1)
   end if
