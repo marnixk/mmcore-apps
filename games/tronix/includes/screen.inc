@@ -19,7 +19,7 @@
 '           black = see-through) during a game
 ' hot-path helpers keep their scratch in globals: LOCAL costs O(variables)
 ' per call in mmcore (each LOCAL scans the whole variable table)
-dim integer scr_mark_x, scr_mark_y, scr_mark_w, scr_mark_h, scr_copyA_s, scr_copyA_x, scr_copyA_y, scr_copyA_w, scr_copyA_h
+dim integer scr_mark_x, scr_mark_y, scr_mark_w, scr_mark_h, scr_copyA_s, scr_copyA_x, scr_copyA_y, scr_copyA_w, scr_copyA_h, scr_i
 
 const PG_BACK = 1, PG_FIELD = 2, PG_OPEN = 3, PG_CLAIM = 4, PG_SHEET = 5, PG_TITLE = 6, PG_P7 = 7
 const P7_NONE = 0, P7_SCORES = 1, P7_DIM = 2
@@ -183,15 +183,14 @@ end sub
 
 ' show what changed: the marked rectangles, or the whole page after a redraw
 sub scr.flush()
-  local i
   if scr.full then
     scr.present()
     exit sub
   end if
   page write 0
-  for i = 0 to dr.n - 1
-    blit dr.x(i), dr.y(i), dr.x(i), dr.y(i), dr.w(i), dr.h(i), PG_BACK
-  next i
+  for scr_i = 0 to dr.n - 1
+    blit dr.x(scr_i), dr.y(scr_i), dr.x(scr_i), dr.y(scr_i), dr.w(scr_i), dr.h(scr_i), PG_BACK
+  next scr_i
   page write PG_BACK
   dr.n = 0
   scr.dirty = FALSE

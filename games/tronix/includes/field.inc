@@ -21,9 +21,15 @@
 ' per call in mmcore (each LOCAL scans the whole variable table)
 dim integer fld_rend_k, fld_rend_k2, fld_other_k, fld_other_k2, fld_vedge_s, fld_hedge_a, fld_hedge_b, fld_hedge_s
 dim integer fld_hedge_hd, fld_hedge_sy, fld_hedge_dy, tr_piece_n, tr_piece_s, tr_piece_e, tr_piece_w
+dim integer fr_x0, fr_y0, fr_x1, fr_y1, fr_y, fr_p, fr_q, fr_cl, fr_k, fr_c, fr_s, fr_pg, fg_x, fg_y
 
 const FMAX_W = 100, FMAX_H = 64, RUN_MAX = 2400, TR_MAX = 4000
 dim string rw$(FMAX_H - 1) length FMAX_W
+' the same cells as numbers, with a ring of 9 (outside) round the field:
+' fg(x + 1, y + 1). The orbs, sentinels and the player read this in the tick
+' (an array read is far cheaper than a function call or MID$)
+dim integer fg(FMAX_W + 1, FMAX_H + 1)
+dim string fr_r$ length FMAX_W, fr_o$ length FMAX_W
 dim fld.W, fld.H, fld.inner, fld.got   ' size, interior cells, interior cells claimed
 dim fld.X0, fld.Y0, fld.c              ' field origin and cell size in screen px
 ' wall: cells in order, the side each came in from, its piece (tile index)
@@ -112,22 +118,30 @@ sub fld.reset()
       rw$(y) = m$
     end if
   next y
+  for fg_y = 0 to FMAX_H + 1
+    for fg_x = 0 to FMAX_W + 1
+      fg(fg_x, fg_y) = 9
+    next fg_x
+  next fg_y
+  for fg_y = 0 to fld.H - 1
+    for fg_x = 0 to fld.W - 1
+      fg(fg_x + 1, fg_y + 1) = asc(mid$(rw$(fg_y), fg_x + 1, 1)) - 48
+    next fg_x
+  next fg_y
   fld.got = 0
   tr.n = 0
   tr.shown = 0
 end sub
 
 ' cell state: 0 open, 1 claimed, 2 wall, 9 outside the field
+' (x from -1 to fld.W, y from -1 to fld.H)
 function fld.at(x, y)
-  if x < 0 or y < 0 or x >= fld.W or y >= fld.H then
-    fld.at = 9
-  else
-    fld.at = asc(mid$(rw$(y), x + 1, 1)) - 48
-  end if
+  fld.at = fg(x + 1, y + 1)
 end function
 
 sub fld.set(x, y, v)
   mid$(rw$(y), x + 1, 1) = chr$(48 + v)
+  fg(x + 1, y + 1) = v
 end sub
 
 ' claimed share of the interior (whole %)
@@ -225,57 +239,56 @@ end sub
 ' redraw cells x0..x1, y0..y1 on PG_FIELD, then copy them to the back page
 ' and mark them for the screen. Callers set act.dirty (actors get redrawn).
 sub fld.redraw(xa, ya, xb, yb)
-  local x0, y0, x1, y1, y, p, q, cl, k, r$, o$, c, s, pg
-  x0 = max(0, xa)
-  y0 = max(0, ya)
-  x1 = min(fld.W - 1, xb)
-  y1 = min(fld.H - 1, yb)
-  if x1 < x0 or y1 < y0 then exit sub
-  c = fld.c
-  s = scr.sc
+  fr_x0 = max(0, xa)
+  fr_y0 = max(0, ya)
+  fr_x1 = min(fld.W - 1, xb)
+  fr_y1 = min(fld.H - 1, yb)
+  if fr_x1 < fr_x0 or fr_y1 < fr_y0 then exit sub
+  fr_c = fld.c
+  fr_s = scr.sc
   page write PG_FIELD
-  for y = y0 to y1
-    r$ = rw$(y)
-    p = x0
-    do while p <= x1
-      cl = (mid$(r$, p + 1, 1) = "1")
-      q = fld.rend(r$, p, cl, x1)
-      if cl then
-        pg = PG_CLAIM
+  for fr_y = fr_y0 to fr_y1
+    fr_r$ = rw$(fr_y)
+    fr_p = fr_x0
+    do while fr_p <= fr_x1
+      fr_cl = (mid$(fr_r$, fr_p + 1, 1) = "1")
+      fr_q = fld.rend(fr_r$, fr_p, fr_cl, fr_x1)
+      if fr_cl then
+        fr_pg = PG_CLAIM
       else
-        pg = PG_OPEN
+        fr_pg = PG_OPEN
       end if
-      blit fld.X0 + p * c, fld.Y0 + y * c, fld.X0 + p * c, fld.Y0 + y * c, (q - p + 1) * c, c, pg
-      if p > 0 then
-        if (mid$(r$, p, 1) = "1") <> cl then fld.vedge(p, y, cl)
+      blit fld.X0 + fr_p * fr_c, fld.Y0 + fr_y * fr_c, fld.X0 + fr_p * fr_c, fld.Y0 + fr_y * fr_c, (fr_q - fr_p + 1) * fr_c, fr_c, fr_pg
+      if fr_p > 0 then
+        if (mid$(fr_r$, fr_p, 1) = "1") <> fr_cl then fld.vedge(fr_p, fr_y, fr_cl)
       end if
-      if q = x1 and q < fld.W - 1 then
-        if (mid$(r$, q + 2, 1) = "1") <> cl then fld.vedge(q + 1, y, not cl)
+      if fr_q = fr_x1 and fr_q < fld.W - 1 then
+        if (mid$(fr_r$, fr_q + 2, 1) = "1") <> fr_cl then fld.vedge(fr_q + 1, fr_y, not fr_cl)
       end if
       ' edges against the row above (and below on the last row) only when that
       ' row's segment holds a cell of the other class
-      if y > 0 then
-        o$ = mid$(rw$(y - 1), p + 1, q - p + 1)
-        if fld.mixed(o$, cl) then fld.hedge(rw$(y - 1), p, q, y, cl, TRUE)
+      if fr_y > 0 then
+        fr_o$ = mid$(rw$(fr_y - 1), fr_p + 1, fr_q - fr_p + 1)
+        if fld.mixed(fr_o$, fr_cl) then fld.hedge(rw$(fr_y - 1), fr_p, fr_q, fr_y, fr_cl, TRUE)
       end if
-      if y = y1 and y < fld.H - 1 then
-        o$ = mid$(rw$(y + 1), p + 1, q - p + 1)
-        if fld.mixed(o$, cl) then fld.hedge(rw$(y + 1), p, q, y + 1, cl, FALSE)
+      if fr_y = fr_y1 and fr_y < fld.H - 1 then
+        fr_o$ = mid$(rw$(fr_y + 1), fr_p + 1, fr_q - fr_p + 1)
+        if fld.mixed(fr_o$, fr_cl) then fld.hedge(rw$(fr_y + 1), fr_p, fr_q, fr_y + 1, fr_cl, FALSE)
       end if
-      p = q + 1
+      fr_p = fr_q + 1
     loop
     ' wall pieces on top
-    k = instr(x0 + 1, r$, "2")
-    do while k > 0 and k <= x1 + 1
-      blit fld.tp(k - 1, y) * c, SH_TILE_Y * s, fld.X0 + (k - 1) * c, fld.Y0 + y * c, c, c, PG_SHEET, 4
-      k = instr(k + 1, r$, "2")
+    fr_k = instr(fr_x0 + 1, fr_r$, "2")
+    do while fr_k > 0 and fr_k <= fr_x1 + 1
+      blit fld.tp(fr_k - 1, fr_y) * fr_c, SH_TILE_Y * fr_s, fld.X0 + (fr_k - 1) * fr_c, fld.Y0 + fr_y * fr_c, fr_c, fr_c, PG_SHEET, 4
+      fr_k = instr(fr_k + 1, fr_r$, "2")
     loop
-  next y
+  next fr_y
   ' the thin frame round the whole field
-  if x0 = 0 or y0 = 0 or x1 = fld.W - 1 or y1 = fld.H - 1 then fld.frame()
+  if fr_x0 = 0 or fr_y0 = 0 or fr_x1 = fld.W - 1 or fr_y1 = fld.H - 1 then fld.frame()
   page write PG_BACK
-  blit fld.X0 + x0 * c, fld.Y0 + y0 * c, fld.X0 + x0 * c, fld.Y0 + y0 * c, (x1 - x0 + 1) * c, (y1 - y0 + 1) * c, PG_FIELD
-  scr.mark(fld.X0 + x0 * c, fld.Y0 + y0 * c, (x1 - x0 + 1) * c, (y1 - y0 + 1) * c)
+  blit fld.X0 + fr_x0 * fr_c, fld.Y0 + fr_y0 * fr_c, fld.X0 + fr_x0 * fr_c, fld.Y0 + fr_y0 * fr_c, (fr_x1 - fr_x0 + 1) * fr_c, (fr_y1 - fr_y0 + 1) * fr_c, PG_FIELD
+  scr.mark(fld.X0 + fr_x0 * fr_c, fld.Y0 + fr_y0 * fr_c, (fr_x1 - fr_x0 + 1) * fr_c, (fr_y1 - fr_y0 + 1) * fr_c)
 end sub
 
 sub fld.frame()
@@ -298,35 +311,35 @@ end sub
 
 ' add wall cell (x, y), entered moving in direction d; sets the pieces of it
 ' and of the cell before
+' scratch for tr.add / tr.show (LOCAL in mmcore clears its fast-path cache)
+dim integer ta_i, ta_a, ta_b, ta_px, ta_py, ts_i, ts_n
 sub tr.add(x, y, d)
-  local i, a, b, px, py
-  i = tr.n
-  tr.x(i) = x
-  tr.y(i) = y
-  tr.in(i) = dir.op(d)
-  tr.n = i + 1
+  ta_i = tr.n
+  tr.x(ta_i) = x
+  tr.y(ta_i) = y
+  tr.in(ta_i) = dir.op(d)
+  tr.n = ta_i + 1
   fld.set(x, y, 2)
   fld.tp(x, y) = tp.cap(dir.op(d))
-  px = x
-  py = y
-  if i > 0 then
-    px = tr.x(i - 1)
-    py = tr.y(i - 1)
-    fld.tp(px, py) = tr.piece(tr.in(i - 1), d)
+  ta_px = x
+  ta_py = y
+  if ta_i > 0 then
+    ta_px = tr.x(ta_i - 1)
+    ta_py = tr.y(ta_i - 1)
+    fld.tp(ta_px, ta_py) = tr.piece(tr.in(ta_i - 1), d)
   end if
 end sub
 
 ' draw the wall cells added since the last call, and the cell before them
 ' (its piece changes when the wall turns). Main loop only.
 sub tr.show()
-  local i, n
-  n = tr.n
-  if tr.shown >= n then exit sub
+  ts_n = tr.n
+  if tr.shown >= ts_n then exit sub
   bb.none()
-  for i = max(0, tr.shown - 1) to n - 1
-    bb.add(tr.x(i), tr.y(i), tr.x(i), tr.y(i))
-  next i
-  tr.shown = n
+  for ts_i = max(0, tr.shown - 1) to ts_n - 1
+    bb.add(tr.x(ts_i), tr.y(ts_i), tr.x(ts_i), tr.y(ts_i))
+  next ts_i
+  tr.shown = ts_n
   fld.redraw(bb.x0, bb.y0, bb.x1, bb.y1)
   act.dirty = TRUE
 end sub
@@ -440,6 +453,7 @@ function fld.close()
       y = ru.y(j)
       L = ru.e(j) - ru.s(j) + 1
       mid$(rw$(y), ru.s(j) + 1, L) = string$(L, "1")
+      for x = ru.s(j) + 1 to ru.e(j) + 1 : fg(x, y + 1) = 1 : next x
       gotNew = gotNew + L
       bb.add(ru.s(j), y, ru.e(j), y)
     end if

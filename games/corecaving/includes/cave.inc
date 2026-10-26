@@ -51,13 +51,24 @@ dim integer cv.rs
 const MG_MAX = 120
 dim integer mg.i(MG_MAX - 1), mg.n
 ' changed cells waiting to be drawn (dm() = already queued)
-dim integer dq(CV_N - 1), dm(CV_N - 1), dqn
+dim integer dq(CV_N), dm(CV_N - 1), dqn
 ' scan scratch (globals: LOCAL is slow in mmcore, see screen.inc)
 dim integer cv_i, cv_c, cv_b, cv_j, cv_k, cv_d, cv_n0, cv_n1, cv_n2, cv_n3, cv_toB, cv_toD, cv_cnt, cv_can
-dim integer cv_x, cv_m, cv_t, cv_en
+dim integer cv_x, cv_m, cv_t, cv_en, cv_sp, cv_ey, cv_ex, cv_et
+' the active cells (see cv.step): one "1" / "0" per cell, row by row
+dim string ac$(CV_H - 1) length CV_W
+dim integer cv_y, cv_yb, cv_p, cv_at, cv_v, cv_wy, cv_wx, cv_q, cv_tk
+' lookup tables: row and column (+ 0, the start of its 3-cell wake block in
+' ac$) of each cell; per code (0 .. 127, tag included): cv.kind = what the
+' scan does with it, cv.round = boulder, diamond or brick (things roll off),
+' cv.foe = miner or amoeba (an enemy next to one explodes), cv.isd = diamond
+dim integer cv.ry(CV_N - 1), cv.rx(CV_N - 1)
+dim integer cv.kind(127), cv.round(127), cv.foe(127), cv.isd(127), cv.soft(127), cv_am4
+dim integer cv.twk(3) = (0, 21, 22, 23)
 
 sub cv.loadAll()
   local i, r
+  cv.tables()
   restore caveData
   for i = 0 to CAVE_N - 1
     read cvd.id$(i), cvd.title$(i), cvd.bonus(i), cvd.need(i), cvd.time(i), cvd.magic(i)
@@ -154,44 +165,119 @@ sub cv.load(k, d)
       dm(i) = 0
     next x
   next y
+  ' only cells that may do something start awake (see cv.step)
+  for y = 0 to CV_H - 1
+    r$ = string$(CV_W, "0")
+    for x = 0 to CV_W - 1
+      if g(y * CV_W + x) > 4 then mid$(r$, x + 1, 1) = "1"
+    next x
+    ac$(y) = r$
+  next y
+end sub
+
+' the scan's lookup tables (once)
+sub cv.tables()
+  local i, c
+  for i = 0 to CV_N - 1
+    cv.ry(i) = i \ CV_W
+    cv.rx(i) = i mod CV_W
+  next i
+  for i = 0 to 127
+    c = i
+    if c >= E_FLAG then c = c - E_FLAG
+    cv.kind(i) = 0
+    if i >= E_FLAG then
+      cv.kind(i) = 1
+    elseif c = E_BOULDER or c = E_DIAMOND then
+      cv.kind(i) = 2
+    elseif c = E_BOULDERF or c = E_DIAMONDF then
+      cv.kind(i) = 3
+    elseif c >= E_FF and c < E_EXS then
+      cv.kind(i) = 4
+    elseif c = E_AMOEBA then
+      cv.kind(i) = 5
+    elseif c = E_PLAYER then
+      cv.kind(i) = 6
+    elseif c >= E_EXS and c <= E_LAST then
+      cv.kind(i) = 7
+    elseif c = E_EXITC then
+      cv.kind(i) = 8
+    end if
+    cv.round(i) = (i = E_BOULDER or i = E_DIAMOND or i = E_BRICK)
+    cv.foe(i) = (i = E_PLAYER or i = E_AMOEBA)
+    cv.isd(i) = (i = E_DIAMOND)
+    cv.soft(i) = (i <= E_DIRT)
+  next i
 end sub
 
 ' queue cell m for drawing
 sub cv.mark(m)
-  if dm(m) = 0 then
-    dm(m) = 1
-    dq(dqn) = m
-    dqn = dqn + 1
-  end if
+  dq(dqn) = m : dqn = dqn + 1 - dm(m) : dm(m) = 1
+end sub
+
+' ---- writing a cell. Every change to g() during the scan goes through cv.w
+' (cell cv_at := cv_v) or cv.wm (the same, and queue it for drawing). Both
+' wake the cells that look at it (see the active cells, below).
+sub cv.w()
+  g(cv_at) = cv_v
+  cv_wy = cv.ry(cv_at) : cv_wx = cv.rx(cv_at)
+  mid$(ac$(cv_wy), cv_wx, 3) = "111"
+  cv_wy = cv_wy - 1
+  mid$(ac$(cv_wy), cv_wx, 3) = "111"
+end sub
+
+sub cv.wm()
+  g(cv_at) = cv_v
+  cv_wy = cv.ry(cv_at) : cv_wx = cv.rx(cv_at)
+  mid$(ac$(cv_wy), cv_wx, 3) = "111"
+  cv_wy = cv_wy - 1
+  mid$(ac$(cv_wy), cv_wx, 3) = "111"
+  dq(dqn) = cv_at : dqn = dqn + 1 - dm(cv_at) : dm(cv_at) = 1
 end sub
 
 ' explode the 3 x 3 cells round c into kind (E_EXS or E_EXD); cells after the
 ' scan position get the tag. Steel and the exit survive.
 sub cv.explode(c, kind)
-  local j, t, dy, dx
-  for dy = -40 to 40 step 40
-    for dx = -1 to 1
-      j = c + dy + dx
-      t = g(j) and 63
-      if t <> E_STEEL and t <> E_EXITC and t <> E_EXITO then
-        if t = E_PLAYER then cv.dead = TRUE
-        if j > cv_i then
-          g(j) = kind + E_FLAG
-        else
-          g(j) = kind
-        end if
-        cv.mark(j)
+  for cv_ey = -40 to 40 step 40
+    for cv_ex = -1 to 1
+      cv_at = c + cv_ey + cv_ex
+      cv_et = g(cv_at) and 63
+      if cv_et <> E_STEEL and cv_et <> E_EXITC and cv_et <> E_EXITO then
+        if cv_et = E_PLAYER then cv.dead = TRUE
+        cv_v = kind
+        if cv_at > cv_i then cv_v = kind + E_FLAG
+        cv.wm()
       end if
-    next dx
-  next dy
+    next cv_ex
+  next cv_ey
 end sub
 
-' one cave frame; cv.pd = the miner's direction (-1 none), cv.snap = grab
-' The scan subs below use the plain numbers of the E_ codes (CONST lookups
-' cost time in this hot loop): 0 space, 1 dirt, 2 brick, 3 magic, 4 steel,
-' 5 exit closed, 6 exit open, 7 boulder, 8 falling boulder, 9 diamond,
-' 10 falling diamond, 11 amoeba, 12 miner, 13-16 firefly, 17-20 butterfly,
-' 21-24 explosion to space, 25-28 explosion to diamonds, +64 scanned tag.
+' ---- one cave frame; cv.pd = the miner's direction (-1 none), cv.snap = grab
+'
+' The active cells. The classic scan visits all 798 inner cells, but most of
+' them do nothing: dirt, space, walls, and boulders and diamonds lying still.
+' Only these are visited here: ac$(y) has a "1" at column x + 1 for every
+' cell that may do something. A boulder or diamond that stays where it is
+' goes to sleep (its "1" becomes "0"), and so does any cell of code <= 4 or 6;
+' everything else stays awake. Writing a cell (cv.w / cv.wm) wakes the cell
+' itself and the five that look at it (a resting boulder or diamond looks at
+' the cells below, left, right, below-left and below-right), so a sleeping
+' cell is always one that the classic scan would also have left alone, and
+' the cells are visited in the same order as before (INSTR finds the next
+' "1" in the row, so a cell woken ahead of the scan is still reached this
+' frame). The result is the same as the full scan, frame for frame.
+' A resting diamond's twinkle (draw only) is done after the scan, from the
+' cells whose twinkle is due this frame (cv.twinkle).
+'
+' Written for mmcore's fast path: "x = arithmetic" and "IF a <op> b THEN
+' x = ..." on their own, with plain-variable array subscripts, run several
+' times faster than anything else; so the hot paths read neighbours through
+' an index variable, use lookup tables (cv.kind, cv.round) instead of AND /
+' OR tests, and jump with GOTO instead of block IFs and calls.
+' Codes: 0 space, 1 dirt, 2 brick, 3 magic, 4 steel, 5 exit closed, 6 exit
+' open, 7 boulder, 8 falling boulder, 9 diamond, 10 falling diamond, 11
+' amoeba, 12 miner, 13-16 firefly, 17-20 butterfly, 21-24 explosion to space,
+' 25-28 explosion to diamonds, +64 scanned tag.
 sub cv.step()
   if cv.dead or cv.won or cv.timeout then cv.pd = -1
   cv.afr = cv.fr
@@ -200,13 +286,79 @@ sub cv.step()
   cv_cnt = 0
   cv_can = 0
   cv_en = (cv.diff <> DF_EASY or (cv.fr mod 4) <> 3)
-  ' (most cells are dirt, space or walls: one short test each)
-  for cv_i = 41 to 838
-    cv_c = g(cv_i)
-    if cv_c > 4 then cv.cell()
-  next cv_i
+  cv_am4 = ((cv.afr mod 4) = 0)
+  for cv_y = 1 to CV_H - 2
+    cv_yb = cv_y * CV_W - 1
+    cv_p = instr(ac$(cv_y), "1")
+    do while cv_p > 0
+      cv_i = cv_yb + cv_p
+      cv_c = g(cv_i)
+      cv_k = cv.kind(cv_c)
+      if cv_k = 2 then goto cvRest
+      if cv_k = 1 then goto cvStrip
+      if cv_k = 0 then goto cvSleep
+      if cv_k = 3 then goto cvFall
+      if cv_k = 4 then goto cvEnemy
+      if cv_k = 7 then goto cvBoom
+      if cv_k = 5 then goto cvAmoeba
+      if cv_k = 6 then goto cvPlayer
+      ' 8: closed exit
+      if cv.got >= cv.need then cv_at = cv_i : cv_v = 6 : cv.wm()
+      goto cvNext
+cvStrip:
+      g(cv_i) = cv_c - 64
+      goto cvNext
+cvRest:
+      ' a boulder or diamond lying still: falls into space below, or rolls
+      ' off a round thing or brick wall (left first)
+      cv_j = cv_i + 40 : cv_b = g(cv_j)
+      if cv_b = 0 then goto cvRDrop
+      cv_t = cv.round(cv_b)
+      if cv_t = 0 then goto cvSleep
+      cv_j = cv_i - 1 : cv_n0 = g(cv_j) : cv_j = cv_i + 39 : cv_n1 = g(cv_j) : cv_t = cv_n0 + cv_n1
+      if cv_t = 0 then goto cvRLeft
+      cv_j = cv_i + 1 : cv_n0 = g(cv_j) : cv_j = cv_i + 41 : cv_n1 = g(cv_j) : cv_t = cv_n0 + cv_n1
+      if cv_t = 0 then goto cvRRight
+cvSleep:
+      mid$(ac$(cv_y), cv_p, 1) = "0"
+      goto cvNext
+cvRDrop:
+      cv_at = cv_i : cv_v = 0 : cv.wm()
+      cv_at = cv_i + 40 : cv_v = cv_c + 65 : cv.wm()
+      goto cvNext
+cvRLeft:
+      cv_at = cv_i : cv_v = 0 : cv.wm()
+      cv_at = cv_i - 1 : cv_v = cv_c + 1 : cv.wm()
+      goto cvNext
+cvRRight:
+      cv_at = cv_i : cv_v = 0 : cv.wm()
+      cv_at = cv_i + 1 : cv_v = cv_c + 65 : cv.wm()
+      goto cvNext
+cvFall:
+      cv.falling()
+      goto cvNext
+cvEnemy:
+      cv.enemy()
+      goto cvNext
+cvBoom:
+      ' explosion frames: 21-24 end as space, 25-28 as a diamond
+      cv_at = cv_i : cv_v = cv_c + 1
+      if cv_c = 24 then cv_v = 0
+      if cv_c = 28 then cv_v = 9
+      cv.wm()
+      goto cvNext
+cvAmoeba:
+      cv.amoeba()
+      goto cvNext
+cvPlayer:
+      cv.player()
+cvNext:
+      cv_p = instr(cv_p + 1, ac$(cv_y), "1")
+    loop
+  next cv_y
   cv.amN = cv_cnt
   cv.amGrow = cv_can
+  cv.twinkle()
   ' the magic wall: shimmer while awake, back to sleep-look when spent
   if cv.mw = 1 then
     cv.magic = cv.magic - 1
@@ -237,116 +389,45 @@ sub cv.step()
   end if
 end sub
 
-' one cell that may do something (code cv_c > 4 at cv_i).
-' Short IF blocks that end in EXIT SUB: skipping a long IF / ELSEIF chain is
-' slow in mmcore. EXIT SUB stays on its own line: after a sub call on the same
-' line it returns to the start of the caller's line (ticket draft
-' exit-sub-after-call-same-line.md).
-sub cv.cell()
-  if cv_c >= 64 then
-    g(cv_i) = cv_c - 64
-    exit sub
-  end if
-  if cv_c = 7 or cv_c = 9 then
-    cv.resting()
-    exit sub
-  end if
-  if cv_c = 8 or cv_c = 10 then
-    cv.falling()
-    exit sub
-  end if
-  if cv_c >= 13 and cv_c < 21 then
-    cv.enemy()
-    exit sub
-  end if
-  if cv_c = 11 then
-    cv.amoeba()
-    exit sub
-  end if
-  if cv_c = 12 then
-    cv.player()
-    exit sub
-  end if
-  if cv_c >= 21 then
-    cv.boom()
-    exit sub
-  end if
-  if cv_c = 5 and cv.got >= cv.need then
-    g(cv_i) = 6
-    cv.mark(cv_i)
-  end if
-end sub
-
-' a boulder or diamond lying still: falls into space below, or rolls off a
-' round thing or brick wall (left first); a diamond twinkles now and then
-sub cv.resting()
-  cv_b = g(cv_i + 40)
-  if cv_b = 0 then
-    g(cv_i) = 0
-    g(cv_i + 40) = cv_c + 65
-    cv.mark(cv_i)
-    cv.mark(cv_i + 40)
-    exit sub
-  end if
-  if cv_b = 7 or cv_b = 9 or cv_b = 2 then
-    if g(cv_i - 1) = 0 and g(cv_i + 39) = 0 then
-      g(cv_i) = 0
-      g(cv_i - 1) = cv_c + 1
-      cv.mark(cv_i)
-      cv.mark(cv_i - 1)
-      exit sub
-    end if
-    if g(cv_i + 1) = 0 and g(cv_i + 41) = 0 then
-      g(cv_i) = 0
-      g(cv_i + 1) = cv_c + 65
-      cv.mark(cv_i)
-      cv.mark(cv_i + 1)
-      exit sub
-    end if
-  end if
-  if cv_c = 9 then
-    cv_k = (cv.afr + cv_i * 7) mod 24
-    if cv_k = 0 or cv_k >= 21 then cv.mark(cv_i)
-  end if
-end sub
-
-' explosion frames: 21-24 end as space, 25-28 as a diamond
-sub cv.boom()
-  if cv_c = 24 then
-    g(cv_i) = 0
-  elseif cv_c = 28 then
-    g(cv_i) = 9
-  else
-    g(cv_i) = cv_c + 1
-  end if
-  cv.mark(cv_i)
+' a diamond twinkles (is redrawn) on the frames where (afr + 7 i) mod 24 is 0
+' or 21 .. 23. 7 x 7 = 49 = 1 (mod 24), so those are the cells with
+' i = 7 (k - afr) (mod 24) for k = 0, 21, 22, 23: four strided passes.
+sub cv.twinkle()
+  for cv_tk = 0 to 3
+    cv_t = (7 * (cv.twk(cv_tk) - cv.afr)) mod 24
+    if cv_t < 0 then cv_t = cv_t + 24
+    cv_t = 24 + cv_t
+    if cv_t < 41 then cv_t = cv_t + 24
+    for cv_j = cv_t to 838 step 24
+      cv_v = g(cv_j) : cv_q = cv.isd(cv_v)
+      dq(dqn) = cv_j : dqn = dqn + cv_q - cv_q * dm(cv_j) : dm(cv_j) = dm(cv_j) + cv_q - cv_q * dm(cv_j)
+    next cv_j
+  next cv_tk
 end sub
 
 sub cv.falling()
-  cv_b = g(cv_i + 40)
+  cv_j = cv_i + 40 : cv_b = g(cv_j)
   if cv_b = 0 then
-    g(cv_i) = 0
-    g(cv_i + 40) = cv_c + 64
-    cv.mark(cv_i)
-    cv.mark(cv_i + 40)
+    cv_at = cv_i : cv_v = 0 : cv.wm()
+    cv_at = cv_i + 40 : cv_v = cv_c + 64 : cv.wm()
   elseif cv_b = 3 then
     if cv.mw = 0 then
       cv.mw = 1
       cv.mwChg = TRUE
     end if
     if cv.mw = 1 then
-      g(cv_i) = 0
-      cv.mark(cv_i)
+      cv_at = cv_i : cv_v = 0 : cv.wm()
       if g(cv_i + 80) = 0 then
+        cv_at = cv_i + 80
         if cv_c = 8 then
-          g(cv_i + 80) = 74
+          cv_v = 74
         else
-          g(cv_i + 80) = 72
+          cv_v = 72
         end if
-        cv.mark(cv_i + 80)
+        cv.wm()
       end if
     else
-      g(cv_i) = cv_c - 1
+      cv_at = cv_i : cv_v = cv_c - 1 : cv.w()
     end if
   elseif cv_b = 12 or (cv_b >= 13 and cv_b < 17) then
     cv.explode(cv_i + 40, 21)
@@ -354,30 +435,27 @@ sub cv.falling()
     cv.explode(cv_i + 40, 25)
   elseif cv_b = 7 or cv_b = 9 or cv_b = 2 then
     if g(cv_i - 1) = 0 and g(cv_i + 39) = 0 then
-      g(cv_i) = 0
-      g(cv_i - 1) = cv_c
-      cv.mark(cv_i)
-      cv.mark(cv_i - 1)
+      cv_at = cv_i : cv_v = 0 : cv.wm()
+      cv_at = cv_i - 1 : cv_v = cv_c : cv.wm()
     elseif g(cv_i + 1) = 0 and g(cv_i + 41) = 0 then
-      g(cv_i) = 0
-      g(cv_i + 1) = cv_c + 64
-      cv.mark(cv_i)
-      cv.mark(cv_i + 1)
+      cv_at = cv_i : cv_v = 0 : cv.wm()
+      cv_at = cv_i + 1 : cv_v = cv_c + 64 : cv.wm()
     else
-      g(cv_i) = cv_c - 1
+      cv_at = cv_i : cv_v = cv_c - 1 : cv.w()
     end if
   else
-    g(cv_i) = cv_c - 1
+    cv_at = cv_i : cv_v = cv_c - 1 : cv.w()
   end if
 end sub
 
 ' fireflies (E_FF + dir) and butterflies (E_BF + dir)
 sub cv.enemy()
-  cv_n0 = g(cv_i - 40)
-  cv_n1 = g(cv_i + 1)
-  cv_n2 = g(cv_i + 40)
-  cv_n3 = g(cv_i - 1)
-  if cv_n0 = 12 or cv_n1 = 12 or cv_n2 = 12 or cv_n3 = 12 or cv_n0 = 11 or cv_n1 = 11 or cv_n2 = 11 or cv_n3 = 11 then
+  cv_j = cv_i - 40 : cv_n0 = g(cv_j)
+  cv_j = cv_i + 1 : cv_n1 = g(cv_j)
+  cv_j = cv_i + 40 : cv_n2 = g(cv_j)
+  cv_j = cv_i - 1 : cv_n3 = g(cv_j)
+  cv_t = cv.foe(cv_n0) + cv.foe(cv_n1) + cv.foe(cv_n2) + cv.foe(cv_n3)
+  if cv_t > 0 then
     if cv_c >= 17 then
       cv.explode(cv_i, 25)
     else
@@ -385,7 +463,7 @@ sub cv.enemy()
     end if
     exit sub
   end if
-  cv.mark(cv_i)
+  cv_at = cv_i : dq(dqn) = cv_at : dqn = dqn + 1 - dm(cv_at) : dm(cv_at) = 1
   if not cv_en then exit sub
   if cv_c >= 17 then
     cv_x = 17
@@ -398,85 +476,73 @@ sub cv.enemy()
   end if
   cv_j = cv_i + cv.off(cv_k)
   if g(cv_j) = 0 then
-    g(cv_i) = 0
-    if cv_j > cv_i then
-      g(cv_j) = cv_x + cv_k + 64
-    else
-      g(cv_j) = cv_x + cv_k
-    end if
-    cv.mark(cv_j)
+    cv_at = cv_i : cv_v = 0 : cv.w()
+    cv_at = cv_j : cv_v = cv_x + cv_k
+    if cv_j > cv_i then cv_v = cv_v + 64
+    cv.wm()
   else
     cv_j = cv_i + cv.off(cv_d)
     if g(cv_j) = 0 then
-      g(cv_i) = 0
-      if cv_j > cv_i then
-        g(cv_j) = cv_c + 64
-      else
-        g(cv_j) = cv_c
-      end if
-      cv.mark(cv_j)
+      cv_at = cv_i : cv_v = 0 : cv.w()
+      cv_at = cv_j : cv_v = cv_c
+      if cv_j > cv_i then cv_v = cv_c + 64
+      cv.wm()
     elseif cv_x = 17 then
-      g(cv_i) = cv_x + (cv_d + 3) mod 4
+      cv_at = cv_i : cv_v = cv_x + (cv_d + 3) mod 4 : cv.w()
     else
-      g(cv_i) = cv_x + (cv_d + 1) mod 4
+      cv_at = cv_i : cv_v = cv_x + (cv_d + 1) mod 4 : cv.w()
     end if
   end if
 end sub
 
 sub cv.amoeba()
-  if cv_toB then
-    g(cv_i) = 7
-    cv.mark(cv_i)
-  elseif cv_toD then
-    g(cv_i) = 9
-    cv.mark(cv_i)
-  else
-    cv_cnt = cv_cnt + 1
-    if (cv.afr mod 4) = 0 then cv.mark(cv_i)
-    if g(cv_i - 40) <= 1 or g(cv_i + 1) <= 1 or g(cv_i + 40) <= 1 or g(cv_i - 1) <= 1 then
-      cv_can = 1
-      if cv.afr < cv.aslow then
-        cv_k = cv.ap1
-      else
-        cv_k = cv.ap2
-      end if
-      cv.rs = (cv.rs * 1103515245 + 12345) and &H7FFFFFFF
-      if ((cv.rs \ 65536) * 1000) \ 32768 < cv_k then
-        cv.rs = (cv.rs * 1103515245 + 12345) and &H7FFFFFFF
-        cv_j = cv_i + cv.off((cv.rs \ 65536) mod 4)
-        if g(cv_j) <= 1 then
-          if cv_j > cv_i then
-            g(cv_j) = 75
-          else
-            g(cv_j) = 11
-          end if
-          cv.mark(cv_j)
-        end if
-      end if
-    end if
-  end if
+  if cv_toB <> 0 then goto cvAmB
+  if cv_toD <> 0 then goto cvAmD
+  cv_cnt = cv_cnt + 1
+  ' (redrawn every 4th frame: cv_am4 = 1 then)
+  dq(dqn) = cv_i : dqn = dqn + cv_am4 - cv_am4 * dm(cv_i) : dm(cv_i) = dm(cv_i) + cv_am4 - cv_am4 * dm(cv_i)
+  ' room to grow: space or dirt next to it
+  cv_j = cv_i - 40 : cv_n0 = g(cv_j) : cv_j = cv_i + 1 : cv_n1 = g(cv_j)
+  cv_j = cv_i + 40 : cv_n2 = g(cv_j) : cv_j = cv_i - 1 : cv_n3 = g(cv_j)
+  cv_t = cv.soft(cv_n0) + cv.soft(cv_n1) + cv.soft(cv_n2) + cv.soft(cv_n3)
+  if cv_t = 0 then exit sub
+  cv_can = 1
+  cv_k = cv.ap1
+  if cv.afr >= cv.aslow then cv_k = cv.ap2
+  cv.rs = (cv.rs * 1103515245 + 12345) and &H7FFFFFFF
+  if ((cv.rs \ 65536) * 1000) \ 32768 >= cv_k then exit sub
+  cv.rs = (cv.rs * 1103515245 + 12345) and &H7FFFFFFF
+  cv_j = cv_i + cv.off((cv.rs \ 65536) mod 4)
+  if g(cv_j) > 1 then exit sub
+  cv_at = cv_j : cv_v = 11
+  if cv_j > cv_i then cv_v = 75
+  cv.wm()
+  exit sub
+cvAmB:
+  cv_at = cv_i : cv_v = 7 : cv.wm()
+  exit sub
+cvAmD:
+  cv_at = cv_i : cv_v = 9 : cv.wm()
 end sub
 
 ' the miner: move / dig / collect / push in direction cv.pd; grab (cv.snap)
 ' takes the dirt or diamond next to him without moving
 sub cv.player()
-  local sp
   if cv.pd < 0 then
     cv.push = 0
-    sp = T_DIG_IDLE
-    if (cv.afr mod 50) >= 47 then sp = T_DIG_BLINK
+    cv_sp = T_DIG_IDLE
+    if (cv.afr mod 50) >= 47 then cv_sp = T_DIG_BLINK
   else
     cv_j = cv_i + cv.off(cv.pd)
     cv_t = g(cv_j)
     if cv.pd = 1 then cv.face = 1
     if cv.pd = 3 then cv.face = 0
-    sp = T_DIG_WL_0 + 2 * cv.face + (cv.afr mod 2)
+    cv_sp = T_DIG_WL_0 + 2 * cv.face + (cv.afr mod 2)
     if cv_t = E_SPACE or cv_t = E_DIRT then
       cv.push = 0
       if cv.snap then
-        g(cv_j) = E_SPACE
-        cv.mark(cv_j)
-        sp = T_DIG_PL + cv.face
+        cv_at = cv_j : cv_v = E_SPACE : cv.wm()
+        cv_sp = T_DIG_PL + cv.face
       else
         cv.move()
       end if
@@ -490,9 +556,8 @@ sub cv.player()
       end if
       hud.dirty = TRUE
       if cv.snap then
-        g(cv_j) = E_SPACE
-        cv.mark(cv_j)
-        sp = T_DIG_PL + cv.face
+        cv_at = cv_j : cv_v = E_SPACE : cv.wm()
+        cv_sp = T_DIG_PL + cv.face
       else
         cv.move()
       end if
@@ -500,17 +565,18 @@ sub cv.player()
       cv.move()
       cv.won = TRUE
     elseif cv_t = E_BOULDER and (cv.pd = 1 or cv.pd = 3) and not cv.snap then
-      sp = T_DIG_PL + cv.face
+      cv_sp = T_DIG_PL + cv.face
       cv_k = cv_j + cv.off(cv.pd)
       if g(cv_k) = E_SPACE then
         cv.push = cv.push + 1
         if cv.push >= PUSH_N then
+          cv_at = cv_k
           if cv_k > cv_i then
-            g(cv_k) = E_BOULDER + E_FLAG
+            cv_v = E_BOULDER + E_FLAG
           else
-            g(cv_k) = E_BOULDER
+            cv_v = E_BOULDER
           end if
-          cv.mark(cv_k)
+          cv.wm()
           cv.move()
           cv.push = 0
         end if
@@ -521,20 +587,16 @@ sub cv.player()
       cv.push = 0
     end if
   end if
-  if sp <> cv.spr then
-    cv.spr = sp
+  if cv_sp <> cv.spr then
+    cv.spr = cv_sp
     cv.mark(cv.pi)
   end if
 end sub
 
 sub cv.move()
-  g(cv_i) = E_SPACE
-  if cv_j > cv_i then
-    g(cv_j) = E_PLAYER + E_FLAG
-  else
-    g(cv_j) = E_PLAYER
-  end if
+  cv_at = cv_i : cv_v = E_SPACE : cv.wm()
+  cv_at = cv_j : cv_v = E_PLAYER
+  if cv_j > cv_i then cv_v = E_PLAYER + E_FLAG
+  cv.wm()
   cv.pi = cv_j
-  cv.mark(cv_i)
-  cv.mark(cv_j)
 end sub

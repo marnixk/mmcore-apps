@@ -2,18 +2,20 @@
 ' scales to screen pixels. Colours C_* come from the art palette in layouts.inc.
 
 ' filled rectangle in art units
+' scratch for the sub below (globals: LOCAL clears mmcore's fast-path cache)
+dim af_s
 sub af(x, y, w, h, c)
-  local s
-  s = scr.sc
-  if w > 0 and h > 0 then box x * s, y * s, w * s, h * s, 1, c, c
+  af_s = scr.sc
+  if w > 0 and h > 0 then box x * af_s, y * af_s, w * af_s, h * af_s, 1, c, c
 end sub
 
 ' an image from the UI block (art position sx, sy from the UI origin, size
 ' w x h) at art x, y; black = see-through
+' scratch for the sub below (globals: LOCAL clears mmcore's fast-path cache)
+dim us_s
 sub ui.spr(sx, sy, w, h, x, y)
-  local s
-  s = scr.sc
-  blit sx * s, (lay.uy + sy) * s, x * s, y * s, w * s, h * s, PG_SHEET, 4
+  us_s = scr.sc
+  blit sx * us_s, (lay.uy + sy) * us_s, x * us_s, y * us_s, w * us_s, h * us_s, PG_SHEET, 4
 end sub
 
 ' highlighted row bar (menu and score table): warm torch-lit stone

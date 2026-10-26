@@ -51,15 +51,17 @@ dim key.pause              ' P / Esc typed
 ' 200 times a second: LOCAL costs O(variables) per call in mmcore
 dim integer key_i, key_j
 
+' scratch for the sub below (globals: LOCAL clears mmcore's fast-path cache)
+dim ko_d
+dim string ko_k$
 sub key.onKey()
-  local k$, d
   do
-    k$ = inkey$
-    if k$ = "" then exit do
-    d = asc(k$) - K_UP
-    if d >= 0 and d <= 3 then
-      if not (key.ah(d) and key.isDown(d)) then key.press(d)
-    elseif key.isPause(k$) then
+    ko_k$ = inkey$
+    if ko_k$ = "" then exit do
+    ko_d = asc(ko_k$) - K_UP
+    if ko_d >= 0 and ko_d <= 3 then
+      if not (key.ah(ko_d) and key.isDown(ko_d)) then key.press(ko_d)
+    elseif key.isPause(ko_k$) then
       key.pause = TRUE
     end if
   loop

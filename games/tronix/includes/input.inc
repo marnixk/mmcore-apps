@@ -47,15 +47,16 @@ dim key.pause              ' P / Esc typed
 ' second: LOCAL costs O(variables) per call in mmcore
 dim integer key_i, key_j
 
+dim string ko_k$ length 4
+dim integer ko_d
 sub key.onKey()
-  local k$, d
   do
-    k$ = inkey$
-    if k$ = "" then exit do
-    d = asc(k$) - K_UP
-    if d >= 0 and d <= 3 then
-      if not (key.ah(d) and key.isDown(d)) then key.press(d)
-    elseif key.isPause(k$) then
+    ko_k$ = inkey$
+    if ko_k$ = "" then exit do
+    ko_d = asc(ko_k$) - K_UP
+    if ko_d >= 0 and ko_d <= 3 then
+      if not (key.ah(ko_d) and key.isDown(ko_d)) then key.press(ko_d)
+    elseif key.isPause(ko_k$) then
       key.pause = TRUE
     end if
   loop
@@ -97,14 +98,14 @@ sub key.poll()
 end sub
 
 ' next queued tap (-1 none)
+dim integer kp_i
 function key.pop()
-  local i
   key.pop = -1
   if key.qn = 0 then exit function
   key.pop = key.q(0)
-  for i = 1 to key.qn - 1
-    key.q(i - 1) = key.q(i)
-  next i
+  for kp_i = 1 to key.qn - 1
+    key.q(kp_i - 1) = key.q(kp_i)
+  next kp_i
   key.qn = key.qn - 1
 end function
 

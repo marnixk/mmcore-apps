@@ -5,21 +5,23 @@
 ' [ ] { } are not used as arrows here.
 
 ' draw s$ at art x, y in style st on the current write page
+' scratch (LOCAL in mmcore clears its fast-path cache)
+dim integer tx_i, tx_k, tx_s, tx_n, tx_cw, tx_dx, tx_sy0
+dim string tx_u$
 sub txt(s$, x, y, st)
-  local i, k, s, u$, n, cw, dx, sy0
-  s = scr.sc
-  cw = 9 * s
-  u$ = ucase$(s$)
-  n = len(u$)
-  sy0 = (FS_Y + 18 * st) * s
-  for i = 1 to n
-    k = instr(SMALL$, mid$(u$, i, 1)) - 1
-    if k < 0 then k = instr(SMALL$, "?") - 1
-    if k > 0 then
-      dx = (x + (i - 1) * 8) * s
-      blit (k mod FS_N) * cw, sy0 + (k \ FS_N) * cw, dx, y * s, cw, cw, PG_SHEET, 4
+  tx_s = scr.sc
+  tx_cw = 9 * tx_s
+  tx_u$ = ucase$(s$)
+  tx_n = len(tx_u$)
+  tx_sy0 = (FS_Y + 18 * st) * tx_s
+  for tx_i = 1 to tx_n
+    tx_k = instr(SMALL$, mid$(tx_u$, tx_i, 1)) - 1
+    if tx_k < 0 then tx_k = instr(SMALL$, "?") - 1
+    if tx_k > 0 then
+      tx_dx = (x + (tx_i - 1) * 8) * tx_s
+      blit (tx_k mod FS_N) * tx_cw, tx_sy0 + (tx_k \ FS_N) * tx_cw, tx_dx, y * tx_s, tx_cw, tx_cw, PG_SHEET, 4
     end if
-  next i
+  next tx_i
 end sub
 
 function txtW(s$)

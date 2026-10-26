@@ -26,7 +26,10 @@
 '   orb step  = max(df.orbMin, df.orbMs - ORB_FASTER * ((L - 1) \ df.fastEvery)) ms
 '   target    = TARGET1 %, TARGET2 % from level TARGET2_LEVEL
 
-const FRAME_MS = 20, IDLE_MS = 4, TICK_MS = 5
+' FRAME_MS 16: one frame per 60 Hz refresh. At 20 (50 fps) every 5th refresh
+' got no new frame, and with a vsync-blocking display the present slid in
+' and out of phase with the refresh, which showed as a rhythmic stutter.
+const FRAME_MS = 16, IDLE_MS = 4, TICK_MS = 5
 
 dim gm.diff, gm.level, gm.lives, gm.score, gm.quit, gm.over, gm.target
 dim gm.orbMs, gm.enMs, gm.lvPts, gm.cleared
@@ -34,6 +37,10 @@ dim gm.dead, gm.hx, gm.hy, gm.hitOrb
 dim gm.claim, gm.drawing   ' a claim is waiting for the main loop; actors being drawn
 dim pl.land, pl.d, pl.due, pl.sx, pl.sy
 dim integer gm_tick_now   ' the tick's clock (a global: LOCAL is slow, see actors.inc)
+' scratch of the player / orb / sentinel steps (they run in the tick 200 times
+' a second: globals, as LOCAL costs O(variables) per call in mmcore)
+dim integer pl_nx, pl_ny, pl_c, pl_i, pl_d, pl_t0
+dim integer ob_i, ob_x, ob_y, ob_dx, ob_dy, ob_h, ob_v, ob_g, ob_nx, ob_ny, ob_px, ob_py
 dim orb.due, en.due, fr.due
 
 ' ---- status bar (on PG_FIELD, copied to the back page): level, claimed %
@@ -139,35 +146,36 @@ end sub
 ' one step in direction d; the next step is due PLAYER_MS later, on the beat
 ' while it keeps moving, or PLAYER_MS from now after a rest
 sub pl.go(d, now)
-  local nx, ny, c, i
-  nx = o.x(0) + dir.x(d)
-  ny = o.y(0) + dir.y(d)
-  c = fld.at(nx, ny)
-  if c = 9 then exit sub
+  pl_nx = o.x(0) + dir.x(d) : pl_ny = o.y(0) + dir.y(d)
+  pl_c = fg(pl_nx + 1, pl_ny + 1)
+  if pl_c = 9 then exit sub
   pl.due = pl.due + PLAYER_MS
   if pl.due <= now then pl.due = now + PLAYER_MS
+  ' the glide on screen starts when the step was due (a late tick does not
+  ' push the picture back)
+  pl_t0 = pl.due - PLAYER_MS
   if pl.land then
-    act.move(0, nx, ny, PLAYER_MS, now)
-    if c = 0 then
+    act.move(0, pl_nx, pl_ny, PLAYER_MS, pl_t0)
+    if pl_c = 0 then
       ' off the land: start a wall
       pl.land = FALSE
       pl.sx = o.lx(0)
       pl.sy = o.ly(0)
       pl.d = d
       tr.clear()
-      tr.add(nx, ny, d)
+      tr.add(pl_nx, pl_ny, d)
     end if
   else
-    if c = 2 then
+    if pl_c = 2 then
       ' ran into its own wall
-      act.move(0, nx, ny, PLAYER_MS, now)
-      gm.kill(nx, ny, FALSE)
+      act.move(0, pl_nx, pl_ny, PLAYER_MS, pl_t0)
+      gm.kill(pl_nx, pl_ny, FALSE)
       exit sub
     end if
-    act.move(0, nx, ny, PLAYER_MS, now)
+    act.move(0, pl_nx, pl_ny, PLAYER_MS, pl_t0)
     pl.d = d
-    if c = 0 then
-      tr.add(nx, ny, d)
+    if pl_c = 0 then
+      tr.add(pl_nx, pl_ny, d)
     else
       ' back on land: the wall closes; the main loop does the claim
       pl.land = TRUE
@@ -177,115 +185,90 @@ sub pl.go(d, now)
   end if
   ' ran into an orb / a sentinel
   if pl.land then
-    for i = A_EN to A_EN + act.nEn - 1
-      if o.x(i) = nx and o.y(i) = ny then gm.kill(nx, ny, FALSE)
-    next i
+    for pl_i = A_EN to A_EN + act.nEn - 1
+      if o.x(pl_i) = pl_nx and o.y(pl_i) = pl_ny then gm.kill(pl_nx, pl_ny, FALSE)
+    next pl_i
   else
-    for i = 1 to act.nOrb
-      if o.x(i) = nx and o.y(i) = ny then gm.kill(nx, ny, TRUE)
-    next i
+    for pl_i = 1 to act.nOrb
+      if o.x(pl_i) = pl_nx and o.y(pl_i) = pl_ny then gm.kill(pl_nx, pl_ny, TRUE)
+    next pl_i
   end if
 end sub
 
 ' keys -> a player step (from the tick, when a step is due)
 sub pl.input(now)
-  local d
   if pl.land then
-    d = key.pop()
-    if d < 0 and key.held >= 0 then
-      if now >= key.t0 + LAND_DELAY then d = key.held
+    pl_d = key.pop()
+    if pl_d < 0 and key.held >= 0 then
+      if now >= key.t0 + LAND_DELAY then pl_d = key.held
     end if
-    if d >= 0 then pl.go(d, now)
+    if pl_d >= 0 then pl.go(pl_d, now)
   else
     ' riding the grid: queued taps turn; repeats and reversals are dropped
     do
-      d = key.pop()
-      if d < 0 then exit do
-      if d <> pl.d and d <> dir.op(pl.d) then exit do
+      pl_d = key.pop()
+      if pl_d < 0 then exit do
+      if pl_d <> pl.d and pl_d <> dir.op(pl.d) then exit do
     loop
-    if d >= 0 then pl.d = d
+    if pl_d >= 0 then pl.d = pl_d
     pl.go(pl.d, now)
   end if
 end sub
 
 ' ---- orbs: bounce diagonally off claimed land; touching the wall is a kill
-sub orb.step(now)
-  local i, x, y, dx, dy, h, v, g, nx, ny
-  for i = 1 to act.nOrb
-    x = o.x(i)
-    y = o.y(i)
-    dx = o.dx(i)
-    dy = o.dy(i)
-    h = fld.at(x + dx, y)
-    v = fld.at(x, y + dy)
-    if h = 1 or h = 9 then dx = -dx
-    if v = 1 or v = 9 then dy = -dy
-    if dx = o.dx(i) and dy = o.dy(i) then
-      g = fld.at(x + dx, y + dy)
-      if g = 1 or g = 9 then
-        dx = -dx
-        dy = -dy
-      end if
+' (t0 = when this step was due: the glide on screen starts then. The cells are
+' read from fg(), which has a ring of 9 round the field: ob_x, ob_y are the
+' orb's fg coordinates, cell + 1. Short lines on purpose: every program line
+' costs time in mmcore, so related statements share one.)
+sub orb.step(t0)
+  for ob_i = 1 to act.nOrb
+    ob_x = o.x(ob_i) + 1 : ob_y = o.y(ob_i) + 1 : ob_dx = o.dx(ob_i) : ob_dy = o.dy(ob_i)
+    ob_h = fg(ob_x + ob_dx, ob_y) : ob_v = fg(ob_x, ob_y + ob_dy)
+    if ob_h = 1 or ob_h = 9 then ob_dx = -ob_dx
+    if ob_v = 1 or ob_v = 9 then ob_dy = -ob_dy
+    if ob_dx = o.dx(ob_i) and ob_dy = o.dy(ob_i) then
+      ob_g = fg(ob_x + ob_dx, ob_y + ob_dy)
+      if ob_g = 1 or ob_g = 9 then ob_dx = -ob_dx : ob_dy = -ob_dy
     end if
-    o.dx(i) = dx
-    o.dy(i) = dy
-    h = fld.at(x + dx, y)
-    v = fld.at(x, y + dy)
-    g = fld.at(x + dx, y + dy)
-    if g = 2 then
-      gm.kill(x + dx, y + dy, TRUE)
-    elseif h = 2 then
-      gm.kill(x + dx, y, TRUE)
-    elseif v = 2 then
-      gm.kill(x, y + dy, TRUE)
-    end if
-    if g = 0 or g = 2 then
-      nx = x + dx
-      ny = y + dy
-    else
-      nx = x
-      ny = y
-    end if
-    act.move(i, nx, ny, gm.orbMs, now)
-    if not pl.land and nx = o.x(0) and ny = o.y(0) then gm.kill(nx, ny, TRUE)
-  next i
+    o.dx(ob_i) = ob_dx : o.dy(ob_i) = ob_dy
+    ob_h = fg(ob_x + ob_dx, ob_y) : ob_v = fg(ob_x, ob_y + ob_dy) : ob_g = fg(ob_x + ob_dx, ob_y + ob_dy)
+    if ob_g = 2 or ob_h = 2 or ob_v = 2 then orb.cut()
+    ob_nx = ob_x - 1 : ob_ny = ob_y - 1
+    if ob_g = 0 or ob_g = 2 then ob_nx = ob_nx + ob_dx : ob_ny = ob_ny + ob_dy
+    o.lx(ob_i) = o.x(ob_i) : o.ly(ob_i) = o.y(ob_i) : o.x(ob_i) = ob_nx : o.y(ob_i) = ob_ny : o.t0(ob_i) = t0 : o.T(ob_i) = gm.orbMs
+    if pl.land = FALSE and ob_nx = o.x(0) and ob_ny = o.y(0) then gm.kill(ob_nx, ob_ny, TRUE)
+  next ob_i
+end sub
+
+' the orb touches the wall: diagonal first, then sideways, then up / down
+sub orb.cut()
+  if ob_g = 2 then
+    gm.kill(ob_x - 1 + ob_dx, ob_y - 1 + ob_dy, TRUE)
+  elseif ob_h = 2 then
+    gm.kill(ob_x - 1 + ob_dx, ob_y - 1, TRUE)
+  else
+    gm.kill(ob_x - 1, ob_y - 1 + ob_dy, TRUE)
+  end if
 end sub
 
 ' ---- sentinels: bounce diagonally inside the claimed land
-sub en.step(now)
-  local i, x, y, dx, dy, h, v, g, nx, ny, px, py
-  px = o.x(0)
-  py = o.y(0)
-  for i = A_EN to A_EN + act.nEn - 1
-    x = o.x(i)
-    y = o.y(i)
-    dx = o.dx(i)
-    dy = o.dy(i)
-    h = fld.at(x + dx, y)
-    v = fld.at(x, y + dy)
-    if h <> 1 then dx = -dx
-    if v <> 1 then dy = -dy
-    if dx = o.dx(i) and dy = o.dy(i) then
-      g = fld.at(x + dx, y + dy)
-      if g <> 1 then
-        dx = -dx
-        dy = -dy
-      end if
+sub en.step(t0)
+  ob_px = o.x(0) : ob_py = o.y(0)
+  for ob_i = A_EN to A_EN + act.nEn - 1
+    ob_x = o.x(ob_i) + 1 : ob_y = o.y(ob_i) + 1 : ob_dx = o.dx(ob_i) : ob_dy = o.dy(ob_i)
+    if fg(ob_x + ob_dx, ob_y) <> 1 then ob_dx = -ob_dx
+    if fg(ob_x, ob_y + ob_dy) <> 1 then ob_dy = -ob_dy
+    if ob_dx = o.dx(ob_i) and ob_dy = o.dy(ob_i) then
+      if fg(ob_x + ob_dx, ob_y + ob_dy) <> 1 then ob_dx = -ob_dx : ob_dy = -ob_dy
     end if
-    o.dx(i) = dx
-    o.dy(i) = dy
-    if fld.at(x + dx, y + dy) = 1 then
-      nx = x + dx
-      ny = y + dy
-    else
-      nx = x
-      ny = y
-    end if
-    act.move(i, nx, ny, gm.enMs, now)
+    o.dx(ob_i) = ob_dx : o.dy(ob_i) = ob_dy
+    ob_nx = ob_x - 1 : ob_ny = ob_y - 1
+    if fg(ob_x + ob_dx, ob_y + ob_dy) = 1 then ob_nx = ob_nx + ob_dx : ob_ny = ob_ny + ob_dy
+    o.lx(ob_i) = ob_x - 1 : o.ly(ob_i) = ob_y - 1 : o.x(ob_i) = ob_nx : o.y(ob_i) = ob_ny : o.t0(ob_i) = t0 : o.T(ob_i) = gm.enMs
     if pl.land then
-      if (nx = px and ny = py) or (x = px and y = py) then gm.kill(px, py, FALSE)
+      if (ob_nx = ob_px and ob_ny = ob_py) or (ob_x - 1 = ob_px and ob_y - 1 = ob_py) then gm.kill(ob_px, ob_py, FALSE)
     end if
-  next i
+  next ob_i
 end sub
 
 ' ---- the wall closed (flagged by the tick): claim, points, status bar,
@@ -398,18 +381,18 @@ end sub
 ' step is due. Nothing moves while a kill, a claim or the level clear waits
 ' for the main loop, or while the main loop draws the actors.
 sub gm.tick()
-  key.poll()
+  if key.ah(0) or key.ah(1) or key.ah(2) or key.ah(3) then key.poll()
   if gm.dead or gm.claim or gm.cleared or gm.drawing then exit sub
   gm_tick_now = timer
   if gm_tick_now >= pl.due then pl.input(gm_tick_now)
   if gm.dead or gm.claim then exit sub
   if gm_tick_now >= orb.due then
-    orb.step(gm_tick_now)
+    orb.step(orb.due)
     orb.due = orb.due + gm.orbMs
     if orb.due < gm_tick_now then orb.due = gm_tick_now + gm.orbMs
   end if
   if not gm.dead and gm_tick_now >= en.due then
-    en.step(gm_tick_now)
+    en.step(en.due)
     en.due = en.due + gm.enMs
     if en.due < gm_tick_now then en.due = gm_tick_now + gm.enMs
   end if

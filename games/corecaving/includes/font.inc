@@ -5,21 +5,23 @@
 '  big:   gold 16 px glyphs with a dark rim, 18 x 18 cells drawn 16 apart
 
 ' draw s$ at art x, y in style st on the current write page
+' scratch for the sub below (globals: LOCAL clears mmcore's fast-path cache)
+dim tx_i, tx_k, tx_s, tx_n, tx_cw, tx_dx, tx_sy0
+dim string tx_u$
 sub txt(s$, x, y, st)
-  local i, k, s, u$, n, cw, dx, sy0
-  s = scr.sc
-  cw = 9 * s
-  u$ = ucase$(s$)
-  n = len(u$)
-  sy0 = (lay.uy + FS_Y + 18 * st) * s
-  for i = 1 to n
-    k = instr(SMALL$, mid$(u$, i, 1)) - 1
-    if k < 0 then k = instr(SMALL$, "?") - 1
-    if k > 0 then
-      dx = (x + (i - 1) * 8) * s
-      blit (k mod FS_N) * cw, sy0 + (k \ FS_N) * cw, dx, y * s, cw, cw, PG_SHEET, 4
+  tx_s = scr.sc
+  tx_cw = 9 * tx_s
+  tx_u$ = ucase$(s$)
+  tx_n = len(tx_u$)
+  tx_sy0 = (lay.uy + FS_Y + 18 * st) * tx_s
+  for tx_i = 1 to tx_n
+    tx_k = instr(SMALL$, mid$(tx_u$, tx_i, 1)) - 1
+    if tx_k < 0 then tx_k = instr(SMALL$, "?") - 1
+    if tx_k > 0 then
+      tx_dx = (x + (tx_i - 1) * 8) * tx_s
+      blit (tx_k mod FS_N) * tx_cw, tx_sy0 + (tx_k \ FS_N) * tx_cw, tx_dx, y * tx_s, tx_cw, tx_cw, PG_SHEET, 4
     end if
-  next i
+  next tx_i
 end sub
 
 function txtW(s$)
@@ -35,18 +37,20 @@ sub txtR(s$, rx, y, st)
 end sub
 
 ' big gold text, centred on art x cx
+' scratch for the sub below (globals: LOCAL clears mmcore's fast-path cache)
+dim bc_i, bc_k, bc_s, bc_n, bc_cw, bc_x, bc_sy0
+dim string bg_u$
 sub bigC(s$, cx, y)
-  local i, k, s, u$, n, cw, x, sy0
-  s = scr.sc
-  cw = 18 * s
-  u$ = ucase$(s$)
-  n = len(u$)
-  x = cx - n * 8
-  sy0 = (lay.uy + BG_Y) * s
-  for i = 1 to n
-    k = instr(BIG$, mid$(u$, i, 1)) - 1
-    if k > 0 then
-      blit (k mod BG_N) * cw, sy0 + (k \ BG_N) * cw, (x + (i - 1) * 16) * s, y * s, cw, cw, PG_SHEET, 4
+  bc_s = scr.sc
+  bc_cw = 18 * bc_s
+  bg_u$ = ucase$(s$)
+  bc_n = len(bg_u$)
+  bc_x = cx - bc_n * 8
+  bc_sy0 = (lay.uy + BG_Y) * bc_s
+  for bc_i = 1 to bc_n
+    bc_k = instr(BIG$, mid$(bg_u$, bc_i, 1)) - 1
+    if bc_k > 0 then
+      blit (bc_k mod BG_N) * bc_cw, bc_sy0 + (bc_k \ BG_N) * bc_cw, (bc_x + (bc_i - 1) * 16) * bc_s, y * bc_s, bc_cw, bc_cw, PG_SHEET, 4
     end if
-  next i
+  next bc_i
 end sub
