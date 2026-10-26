@@ -66,7 +66,7 @@ const LIVES0 = 3, EXTRA_EVERY = 3, LIVES_MAX = 6
 dim menuPick
 
 randomize timer
-on key 0   ' no ON KEY handler: every loop reads INKEY$ itself
+on key 0   ' no ON KEY handler in menus and dialogs (they read INKEY$); gm.handlers turns it on during play
 scr.init()
 scr.loadAssets()
 fld.planes()

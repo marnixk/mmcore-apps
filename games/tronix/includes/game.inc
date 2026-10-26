@@ -5,8 +5,20 @@
 ' keeps going in its last direction, classic Xonix); on claimed land it only
 ' moves on a key press (one step per tap, a held arrow repeats after
 ' LAND_DELAY). Orbs step together every gm.orbMs, sentinels every gm.enMs.
-' A frame is drawn every FRAME_MS when something moved; between events the
-' loop idles with a short PAUSE and reads the keys on every wake.
+'
+' How a level runs - two interrupt handlers and the main loop:
+'  key.onKey (ON KEY, input.inc) notes arrow presses and the pause key.
+'  gm.tick (SETTICK, every TICK_MS) is the beat: it notices released keys and
+'    moves the player, orbs and sentinels when their step is due. It only
+'    changes the game state and never draws, so it cannot upset the page or
+'    the scratch variables the main loop is drawing with. Work too big for it
+'    is flagged for the main loop: a claim (gm.claim) or a kill (gm.dead);
+'    the tick then waits until the main loop has dealt with it.
+'  The main loop (gm.play) draws: the new wall cells, a frame of the actors
+'    every FRAME_MS, the claim, the derez, the pause dialog. While it draws
+'    the actors (gm.drawing) the tick skips its moves, so a frame never shows
+'    an actor half way through a step.
+' Both handlers are only on during play; menus and dialogs read INKEY$.
 '
 ' Difficulty ramp per level L (numbers per skill in the main program):
 '   orbs      = min(ORB_MAX, df.orbs0 + (L - 1) \ df.orbEvery)
@@ -14,12 +26,14 @@
 '   orb step  = max(df.orbMin, df.orbMs - ORB_FASTER * ((L - 1) \ df.fastEvery)) ms
 '   target    = TARGET1 %, TARGET2 % from level TARGET2_LEVEL
 
-const FRAME_MS = 20, IDLE_MS = 4
+const FRAME_MS = 20, IDLE_MS = 4, TICK_MS = 5
 
 dim gm.diff, gm.level, gm.lives, gm.score, gm.quit, gm.over, gm.target
 dim gm.orbMs, gm.enMs, gm.lvPts, gm.cleared
 dim gm.dead, gm.hx, gm.hy, gm.hitOrb
-dim pl.land, pl.d, pl.last, pl.sx, pl.sy
+dim gm.claim, gm.drawing   ' a claim is waiting for the main loop; actors being drawn
+dim pl.land, pl.d, pl.due, pl.sx, pl.sy
+dim integer gm_tick_now   ' the tick's clock (a global: LOCAL is slow, see actors.inc)
 dim orb.due, en.due, fr.due
 
 ' ---- status bar (on PG_FIELD, copied to the back page): level, claimed %
@@ -69,6 +83,7 @@ sub gm.setupLevel()
   gm.lvPts = 0
   gm.cleared = FALSE
   gm.dead = FALSE
+  gm.claim = FALSE
   fld.reset()
   act.clear()
   page write PG_FIELD
@@ -120,15 +135,17 @@ sub gm.setupLevel()
   scr.present()
 end sub
 
-' ---- the player
-' one step in direction d
+' ---- the player (runs in the tick)
+' one step in direction d; the next step is due PLAYER_MS later, on the beat
+' while it keeps moving, or PLAYER_MS from now after a rest
 sub pl.go(d, now)
-  local nx, ny, c, i, n
+  local nx, ny, c, i
   nx = o.x(0) + dir.x(d)
   ny = o.y(0) + dir.y(d)
   c = fld.at(nx, ny)
   if c = 9 then exit sub
-  pl.last = now
+  pl.due = pl.due + PLAYER_MS
+  if pl.due <= now then pl.due = now + PLAYER_MS
   if pl.land then
     act.move(0, nx, ny, PLAYER_MS, now)
     if c = 0 then
@@ -139,7 +156,6 @@ sub pl.go(d, now)
       pl.d = d
       tr.clear()
       tr.add(nx, ny, d)
-      act.dirty = TRUE
     end if
   else
     if c = 2 then
@@ -152,14 +168,11 @@ sub pl.go(d, now)
     pl.d = d
     if c = 0 then
       tr.add(nx, ny, d)
-      act.dirty = TRUE
     else
-      ' back on land: the wall closes, claim what the orbs cannot reach
+      ' back on land: the wall closes; the main loop does the claim
       pl.land = TRUE
       pl.d = -1
-      n = fld.close()
-      act.dirty = TRUE
-      gm.claimed()
+      gm.claim = TRUE
     end if
   end if
   ' ran into an orb / a sentinel
@@ -174,18 +187,15 @@ sub pl.go(d, now)
   end if
 end sub
 
-' keys -> player steps (called every loop pass)
+' keys -> a player step (from the tick, when a step is due)
 sub pl.input(now)
   local d
-  if gm.dead then exit sub
-  if now < pl.last + PLAYER_MS then exit sub
   if pl.land then
     d = key.pop()
-    if d >= 0 then
-      pl.go(d, now)
-    elseif key.held >= 0 then
-      if now >= key.t0 + LAND_DELAY then pl.go(key.held, now)
+    if d < 0 and key.held >= 0 then
+      if now >= key.t0 + LAND_DELAY then d = key.held
     end if
+    if d >= 0 then pl.go(d, now)
   else
     ' riding the grid: queued taps turn; repeats and reversals are dropped
     do
@@ -278,14 +288,18 @@ sub en.step(now)
   next i
 end sub
 
-' ---- a claim was made: points, status bar, level target
-sub gm.claimed()
-  local p
+' ---- the wall closed (flagged by the tick): claim, points, status bar,
+' level target; then the tick carries on
+sub gm.claimNow()
+  local n, p
+  n = fld.close()
+  act.dirty = TRUE
   p = (fld.got * 100 * PTS_PER_PCT) \ fld.inner
   gm.score = gm.score + p - gm.lvPts
   gm.lvPts = p
   hud.draw()
   if fld.pct() >= gm.target then gm.cleared = TRUE
+  gm.claim = FALSE
 end sub
 
 ' ---- a kill: remember where it hit (the derez runs in gm.die)
@@ -300,6 +314,7 @@ end sub
 ' derez, the wall is cut, one life less, the player back where it left land
 sub gm.die()
   local f, i, best, bd, d, cx(3), cy(3), j
+  gm.handlers(FALSE)
   o.fs(0) = -1
   if gm.hitOrb then
     act.place(A_FX, gm.hx, gm.hy)
@@ -356,23 +371,54 @@ sub gm.die()
   act.render()
   scr.flush()
   pause 600
-  key.reset()
-  gm.resync()
+  gm.handlers(TRUE)
 end sub
 
-' after a pause, panel or death: timers restart from now
-sub gm.resync()
+' the key handler and the beat: on while a level is played, off for the
+' derez, the pause dialog and between levels. Switching on starts afresh:
+' no keys typed before count, the steps are timed from now.
+sub gm.handlers(on)
   local now
-  now = timer
-  orb.due = now + gm.orbMs
-  en.due = now + gm.enMs
-  fr.due = now
-  pl.last = now - PLAYER_MS
+  if on then
+    key.reset()
+    now = timer
+    orb.due = now + gm.orbMs
+    en.due = now + gm.enMs
+    fr.due = now
+    pl.due = now
+    on key key.onKey
+    settick TICK_MS, gm.tick
+  else
+    settick 0, gm.tick
+    on key 0
+  end if
+end sub
+
+' ---- the beat (timer interrupt, every TICK_MS): releases, then whatever
+' step is due. Nothing moves while a kill, a claim or the level clear waits
+' for the main loop, or while the main loop draws the actors.
+sub gm.tick()
+  key.poll()
+  if gm.dead or gm.claim or gm.cleared or gm.drawing then exit sub
+  gm_tick_now = timer
+  if gm_tick_now >= pl.due then pl.input(gm_tick_now)
+  if gm.dead or gm.claim then exit sub
+  if gm_tick_now >= orb.due then
+    orb.step(gm_tick_now)
+    orb.due = orb.due + gm.orbMs
+    if orb.due < gm_tick_now then orb.due = gm_tick_now + gm.orbMs
+  end if
+  if not gm.dead and gm_tick_now >= en.due then
+    en.step(gm_tick_now)
+    en.due = en.due + gm.enMs
+    if en.due < gm_tick_now then en.due = gm_tick_now + gm.enMs
+  end if
 end sub
 
 ' pause: the dialog covers the back page; afterwards the scene is rebuilt
 ' from the clean field page and the actors
 sub gm.pauseGame()
+  gm.handlers(FALSE)
   gm.quit = dlg.pause()
   if gm.quit then exit sub
   page copy PG_FIELD to PG_BACK
@@ -380,54 +426,38 @@ sub gm.pauseGame()
   act.invalidate()
   act.render()
   scr.present()
-  key.reset()
-  gm.resync()
+  gm.handlers(TRUE)
 end sub
 
-' ---- one level: returns when it is cleared, the game is over or quit
+' ---- one level: returns when it is cleared, the game is over or quit.
+' The main loop only draws and handles what the handlers flagged; it wakes
+' every IDLE_MS (the tick and ON KEY also run during its PAUSE).
 sub gm.play()
-  local k$, now, w, fin
-  key.drain()
-  key.reset()
-  gm.resync()
-  fin = FALSE
+  local now
+  gm.handlers(TRUE)
   do
-    k$ = inkey$
-    do while k$ <> ""
-      if key.isPause(k$) then
-        gm.pauseGame()
-        if gm.quit then exit do
-      end if
-      k$ = inkey$
-    loop
-    if gm.quit then exit do
-    key.scan()
-    now = timer
-    pl.input(now)
-    if not gm.dead and not gm.cleared and now >= orb.due then
-      orb.step(now)
-      orb.due = orb.due + gm.orbMs
-      if orb.due < now then orb.due = now + gm.orbMs
+    if key.pause then
+      gm.pauseGame()
+      if gm.quit then exit do
     end if
-    if not gm.dead and not gm.cleared and now >= en.due then
-      en.step(now)
-      en.due = en.due + gm.enMs
-      if en.due < now then en.due = now + gm.enMs
-    end if
+    if gm.claim then gm.claimNow()
+    tr.show()
     if gm.dead then
       gm.die()
       if gm.over then exit do
     end if
+    now = timer
     if now >= fr.due or gm.cleared then
+      gm.drawing = TRUE
       act.render()
+      gm.drawing = FALSE
       if scr.dirty then scr.flush()
       fr.due = now + FRAME_MS
     end if
     if gm.cleared then exit do
-    w = min(fr.due, orb.due, en.due) - timer
-    if not pl.land then w = min(w, pl.last + PLAYER_MS - timer)
-    pause max(1, min(IDLE_MS, w))
+    pause max(1, min(IDLE_MS, fr.due - timer))
   loop
+  gm.handlers(FALSE)
 end sub
 
 ' ---- level clear: bonuses, the panel, an extra life every EXTRA_EVERY levels

@@ -28,6 +28,7 @@ dim fld.W, fld.H, fld.inner, fld.got   ' size, interior cells, interior cells cl
 dim fld.X0, fld.Y0, fld.c              ' field origin and cell size in screen px
 ' wall: cells in order, the side each came in from, its piece (tile index)
 dim tr.x(TR_MAX - 1), tr.y(TR_MAX - 1), tr.in(TR_MAX - 1), tr.n
+dim tr.shown   ' wall cells drawn so far (tr.show)
 dim fld.tp(FMAX_W - 1, FMAX_H - 1)
 ' open runs for the claim
 dim ru.s(RUN_MAX - 1), ru.e(RUN_MAX - 1), ru.y(RUN_MAX - 1), ru.v(RUN_MAX - 1), ru.q(RUN_MAX - 1)
@@ -113,6 +114,7 @@ sub fld.reset()
   next y
   fld.got = 0
   tr.n = 0
+  tr.shown = 0
 end sub
 
 ' cell state: 0 open, 1 claimed, 2 wall, 9 outside the field
@@ -287,13 +289,15 @@ sub fld.frame()
 end sub
 
 ' ---- the wall
-' start a wall: the player left land at (x, y) heading d
+' tr.add runs in the timer tick and only changes the state; the main loop
+' draws the new cells with tr.show.
 sub tr.clear()
   tr.n = 0
+  tr.shown = 0
 end sub
 
-' add wall cell (x, y), entered moving in direction d; updates the pieces of
-' it and the cell before and redraws both
+' add wall cell (x, y), entered moving in direction d; sets the pieces of it
+' and of the cell before
 sub tr.add(x, y, d)
   local i, a, b, px, py
   i = tr.n
@@ -310,7 +314,21 @@ sub tr.add(x, y, d)
     py = tr.y(i - 1)
     fld.tp(px, py) = tr.piece(tr.in(i - 1), d)
   end if
-  fld.redraw(min(x, px), min(y, py), max(x, px), max(y, py))
+end sub
+
+' draw the wall cells added since the last call, and the cell before them
+' (its piece changes when the wall turns). Main loop only.
+sub tr.show()
+  local i, n
+  n = tr.n
+  if tr.shown >= n then exit sub
+  bb.none()
+  for i = max(0, tr.shown - 1) to n - 1
+    bb.add(tr.x(i), tr.y(i), tr.x(i), tr.y(i))
+  next i
+  tr.shown = n
+  fld.redraw(bb.x0, bb.y0, bb.x1, bb.y1)
+  act.dirty = TRUE
 end sub
 
 ' wall piece through sides a and b (0 N 1 S 2 W 3 E)
@@ -344,6 +362,7 @@ sub tr.remove()
     bb.add(tr.x(i), tr.y(i), tr.x(i), tr.y(i))
   next i
   tr.n = 0
+  tr.shown = 0
   fld.redraw(bb.x0 - 1, bb.y0 - 1, bb.x1 + 1, bb.y1 + 1)
 end sub
 
@@ -358,6 +377,7 @@ function fld.close()
     bb.add(tr.x(i), tr.y(i), tr.x(i), tr.y(i))
   next i
   tr.n = 0
+  tr.shown = 0
   ' every open run of the field
   n = 0
   for y = 0 to fld.H - 1
