@@ -1,0 +1,47 @@
+CORE CAVING (mmcore edition) - asset list
+=========================================================
+A Boulder Dash style digging game. Art direction "Ember Mine": warm brown
+earth, grey-blue steel, gold and ember accents, green diamonds, dark mine
+shafts. Hard-edged pixels, dithering, no antialiasing.
+
+The whole 40 x 22 cave is always on screen (no scrolling) under a slim top
+bar; what is left round it is filled with darkened steel:
+  MODE 19 1366x768   art x2  tiles 32 px  bar 32 px
+  MODE 20 683x384    art x1  tiles 16 px  bar 16 px
+  MODE 16 1920x1080  art x3  tiles 48 px  bar 72 px (covers steel row 0)
+  MODE 11 1280x720   art x2  tiles 32 px  bar 48 px (covers steel row 0)
+  MODE 1  800x600    art x2  tiles 16 px  bar 32 px
+The game starts in the current mode (picks the nearest layout, switching to
+16-bit colour if needed) and restores the original mode on exit.
+
+gfx/  (PNG, WxH = 683x384 1366x768 800x600 1280x720 1920x1080)
+  sheet_WxH.png    tile sheet, 16 tiles per row, each pre-composited on
+                   empty space: space, dirt, steel, brick, magic wall (3),
+                   boulder, diamond (4 sparkle frames), miner (idle, blink,
+                   walk left/right x2, push left/right), firefly (4),
+                   butterfly (4), exit closed / open (2), explosion (3),
+                   amoeba (2), dark steel; below it the UI block: small font
+                   (8 styles), big gold font, bar icons (gem, life, dither,
+                   bullet, time ticks), name-entry box
+  title_WxH.png    title screen: CORE CAVING logo, STRIKE IT RICH ribbon,
+                   cave backdrop, empty menu panel
+  scores_WxH.png   high-score screen: small logo, HIGH SCORES, table panel with
+                   column headers (#, NAME, SKILL, CAVE, SCORE)
+  frame_WxH.png    play screen without the cave: dark steel and empty bar
+  pause_WxH.png    PAUSED dialog with the control list
+  banner_WxH.png   cave intro / cave complete banner (text drawn at run time)
+  over_WxH.png     GAME OVER dialog (labels; values drawn at run time)
+  win_WxH.png      ALL CAVES CLEARED dialog (labels; values drawn at run time)
+
+includes/layouts.inc  GENERATED: per-resolution scale, tile size, cave origin,
+                      bar, menu/score panel positions, tile ids, palette
+includes/caves.inc    GENERATED from tools/caves.py: the 20 caves as readable
+                      DATA (header with need/time/magic/amoeba values, then
+                      22 rows of 40 characters)
+
+Sound: none. Play is silent by design.
+
+High scores: C:/.corecaving (first line R,<easy>,<normal>,<hard> = furthest
+cave reached per difficulty, then score,cave,difficulty,name; top 10). A
+missing file is an empty table; if C: is missing or read-only the game runs
+without saving.
