@@ -19,6 +19,9 @@ python3 tools/jetpack/scripts/extract_all.py tools/jetpack/_download/extracted/j
 
 # Approval mockups (2 gameplay + title + pause)
 python3 tools/jetpack/scripts/make_mockups.py tools/jetpack/_download/extracted/jetpak15
+
+# TASVideos reference compare (downloads in reference/tasvideos/ if missing)
+python3 tools/jetpack/scripts/build_reference_compare.py tools/jetpack/_download/extracted/jetpak15
 ```
 
 ## Outputs
@@ -28,7 +31,8 @@ python3 tools/jetpack/scripts/make_mockups.py tools/jetpack/_download/extracted/
 | `levels/level_XX.json` | Level data (committed after extract) |
 | `previews/level_XX.png` | Map preview |
 | `gfx/sprites_vga.png` | Decoded VGA tile/sprite sheet (SCLM LZ77) |
-| `reference/` | DOSBox ground-truth screenshots for art validation |
+| `reference/` | DOSBox ground-truth screenshots; `tasvideos/` PNGs; `compare.png` vs decoded art |
+| `gfx/tas_reference.json` | TASVideos silhouette matches + player animation sheet indices |
 | `scripts/validate_art.py` | Level 0 minimap MSE vs `reference/level00_preview_crop2.png` |
 | `mockups/*.png` | UI / gameplay mockups |
 

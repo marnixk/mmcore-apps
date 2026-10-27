@@ -1,0 +1,113 @@
+{
+  "references": [
+    {
+      "reference": "ball.png",
+      "tas_cell": [
+        1,
+        1
+      ],
+      "tile_id": null,
+      "sheet_index": 199,
+      "match_mask_mse": 0.1007
+    },
+    {
+      "reference": "door.png",
+      "tas_cell": [
+        1,
+        0
+      ],
+      "tile_id": null,
+      "sheet_index": 199,
+      "match_mask_mse": 0.0764
+    },
+    {
+      "reference": "emerald_gem.png",
+      "tas_cell": [
+        1,
+        1
+      ],
+      "tile_id": 4,
+      "sheet_index": 4,
+      "match_mask_mse": null
+    },
+    {
+      "reference": "guy.png",
+      "tas_cell": [
+        1,
+        0
+      ],
+      "tile_id": null,
+      "sheet_index": 309,
+      "match_mask_mse": 0.1927
+    },
+    {
+      "reference": "ladder.png",
+      "tas_cell": [
+        1,
+        1
+      ],
+      "tile_id": 1,
+      "sheet_index": 1,
+      "match_mask_mse": null
+    },
+    {
+      "reference": "lred.png",
+      "tas_cell": [
+        0,
+        0
+      ],
+      "tile_id": null,
+      "sheet_index": 275,
+      "match_mask_mse": 0.3403
+    },
+    {
+      "reference": "missile.png",
+      "tas_cell": [
+        1,
+        1
+      ],
+      "tile_id": null,
+      "sheet_index": 301,
+      "match_mask_mse": 0.191
+    },
+    {
+      "reference": "stunner.png",
+      "tas_cell": [
+        1,
+        1
+      ],
+      "tile_id": 19,
+      "sheet_index": 19,
+      "match_mask_mse": null
+    },
+    {
+      "reference": "tank_of_fuel.png",
+      "tas_cell": [
+        1,
+        1
+      ],
+      "tile_id": 16,
+      "sheet_index": 16,
+      "match_mask_mse": null
+    },
+    {
+      "reference": "trackbot.png",
+      "tas_cell": [
+        1,
+        1
+      ],
+      "tile_id": null,
+      "sheet_index": 301,
+      "match_mask_mse": 0.1215
+    },
+    {
+      "reference": "guy.png",
+      "player_animation_sheet_indices": [
+        182,
+        309,
+        182,
+        293
+      ]
+    }
+  ]
+}

@@ -7,6 +7,7 @@ from PIL import Image, ImageDraw, ImageFont
 from .constants import MAP_H, MAP_W, TILE_PX
 from .graphics import TileAtlas, render_level_tiles
 from .levels import Level
+from .sprite_catalog import load_enemy_sheet_indices, load_player_frames, sheet_sprite
 from .palette import (
     DOOR_COLOR,
     ENEMY_COLORS,
@@ -111,14 +112,30 @@ def render_entity_showcase_crop(level: Level, atlas: TileAtlas, margin_tiles: in
     py = (level.player_y - 1) * TILE_PX
     m = margin_tiles * TILE_PX
     field = render_level_tiles(level.tiles, atlas)
-    draw = ImageDraw.Draw(field)
     s = TILE_PX
+    player_frames = load_player_frames()
+    player_im = sheet_sprite(atlas, player_frames[0]) if player_frames else None
+    enemy_sprites = load_enemy_sheet_indices()
     for e in level.enemies:
-        ex = (e.x - 1) * s + s // 2
-        ey = (e.y - 1) * s + s // 2
+        ox = (e.x - 1) * s
+        oy = (e.y - 1) * s
+        spr = sheet_sprite(atlas, enemy_sprites.get(e.type_id))
+        if spr is not None:
+            field.paste(spr, (ox, oy), spr)
+            continue
+        draw = ImageDraw.Draw(field)
+        ex = ox + s // 2
+        ey = oy + s // 2
         col = ENEMY_COLORS.get(e.type_id, (0xFF, 0x80, 0x80))
         draw.rectangle([ex - 6, ey - 6, ex + 6, ey + 6], fill=col)
-    draw.ellipse([px + s // 2 - 8, py + s // 2 - 8, px + s // 2 + 8, py + s // 2 + 8], fill=PLAYER_COLOR)
+    if player_im is not None:
+        field.paste(player_im, (px, py), player_im)
+    else:
+        draw = ImageDraw.Draw(field)
+        draw.ellipse(
+            [px + s // 2 - 8, py + s // 2 - 8, px + s // 2 + 8, py + s // 2 + 8],
+            fill=PLAYER_COLOR,
+        )
     x0 = max(0, px - m)
     y0 = max(0, py - m)
     x1 = min(field.width, px + s + m)
