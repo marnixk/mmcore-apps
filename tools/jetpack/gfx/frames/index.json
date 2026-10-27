@@ -1,454 +1,724 @@
 {
-  "source": "dosbox_play_capture",
+  "source": "dosbox_native_median",
   "tile_size": 24,
-  "playfield_crop": [
-    20,
-    48,
-    618,
-    416
+  "native_resolution": [
+    640,
+    400
   ],
-  "captures": {
-    "0": "/workspace/tools/jetpack/reference/dosbox_play_level00.png",
-    "10": "/workspace/tools/jetpack/reference/dosbox_play_level10.png",
-    "20": "/workspace/tools/jetpack/reference/dosbox_play_level20.png",
-    "30": "/workspace/tools/jetpack/reference/dosbox_play_level30.png",
-    "40": "/workspace/tools/jetpack/reference/dosbox_play_level40.png",
-    "50": "/workspace/tools/jetpack/reference/dosbox_play_level50.png",
-    "60": "/workspace/tools/jetpack/reference/dosbox_play_level60.png",
-    "70": "/workspace/tools/jetpack/reference/dosbox_play_level70.png",
-    "80": "/workspace/tools/jetpack/reference/dosbox_play_level80.png",
-    "90": "/workspace/tools/jetpack/reference/dosbox_play_level90.png"
+  "playfield_origin": [
+    8,
+    0
+  ],
+  "tile_counts": {
+    "1": 4893,
+    "2": 672,
+    "3": 807,
+    "4": 9568,
+    "5": 12,
+    "6": 273,
+    "7": 240,
+    "8": 216,
+    "9": 123,
+    "10": 18,
+    "11": 78,
+    "12": 12,
+    "13": 75,
+    "14": 3,
+    "15": 276,
+    "16": 297,
+    "17": 288,
+    "18": 1020,
+    "19": 81,
+    "20": 2222,
+    "21": 1677,
+    "22": 1134,
+    "23": 201,
+    "24": 120,
+    "25": 510,
+    "26": 270,
+    "27": 765,
+    "28": 1143,
+    "29": 1905,
+    "30": 69,
+    "31": 96,
+    "32": 510,
+    "33": 72,
+    "34": 48,
+    "35": 18,
+    "36": 633,
+    "37": 102,
+    "38": 468,
+    "39": 99,
+    "40": 3705,
+    "41": 66,
+    "42": 84,
+    "43": 90,
+    "44": 48,
+    "45": 33,
+    "46": 60,
+    "47": 96,
+    "48": 45,
+    "49": 3,
+    "60": 107916,
+    "69": 66,
+    "70": 2723,
+    "71": 774,
+    "72": 5535,
+    "73": 2553,
+    "74": 819,
+    "75": 776,
+    "76": 663,
+    "77": 615,
+    "78": 459,
+    "79": 261,
+    "80": 744,
+    "81": 537,
+    "82": 351,
+    "83": 195,
+    "84": 252,
+    "85": 201,
+    "86": 285,
+    "87": 363,
+    "88": 297,
+    "89": 309,
+    "90": 99,
+    "91": 108,
+    "92": 84,
+    "93": 120,
+    "94": 426,
+    "95": 168,
+    "96": 723,
+    "97": 186,
+    "98": 3,
+    "99": 54,
+    "100": 585,
+    "101": 192,
+    "102": 288,
+    "103": 168,
+    "104": 498,
+    "105": 93,
+    "106": 99,
+    "107": 117,
+    "108": 114,
+    "109": 108,
+    "110": 105,
+    "111": 114,
+    "112": 51,
+    "113": 96,
+    "114": 75,
+    "115": 42,
+    "116": 198,
+    "117": 90,
+    "118": 57,
+    "119": 147
   },
+  "flagged_tile_ids": [],
   "tiles": [
-    {
-      "file": "tile_000_blank.png",
-      "tile_id": 0,
-      "name": "blank"
-    },
     {
       "file": "tile_001_ladder.png",
       "tile_id": 1,
-      "name": "ladder"
+      "name": "ladder",
+      "samples": 4893
     },
     {
       "file": "tile_002_escalator_up.png",
       "tile_id": 2,
-      "name": "escalator_up"
+      "name": "escalator_up",
+      "samples": 672
     },
     {
       "file": "tile_003_escalator_down.png",
       "tile_id": 3,
-      "name": "escalator_down"
+      "name": "escalator_down",
+      "samples": 807
     },
     {
       "file": "tile_004_gem.png",
       "tile_id": 4,
-      "name": "gem"
+      "name": "gem",
+      "samples": 9568
     },
     {
       "file": "tile_005_gem_collected.png",
       "tile_id": 5,
-      "name": "gem_collected"
+      "name": "gem_collected",
+      "samples": 12
     },
     {
       "file": "tile_006_teleport_yellow.png",
       "tile_id": 6,
-      "name": "teleport_yellow"
+      "name": "teleport_yellow",
+      "samples": 273
     },
     {
       "file": "tile_007_teleport_pink.png",
       "tile_id": 7,
-      "name": "teleport_pink"
+      "name": "teleport_pink",
+      "samples": 240
     },
     {
       "file": "tile_008_teleport_green.png",
       "tile_id": 8,
-      "name": "teleport_green"
+      "name": "teleport_green",
+      "samples": 216
     },
     {
       "file": "tile_009_toggle_blue_off.png",
       "tile_id": 9,
-      "name": "toggle_blue_off"
+      "name": "toggle_blue_off",
+      "samples": 123
     },
     {
       "file": "tile_010_toggle_blue_on.png",
       "tile_id": 10,
-      "name": "toggle_blue_on"
+      "name": "toggle_blue_on",
+      "samples": 18
     },
     {
       "file": "tile_011_toggle_red_off.png",
       "tile_id": 11,
-      "name": "toggle_red_off"
+      "name": "toggle_red_off",
+      "samples": 78
     },
     {
       "file": "tile_012_toggle_red_on.png",
       "tile_id": 12,
-      "name": "toggle_red_on"
+      "name": "toggle_red_on",
+      "samples": 12
     },
     {
       "file": "tile_013_toggle_cyan_off.png",
       "tile_id": 13,
-      "name": "toggle_cyan_off"
+      "name": "toggle_cyan_off",
+      "samples": 75
+    },
+    {
+      "file": "tile_014_toggle_cyan_on.png",
+      "tile_id": 14,
+      "name": "toggle_cyan_on",
+      "samples": 3
     },
     {
       "file": "tile_015_fuel_double.png",
       "tile_id": 15,
-      "name": "fuel_double"
+      "name": "fuel_double",
+      "samples": 276
     },
     {
       "file": "tile_016_fuel_single.png",
       "tile_id": 16,
-      "name": "fuel_single"
+      "name": "fuel_single",
+      "samples": 297
+    },
+    {
+      "file": "tile_017_charger.png",
+      "tile_id": 17,
+      "name": "charger",
+      "samples": 288
     },
     {
       "file": "tile_018_drain.png",
       "tile_id": 18,
-      "name": "drain"
+      "name": "drain",
+      "samples": 1020
+    },
+    {
+      "file": "tile_019_stunner.png",
+      "tile_id": 19,
+      "name": "stunner",
+      "samples": 81
     },
     {
       "file": "tile_020_id_14.png",
       "tile_id": 20,
-      "name": "id_14"
+      "name": "id_14",
+      "samples": 2222
     },
     {
       "file": "tile_021_id_15.png",
       "tile_id": 21,
-      "name": "id_15"
+      "name": "id_15",
+      "samples": 1677
     },
     {
       "file": "tile_022_id_16.png",
       "tile_id": 22,
-      "name": "id_16"
+      "name": "id_16",
+      "samples": 1134
     },
     {
       "file": "tile_023_id_17.png",
       "tile_id": 23,
-      "name": "id_17"
+      "name": "id_17",
+      "samples": 201
+    },
+    {
+      "file": "tile_024_id_18.png",
+      "tile_id": 24,
+      "name": "id_18",
+      "samples": 120
+    },
+    {
+      "file": "tile_025_id_19.png",
+      "tile_id": 25,
+      "name": "id_19",
+      "samples": 510
     },
     {
       "file": "tile_026_id_1a.png",
       "tile_id": 26,
-      "name": "id_1a"
+      "name": "id_1a",
+      "samples": 270
     },
     {
       "file": "tile_027_id_1b.png",
       "tile_id": 27,
-      "name": "id_1b"
+      "name": "id_1b",
+      "samples": 765
     },
     {
       "file": "tile_028_id_1c.png",
       "tile_id": 28,
-      "name": "id_1c"
+      "name": "id_1c",
+      "samples": 1143
     },
     {
       "file": "tile_029_id_1d.png",
       "tile_id": 29,
-      "name": "id_1d"
+      "name": "id_1d",
+      "samples": 1905
     },
     {
       "file": "tile_030_id_1e.png",
       "tile_id": 30,
-      "name": "id_1e"
+      "name": "id_1e",
+      "samples": 69
+    },
+    {
+      "file": "tile_031_id_1f.png",
+      "tile_id": 31,
+      "name": "id_1f",
+      "samples": 96
+    },
+    {
+      "file": "tile_032_id_20.png",
+      "tile_id": 32,
+      "name": "id_20",
+      "samples": 510
     },
     {
       "file": "tile_033_id_21.png",
       "tile_id": 33,
-      "name": "id_21"
+      "name": "id_21",
+      "samples": 72
     },
     {
       "file": "tile_034_id_22.png",
       "tile_id": 34,
-      "name": "id_22"
+      "name": "id_22",
+      "samples": 48
+    },
+    {
+      "file": "tile_035_id_23.png",
+      "tile_id": 35,
+      "name": "id_23",
+      "samples": 18
     },
     {
       "file": "tile_036_id_24.png",
       "tile_id": 36,
-      "name": "id_24"
+      "name": "id_24",
+      "samples": 633
+    },
+    {
+      "file": "tile_037_id_25.png",
+      "tile_id": 37,
+      "name": "id_25",
+      "samples": 102
     },
     {
       "file": "tile_038_id_26.png",
       "tile_id": 38,
-      "name": "id_26"
+      "name": "id_26",
+      "samples": 468
+    },
+    {
+      "file": "tile_039_id_27.png",
+      "tile_id": 39,
+      "name": "id_27",
+      "samples": 99
     },
     {
       "file": "tile_040_id_28.png",
       "tile_id": 40,
-      "name": "id_28"
+      "name": "id_28",
+      "samples": 3705
     },
     {
       "file": "tile_041_id_29.png",
       "tile_id": 41,
-      "name": "id_29"
+      "name": "id_29",
+      "samples": 66
     },
     {
       "file": "tile_042_id_2a.png",
       "tile_id": 42,
-      "name": "id_2a"
+      "name": "id_2a",
+      "samples": 84
     },
     {
       "file": "tile_043_id_2b.png",
       "tile_id": 43,
-      "name": "id_2b"
+      "name": "id_2b",
+      "samples": 90
     },
     {
       "file": "tile_044_id_2c.png",
       "tile_id": 44,
-      "name": "id_2c"
+      "name": "id_2c",
+      "samples": 48
+    },
+    {
+      "file": "tile_045_id_2d.png",
+      "tile_id": 45,
+      "name": "id_2d",
+      "samples": 33
     },
     {
       "file": "tile_046_id_2e.png",
       "tile_id": 46,
-      "name": "id_2e"
+      "name": "id_2e",
+      "samples": 60
     },
     {
       "file": "tile_047_id_2f.png",
       "tile_id": 47,
-      "name": "id_2f"
+      "name": "id_2f",
+      "samples": 96
     },
     {
       "file": "tile_048_id_30.png",
       "tile_id": 48,
-      "name": "id_30"
+      "name": "id_30",
+      "samples": 45
     },
     {
       "file": "tile_049_id_31.png",
       "tile_id": 49,
-      "name": "id_31"
+      "name": "id_31",
+      "samples": 3
     },
     {
-      "file": "tile_060_id_3c.png",
+      "file": "tile_060_backdrop.png",
       "tile_id": 60,
-      "name": "id_3c"
+      "name": "backdrop",
+      "samples": 107916
+    },
+    {
+      "file": "tile_069_id_45.png",
+      "tile_id": 69,
+      "name": "id_45",
+      "samples": 66
     },
     {
       "file": "tile_070_crate.png",
       "tile_id": 70,
-      "name": "crate"
+      "name": "crate",
+      "samples": 2723
     },
     {
       "file": "tile_071_steel_barrier.png",
       "tile_id": 71,
-      "name": "steel_barrier"
+      "name": "steel_barrier",
+      "samples": 774
     },
     {
       "file": "tile_072_diamond_block.png",
       "tile_id": 72,
-      "name": "diamond_block"
+      "name": "diamond_block",
+      "samples": 5535
     },
     {
       "file": "tile_073_id_49.png",
       "tile_id": 73,
-      "name": "id_49"
+      "name": "id_49",
+      "samples": 2553
     },
     {
       "file": "tile_074_id_4a.png",
       "tile_id": 74,
-      "name": "id_4a"
+      "name": "id_4a",
+      "samples": 819
     },
     {
       "file": "tile_075_id_4b.png",
       "tile_id": 75,
-      "name": "id_4b"
+      "name": "id_4b",
+      "samples": 776
     },
     {
       "file": "tile_076_id_4c.png",
       "tile_id": 76,
-      "name": "id_4c"
+      "name": "id_4c",
+      "samples": 663
     },
     {
       "file": "tile_077_id_4d.png",
       "tile_id": 77,
-      "name": "id_4d"
+      "name": "id_4d",
+      "samples": 615
     },
     {
       "file": "tile_078_id_4e.png",
       "tile_id": 78,
-      "name": "id_4e"
+      "name": "id_4e",
+      "samples": 459
     },
     {
       "file": "tile_079_id_4f.png",
       "tile_id": 79,
-      "name": "id_4f"
+      "name": "id_4f",
+      "samples": 261
     },
     {
       "file": "tile_080_id_50.png",
       "tile_id": 80,
-      "name": "id_50"
+      "name": "id_50",
+      "samples": 744
     },
     {
       "file": "tile_081_id_51.png",
       "tile_id": 81,
-      "name": "id_51"
+      "name": "id_51",
+      "samples": 537
     },
     {
       "file": "tile_082_id_52.png",
       "tile_id": 82,
-      "name": "id_52"
+      "name": "id_52",
+      "samples": 351
     },
     {
       "file": "tile_083_id_53.png",
       "tile_id": 83,
-      "name": "id_53"
+      "name": "id_53",
+      "samples": 195
     },
     {
       "file": "tile_084_id_54.png",
       "tile_id": 84,
-      "name": "id_54"
+      "name": "id_54",
+      "samples": 252
     },
     {
       "file": "tile_085_id_55.png",
       "tile_id": 85,
-      "name": "id_55"
+      "name": "id_55",
+      "samples": 201
     },
     {
       "file": "tile_086_id_56.png",
       "tile_id": 86,
-      "name": "id_56"
+      "name": "id_56",
+      "samples": 285
     },
     {
       "file": "tile_087_id_57.png",
       "tile_id": 87,
-      "name": "id_57"
+      "name": "id_57",
+      "samples": 363
     },
     {
       "file": "tile_088_id_58.png",
       "tile_id": 88,
-      "name": "id_58"
+      "name": "id_58",
+      "samples": 297
     },
     {
       "file": "tile_089_id_59.png",
       "tile_id": 89,
-      "name": "id_59"
+      "name": "id_59",
+      "samples": 309
     },
     {
       "file": "tile_090_id_5a.png",
       "tile_id": 90,
-      "name": "id_5a"
+      "name": "id_5a",
+      "samples": 99
     },
     {
       "file": "tile_091_id_5b.png",
       "tile_id": 91,
-      "name": "id_5b"
+      "name": "id_5b",
+      "samples": 108
     },
     {
       "file": "tile_092_id_5c.png",
       "tile_id": 92,
-      "name": "id_5c"
+      "name": "id_5c",
+      "samples": 84
     },
     {
       "file": "tile_093_id_5d.png",
       "tile_id": 93,
-      "name": "id_5d"
+      "name": "id_5d",
+      "samples": 120
     },
     {
       "file": "tile_094_id_5e.png",
       "tile_id": 94,
-      "name": "id_5e"
+      "name": "id_5e",
+      "samples": 426
     },
     {
       "file": "tile_095_id_5f.png",
       "tile_id": 95,
-      "name": "id_5f"
+      "name": "id_5f",
+      "samples": 168
     },
     {
       "file": "tile_096_id_60.png",
       "tile_id": 96,
-      "name": "id_60"
+      "name": "id_60",
+      "samples": 723
     },
     {
       "file": "tile_097_id_61.png",
       "tile_id": 97,
-      "name": "id_61"
+      "name": "id_61",
+      "samples": 186
+    },
+    {
+      "file": "tile_098_id_62.png",
+      "tile_id": 98,
+      "name": "id_62",
+      "samples": 3
     },
     {
       "file": "tile_099_id_63.png",
       "tile_id": 99,
-      "name": "id_63"
+      "name": "id_63",
+      "samples": 54
     },
     {
       "file": "tile_100_id_64.png",
       "tile_id": 100,
-      "name": "id_64"
+      "name": "id_64",
+      "samples": 585
     },
     {
       "file": "tile_101_id_65.png",
       "tile_id": 101,
-      "name": "id_65"
+      "name": "id_65",
+      "samples": 192
     },
     {
       "file": "tile_102_id_66.png",
       "tile_id": 102,
-      "name": "id_66"
+      "name": "id_66",
+      "samples": 288
     },
     {
       "file": "tile_103_id_67.png",
       "tile_id": 103,
-      "name": "id_67"
+      "name": "id_67",
+      "samples": 168
     },
     {
       "file": "tile_104_id_68.png",
       "tile_id": 104,
-      "name": "id_68"
+      "name": "id_68",
+      "samples": 498
     },
     {
       "file": "tile_105_id_69.png",
       "tile_id": 105,
-      "name": "id_69"
+      "name": "id_69",
+      "samples": 93
     },
     {
       "file": "tile_106_id_6a.png",
       "tile_id": 106,
-      "name": "id_6a"
+      "name": "id_6a",
+      "samples": 99
     },
     {
       "file": "tile_107_id_6b.png",
       "tile_id": 107,
-      "name": "id_6b"
+      "name": "id_6b",
+      "samples": 117
     },
     {
       "file": "tile_108_id_6c.png",
       "tile_id": 108,
-      "name": "id_6c"
+      "name": "id_6c",
+      "samples": 114
     },
     {
       "file": "tile_109_id_6d.png",
       "tile_id": 109,
-      "name": "id_6d"
+      "name": "id_6d",
+      "samples": 108
     },
     {
       "file": "tile_110_id_6e.png",
       "tile_id": 110,
-      "name": "id_6e"
+      "name": "id_6e",
+      "samples": 105
     },
     {
       "file": "tile_111_id_6f.png",
       "tile_id": 111,
-      "name": "id_6f"
+      "name": "id_6f",
+      "samples": 114
     },
     {
       "file": "tile_112_id_70.png",
       "tile_id": 112,
-      "name": "id_70"
+      "name": "id_70",
+      "samples": 51
     },
     {
       "file": "tile_113_id_71.png",
       "tile_id": 113,
-      "name": "id_71"
+      "name": "id_71",
+      "samples": 96
     },
     {
       "file": "tile_114_conveyor_left.png",
       "tile_id": 114,
-      "name": "conveyor_left"
+      "name": "conveyor_left",
+      "samples": 75
+    },
+    {
+      "file": "tile_115_id_73.png",
+      "tile_id": 115,
+      "name": "id_73",
+      "samples": 42
     },
     {
       "file": "tile_116_id_74.png",
       "tile_id": 116,
-      "name": "id_74"
+      "name": "id_74",
+      "samples": 198
     },
     {
       "file": "tile_117_conveyor_right.png",
       "tile_id": 117,
-      "name": "conveyor_right"
+      "name": "conveyor_right",
+      "samples": 90
+    },
+    {
+      "file": "tile_118_id_76.png",
+      "tile_id": 118,
+      "name": "id_76",
+      "samples": 57
+    },
+    {
+      "file": "tile_119_id_77.png",
+      "tile_id": 119,
+      "name": "id_77",
+      "samples": 147
     }
   ],
   "player": [
@@ -462,44 +732,22 @@
     {
       "file": "enemy_trackbot_0.png",
       "enemy_id": 1,
-      "name": "trackbot",
-      "from_level": 0
+      "name": "trackbot"
     },
     {
-      "file": "enemy_spikes_0.png",
+      "file": "enemy_spikes_1.png",
       "enemy_id": 5,
-      "name": "spikes",
-      "from_level": 0
+      "name": "spikes"
     },
     {
-      "file": "enemy_missile_0.png",
-      "enemy_id": 4,
-      "name": "missile",
-      "from_level": 10
+      "file": "enemy_trackbot_2.png",
+      "enemy_id": 1,
+      "name": "trackbot"
     },
     {
-      "file": "enemy_steel_ball_0.png",
-      "enemy_id": 2,
-      "name": "steel_ball",
-      "from_level": 10
-    },
-    {
-      "file": "enemy_flitzer_0.png",
-      "enemy_id": 6,
-      "name": "flitzer",
-      "from_level": 10
-    },
-    {
-      "file": "enemy_spring_0.png",
-      "enemy_id": 3,
-      "name": "spring",
-      "from_level": 10
-    },
-    {
-      "file": "enemy_batbot_0.png",
-      "enemy_id": 8,
-      "name": "batbot",
-      "from_level": 20
+      "file": "enemy_spikes_3.png",
+      "enemy_id": 5,
+      "name": "spikes"
     }
   ],
   "pickups": []

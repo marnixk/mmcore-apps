@@ -14,7 +14,6 @@ sys.path.insert(0, str(ROOT))
 from jetpack.frame_atlas import FrameAtlas
 from jetpack.graphics import TileAtlas, export_sprite_sheet, load_vga_palette
 from jetpack.levels import load_jetlev, write_level_json
-from jetpack.playfield import normalize_playfield
 from jetpack.render import render_level_preview
 
 
@@ -60,13 +59,9 @@ def main() -> int:
     else:
         frame_atlas = None
     atlas = TileAtlas.open(game_dir)
-    ref_dir = out / "reference"
     for lv in levels:
         write_level_json(lv, json_dir / f"level_{lv.index:02d}.json")
-        cap = ref_dir / f"dosbox_play_level{lv.index:02d}.png"
-        if cap.is_file():
-            img = normalize_playfield(__import__("PIL").Image.open(cap))
-        elif frame_atlas is not None:
+        if frame_atlas is not None:
             img = frame_atlas.render_level(lv.tiles).convert("RGB")
         else:
             img = render_level_preview(lv, scale=1, show_entities=False, atlas=atlas)

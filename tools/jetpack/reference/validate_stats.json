@@ -1,0 +1,12 @@
+{
+  "level_00": {
+    "structural_mse": 7677.87841796875,
+    "pass": false,
+    "cells": 128
+  },
+  "level_05": {
+    "structural_mse": 8862.80859375,
+    "pass": false,
+    "cells": 42
+  }
+}

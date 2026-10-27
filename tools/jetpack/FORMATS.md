@@ -100,17 +100,19 @@ After decompress, only the first `24×24 = 576` bytes are the visible tile; rema
 
 ### Art pipeline in this repo (v1.5 phase 1)
 
-**Ground truth:** full-size **in-game** DOSBox screenshots `reference/dosbox_play_levelXX.png` (not the READY/minimap). Automation: `scripts/dosbox_capture.py` (DOSBox-X + Xvfb + xdotool).
+**Ground truth:** native VGA PNGs `reference/native/level_XX_fN.png` (**640×400**, `scaler=none`, no resample). Legacy window captures are rejected.
 
-**Playfield geometry in captures:** DOSBox client crop **(20, 48)–(618, 416)** = **598×368** px (**23 px/tile**), resampled to **624×384** (`jetpack/playfield.py`).
+**Playfield:** crop **(8, 0)–(632, 384)** = **26×16×24 px** (`reference/playfield_geometry.json`, `jetpack/native_vga.py`).
 
-**Export route:** `jetpack/play_extract.py` + `scripts/extract_from_play.py` — dedupe **24×24** RGBA tiles per ID from play captures (levels 0, 10, …, 90); backdrop **0x3C** from empty cells on level 0; enemy spawn crops; `gfx/frames/index.json` → `"source": "dosbox_play_capture"`.
+**Capture:** `scripts/dosbox_capture.py` — DOSBox-X + Xvfb; levels **0–99** via `TAB+2+S` skip and `--boot-level` decades (F3 +10 on title).
 
-**Previews:** captured levels use normalized play PNG; others use `FrameAtlas.render_level()`.
+**Atlas:** `jetpack/atlas_median.py` — per tile ID, pick highest-variance clean cell sample across all captures (medoid fallback); `scripts/extract_from_play.py` → `gfx/frames/index.json` (`source: dosbox_native_median`).
 
-**Validation:** `scripts/validate_art.py` compares tile rebuild vs play capture (masked where player/enemies stand). TAS compare: `reference/compare.png`.
+**Sprites:** `jetpack/sprites_diff.py` diffs `f1`/`f2` against static rebuild (player + enemies).
 
-**RAM / DAC dump:** not automated in this branch; DAT bitmap layout still unverified vs play crops.
+**Validation:** `scripts/validate_art.py` — structural cells only (excludes backdrop, items, spawn markers, player/enemy cells); side-by-sides `reference/validate_level*_side_by_side.png`.
+
+**RAM / DAC dump:** not automated; DAT decode still unverified.
 
 ## Other files
 

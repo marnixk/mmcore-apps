@@ -1,0 +1,19 @@
+{
+  "native_resolution": [
+    640,
+    400
+  ],
+  "playfield_origin": [
+    8,
+    0
+  ],
+  "tile_px": 24,
+  "playfield_size": [
+    624,
+    384
+  ],
+  "map_tiles": [
+    26,
+    16
+  ]
+}

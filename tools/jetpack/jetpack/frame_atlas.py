@@ -65,25 +65,17 @@ class FrameAtlas:
         background_tile_id: int = 0x3C,
         use_level0_cells: bool = False,
     ) -> Image.Image:
-        w, h = MAP_W * TILE_PX, MAP_H * TILE_PX
-        _ = use_level0_cells  # deprecated: minimap cells are not 1:1 tiles
-        base = self.tiles.get(background_tile_id)
-        if base is None:
-            frame = Image.new("RGBA", (w, h), (0x28, 0x20, 0x38, 255))
-        else:
-            frame = Image.new("RGBA", (w, h))
-            for y in range(MAP_H):
-                for x in range(MAP_W):
-                    frame.paste(base, (x * TILE_PX, y * TILE_PX), base)
-        for row in range(MAP_H):
-            for col in range(MAP_W):
-                tid = tile_ids[row * MAP_W + col]
-                if tid == 0 or tid in SPAWN_MARKER_TILE_IDS:
-                    continue
-                spr = self.tiles.get(tid)
-                if spr is None and tid == 60:
-                    spr = self.tiles.get(0x3C)
-                if spr is None:
-                    continue
-                frame.paste(spr, (col * TILE_PX, row * TILE_PX), spr)
-        return frame
+        _ = use_level0_cells
+        from .atlas_median import TileAtlasStats, render_level_from_atlas
+        import numpy as np
+
+        tiles_np: dict[int, np.ndarray] = {}
+        for tid, im in self.tiles.items():
+            tiles_np[tid] = np.array(im.convert("RGB"))
+        stats = TileAtlasStats(
+            tiles=tiles_np,
+            counts={},
+            disagreement={},
+        )
+        rgb = render_level_from_atlas(tile_ids, stats)
+        return rgb.convert("RGBA")

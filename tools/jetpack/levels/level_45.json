@@ -3,418 +3,418 @@
   "name": "BEWARE THE   GUARDIANS",
   "tiles": [
     0,
-    20,
-    0,
-    20,
-    0,
-    20,
-    0,
-    20,
-    0,
     70,
     0,
+    27,
+    79,
+    0,
+    0,
+    72,
     0,
     0,
     0,
     0,
+    73,
     0,
-    70,
+    0,
+    0,
+    0,
+    75,
+    0,
+    0,
+    72,
+    0,
+    72,
+    0,
+    0,
+    0,
+    20,
+    0,
+    27,
+    0,
+    79,
+    0,
+    0,
+    72,
+    0,
+    0,
+    0,
+    0,
+    73,
+    0,
+    72,
+    0,
+    0,
+    75,
+    0,
+    0,
+    0,
+    0,
+    72,
+    0,
+    0,
+    27,
     0,
     22,
-    0,
-    22,
-    0,
-    22,
-    0,
-    23,
-    0,
-    9,
-    27,
-    0,
-    27,
-    0,
-    27,
-    0,
-    27,
     16,
+    27,
+    79,
+    4,
+    0,
+    72,
+    0,
+    0,
+    0,
+    4,
+    75,
+    0,
+    0,
+    72,
+    0,
+    73,
+    4,
+    0,
+    0,
+    0,
+    72,
+    0,
+    4,
+    0,
+    20,
+    0,
     70,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    70,
-    0,
-    27,
-    0,
-    27,
-    0,
-    27,
-    0,
-    27,
     11,
-    60,
-    60,
-    60,
-    60,
-    60,
-    60,
-    60,
-    60,
-    60,
-    60,
     79,
-    79,
-    79,
-    79,
-    79,
-    79,
-    60,
-    60,
-    60,
-    60,
-    60,
-    60,
-    60,
-    60,
-    60,
-    60,
-    0,
-    0,
-    0,
     0,
     4,
+    72,
+    0,
+    72,
+    0,
+    0,
+    75,
     0,
     0,
     0,
     0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    4,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
+    73,
     0,
     4,
     0,
     0,
     72,
-    72,
-    72,
-    72,
-    72,
-    72,
-    72,
-    72,
-    72,
-    72,
-    0,
-    0,
-    4,
     0,
     0,
     0,
     0,
+    22,
     0,
-    0,
-    0,
-    0,
-    0,
-    4,
-    0,
+    60,
+    60,
     0,
     0,
     72,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    72,
-    0,
-    0,
-    0,
-    4,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    4,
-    0,
-    0,
     0,
     0,
     28,
     0,
     73,
-    73,
-    71,
-    71,
-    73,
-    73,
-    0,
-    72,
-    0,
-    0,
-    0,
     0,
     4,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    4,
-    0,
-    0,
-    0,
-    72,
-    0,
-    73,
-    73,
-    75,
-    75,
-    73,
-    73,
-    0,
-    72,
-    0,
-    0,
-    0,
-    4,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    4,
-    0,
-    0,
-    72,
-    0,
-    71,
-    76,
-    0,
-    0,
-    76,
     71,
     0,
-    72,
     0,
     0,
-    4,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    4,
-    0,
-    0,
-    0,
-    72,
-    0,
-    71,
-    76,
-    0,
-    0,
-    76,
-    71,
-    0,
-    72,
-    0,
-    0,
-    0,
-    4,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    4,
-    0,
-    0,
-    0,
-    0,
-    72,
-    0,
-    73,
-    73,
-    75,
-    75,
-    73,
-    73,
-    0,
-    28,
-    0,
-    0,
-    0,
-    0,
-    4,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    4,
-    0,
-    0,
-    0,
-    72,
-    0,
-    73,
-    73,
-    71,
-    71,
-    73,
-    73,
-    0,
-    72,
-    0,
-    0,
-    0,
-    4,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    4,
-    0,
-    0,
-    72,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    72,
-    0,
-    0,
-    4,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    4,
-    0,
-    0,
-    0,
-    72,
-    72,
-    72,
-    72,
-    72,
-    72,
-    72,
-    72,
-    72,
-    72,
-    0,
-    0,
-    0,
-    4,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    4,
     0,
     0,
     0,
     0,
     27,
     0,
-    0,
-    16,
-    0,
-    0,
-    16,
-    0,
-    0,
     27,
+    20,
+    0,
+    0,
+    60,
+    60,
+    0,
+    0,
+    72,
     0,
     0,
     0,
     0,
+    73,
     4,
+    0,
+    76,
+    0,
+    28,
+    0,
+    0,
+    0,
+    0,
     0,
     0,
     13,
     0,
     0,
+    22,
+    0,
+    60,
+    60,
+    0,
+    0,
+    72,
+    4,
+    0,
+    73,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    72,
     0,
     0,
     4,
     0,
     0,
     0,
-    27,
+    0,
+    20,
     0,
     0,
-    27,
+    60,
+    60,
     0,
     0,
-    27,
+    72,
     0,
+    4,
+    73,
     0,
-    27,
+    72,
     0,
     0,
     0,
     4,
     0,
+    0,
+    0,
+    0,
+    0,
+    4,
+    16,
+    0,
+    27,
+    0,
+    23,
+    0,
+    60,
+    60,
+    0,
+    0,
+    72,
+    0,
+    0,
+    71,
+    0,
+    0,
+    72,
+    0,
+    76,
+    0,
+    0,
+    73,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    70,
+    0,
+    0,
+    60,
+    60,
+    0,
+    0,
+    72,
+    0,
+    0,
+    71,
+    0,
+    0,
+    0,
+    0,
+    71,
+    0,
+    0,
+    73,
+    0,
+    72,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    9,
+    70,
+    60,
+    60,
+    0,
+    0,
+    0,
+    72,
+    0,
+    73,
+    4,
+    0,
+    71,
+    0,
+    0,
+    0,
+    4,
+    71,
+    0,
+    0,
+    72,
+    0,
+    16,
+    4,
+    0,
+    0,
+    27,
+    0,
+    60,
+    60,
+    0,
+    0,
+    0,
+    0,
+    0,
+    73,
+    0,
+    4,
+    76,
+    0,
+    72,
+    0,
+    0,
+    71,
+    0,
+    0,
+    72,
+    0,
+    0,
+    0,
+    4,
+    0,
+    0,
+    27,
+    60,
+    60,
+    0,
+    0,
+    4,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    72,
+    0,
+    73,
+    0,
+    4,
+    72,
+    0,
+    0,
+    0,
+    0,
+    0,
+    27,
+    0,
+    60,
+    60,
+    0,
+    4,
+    0,
+    0,
+    0,
+    72,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    73,
+    4,
+    0,
+    72,
+    0,
+    27,
+    0,
+    0,
+    0,
+    0,
+    27,
+    79,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    72,
+    0,
+    76,
+    4,
+    0,
+    73,
+    0,
+    0,
+    0,
+    0,
+    72,
+    0,
+    0,
+    27,
+    0,
+    0,
+    27,
+    0,
+    79,
+    0,
+    0,
+    0,
+    0,
+    0,
+    4,
+    0,
+    0,
+    0,
+    71,
+    0,
+    4,
+    73,
+    0,
+    72,
+    0,
+    0,
+    72,
+    4,
     0,
     0,
     27
@@ -485,38 +485,6 @@
       "name": "blank"
     },
     {
-      "id": 20,
-      "name": "tile_14"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 20,
-      "name": "tile_14"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 20,
-      "name": "tile_14"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 20,
-      "name": "tile_14"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
       "id": 70,
       "name": "crate"
     },
@@ -525,8 +493,24 @@
       "name": "blank"
     },
     {
+      "id": 27,
+      "name": "tile_1b"
+    },
+    {
+      "id": 79,
+      "name": "tile_4f"
+    },
+    {
       "id": 0,
       "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
     },
     {
       "id": 0,
@@ -545,8 +529,164 @@
       "name": "blank"
     },
     {
-      "id": 70,
-      "name": "crate"
+      "id": 73,
+      "name": "tile_49"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 75,
+      "name": "tile_4b"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 20,
+      "name": "tile_14"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 27,
+      "name": "tile_1b"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 79,
+      "name": "tile_4f"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 73,
+      "name": "tile_49"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 75,
+      "name": "tile_4b"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 27,
+      "name": "tile_1b"
     },
     {
       "id": 0,
@@ -555,256 +695,124 @@
     {
       "id": 22,
       "name": "tile_16"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 22,
-      "name": "tile_16"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 22,
-      "name": "tile_16"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 23,
-      "name": "tile_17"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 9,
-      "name": "toggle_blue_off"
-    },
-    {
-      "id": 27,
-      "name": "tile_1b"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 27,
-      "name": "tile_1b"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 27,
-      "name": "tile_1b"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 27,
-      "name": "tile_1b"
     },
     {
       "id": 16,
       "name": "fuel_single"
     },
     {
+      "id": 27,
+      "name": "tile_1b"
+    },
+    {
+      "id": 79,
+      "name": "tile_4f"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 75,
+      "name": "tile_4b"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 73,
+      "name": "tile_49"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 20,
+      "name": "tile_14"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
       "id": 70,
       "name": "crate"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 70,
-      "name": "crate"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 27,
-      "name": "tile_1b"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 27,
-      "name": "tile_1b"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 27,
-      "name": "tile_1b"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 27,
-      "name": "tile_1b"
     },
     {
       "id": 11,
       "name": "toggle_red_off"
     },
     {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
       "id": 79,
       "name": "tile_4f"
     },
     {
-      "id": 79,
-      "name": "tile_4f"
-    },
-    {
-      "id": 79,
-      "name": "tile_4f"
-    },
-    {
-      "id": 79,
-      "name": "tile_4f"
-    },
-    {
-      "id": 79,
-      "name": "tile_4f"
-    },
-    {
-      "id": 79,
-      "name": "tile_4f"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 60,
-      "name": "backdrop"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
       "id": 0,
       "name": "blank"
     },
@@ -813,8 +821,28 @@
       "name": "gem"
     },
     {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
       "id": 0,
       "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 75,
+      "name": "tile_4b"
     },
     {
       "id": 0,
@@ -833,84 +861,8 @@
       "name": "blank"
     },
     {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
+      "id": 73,
+      "name": "tile_49"
     },
     {
       "id": 0,
@@ -933,54 +885,6 @@
       "name": "diamond_block"
     },
     {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
       "id": 0,
       "name": "blank"
     },
@@ -997,32 +901,20 @@
       "name": "blank"
     },
     {
-      "id": 0,
-      "name": "blank"
+      "id": 22,
+      "name": "tile_16"
     },
     {
       "id": 0,
       "name": "blank"
     },
     {
-      "id": 0,
-      "name": "blank"
+      "id": 60,
+      "name": "backdrop"
     },
     {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
+      "id": 60,
+      "name": "backdrop"
     },
     {
       "id": 0,
@@ -1035,98 +927,6 @@
     {
       "id": 72,
       "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
     },
     {
       "id": 0,
@@ -1149,228 +949,12 @@
       "name": "tile_49"
     },
     {
-      "id": 73,
-      "name": "tile_49"
-    },
-    {
-      "id": 71,
-      "name": "steel_barrier"
-    },
-    {
-      "id": 71,
-      "name": "steel_barrier"
-    },
-    {
-      "id": 73,
-      "name": "tile_49"
-    },
-    {
-      "id": 73,
-      "name": "tile_49"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
       "id": 0,
       "name": "blank"
     },
     {
       "id": 4,
       "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 73,
-      "name": "tile_49"
-    },
-    {
-      "id": 73,
-      "name": "tile_49"
-    },
-    {
-      "id": 75,
-      "name": "tile_4b"
-    },
-    {
-      "id": 75,
-      "name": "tile_4b"
-    },
-    {
-      "id": 73,
-      "name": "tile_49"
-    },
-    {
-      "id": 73,
-      "name": "tile_49"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 71,
-      "name": "steel_barrier"
-    },
-    {
-      "id": 76,
-      "name": "tile_4c"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 76,
-      "name": "tile_4c"
     },
     {
       "id": 71,
@@ -1381,576 +965,12 @@
       "name": "blank"
     },
     {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 71,
-      "name": "steel_barrier"
-    },
-    {
-      "id": 76,
-      "name": "tile_4c"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 76,
-      "name": "tile_4c"
-    },
-    {
-      "id": 71,
-      "name": "steel_barrier"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 73,
-      "name": "tile_49"
-    },
-    {
-      "id": 73,
-      "name": "tile_49"
-    },
-    {
-      "id": 75,
-      "name": "tile_4b"
-    },
-    {
-      "id": 75,
-      "name": "tile_4b"
-    },
-    {
-      "id": 73,
-      "name": "tile_49"
-    },
-    {
-      "id": 73,
-      "name": "tile_49"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 73,
-      "name": "tile_49"
-    },
-    {
-      "id": 73,
-      "name": "tile_49"
-    },
-    {
-      "id": 71,
-      "name": "steel_barrier"
-    },
-    {
-      "id": 71,
-      "name": "steel_barrier"
-    },
-    {
-      "id": 73,
-      "name": "tile_49"
-    },
-    {
-      "id": 73,
-      "name": "tile_49"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
       "id": 0,
       "name": "blank"
     },
     {
       "id": 0,
       "name": "blank"
-    },
-    {
-      "id": 4,
-      "name": "gem"
     },
     {
       "id": 0,
@@ -1977,40 +997,40 @@
       "name": "blank"
     },
     {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 16,
-      "name": "fuel_single"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 16,
-      "name": "fuel_single"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
       "id": 27,
       "name": "tile_1b"
     },
     {
+      "id": 20,
+      "name": "tile_14"
+    },
+    {
       "id": 0,
       "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
     },
     {
       "id": 0,
@@ -2023,10 +1043,50 @@
     {
       "id": 0,
       "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 73,
+      "name": "tile_49"
     },
     {
       "id": 4,
       "name": "gem"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 76,
+      "name": "tile_4c"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
     },
     {
       "id": 0,
@@ -2049,6 +1109,78 @@
       "name": "blank"
     },
     {
+      "id": 22,
+      "name": "tile_16"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 73,
+      "name": "tile_49"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
       "id": 0,
       "name": "blank"
     },
@@ -2073,8 +1205,12 @@
       "name": "blank"
     },
     {
-      "id": 27,
-      "name": "tile_1b"
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 20,
+      "name": "tile_14"
     },
     {
       "id": 0,
@@ -2085,8 +1221,12 @@
       "name": "blank"
     },
     {
-      "id": 27,
-      "name": "tile_1b"
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
     },
     {
       "id": 0,
@@ -2097,20 +1237,28 @@
       "name": "blank"
     },
     {
-      "id": 27,
-      "name": "tile_1b"
+      "id": 72,
+      "name": "diamond_block"
     },
     {
       "id": 0,
       "name": "blank"
     },
     {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 73,
+      "name": "tile_49"
+    },
+    {
       "id": 0,
       "name": "blank"
     },
     {
-      "id": 27,
-      "name": "tile_1b"
+      "id": 72,
+      "name": "diamond_block"
     },
     {
       "id": 0,
@@ -2131,6 +1279,858 @@
     {
       "id": 0,
       "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 16,
+      "name": "fuel_single"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 27,
+      "name": "tile_1b"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 23,
+      "name": "tile_17"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 71,
+      "name": "steel_barrier"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 76,
+      "name": "tile_4c"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 73,
+      "name": "tile_49"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 71,
+      "name": "steel_barrier"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 71,
+      "name": "steel_barrier"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 73,
+      "name": "tile_49"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 9,
+      "name": "toggle_blue_off"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 73,
+      "name": "tile_49"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 71,
+      "name": "steel_barrier"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 71,
+      "name": "steel_barrier"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 16,
+      "name": "fuel_single"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 27,
+      "name": "tile_1b"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 73,
+      "name": "tile_49"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 76,
+      "name": "tile_4c"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 71,
+      "name": "steel_barrier"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 27,
+      "name": "tile_1b"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 73,
+      "name": "tile_49"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 27,
+      "name": "tile_1b"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 73,
+      "name": "tile_49"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 27,
+      "name": "tile_1b"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 27,
+      "name": "tile_1b"
+    },
+    {
+      "id": 79,
+      "name": "tile_4f"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 76,
+      "name": "tile_4c"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 73,
+      "name": "tile_49"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 27,
+      "name": "tile_1b"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 27,
+      "name": "tile_1b"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 79,
+      "name": "tile_4f"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 71,
+      "name": "steel_barrier"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 73,
+      "name": "tile_49"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 4,
+      "name": "gem"
     },
     {
       "id": 0,

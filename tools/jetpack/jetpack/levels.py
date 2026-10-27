@@ -47,7 +47,8 @@ def _jetscii_name(raw: bytes) -> str:
 def parse_level_blob(blob: bytes, index: int) -> Level:
     if len(blob) != LEVEL_SIZE:
         raise ValueError(f"level blob must be {LEVEL_SIZE} bytes, got {len(blob)}")
-    tiles = list(blob[0:416])
+    raw = list(blob[0:416])
+    tiles = [raw[col * MAP_H + row] for row in range(MAP_H) for col in range(MAP_W)]
     door_x, door_y = blob[0x1A0], blob[0x1A1]
     player_x, player_y = blob[0x1A2], blob[0x1A3]
     enemies: list[Enemy] = []
