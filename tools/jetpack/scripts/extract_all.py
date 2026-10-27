@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from jetpack.graphics import export_sprite_sheet, load_vga_palette
+from jetpack.graphics import TileAtlas, export_sprite_sheet, load_vga_palette
 from jetpack.levels import load_jetlev, write_level_json
 from jetpack.render import render_level_preview
 
@@ -52,9 +52,10 @@ def main() -> int:
     json_dir.mkdir(parents=True, exist_ok=True)
     prev_dir.mkdir(parents=True, exist_ok=True)
 
+    atlas = TileAtlas.open(game_dir)
     for lv in levels:
         write_level_json(lv, json_dir / f"level_{lv.index:02d}.json")
-        img = render_level_preview(lv, scale=1)
+        img = render_level_preview(lv, scale=1, show_entities=False, atlas=atlas)
         img.save(prev_dir / f"level_{lv.index:02d}.png")
 
     print(f"Wrote {len(levels)} levels to {json_dir} and {prev_dir}")
@@ -69,7 +70,7 @@ def main() -> int:
             gfx_dir / "sprites_index.json",
             vga,
         )
-        print(f"Sprite sheet: {info['count']} entries -> {gfx_dir}")
+        print(f"Sprite sheet: {info['slot_count']} slots -> {gfx_dir}")
 
     manifest = out / "SOURCE_MANIFEST.txt"
     lines = ["# Hashes of local Jetpack freeware files (not committed to git)\n"]

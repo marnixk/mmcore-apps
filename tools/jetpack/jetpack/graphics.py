@@ -1,15 +1,23 @@
-"""Decode JETPACK*.DAT sprite blobs and JETPAL.DAT (partial — see FORMATS.md)."""
+"""Decode JETPACK*.DAT (SCLM LZ77) and JETPAL.DAT — see FORMATS.md."""
 
 from __future__ import annotations
 
 import json
-import struct
 from dataclasses import dataclass
 from pathlib import Path
 
 from PIL import Image
 
-TILE_BYTES = 24 * 24
+from .constants import MAP_H, MAP_W, TILE_PX
+
+DAT_HEADER = 512
+DAT_STRIDE = 514
+DAT_BLOB_BYTES = 512
+TILE_PIXELS = TILE_PX * TILE_PX  # 24×24 indexed
+TILE_RLE_OUT = 576  # bytes after SCLM decompress (verified vs DOS level-0 preview)
+
+# Slots per JETPACKn.DAT (512-byte blob + 2-byte pad each), v1.5 freeware
+DAT_SLOT_COUNTS = (83, 58, 64, 74, 39, 33)
 
 
 def load_vga_palette(path: Path) -> list[tuple[int, int, int]]:
@@ -30,112 +38,217 @@ def load_vga_palette(path: Path) -> list[tuple[int, int, int]]:
     return pal
 
 
-def parse_offset_table(data: bytes) -> list[int]:
-    offs: list[int] = []
-    i = 0
-    while i + 2 <= len(data):
-        v = struct.unpack_from("<H", data, i)[0]
-        if v >= len(data) or (offs and v < offs[-1]):
-            break
-        offs.append(v)
-        i += 2
-    return offs
-
-
-def decompress_rle_zero(blob: bytes, out_size: int = TILE_BYTES) -> bytes:
-    """Best-effort RLE used in JETPACK*.DAT (0x00 count value runs)."""
+def sclm_lz77_decompress(src: bytes, out_size: int = TILE_RLE_OUT) -> bytes:
+    """LZ77 bitstream from Adept SCLM.DAT offset 0x87 (used for JETPACK*.DAT blobs)."""
     out = bytearray()
-    p = 0
-    while p < len(blob) and len(out) < out_size:
-        b = blob[p]
-        p += 1
-        if b == 0:
-            if p >= len(blob):
+    si = 0
+    while len(out) < out_size and si < len(src):
+        control = src[si]
+        si += 1
+        bits = control
+        for _ in range(8):
+            if len(out) >= out_size:
                 break
-            cnt = blob[p]
-            p += 1
-            if p >= len(blob):
-                break
-            val = blob[p]
-            p += 1
-            out.extend([val] * cnt)
-        else:
-            out.append(b)
-    return bytes(out)
+            bit = bits & 1
+            bits >>= 1
+            if bit == 0:
+                if si >= len(src):
+                    break
+                out.append(src[si])
+                si += 1
+            else:
+                if si + 1 >= len(src):
+                    break
+                b0, b1 = src[si], src[si + 1]
+                si += 2
+                length = ((b1 >> 4) & 0x0F) + 2
+                offset = (b0 | (b1 << 8)) & 0xFFF
+                start = len(out) - offset
+                for _ in range(length):
+                    if len(out) >= out_size:
+                        break
+                    if 0 <= start < len(out):
+                        out.append(out[start])
+                        start += 1
+                    else:
+                        out.append(0)
+    return bytes(out[:out_size])
+
+
+def decode_tile_blob(blob: bytes) -> bytes:
+    raw = sclm_lz77_decompress(blob[:DAT_BLOB_BYTES], TILE_RLE_OUT)
+    return raw[:TILE_PIXELS]
+
+
+def _slot_offset(file_index: int, slot_index: int) -> int:
+    return DAT_HEADER + slot_index * DAT_STRIDE
+
+
+def resolve_tile_slot(tile_id: int) -> tuple[int, int] | None:
+    if tile_id < 0:
+        return None
+    remaining = tile_id
+    for file_index, count in enumerate(DAT_SLOT_COUNTS):
+        if remaining < count:
+            return file_index, remaining
+        remaining -= count
+    return None
 
 
 @dataclass
-class SpriteIndex:
-    file: str
-    index: int
-    global_id: int
+class TileAtlas:
+    game_dir: Path
+    palette: list[tuple[int, int, int]]
+    _cache: dict[tuple[int, bool], Image.Image]
 
+    @classmethod
+    def open(cls, game_dir: Path) -> TileAtlas:
+        pal_path = game_dir / "JETPAL.DAT"
+        palette = load_vga_palette(pal_path) if pal_path.is_file() else [(0, 0, 0)] * 256
+        return cls(game_dir=game_dir, palette=palette, _cache={})  # type: ignore[arg-type]
 
-def extract_sprites_from_dat(path: Path, file_label: str, start_gid: int) -> tuple[list[bytes], list[SpriteIndex], int]:
-    data = path.read_bytes()
-    offs = parse_offset_table(data)
-    sprites: list[bytes] = []
-    index: list[SpriteIndex] = []
-    gid = start_gid
-    for j in range(len(offs) - 1):
-        size = offs[j + 1] - offs[j]
-        if size < 10:
-            continue
-        dec = decompress_rle_zero(data[offs[j] : offs[j + 1]])
-        if len(dec) < TILE_BYTES:
-            continue
-        sprites.append(dec[:TILE_BYTES])
-        index.append(SpriteIndex(file=file_label, index=len(sprites) - 1, global_id=gid))
-        gid += 1
-    return sprites, index, gid
+    def _read_blob(self, file_index: int, slot_index: int) -> bytes:
+        path = self.game_dir / f"JETPACK{file_index}.DAT"
+        data = path.read_bytes()
+        off = _slot_offset(file_index, slot_index)
+        return data[off : off + DAT_BLOB_BYTES]
+
+    def tile_pixels(self, tile_id: int) -> bytes | None:
+        loc = resolve_tile_slot(tile_id)
+        if loc is None:
+            return None
+        fi, si = loc
+        return decode_tile_blob(self._read_blob(fi, si))
+
+    def tile_image(self, tile_id: int, transparent: bool = True) -> Image.Image | None:
+        key = (tile_id, transparent)
+        if key in self._cache:
+            return self._cache[key]
+        px = self.tile_pixels(tile_id)
+        if px is None:
+            return None
+        flat = [c for rgb in self.palette for c in rgb][:768]
+        im = Image.new("P", (TILE_PX, TILE_PX))
+        im.putpalette(flat)
+        im.putdata(list(px))
+        if transparent:
+            rgba = Image.new("RGBA", (TILE_PX, TILE_PX))
+            for i, idx in enumerate(px):
+                x, y = i % TILE_PX, i // TILE_PX
+                if idx == 0:
+                    rgba.putpixel((x, y), (0, 0, 0, 0))
+                else:
+                    r, g, b = self.palette[idx]
+                    rgba.putpixel((x, y), (r, g, b, 255))
+            im = rgba
+        self._cache[key] = im
+        return im
 
 
 def export_sprite_sheet(
     game_dir: Path,
     out_png: Path,
     out_json: Path,
-    vga_palette: list[tuple[int, int, int]],
+    vga_palette: list[tuple[int, int, int]] | None = None,
 ) -> dict:
-    all_sprites: list[bytes] = []
+    palette = vga_palette or load_vga_palette(game_dir / "JETPAL.DAT")
+    flat = [c for rgb in palette for c in rgb][:768]
     meta: list[dict] = []
-    gid = 0
-    for n in range(6):
-        dat = game_dir / f"JETPACK{n}.DAT"
+    sheet_tiles: list[Image.Image] = []
+    sheet_index = 0
+    for file_index, count in enumerate(DAT_SLOT_COUNTS):
+        dat = game_dir / f"JETPACK{file_index}.DAT"
         if not dat.is_file():
             continue
-        sprites, idx, gid = extract_sprites_from_dat(dat, f"JETPACK{n}.DAT", gid)
-        base = len(all_sprites)
-        all_sprites.extend(sprites)
-        for ent in idx:
+        data = dat.read_bytes()
+        for slot in range(count):
+            off = _slot_offset(file_index, slot)
+            blob = data[off : off + DAT_BLOB_BYTES]
+            px = decode_tile_blob(blob)
+            tile = Image.new("P", (TILE_PX, TILE_PX))
+            tile.putpalette(flat)
+            tile.putdata(list(px))
+            sheet_tiles.append(tile)
             meta.append(
                 {
-                    "global_id": ent.global_id,
-                    "file": ent.file,
-                    "index_in_file": ent.index,
-                    "sheet_index": base + ent.index,
-                    "width": 24,
-                    "height": 24,
+                    "sheet_index": sheet_index,
+                    "file": f"JETPACK{file_index}.DAT",
+                    "slot_in_file": slot,
+                    "width": TILE_PX,
+                    "height": TILE_PX,
                 }
             )
+            sheet_index += 1
 
-    if not all_sprites:
+    if not sheet_tiles:
         raise RuntimeError("no sprites decoded")
 
     cols = 16
-    rows = (len(all_sprites) + cols - 1) // cols
-    sheet = Image.new("P", (cols * 24, rows * 24))
-    pal_flat = [c for rgb in vga_palette for c in rgb][:768]
-    sheet.putpalette(pal_flat)
-    for i, spr in enumerate(all_sprites):
-        tile = Image.new("P", (24, 24))
-        tile.putpalette(pal_flat)
-        tile.putdata(list(spr))
-        x = (i % cols) * 24
-        y = (i // cols) * 24
+    rows = (len(sheet_tiles) + cols - 1) // cols
+    sheet = Image.new("P", (cols * TILE_PX, rows * TILE_PX))
+    sheet.putpalette(flat)
+    for i, tile in enumerate(sheet_tiles):
+        x = (i % cols) * TILE_PX
+        y = (i // cols) * TILE_PX
         sheet.paste(tile, (x, y))
 
     out_png.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(out_png)
-    payload = {"tile_size": 24, "count": len(all_sprites), "sprites": meta}
+
+    tile_map = []
+    for tid in range(120):
+        loc = resolve_tile_slot(tid)
+        if loc is None:
+            continue
+        fi, si = loc
+        global_slot = sum(DAT_SLOT_COUNTS[:fi]) + si
+        tile_map.append(
+            {
+                "tile_id": tid,
+                "sheet_index": global_slot,
+                "file": f"JETPACK{fi}.DAT",
+                "slot_in_file": si,
+            }
+        )
+
+    payload = {
+        "tile_size": TILE_PX,
+        "slot_count": len(sheet_tiles),
+        "tile_id_map": tile_map,
+        "slots": meta,
+    }
     out_json.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     return payload
+
+
+def render_level_tiles(
+    tiles: list[int],
+    atlas: TileAtlas,
+    background_tile_id: int = 0x3C,
+) -> Image.Image:
+    """Render 26×16 map with VGA art; index 0 in tiles is transparent."""
+    w, h = MAP_W * TILE_PX, MAP_H * TILE_PX
+    base = atlas.tile_image(background_tile_id, transparent=False)
+    if base is None:
+        frame = Image.new("RGBA", (w, h), (0x28, 0x20, 0x38, 255))
+    else:
+        frame = Image.new("RGBA", (w, h))
+        if base.mode != "RGBA":
+            base = base.convert("RGBA")
+        for y in range(MAP_H):
+            for x in range(MAP_W):
+                frame.paste(base, (x * TILE_PX, y * TILE_PX))
+
+    for y in range(MAP_H):
+        for x in range(MAP_W):
+            tid = tiles[y * MAP_W + x]
+            if tid == 0:
+                continue
+            spr = atlas.tile_image(tid, transparent=True)
+            if spr is None:
+                continue
+            if spr.mode != "RGBA":
+                spr = spr.convert("RGBA")
+            frame.paste(spr, (x * TILE_PX, y * TILE_PX), spr)
+
+    return frame

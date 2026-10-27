@@ -10,8 +10,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from jetpack.graphics import TileAtlas
 from jetpack.levels import load_jetlev
-from jetpack.render import composite_gameplay_frame, render_pause_dialog, render_title_screen
+from jetpack.render import (
+    composite_gameplay_frame,
+    render_entity_showcase_crop,
+    render_pause_dialog,
+    render_title_screen,
+)
 
 
 def main() -> int:
@@ -28,7 +34,7 @@ def main() -> int:
     ap.add_argument(
         "--level",
         type=int,
-        default=10,
+        default=15,
         help="Campaign level index (0–99) used in gameplay mockups",
     )
     args = ap.parse_args()
@@ -43,10 +49,12 @@ def main() -> int:
     lv = levels[args.level]
     label = f"LEVEL {lv.index:02d}"
 
-    composite_gameplay_frame(lv, 683, 384, label).save(out / "gameplay_683x384.png")
-    composite_gameplay_frame(lv, 1280, 720, label).save(out / "gameplay_1280x720.png")
+    atlas = TileAtlas.open(game_dir)
+    composite_gameplay_frame(lv, 683, 384, label, atlas=atlas).save(out / "gameplay_683x384.png")
+    composite_gameplay_frame(lv, 1280, 720, label, atlas=atlas).save(out / "gameplay_1280x720.png")
     render_title_screen(1280, 720).save(out / "title_1280x720.png")
-    render_pause_dialog(lv, 1280, 720).save(out / "pause_1280x720.png")
+    render_pause_dialog(lv, 1280, 720, atlas=atlas).save(out / "pause_1280x720.png")
+    render_entity_showcase_crop(lv, atlas).save(out / "entity_showcase_1x1.png")
 
     print(f"Mockups written to {out}")
     return 0

@@ -465,24 +465,6 @@
       "type_name": "steel_ball",
       "x": 6,
       "y": 4
-    },
-    {
-      "type_id": 16,
-      "type_name": "unknown_16",
-      "x": 12,
-      "y": 5
-    },
-    {
-      "type_id": 16,
-      "type_name": "unknown_16",
-      "x": 12,
-      "y": 5
-    },
-    {
-      "type_id": 25,
-      "type_name": "unknown_25",
-      "x": 1,
-      "y": 1
     }
   ],
   "tiles_named": [

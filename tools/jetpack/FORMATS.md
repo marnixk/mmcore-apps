@@ -1,6 +1,6 @@
 # Jetpack (DOS v1.5) data formats
 
-Sources: `MANUAL.TXT`, [TASVideos GameResources](https://tasvideos.org/GameResources/DOS/Jetpack), [downerj level layout gist](https://gist.github.com/downerj/0bd0664cd407da0eb4d438531176fd37), and reverse engineering of `jetpak15.zip` in this repo.
+Sources: `MANUAL.TXT`, [TASVideos GameResources](https://tasvideos.org/GameResources/DOS/Jetpack), [downerj level layout gist](https://gist.github.com/downerj/0bd0664cd407da0eb4d438531176fd37), reverse engineering of `jetpak15.zip`, and `SCLM.DAT` (Adept shared library).
 
 ## Campaign levels — `JETLEV.DAT`
 
@@ -47,34 +47,38 @@ Used at runtime for blitted sprites and UI.
 
 ## Graphics archives — `JETPACK0.DAT` … `JETPACK5.DAT`
 
-| File | Size (v1.5) | Role |
-|------|-------------|------|
-| JETPACK0.DAT | 43 559 | Tiles / objects (module 0) |
-| JETPACK1.DAT | 30 487 | Sprites |
-| JETPACK2.DAT | 33 739 | Sprites |
-| JETPACK3.DAT | 38 840 | Sprites |
-| JETPACK4.DAT | 21 048 | Sprites |
-| JETPACK5.DAT | 17 686 | Sprites |
+| File | Size (v1.5) | Slots (512-byte blobs) |
+|------|-------------|-------------------------|
+| JETPACK0.DAT | 43 559 | 83 |
+| JETPACK1.DAT | 30 487 | 58 |
+| JETPACK2.DAT | 33 739 | 64 |
+| JETPACK3.DAT | 38 840 | 74 |
+| JETPACK4.DAT | 21 048 | 39 |
+| JETPACK5.DAT | 17 686 | 33 |
 
-### Container layout (reverse-engineered)
+**351** compressed slots total; campaign **tile IDs `0x00`–`0x77` (120)** map to the first 120 slots across `JETPACK0` + `JETPACK1` (tile `N` → file `0` slot `N` for `N < 83`, else file `1` slot `N − 83`, etc.).
 
-1. **Offset table** at file start: little-endian `uint16` offsets, strictly increasing, until an offset ≥ file size.
-2. **Sprite blobs** between consecutive offsets (skipping 2-byte “meta” gaps in some entries).
-3. Each sprite decodes to **24×24** indexed pixels (576 bytes) via **RLE**:
+### Per-file layout
 
-```
-while output < 576:
-  b = read_byte()
-  if b == 0:
-    count = read_byte(); value = read_byte()
-    emit value repeated count times
-  else:
-    emit b
-```
+1. **512-byte header**: little-endian `uint16` values `0, 514, 1028, …` (byte pairs `00 00`, `02 02`, `04 04`, …) — one entry per slot, pointing at compressed blob starts (stride **514** = 512 data + 2 pad).
+2. **Slot `i`** at offset `512 + i × 514`, length **512** bytes compressed payload (2 trailing bytes in the stride are padding; not part of the bitstream).
+3. Decompress each 512-byte payload to **576** bytes via **SCLM LZ77** (see below), then use the first **576** bytes as a **24×24** indexed bitmap (**index 0 = transparent** when compositing).
 
-**Uncertainty:** Mapping from **map tile ID** → sprite index in these files is not fully verified; level **editor preview** uses tile ID as a colour index (see `jetpack/palette.py`). Runtime drawing may use additional animation frames from other indices.
+### SCLM LZ77 (from `SCLM.DAT` offset `0x87`)
 
-`scripts/extract_all.py` exports a best-effort `out/gfx/sprites_vga.png` + `sprites_index.json` using `JETPAL.DAT`.
+Bitstream: LSB-first within each control byte; **0 = literal** (next source byte), **1 = LZ** (next `uint16` LE):
+
+- `length = ((high_byte >> 4) & 0x0F) + 2`
+- `offset = word & 0x0FFF` (copy from `output_len - offset`)
+
+After decompress, only the first `24×24 = 576` bytes are the visible tile; remaining bytes in the 576-byte buffer are unused padding from the original blitter.
+
+`jetpack/graphics.py` implements this decoder and exports `gfx/sprites_vga.png` + `sprites_index.json` (`tile_id_map` + per-slot metadata).
+
+### Rendering notes
+
+- Empty map cells (`tile_id == 0`) are drawn as **cobblestone** tile `0x3C` in previews/mockups (matches DOS level preview backdrop).
+- **Enemy / player sprites** live in later slots and animation frames; mockups still overlay simple entity markers until those indices are catalogued.
 
 ## Other files
 
@@ -82,7 +86,7 @@ while output < 576:
 |------|--------|
 | `JETDEMO.DAT` | Demo replay data |
 | `JETSOUND.DAT` | Digitized SFX |
-| `SCLM.DAT` | x86 helper (sound/driver), not level data |
+| `SCLM.DAT` | Adept VGA/sound library (mode 13h setup, LZ77 above, blit helpers) |
 | `_JETP_*.DAT` | Graphics module switcher variants (Christmas, Junior, etc.) |
 | `JSWITCH.EXE` | Module switcher tool |
 
