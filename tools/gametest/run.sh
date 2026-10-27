@@ -65,7 +65,9 @@ fi
 
 main="${MAIN_BAS:-}"
 if [ -z "$main" ]; then
-  if [ -f "$drv/g/$gamebase.bas" ]; then
+  if [ -f "$drv/g/main.bas" ]; then
+    main="main.bas"
+  elif [ -f "$drv/g/$gamebase.bas" ]; then
     main="$gamebase.bas"
   else
     cand="$(find "$drv/g" -maxdepth 1 -name '*.bas' | head -1)"

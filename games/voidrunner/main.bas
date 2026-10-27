@@ -6,7 +6,7 @@
 '   laser gates, grab the optional crystals, and the scroll speeds up every 10
 '   gaps. Completely silent (plays nicely with JUKE).
 '
-'   Run from its own folder:  RUN "voidrunner.bas"  (RUN changes into this
+'   Run from its own folder:  RUN "main.bas"  (RUN changes into this
 '   folder, so gfx/ resolves relative to it). High scores live in C:/.voidrunner.
 '   Modules live in includes/; the art in gfx/ is generated per screen size.
 '

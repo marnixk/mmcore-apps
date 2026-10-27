@@ -7,7 +7,7 @@
 '   through the open grid and cut your wall; sentinels patrol the claimed land.
 '   Completely silent (plays nicely with JUKE).
 '
-'   Run from its own folder:  RUN "tronix.bas"  (RUN changes into this folder,
+'   Run from its own folder:  RUN "main.bas"  (RUN changes into this folder,
 '   so gfx/ resolves relative to it). High scores live in C:/.tronix.
 '   Modules live in includes/; the art in gfx/ is generated per screen size.
 '

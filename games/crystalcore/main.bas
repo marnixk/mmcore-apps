@@ -1,17 +1,18 @@
 '
-'   CORE CAVING - mmcore edition
+'   CRYSTAL CORE - mmcore edition
 '
-'   A Boulder Dash style digging game: tunnel through the earth of 16 caves
-'   (A to P, plus a bonus cave after every fourth), collect enough diamonds to
-'   open the exit and get out before the time runs out. Boulders and diamonds
-'   fall and roll, fireflies and butterflies patrol their tunnels, magic walls
-'   turn rock into gems and amoeba grows. Completely silent (plays nicely with
-'   JUKE).
+'   A match-3 puzzle in a crystal mine. Move the gold cursor with the arrows,
+'   pick up a gem with Space or Enter and swap it with a neighbour (arrow).
+'   Lines of 3 or more vanish; 4 make a striped gem, an L or T a charged gem,
+'   5 a rainbow prism, and specials swapped together make bigger blasts.
+'   30 levels with frost, boulders and chained gems; unlimited retries; any
+'   level reached can be the start. Completely silent.
 '
-'   Run from its own folder:  RUN "corecaving.bas"  (RUN changes into this
-'   folder, so gfx/ resolves relative to it). High scores and the caves
-'   reached live in C:/.corecaving. Modules live in includes/; the art in gfx/
-'   is generated per screen size.
+'   Run from its own folder:  RUN "main.bas"  (RUN changes into this
+'   folder, so gfx/ resolves relative to it). High scores, the levels reached
+'   and the stars live in C:/.crystalcore. Modules live in includes/; the art
+'   in gfx/ and includes/layouts.inc come from art/gen_game_assets.py, the
+'   levels in includes/levels.inc from tools/mklevels.py (bot-tested).
 '
 option explicit
 option default integer
@@ -21,32 +22,23 @@ const FALSE = 0
 
 ' ---- key codes (classic CMM2 INKEY$ / KEYDOWN values)
 const K_UP = 128, K_DOWN = 129, K_LEFT = 130, K_RIGHT = 131
-const K_ENTER = 13, K_LF = 10, K_ESC = 27, K_BKSP = 8, K_DEL = 127, K_SPACE = 32
+const K_ENTER = 13, K_LF = 10, K_ESC = 27, K_BKSP = 8, K_DEL = 127
 
 #include "includes/layouts.inc"
 
-' ---- difficulty (how the numbers are used: cave.inc)
-'   cave frame (ms), diamonds needed and time (% of the cave's NORMAL values),
-'   amoeba growth chance (%); on EASY enemies rest every 4th frame
+' ---- skill: the moves per level come from levels.inc (EASY +30 %, HARD -15 %)
 const DF_EASY = 0, DF_NORMAL = 1, DF_HARD = 2
 dim string df.name$(2) = ("EASY", "NORMAL", "HARD")
-dim df.style(2) = (F_GEM, F_GOLD, F_WARM)
-dim df.tick(2) = (125, 110, 100)
-dim df.need(2) = (80, 100, 120)
-dim df.time(2) = (130, 100, 85)
-dim df.amoeba(2) = (70, 100, 140)
-' lives: 3 to start, one more for each bonus cave cleared (max LIVES_MAX)
-const LIVES0 = 3, LIVES_MAX = 6
-' score: per diamond (cave values), plus TIME_PTS per second left
-const TIME_PTS = 5
+dim df.style(2) = (F_GREEN, F_GOLD, F_RED)
 
 #include "includes/screen.inc"
 #include "includes/font.inc"
 #include "includes/ui.inc"
 #include "includes/input.inc"
-#include "includes/caves.inc"
-#include "includes/cave.inc"
-#include "includes/draw.inc"
+#include "includes/levels.inc"
+#include "includes/engine.inc"
+#include "includes/board.inc"
+#include "includes/hud.inc"
 #include "includes/highscore.inc"
 #include "includes/dialogs.inc"
 #include "includes/game.inc"
@@ -55,12 +47,11 @@ const TIME_PTS = 5
 ' ------------------------------------------------------------ main
 dim menuPick
 
-randomize timer
 on key 0   ' no ON KEY handler in menus and dialogs (they read INKEY$); gm.handlers turns it on during play
 scr.init()
 scr.loadAssets()
-cv.loadAll()
-drw.init()
+lv.loadAll()
+bv.init()
 hs.load()
 ' write the table once at start: finds out early whether C: can be written
 ' (if not, hsSaveFail turns saving off and the game runs without saving)
@@ -75,7 +66,7 @@ on error
 do
   menuPick = intro.run()
   if menuPick = MENU_START then
-    game.run(menu.diff, menu.cave)
+    game.run(menu.diff, menu.lvl)
   elseif menuPick = MENU_SCORES then
     dlg.scores(-1)
   end if

@@ -1,7 +1,7 @@
 '
 '   SNAKE - mmcore edition
 '
-'   Run from its own folder:  RUN "snake.bas"  (RUN changes into this folder,
+'   Run from its own folder:  RUN "main.bas"  (RUN changes into this folder,
 '   so gfx/ resolves relative to it). High scores live in C:/.snake.
 '
 '   Steer with the arrow keys, eat 10 fruits to clear a level, 10 layouts,

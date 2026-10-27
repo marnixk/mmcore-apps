@@ -18,7 +18,7 @@ Follow the house rules (input, drawing, resolutions, high scores, silence, etc.)
 A copy is in the repo task docs; summary:
 
 1. **Art first** — mockups approved before code.
-2. **Structure** — thin `*.bas`, `includes/*.inc`, `gfx/` (and `sfx/` if needed);
+2. **Structure** — thin `main.bas`, `includes/*.inc`, `gfx/` (and `sfx/` if needed);
    high scores on `C:/.<game>`.
 3. **Input** — menus use `INKEY$` loops; in-game uses `ON KEY` + `SETTICK` tick
    (see Tronix / standards doc). Pause via Esc/P; quit from pause with Q.

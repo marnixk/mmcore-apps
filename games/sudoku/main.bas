@@ -1,7 +1,7 @@
 '
 '   SUDOKU GROVE - a calm forest sudoku for mmcore
 '
-'   Run from its own folder:  RUN "sudoku.bas"  (RUN changes into this folder,
+'   Run from its own folder:  RUN "main.bas"  (RUN changes into this folder,
 '   so gfx/ and sfx/ resolve relative to it). High scores live in C:/.sudoku.
 '
 '   Modules live in includes/ and are pulled in with #include below.

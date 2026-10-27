@@ -1,7 +1,7 @@
 '
 '   TETRIS - mmcore edition
 '
-'   Run from its own folder:  RUN "tetris.bas"  (RUN changes into this folder,
+'   Run from its own folder:  RUN "main.bas"  (RUN changes into this folder,
 '   so gfx/ resolves relative to it). High scores live in C:/.tetris.
 '
 '   Modules live in includes/ and are pulled in with #include below.

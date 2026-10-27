@@ -1,18 +1,17 @@
 '
-'   CRYSTAL CORE - mmcore edition
+'   SALSA SLIDE - mmcore edition
 '
-'   A match-3 puzzle in a crystal mine. Move the gold cursor with the arrows,
-'   pick up a gem with Space or Enter and swap it with a neighbour (arrow).
-'   Lines of 3 or more vanish; 4 make a striped gem, an L or T a charged gem,
-'   5 a rainbow prism, and specials swapped together make bigger blasts.
-'   30 levels with frost, boulders and chained gems; unlimited retries; any
-'   level reached can be the start. Completely silent.
+'   A lane game in a sunny adobe cantina. Four counters, hungry customers
+'   walking in from the doors on the left, and one cook at the pumps on the
+'   right. Slide full plates of nachos down the counters, catch the empty
+'   plates coming back, grab the tips. Every 4th round: the Salsa Shuffle.
+'   Completely silent.
 '
-'   Run from its own folder:  RUN "crystalcore.bas"  (RUN changes into this
-'   folder, so gfx/ resolves relative to it). High scores, the levels reached
-'   and the stars live in C:/.crystalcore. Modules live in includes/; the art
-'   in gfx/ and includes/layouts.inc come from art/gen_game_assets.py, the
-'   levels in includes/levels.inc from tools/mklevels.py (bot-tested).
+'   Run from its own folder:  RUN "main.bas"  (RUN changes into this
+'   folder, so gfx/ resolves relative to it). High scores and the rounds
+'   reached live in C:/.salsaslide. HOW TO PLAY (title menu) is in
+'   includes/howto.inc. Modules live in includes/; the art in
+'   gfx/ is generated per screen size (art/gen_game_assets.py).
 '
 option explicit
 option default integer
@@ -26,22 +25,23 @@ const K_ENTER = 13, K_LF = 10, K_ESC = 27, K_BKSP = 8, K_DEL = 127
 
 #include "includes/layouts.inc"
 
-' ---- skill: the moves per level come from levels.inc (EASY +30 %, HARD -15 %)
+' ---- difficulty: rounds ramp up from the skill's own start (engine.inc)
 const DF_EASY = 0, DF_NORMAL = 1, DF_HARD = 2
 dim string df.name$(2) = ("EASY", "NORMAL", "HARD")
-dim df.style(2) = (F_GREEN, F_GOLD, F_RED)
+dim df.style(2) = (F_TQ, F_GOLD, F_RED)
 
 #include "includes/screen.inc"
 #include "includes/font.inc"
 #include "includes/ui.inc"
 #include "includes/input.inc"
-#include "includes/levels.inc"
 #include "includes/engine.inc"
-#include "includes/board.inc"
+#include "includes/view.inc"
 #include "includes/hud.inc"
 #include "includes/highscore.inc"
 #include "includes/dialogs.inc"
+#include "includes/bonus.inc"
 #include "includes/game.inc"
+#include "includes/howto.inc"
 #include "includes/intro.inc"
 
 ' ------------------------------------------------------------ main
@@ -50,8 +50,7 @@ dim menuPick
 on key 0   ' no ON KEY handler in menus and dialogs (they read INKEY$); gm.handlers turns it on during play
 scr.init()
 scr.loadAssets()
-lv.loadAll()
-bv.init()
+vw.init()
 hs.load()
 ' write the table once at start: finds out early whether C: can be written
 ' (if not, hsSaveFail turns saving off and the game runs without saving)
@@ -66,12 +65,15 @@ on error
 do
   menuPick = intro.run()
   if menuPick = MENU_START then
-    game.run(menu.diff, menu.lvl)
+    game.run(menu.diff, menu.rd)
+  elseif menuPick = MENU_HOWTO then
+    howto.run()
   elseif menuPick = MENU_SCORES then
     dlg.scores(-1)
   end if
 loop until menuPick = MENU_QUIT
 
+vw.clear()
 scr.restore()
 end
 

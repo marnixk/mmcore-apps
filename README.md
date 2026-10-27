@@ -5,7 +5,7 @@ Apps and games for mmcore.
 ## Games
 
 Games for mmcore (MMBasic, Colour Maximite 2 style). Each game lives in its
-own folder; run its main .bas file from the mmcore prompt with RUN (RUN changes into the
+own folder; run its main.bas file from the mmcore prompt with RUN (RUN changes into the
 game's folder, so its gfx/, sfx/ and data files resolve relative to it).
 
 | Title screen | Game | Folder |

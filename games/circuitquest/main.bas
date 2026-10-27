@@ -7,7 +7,7 @@
 '   ice, conveyors, toggle walls, traps, teleports, tanks, bombs, hidden walls
 '   and a whole zoo of monsters. Unlimited retries. Completely silent.
 '
-'   Run from its own folder:  RUN "circuitquest.bas"  (RUN changes into this
+'   Run from its own folder:  RUN "main.bas"  (RUN changes into this
 '   folder, so gfx/ resolves relative to it). High scores and the levels
 '   reached live in C:/.circuitquest. Modules live in includes/; the art in
 '   gfx/ is generated per screen size (art/gen_game_assets.py), the levels in
