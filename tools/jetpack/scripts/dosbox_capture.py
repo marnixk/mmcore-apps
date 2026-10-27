@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Capture Jetpack DOS screenshots and VGA palette via DOSBox-X + Xvfb."""
+"""Capture in-game Jetpack playfields via DOSBox-X + Xvfb (not minimap / title)."""
 
 from __future__ import annotations
 
@@ -16,28 +16,72 @@ OUT = ROOT / "reference"
 CONF = ROOT / "_dosbox" / "capture_level0.conf"
 
 
+def _run_dosbox(env: dict) -> subprocess.Popen:
+    return subprocess.Popen(
+        ["dosbox-x", "-conf", str(CONF), "-fastlaunch"],
+        env=env,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+
+
+def _focus_game(env: dict) -> str:
+    wid = subprocess.check_output(
+        ["xdotool", "search", "--name", "DOSBox"],
+        env=env,
+        text=True,
+    ).strip().split("\n")[0]
+    subprocess.run(["xdotool", "windowactivate", "--sync", wid], env=env, check=False)
+    subprocess.run(
+        ["xdotool", "mousemove", "--window", wid, "320", "240", "click", "1"],
+        env=env,
+        check=False,
+    )
+    return wid
+
+
+def set_start_level(env: dict, level: int) -> None:
+    """F3 on title menu adds 10 per press (0, 10, 20, …)."""
+    presses = level // 10
+    for _ in range(presses):
+        subprocess.run(["xdotool", "key", "F3"], env=env, check=False)
+        time.sleep(0.35)
+
+
+def start_gameplay(env: dict) -> None:
+    subprocess.run(["xdotool", "key", "s"], env=env, check=False)
+    time.sleep(0.8)
+    subprocess.run(["xdotool", "key", "s"], env=env, check=False)
+    time.sleep(2.0)
+    for key in ("Return", "space", "KP_Enter"):
+        subprocess.run(["xdotool", "key", key], env=env, check=False)
+        time.sleep(0.25)
+    time.sleep(3.5)
+
+
+def capture_play(out: Path, level: int, env: dict) -> Path:
+    dest = out / f"dosbox_play_level{level:02d}.png"
+    subprocess.run(["scrot", str(dest)], env=env, check=False)
+    return dest
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", type=Path, default=OUT)
+    ap.add_argument(
+        "--levels",
+        type=int,
+        nargs="*",
+        default=[0, 10, 20, 30, 40, 50, 60, 70, 80, 90],
+        help="Campaign levels to capture (multiples of 10 via F3)",
+    )
+    ap.add_argument("--wait-title", type=float, default=12.0)
     args = ap.parse_args()
     out = args.out.expanduser().resolve()
     out.mkdir(parents=True, exist_ok=True)
     if not (GAME / "JETPACK.EXE").is_file():
         print(f"Missing {GAME / 'JETPACK.EXE'}", file=sys.stderr)
         return 1
-
-    shot_dir = out / "_dosbox_shots"
-    shot_dir.mkdir(parents=True, exist_ok=True)
-    for old in shot_dir.glob("*.png"):
-        old.unlink()
-
-    conf_text = CONF.read_text(encoding="utf-8")
-    conf_text += f"""
-[dosbox]
-captures={shot_dir}
-"""
-    tmp_conf = out / "_capture_run.conf"
-    tmp_conf.write_text(conf_text, encoding="utf-8")
 
     env = {
         "SDL_VIDEODRIVER": "x11",
@@ -49,56 +93,40 @@ captures={shot_dir}
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )
-    time.sleep(0.5)
+    time.sleep(0.4)
     openbox = subprocess.Popen(["openbox"], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    time.sleep(0.5)
+    time.sleep(0.4)
 
-    db = subprocess.Popen(
-        ["dosbox-x", "-conf", str(tmp_conf), "-fastlaunch"],
-        env=env,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-    )
-    time.sleep(8)
+    db = _run_dosbox(env)
+    time.sleep(args.wait_title)
     try:
-        import shutil as sh
-
-        if sh.which("xdotool"):
-            wid = subprocess.check_output(
-                ["xdotool", "search", "--name", "DOSBox"],
-                env=env,
-                text=True,
-            ).strip().split("\n")[0]
-            subprocess.run(["xdotool", "windowactivate", "--sync", wid], env=env, check=False)
-            time.sleep(0.3)
-            # Title: S = start, Enter through welcome, then in-game level 0
-            subprocess.run(["xdotool", "key", "s"], env=env, check=False)
-            time.sleep(2)
-            subprocess.run(["scrot", "-u", str(out / "dosbox_title.png")], env=env, check=False)
-            subprocess.run(["xdotool", "key", "Return"], env=env, check=False)
-            time.sleep(3)
-            subprocess.run(["scrot", "-u", str(out / "dosbox_level0_welcome.png")], env=env, check=False)
-            subprocess.run(["xdotool", "key", "Return"], env=env, check=False)
-            time.sleep(4)
-            subprocess.run(["scrot", "-u", str(out / "dosbox_level0_gameplay.png")], env=env, check=False)
-            subprocess.run(["xdotool", "key", "p"], env=env, check=False)
-            time.sleep(0.5)
-            subprocess.run(["scrot", "-u", str(out / "dosbox_level0_paused.png")], env=env, check=False)
-    except Exception as exc:
-        print("automation warning:", exc, file=sys.stderr)
-
-    db.terminate()
-    try:
-        db.wait(timeout=3)
-    except subprocess.TimeoutExpired:
-        db.kill()
-    openbox.terminate()
-    xvfb.terminate()
-
-    shots = sorted(shot_dir.glob("*.png"))
-    for i, s in enumerate(shots[:5]):
-        shutil.copy(s, out / f"dosbox_capture_{i:02d}.png")
-    print(f"Wrote scrots to {out}; dosbox-x captures in {shot_dir} ({len(shots)} files)")
+        if not shutil.which("xdotool"):
+            print("xdotool required for automation", file=sys.stderr)
+            return 1
+        _focus_game(env)
+        for level in args.levels:
+            if level > 0:
+                db.terminate()
+                try:
+                    db.wait(timeout=2)
+                except subprocess.TimeoutExpired:
+                    db.kill()
+                time.sleep(0.5)
+                db = _run_dosbox(env)
+                time.sleep(args.wait_title)
+                _focus_game(env)
+            set_start_level(env, level)
+            start_gameplay(env)
+            path = capture_play(out, level, env)
+            print(f"Wrote {path}")
+    finally:
+        db.terminate()
+        try:
+            db.wait(timeout=3)
+        except subprocess.TimeoutExpired:
+            db.kill()
+        openbox.terminate()
+        xvfb.terminate()
     return 0
 
 

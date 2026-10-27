@@ -28,13 +28,6 @@ TILE_ID_FOR_REF = {
     "lred.png": 0x3C,
 }
 
-# Minimap cells that visibly match TAS shapes (level 0 DOS preview).
-CELL_FOR_REF = {
-    "ladder.png": (7, 9),
-    "lred.png": (10, 2),
-    "door.png": (24, 0),
-    "emerald_gem.png": (12, 6),
-}
 
 
 def _bg_color(im: Image.Image) -> tuple[int, int, int]:
@@ -96,18 +89,13 @@ def _pick_ref_cell(ref: Image.Image, bg: tuple[int, int, int]) -> tuple[Image.Im
 
 
 def _atlas_candidates(atlas: FrameAtlas) -> list[tuple[str, Image.Image]]:
-    """Minimap cells are ground truth; per-tile dedupe is unreliable on the preview grid."""
     out: list[tuple[str, Image.Image]] = []
+    for tid, im in sorted(atlas.tiles.items()):
+        if tid == 0:
+            continue
+        out.append((f"tile 0x{tid:02X}", im))
     for i, im in enumerate(atlas.player_frames):
         out.append((f"player_fly_{i}", im))
-    pickups_dir = ROOT / "gfx" / "frames"
-    for name in ("pickup_emerald_left.png", "pickup_emerald_right.png"):
-        p = pickups_dir / name
-        if p.is_file():
-            out.append((name.replace(".png", ""), Image.open(p).convert("RGBA")))
-    if atlas.level0_cells:
-        for (c, r), im in sorted(atlas.level0_cells.items()):
-            out.append((f"cell {c},{r}", im))
     return out
 
 
@@ -167,21 +155,14 @@ def main() -> int:
         ref = Image.open(ref_path).convert("RGBA")
         bg = _bg_color(ref)
         cell, cell_xy = _pick_ref_cell(ref, bg)
-        cell_xy_map = CELL_FOR_REF.get(name)
+        tid = TILE_ID_FOR_REF.get(name)
+        prefer = f"tile 0x{tid:02X}" if tid is not None and atlas.tile_image(tid) else None
         if name == "guy.png" and atlas.player_frames:
             decoded = atlas.player_frames[0]
-            label = "player_fly_0 (title capture)"
+            label = "player_fly_0"
             mse = _rgb_mse(cell, decoded, bg)
-        elif cell_xy_map and atlas.level0_cells and cell_xy_map in atlas.level0_cells:
-            decoded = atlas.level0_cells[cell_xy_map]
-            label = f"cell {cell_xy_map[0]},{cell_xy_map[1]}"
-            mse = _rgb_mse(cell, decoded, bg)
-        elif name == "emerald_gem.png":
-            prefer = "pickup_emerald_left"
-            decoded, label, mse = _best_match(cell, bg, candidates, prefer_label=prefer)
         else:
-            decoded, label, mse = _best_match(cell, bg, candidates, prefer_label=None)
-        tid = TILE_ID_FOR_REF.get(name)
+            decoded, label, mse = _best_match(cell, bg, candidates, prefer_label=prefer)
         label_bits = [name.replace(".png", ""), f"{label} (mask MSE {mse:.3f})"]
         entries.append(
             {

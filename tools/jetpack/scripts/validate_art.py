@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare decoded level 0 render to DOS reference minimap."""
+"""Compare rebuilt playfields to in-game DOS captures (not minimap)."""
 
 from __future__ import annotations
 
@@ -13,11 +13,13 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from jetpack.dos_art import preview_subimage
 from jetpack.frame_atlas import FrameAtlas
 from jetpack.levels import load_jetlev
+from jetpack.playfield import normalize_playfield
+from jetpack.constants import MAP_H, MAP_W, TILE_PX
 
-MAX_MSE = 12.0
+MAX_MSE = 22.0
+DEFAULT_LEVELS = (0, 10, 20, 50)
 
 
 def main() -> int:
@@ -26,19 +28,45 @@ def main() -> int:
     ap.add_argument(
         "--reference",
         type=Path,
-        default=ROOT / "reference" / "level00_play2.png",
+        default=ROOT / "reference",
     )
+    ap.add_argument("--levels", type=int, nargs="*", default=list(DEFAULT_LEVELS))
     args = ap.parse_args()
-    ref_full = Image.open(args.reference).convert("RGB")
-    ref = preview_subimage(ref_full).resize((26 * 24, 16 * 24), Image.Resampling.NEAREST)
-    lv = load_jetlev(args.game_dir / "JETLEV.DAT")[0]
+    ref = args.reference.expanduser().resolve()
+    levels = {lv.index: lv for lv in load_jetlev(args.game_dir / "JETLEV.DAT")}
     atlas = FrameAtlas.load(ROOT / "gfx" / "frames")
-    rend = atlas.render_level(lv.tiles, use_level0_cells=True).convert("RGB")
-    mse = float(np.mean((np.array(rend) - np.array(ref)) ** 2))
-    print(f"level_00 playfield MSE vs DOS minimap (scaled): {mse:.2f} (max {MAX_MSE})")
-    out = ROOT / "reference" / "validate_level00_render.png"
-    rend.save(out)
-    return 0 if mse < MAX_MSE else 1
+    failed = False
+    for idx in args.levels:
+        cap = ref / f"dosbox_play_level{idx:02d}.png"
+        if not cap.is_file():
+            print(f"level_{idx:02d}: skip (no {cap.name})")
+            continue
+        lv = levels[idx]
+        ref_field = normalize_playfield(Image.open(cap))
+        rend = atlas.render_level(lv.tiles).convert("RGB")
+        r = np.array(rend)
+        g = np.array(ref_field)
+        mask = np.ones((MAP_H, MAP_W), dtype=bool)
+        mask[lv.player_y - 1, lv.player_x - 1] = False
+        for e in lv.enemies:
+            if e.type_id:
+                mask[e.y - 1, e.x - 1] = False
+        errs: list[float] = []
+        for row in range(MAP_H):
+            for col in range(MAP_W):
+                if not mask[row, col]:
+                    continue
+                y0, x0 = row * TILE_PX, col * TILE_PX
+                tile_r = r[y0 : y0 + TILE_PX, x0 : x0 + TILE_PX]
+                tile_g = g[y0 : y0 + TILE_PX, x0 : x0 + TILE_PX]
+                errs.append(float(np.mean((tile_r - tile_g) ** 2)))
+        mse = float(np.mean(errs)) if errs else 999.0
+        ok = mse < MAX_MSE
+        failed = failed or not ok
+        print(f"level_{idx:02d} playfield MSE vs DOS play capture: {mse:.2f} (max {MAX_MSE})")
+        out = ref / f"validate_level{idx:02d}_render.png"
+        rend.save(out)
+    return 1 if failed else 0
 
 
 if __name__ == "__main__":

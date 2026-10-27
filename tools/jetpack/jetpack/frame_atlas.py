@@ -66,14 +66,7 @@ class FrameAtlas:
         use_level0_cells: bool = False,
     ) -> Image.Image:
         w, h = MAP_W * TILE_PX, MAP_H * TILE_PX
-        if use_level0_cells and self.level0_cells:
-            frame = Image.new("RGBA", (w, h))
-            for row in range(MAP_H):
-                for col in range(MAP_W):
-                    cell = self.level0_cells.get((col, row))
-                    if cell is not None:
-                        frame.paste(cell, (col * TILE_PX, row * TILE_PX), cell)
-            return frame
+        _ = use_level0_cells  # deprecated: minimap cells are not 1:1 tiles
         base = self.tiles.get(background_tile_id)
         if base is None:
             frame = Image.new("RGBA", (w, h), (0x28, 0x20, 0x38, 255))
@@ -88,6 +81,8 @@ class FrameAtlas:
                 if tid == 0:
                     continue
                 spr = self.tiles.get(tid)
+                if spr is None and tid == 60:
+                    spr = self.tiles.get(0x3C)
                 if spr is None:
                     continue
                 frame.paste(spr, (col * TILE_PX, row * TILE_PX), spr)

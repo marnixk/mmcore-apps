@@ -23,8 +23,8 @@ python3 tools/jetpack/scripts/make_mockups.py tools/jetpack/_download/extracted/
 # TASVideos reference compare (downloads in reference/tasvideos/ if missing)
 python3 tools/jetpack/scripts/build_reference_compare.py tools/jetpack/_download/extracted/jetpak15
 
-# Individual RGBA frames (also run from extract_all.py)
-python3 tools/jetpack/scripts/export_frames.py tools/jetpack/_download/extracted/jetpak15
+# DOS ground-truth frames (preferred; also run from extract_all.py when reference PNGs exist)
+python3 tools/jetpack/scripts/extract_from_dos.py tools/jetpack/_download/extracted/jetpak15
 ```
 
 ## Outputs
@@ -33,11 +33,11 @@ python3 tools/jetpack/scripts/export_frames.py tools/jetpack/_download/extracted
 |------|-------------|
 | `levels/level_XX.json` | Level data (committed after extract) |
 | `previews/level_XX.png` | Map preview |
-| `gfx/sprites_vga.png` | Decoded VGA tile/sprite sheet (SCLM LZ77) |
-| `gfx/frames/` | Per-tile and per-sprite RGBA PNGs + `index.json` (title/menu art reuse) |
-| `reference/` | DOSBox ground-truth screenshots; `tasvideos/` PNGs; `compare.png` vs decoded art |
-| `gfx/tas_reference.json` | TASVideos silhouette matches + player animation sheet indices |
-| `scripts/validate_art.py` | Level 0 minimap MSE vs `reference/level00_preview_crop2.png` |
+| `gfx/sprites_vga.png` | SCLM LZ77 export (DAT decode **not** colour-accurate; see FORMATS.md) |
+| `gfx/frames/` | **In-game** DOS captures → RGBA tiles + `index.json` (`source: dosbox_play_capture`) |
+| `reference/` | DOSBox screenshots (`dosbox_*.png`, `level00_play2.png`); `compare.png` vs TAS |
+| `gfx/tas_reference.json` | TASVideos ↔ DOS capture mapping from `build_reference_compare.py` |
+| `scripts/validate_art.py` | Level 0 playfield MSE vs DOS minimap (threshold 12) |
 | `mockups/*.png` | UI / gameplay mockups |
 
 ## Docs

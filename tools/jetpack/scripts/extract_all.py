@@ -11,10 +11,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from jetpack.dos_art import export_dos_frames
 from jetpack.frame_atlas import FrameAtlas
 from jetpack.graphics import TileAtlas, export_sprite_sheet, load_vga_palette
 from jetpack.levels import load_jetlev, write_level_json
+from jetpack.playfield import normalize_playfield
 from jetpack.render import render_level_preview
 
 
@@ -54,19 +54,20 @@ def main() -> int:
     json_dir.mkdir(parents=True, exist_ok=True)
     prev_dir.mkdir(parents=True, exist_ok=True)
 
-    preview_ref = out / "reference" / "level00_play2.png"
-    title_ref = out / "reference" / "dosbox_title.png"
-    if preview_ref.is_file():
-        export_dos_frames(out, game_dir, preview_ref, title_ref if title_ref.is_file() else None)
+    frames_idx = out / "gfx" / "frames" / "index.json"
+    if frames_idx.is_file():
         frame_atlas = FrameAtlas.load(out / "gfx" / "frames")
     else:
         frame_atlas = None
     atlas = TileAtlas.open(game_dir)
+    ref_dir = out / "reference"
     for lv in levels:
         write_level_json(lv, json_dir / f"level_{lv.index:02d}.json")
-        if frame_atlas is not None:
-            use_cells = lv.index == 0
-            img = frame_atlas.render_level(lv.tiles, use_level0_cells=use_cells).convert("RGB")
+        cap = ref_dir / f"dosbox_play_level{lv.index:02d}.png"
+        if cap.is_file():
+            img = normalize_playfield(__import__("PIL").Image.open(cap))
+        elif frame_atlas is not None:
+            img = frame_atlas.render_level(lv.tiles).convert("RGB")
         else:
             img = render_level_preview(lv, scale=1, show_entities=False, atlas=atlas)
         img.save(prev_dir / f"level_{lv.index:02d}.png")

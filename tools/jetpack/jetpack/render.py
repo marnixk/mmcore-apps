@@ -46,7 +46,7 @@ def render_level_preview(
 ) -> Image.Image:
     frames = _frames()
     if frames is not None:
-        field = frames.render_level(level.tiles, use_level0_cells=(level.index == 0))
+        field = frames.render_level(level.tiles)
         if show_entities and frames.player_frames:
             s = TILE_PX
             px = (level.player_x - 1) * s
@@ -139,7 +139,7 @@ def render_entity_showcase_crop(level: Level, atlas: TileAtlas, margin_tiles: in
     m = margin_tiles * TILE_PX
     frames = _frames()
     if frames is not None:
-        field = frames.render_level(level.tiles, use_level0_cells=(level.index == 0))
+        field = frames.render_level(level.tiles)
         if frames.player_frames:
             field.paste(frames.player_frames[0], (px, py), frames.player_frames[0])
     else:

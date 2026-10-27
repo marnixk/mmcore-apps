@@ -7,9 +7,9 @@
         1
       ],
       "tile_id": null,
-      "dos_match": "cell 5,4",
-      "match_mask_mse": 2891.7452,
-      "atlas_source": "dosbox_capture"
+      "dos_match": "tile 0x37",
+      "match_mask_mse": 3177.7083,
+      "atlas_source": "dosbox_play_capture"
     },
     {
       "reference": "door.png",
@@ -18,9 +18,9 @@
         0
       ],
       "tile_id": null,
-      "dos_match": "cell 24,0",
-      "match_mask_mse": 6434.1117,
-      "atlas_source": "dosbox_capture"
+      "dos_match": "tile 0x56",
+      "match_mask_mse": 3444.1806,
+      "atlas_source": "dosbox_play_capture"
     },
     {
       "reference": "emerald_gem.png",
@@ -29,9 +29,9 @@
         1
       ],
       "tile_id": 4,
-      "dos_match": "cell 12,6",
-      "match_mask_mse": 9548.75,
-      "atlas_source": "dosbox_capture"
+      "dos_match": "tile 0x04",
+      "match_mask_mse": 9863.4148,
+      "atlas_source": "dosbox_play_capture"
     },
     {
       "reference": "guy.png",
@@ -40,9 +40,9 @@
         0
       ],
       "tile_id": null,
-      "dos_match": "player_fly_0 (title capture)",
-      "match_mask_mse": 11402.1181,
-      "atlas_source": "dosbox_capture"
+      "dos_match": "tile 0x0D",
+      "match_mask_mse": 4505.0375,
+      "atlas_source": "dosbox_play_capture"
     },
     {
       "reference": "ladder.png",
@@ -51,9 +51,9 @@
         1
       ],
       "tile_id": 1,
-      "dos_match": "cell 7,9",
-      "match_mask_mse": 859.0264,
-      "atlas_source": "dosbox_capture"
+      "dos_match": "tile 0x01",
+      "match_mask_mse": 8457.3077,
+      "atlas_source": "dosbox_play_capture"
     },
     {
       "reference": "lred.png",
@@ -62,9 +62,9 @@
         0
       ],
       "tile_id": 60,
-      "dos_match": "cell 10,2",
-      "match_mask_mse": 10074.3804,
-      "atlas_source": "dosbox_capture"
+      "dos_match": "tile 0x3C",
+      "match_mask_mse": 12268.5254,
+      "atlas_source": "dosbox_play_capture"
     },
     {
       "reference": "missile.png",
@@ -73,9 +73,9 @@
         1
       ],
       "tile_id": null,
-      "dos_match": "cell 22,9",
-      "match_mask_mse": 4200.2715,
-      "atlas_source": "dosbox_capture"
+      "dos_match": "tile 0x0D",
+      "match_mask_mse": 4835.2379,
+      "atlas_source": "dosbox_play_capture"
     },
     {
       "reference": "stunner.png",
@@ -84,9 +84,9 @@
         1
       ],
       "tile_id": 19,
-      "dos_match": "cell 19,13",
-      "match_mask_mse": 4190.7845,
-      "atlas_source": "dosbox_capture"
+      "dos_match": "tile 0x0D",
+      "match_mask_mse": 4196.5905,
+      "atlas_source": "dosbox_play_capture"
     },
     {
       "reference": "tank_of_fuel.png",
@@ -95,9 +95,9 @@
         1
       ],
       "tile_id": 16,
-      "dos_match": "cell 22,8",
-      "match_mask_mse": 4169.0215,
-      "atlas_source": "dosbox_capture"
+      "dos_match": "tile 0x10",
+      "match_mask_mse": 5476.289,
+      "atlas_source": "dosbox_play_capture"
     },
     {
       "reference": "trackbot.png",
@@ -106,9 +106,9 @@
         1
       ],
       "tile_id": null,
-      "dos_match": "cell 12,4",
-      "match_mask_mse": 5503.1936,
-      "atlas_source": "dosbox_capture"
+      "dos_match": "tile 0x02",
+      "match_mask_mse": 5636.8529,
+      "atlas_source": "dosbox_play_capture"
     }
   ]
 }
