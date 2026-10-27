@@ -1,0 +1,5 @@
+.mmcore/
+.venv/
+tools/gametest/out/
+tools/gametest/drv/
+tools/gametest/croot/

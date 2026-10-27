@@ -1,0 +1,4 @@
+{
+  "name": "mmcore-apps (games + headless SDL validation)",
+  "install": "bash .cursor/install.sh"
+}
