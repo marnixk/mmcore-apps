@@ -1,0 +1,6 @@
+# id mode_command resolution_label
+mode19|MODE 19,16|1366x768
+mode20|MODE 20,16|683x384
+mode16|MODE 16,16|1920x1080
+mode11|MODE 11,16|1280x720
+mode1|MODE 1,16|800x600
