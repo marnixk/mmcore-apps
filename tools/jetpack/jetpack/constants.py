@@ -28,8 +28,8 @@ ITEM_TILE_IDS = {
     0x17: "extra_life",
 }
 
-# JETLEV stores invisible editor spawn markers in this ID range (not drawn in play).
-SPAWN_MARKER_TILE_IDS = frozenset(range(0x32, 0x45))  # decimal 50–68
+# JETLEV editor spawn markers (grey "n" tiles); 0x3C (60) is the playfield backdrop.
+SPAWN_MARKER_TILE_IDS = frozenset(range(0x32, 0x3C)) | frozenset(range(0x3D, 0x45))
 
 TILE_NAMES = {
     0x00: "blank",
@@ -55,6 +55,7 @@ TILE_NAMES = {
     0x46: "crate",
     0x47: "steel_barrier",
     0x48: "diamond_block",
+    0x3C: "backdrop",
     0x72: "conveyor_left",
     0x75: "conveyor_right",
 }

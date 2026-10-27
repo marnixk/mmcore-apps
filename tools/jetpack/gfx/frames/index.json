@@ -216,6 +216,11 @@
       "name": "id_31"
     },
     {
+      "file": "tile_060_id_3c.png",
+      "tile_id": 60,
+      "name": "id_3c"
+    },
+    {
       "file": "tile_070_crate.png",
       "tile_id": 70,
       "name": "crate"

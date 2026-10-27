@@ -544,7 +544,7 @@
     },
     {
       "id": 60,
-      "name": "tile_3c"
+      "name": "backdrop"
     },
     {
       "id": 36,
@@ -1788,11 +1788,11 @@
     },
     {
       "id": 60,
-      "name": "tile_3c"
+      "name": "backdrop"
     },
     {
       "id": 60,
-      "name": "tile_3c"
+      "name": "backdrop"
     },
     {
       "id": 61,
@@ -1812,7 +1812,7 @@
     },
     {
       "id": 60,
-      "name": "tile_3c"
+      "name": "backdrop"
     },
     {
       "id": 17,
@@ -2100,11 +2100,11 @@
     },
     {
       "id": 60,
-      "name": "tile_3c"
+      "name": "backdrop"
     },
     {
       "id": 60,
-      "name": "tile_3c"
+      "name": "backdrop"
     },
     {
       "id": 8,
