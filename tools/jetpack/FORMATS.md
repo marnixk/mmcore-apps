@@ -100,16 +100,17 @@ After decompress, only the first `24×24 = 576` bytes are the visible tile; rema
 
 ### Art pipeline in this repo (v1.5 phase 1)
 
-**Ground truth:** DOSBox captures under `reference/` (`level00_play2.png`, `dosbox_title.png`, …). Level-0 minimap lives at **(175, 95)** size **290×270** inside `level00_play2.png` (same pixels as `level00_preview_crop2.png`).
+**Ground truth:** full-size **in-game** DOSBox screenshots `reference/dosbox_play_levelXX.png` (not the READY/minimap). Automation: `scripts/dosbox_capture.py` (DOSBox-X + Xvfb + xdotool).
 
-**Export route:** `jetpack/dos_art.py` + `scripts/extract_from_dos.py` crop **416** minimap cells to `gfx/frames/level00_cells/cell_CC_RR.png`, dedupe per tile ID for `tile_*.png`, title crops for `player_fly_*.png` / emerald pickups. `gfx/frames/index.json` sets `"source": "dosbox_capture"`.
+**Playfield geometry in captures:** DOSBox client crop **(20, 48)–(618, 416)** = **598×368** px (**23 px/tile**), resampled to **624×384** (`jetpack/playfield.py`).
 
-**Validation:**
+**Export route:** `jetpack/play_extract.py` + `scripts/extract_from_play.py` — dedupe **24×24** RGBA tiles per ID from play captures (levels 0, 10, …, 90); backdrop **0x3C** from empty cells on level 0; enemy spawn crops; `gfx/frames/index.json` → `"source": "dosbox_play_capture"`.
 
-- `scripts/validate_art.py` — level 0 render MSE vs DOS minimap (threshold **12** at 624×384).
-- `scripts/build_reference_compare.py` — TASVideos silhouettes vs DOS frame atlas (`reference/compare.png`).
+**Previews:** captured levels use normalized play PNG; others use `FrameAtlas.render_level()`.
 
-TAS wiki PNGs use a **light/dark matte background**; comparisons use **mask MSE** on opaque pixels (RGB differs from DOS VGA but shapes should align).
+**Validation:** `scripts/validate_art.py` compares tile rebuild vs play capture (masked where player/enemies stand). TAS compare: `reference/compare.png`.
+
+**RAM / DAC dump:** not automated in this branch; DAT bitmap layout still unverified vs play crops.
 
 ## Other files
 

@@ -8,7 +8,7 @@ from pathlib import Path
 
 from PIL import Image
 
-from .constants import MAP_H, MAP_W, TILE_PX
+from .constants import MAP_H, MAP_W, SPAWN_MARKER_TILE_IDS, TILE_PX
 
 _PKG = Path(__file__).resolve().parents[1]
 _FRAMES = _PKG / "gfx" / "frames"
@@ -78,7 +78,7 @@ class FrameAtlas:
         for row in range(MAP_H):
             for col in range(MAP_W):
                 tid = tile_ids[row * MAP_W + col]
-                if tid == 0:
+                if tid == 0 or tid in SPAWN_MARKER_TILE_IDS:
                     continue
                 spr = self.tiles.get(tid)
                 if spr is None and tid == 60:

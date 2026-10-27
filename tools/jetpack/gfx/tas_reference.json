@@ -7,8 +7,8 @@
         1
       ],
       "tile_id": null,
-      "dos_match": "tile 0x37",
-      "match_mask_mse": 3177.7083,
+      "dos_match": "tile 0x56",
+      "match_mask_mse": 3335.4244,
       "atlas_source": "dosbox_play_capture"
     },
     {
@@ -30,7 +30,7 @@
       ],
       "tile_id": 4,
       "dos_match": "tile 0x04",
-      "match_mask_mse": 9863.4148,
+      "match_mask_mse": 7868.0303,
       "atlas_source": "dosbox_play_capture"
     },
     {
@@ -40,8 +40,8 @@
         0
       ],
       "tile_id": null,
-      "dos_match": "tile 0x0D",
-      "match_mask_mse": 4505.0375,
+      "dos_match": "player_fly_0",
+      "match_mask_mse": 6335.4806,
       "atlas_source": "dosbox_play_capture"
     },
     {
@@ -62,8 +62,8 @@
         0
       ],
       "tile_id": 60,
-      "dos_match": "tile 0x3C",
-      "match_mask_mse": 12268.5254,
+      "dos_match": "tile 0x31",
+      "match_mask_mse": 5003.462,
       "atlas_source": "dosbox_play_capture"
     },
     {

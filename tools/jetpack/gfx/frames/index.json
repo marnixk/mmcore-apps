@@ -216,91 +216,6 @@
       "name": "id_31"
     },
     {
-      "file": "tile_050_id_32.png",
-      "tile_id": 50,
-      "name": "id_32"
-    },
-    {
-      "file": "tile_051_id_33.png",
-      "tile_id": 51,
-      "name": "id_33"
-    },
-    {
-      "file": "tile_052_id_34.png",
-      "tile_id": 52,
-      "name": "id_34"
-    },
-    {
-      "file": "tile_053_id_35.png",
-      "tile_id": 53,
-      "name": "id_35"
-    },
-    {
-      "file": "tile_054_id_36.png",
-      "tile_id": 54,
-      "name": "id_36"
-    },
-    {
-      "file": "tile_055_id_37.png",
-      "tile_id": 55,
-      "name": "id_37"
-    },
-    {
-      "file": "tile_056_id_38.png",
-      "tile_id": 56,
-      "name": "id_38"
-    },
-    {
-      "file": "tile_058_id_3a.png",
-      "tile_id": 58,
-      "name": "id_3a"
-    },
-    {
-      "file": "tile_059_id_3b.png",
-      "tile_id": 59,
-      "name": "id_3b"
-    },
-    {
-      "file": "tile_060_id_3c.png",
-      "tile_id": 60,
-      "name": "id_3c"
-    },
-    {
-      "file": "tile_061_id_3d.png",
-      "tile_id": 61,
-      "name": "id_3d"
-    },
-    {
-      "file": "tile_062_id_3e.png",
-      "tile_id": 62,
-      "name": "id_3e"
-    },
-    {
-      "file": "tile_063_id_3f.png",
-      "tile_id": 63,
-      "name": "id_3f"
-    },
-    {
-      "file": "tile_064_id_40.png",
-      "tile_id": 64,
-      "name": "id_40"
-    },
-    {
-      "file": "tile_066_id_42.png",
-      "tile_id": 66,
-      "name": "id_42"
-    },
-    {
-      "file": "tile_067_id_43.png",
-      "tile_id": 67,
-      "name": "id_43"
-    },
-    {
-      "file": "tile_068_id_44.png",
-      "tile_id": 68,
-      "name": "id_44"
-    },
-    {
       "file": "tile_070_crate.png",
       "tile_id": 70,
       "name": "crate"
@@ -531,7 +446,13 @@
       "name": "conveyor_right"
     }
   ],
-  "player": [],
+  "player": [
+    {
+      "file": "player_fly_0.png",
+      "frame": 0,
+      "role": "fly"
+    }
+  ],
   "enemies": [
     {
       "file": "enemy_trackbot_0.png",

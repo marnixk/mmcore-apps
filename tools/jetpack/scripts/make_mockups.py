@@ -29,7 +29,7 @@ def main() -> int:
     ap.add_argument(
         "--level",
         type=int,
-        default=15,
+        default=0,
         help="Campaign level index (0–99) used in gameplay mockups",
     )
     args = ap.parse_args()

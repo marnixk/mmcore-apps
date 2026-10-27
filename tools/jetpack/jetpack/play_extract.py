@@ -8,7 +8,7 @@ from pathlib import Path
 
 from PIL import Image
 
-from .constants import ENEMY_NAMES, MAP_H, MAP_W, TILE_NAMES, TILE_PX
+from .constants import ENEMY_NAMES, MAP_H, MAP_W, SPAWN_MARKER_TILE_IDS, TILE_NAMES, TILE_PX
 from .levels import Level, load_jetlev
 from .playfield import detect_playfield_crop, dosbox_client_image, normalize_playfield
 
@@ -114,24 +114,33 @@ def export_play_frames(
                         (_isolation_score(lv, col, row, 0), -idx - 1000, cell)
                     )
         field.save(root / "reference" / f"validate_level{idx:02d}_playfield.png")
+    backdrop_ids = {0x3C, 60}
     for tid, items in tile_buckets.items():
+        if tid in backdrop_ids:
+            continue
         merged[tid] = max(items, key=lambda t: (t[0], t[1]))[2]
-    if 0 in captures and captures[0].is_file():
-        field0 = normalize_playfield(Image.open(captures[0]))
-        lv0 = levels[0]
+    # Backdrop: only from map cells with tile id 0 (empty), never from explicit 0x3C cells
+    # (those often overlap entities and mis-register in JETLEV).
+    best_back: tuple[int, int, Image.Image] | None = None
+    for idx in sorted(captures):
+        cap = captures[idx]
+        if not cap.is_file():
+            continue
+        lv = levels[idx]
+        field = normalize_playfield(Image.open(cap))
         for row in range(MAP_H):
             for col in range(MAP_W):
-                if lv0.tiles[row * MAP_W + col] != 0:
+                if lv.tiles[row * MAP_W + col] != 0:
                     continue
-                cell = field0.crop(
+                sc = _isolation_score(lv, col, row, 0)
+                cell = field.crop(
                     (col * TILE_PX, row * TILE_PX, (col + 1) * TILE_PX, (row + 1) * TILE_PX)
                 ).convert("RGBA")
-                merged[0x3C] = cell
-                merged[60] = cell
-                break
-            else:
-                continue
-            break
+                if best_back is None or sc > best_back[0]:
+                    best_back = (sc, -idx, cell)
+    if best_back is not None:
+        merged[0x3C] = best_back[2]
+        merged[60] = best_back[2]
 
     index: dict = {
         "source": "dosbox_play_capture",
@@ -145,6 +154,8 @@ def export_play_frames(
     }
 
     for tid in sorted(merged):
+        if tid in SPAWN_MARKER_TILE_IDS:
+            continue
         name = TILE_NAMES.get(tid, f"id_{tid:02x}")
         fname = f"tile_{tid:03d}_{_slug(name)}.png"
         merged[tid].save(out_dir / fname)
@@ -170,18 +181,15 @@ def export_play_frames(
                     {"file": fname, "enemy_id": e.type_id, "name": ename, "from_level": idx}
                 )
 
-    if player_capture and player_capture.is_file():
-        pim = Image.open(player_capture).convert("RGBA")
-        # Player on level 0 start (tile coords from JETLEV): approximate crop from play capture.
-        play0 = captures.get(0)
-        if play0 and play0.is_file():
-            lv0 = levels[0]
-            field0, _ = extract_tiles_from_capture(play0, lv0, None)
-            px = (lv0.player_x - 1) * TILE_PX
-            py = (lv0.player_y - 1) * TILE_PX
-            player = field0.crop((px, py, px + TILE_PX, py + TILE_PX)).convert("RGBA")
-            player.save(out_dir / "player_fly_0.png")
-            index["player"].append({"file": "player_fly_0.png", "frame": 0, "role": "fly"})
+    play0 = captures.get(0)
+    if play0 and play0.is_file():
+        lv0 = levels[0]
+        field0, _ = extract_tiles_from_capture(play0, lv0, None)
+        px = (lv0.player_x - 1) * TILE_PX
+        py = (lv0.player_y - 1) * TILE_PX
+        player = field0.crop((px, py, px + TILE_PX, py + TILE_PX)).convert("RGBA")
+        player.save(out_dir / "player_fly_0.png")
+        index["player"].append({"file": "player_fly_0.png", "frame": 0, "role": "fly"})
 
     (out_dir / "index.json").write_text(json.dumps(index, indent=2) + "\n", encoding="utf-8")
     return index
