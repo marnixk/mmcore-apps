@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate approval mockups (see PORT_PLAN.md for resolution scope)."""
+"""Gameplay mockups only (683×384, 1280×720, 1:1 entity crop). Title/pause UI is out of scope."""
 
 from __future__ import annotations
 
@@ -12,12 +12,7 @@ sys.path.insert(0, str(ROOT))
 
 from jetpack.graphics import TileAtlas
 from jetpack.levels import load_jetlev
-from jetpack.render import (
-    composite_gameplay_frame,
-    render_entity_showcase_crop,
-    render_pause_dialog,
-    render_title_screen,
-)
+from jetpack.render import composite_gameplay_frame, render_entity_showcase_crop
 
 
 def main() -> int:
@@ -52,8 +47,6 @@ def main() -> int:
     atlas = TileAtlas.open(game_dir)
     composite_gameplay_frame(lv, 683, 384, label, atlas=atlas).save(out / "gameplay_683x384.png")
     composite_gameplay_frame(lv, 1280, 720, label, atlas=atlas).save(out / "gameplay_1280x720.png")
-    render_title_screen(1280, 720).save(out / "title_1280x720.png")
-    render_pause_dialog(lv, 1280, 720, atlas=atlas).save(out / "pause_1280x720.png")
     render_entity_showcase_crop(lv, atlas).save(out / "entity_showcase_1x1.png")
 
     print(f"Mockups written to {out}")

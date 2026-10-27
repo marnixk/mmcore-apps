@@ -96,7 +96,7 @@ Bitstream: LSB-first within each control byte; **0 = literal** (next source byte
 
 After decompress, only the first `24×24 = 576` bytes are the visible tile; remaining bytes in the 576-byte buffer are unused padding from the original blitter.
 
-`jetpack/graphics.py` implements this decoder and exports `gfx/sprites_vga.png` + `sprites_index.json` (`tile_id_map` + per-slot metadata).
+`jetpack/graphics.py` implements this decoder and exports `gfx/sprites_vga.png` + `sprites_index.json` (`tile_id_map` + per-slot metadata). `scripts/export_frames.py` (also invoked from `extract_all.py`) writes **RGBA** `gfx/frames/*.png` (`tile_*`, `player_fly_*`, `enemy_*_*`) and `gfx/frames/index.json`.
 
 ### Rendering notes
 

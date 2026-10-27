@@ -33,10 +33,25 @@ def render_level_preview(
 ) -> Image.Image:
     if atlas is not None:
         field = render_level_tiles(level.tiles, atlas)
+        if show_entities:
+            enemy_sprites = load_enemy_sheet_indices()
+            player_frames = load_player_frames()
+            player_im = sheet_sprite(atlas, player_frames[0]) if player_frames else None
+            s = TILE_PX
+            for e in level.enemies:
+                ox = (e.x - 1) * s
+                oy = (e.y - 1) * s
+                spr = sheet_sprite(atlas, enemy_sprites.get(e.type_id))
+                if spr is not None:
+                    field.paste(spr, (ox, oy), spr)
+            if player_im is not None:
+                px = (level.player_x - 1) * s
+                py = (level.player_y - 1) * s
+                field.paste(player_im, (px, py), player_im)
         if scale != 1:
             w, h = field.size
             field = field.resize((w * scale, h * scale), Image.Resampling.NEAREST)
-        img = field.convert("RGB")
+        return field.convert("RGB")
     else:
         w, h = MAP_W * TILE_PX * scale, MAP_H * TILE_PX * scale
         img = Image.new("RGB", (w, h), (0x18, 0x18, 0x20))

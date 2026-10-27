@@ -11,6 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from jetpack.frames_export import export_frame_pngs
 from jetpack.graphics import TileAtlas, export_sprite_sheet, load_vga_palette
 from jetpack.levels import load_jetlev, write_level_json
 from jetpack.render import render_level_preview
@@ -71,6 +72,9 @@ def main() -> int:
             vga,
         )
         print(f"Sprite sheet: {info['slot_count']} slots -> {gfx_dir}")
+        frames_dir = gfx_dir / "frames"
+        finfo = export_frame_pngs(atlas, frames_dir, gfx_dir / "sprites_index.json")
+        print(f"Frame PNGs: {finfo['frame_count']} -> {frames_dir}")
 
     manifest = out / "SOURCE_MANIFEST.txt"
     lines = ["# Hashes of local Jetpack freeware files (not committed to git)\n"]
