@@ -96,13 +96,20 @@ Bitstream: LSB-first within each control byte; **0 = literal** (next source byte
 
 After decompress, only the first `24×24 = 576` bytes are the visible tile; remaining bytes in the 576-byte buffer are unused padding from the original blitter.
 
-`jetpack/graphics.py` implements this decoder and exports `gfx/sprites_vga.png` + `sprites_index.json` (`tile_id_map` + per-slot metadata). `scripts/export_frames.py` (also invoked from `extract_all.py`) writes **RGBA** `gfx/frames/*.png` (`tile_*`, `player_fly_*`, `enemy_*_*`) and `gfx/frames/index.json`.
+`jetpack/graphics.py` implements the LZ77 step and can export `gfx/sprites_vga.png` + `sprites_index.json`, but **indexed DAT → RGBA using `JETPAL.DAT` alone does not reproduce in-game colours** (sparse/nonzero bytes after decompress, ~16 brown gradient entries in `JETPAL.DAT`). Bit-plane order, runtime DAC reprogramming, and/or a different palette source remain **unverified** — treat DAT bitmap decode as **broken** until matched to DOS captures.
 
-### Rendering notes
+### Art pipeline in this repo (v1.5 phase 1)
 
-- Empty map cells (`tile_id == 0`) are drawn as **cobblestone** tile `0x3C` in previews/mockups (matches DOS level preview backdrop).
-- **Enemy / player sprites** live in later slots and animation frames; see `gfx/tas_reference.json` (from `scripts/build_reference_compare.py`) for TASVideos shape matches.
-- TAS wiki PNGs use a **light/dark matte background**; compare shapes via `reference/compare.png` (RGB differs from `JETPAL.DAT` but silhouettes align). Primary decode check: DOS level-0 preview MSE (`scripts/validate_art.py`).
+**Ground truth:** DOSBox captures under `reference/` (`level00_play2.png`, `dosbox_title.png`, …). Level-0 minimap lives at **(175, 95)** size **290×270** inside `level00_play2.png` (same pixels as `level00_preview_crop2.png`).
+
+**Export route:** `jetpack/dos_art.py` + `scripts/extract_from_dos.py` crop **416** minimap cells to `gfx/frames/level00_cells/cell_CC_RR.png`, dedupe per tile ID for `tile_*.png`, title crops for `player_fly_*.png` / emerald pickups. `gfx/frames/index.json` sets `"source": "dosbox_capture"`.
+
+**Validation:**
+
+- `scripts/validate_art.py` — level 0 render MSE vs DOS minimap (threshold **12** at 624×384).
+- `scripts/build_reference_compare.py` — TASVideos silhouettes vs DOS frame atlas (`reference/compare.png`).
+
+TAS wiki PNGs use a **light/dark matte background**; comparisons use **mask MSE** on opaque pixels (RGB differs from DOS VGA but shapes should align).
 
 ## Other files
 

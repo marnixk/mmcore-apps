@@ -5,9 +5,22 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 from .constants import MAP_H, MAP_W, TILE_PX
+from .frame_atlas import FrameAtlas
 from .graphics import TileAtlas, render_level_tiles
 from .levels import Level
-from .sprite_catalog import load_enemy_sheet_indices, load_player_frames, sheet_sprite
+
+_FRAME_ATLAS: FrameAtlas | None = None
+
+
+def _frames() -> FrameAtlas | None:
+    global _FRAME_ATLAS
+    if _FRAME_ATLAS is not None:
+        return _FRAME_ATLAS
+    try:
+        _FRAME_ATLAS = FrameAtlas.load()
+        return _FRAME_ATLAS
+    except FileNotFoundError:
+        return None
 from .palette import (
     DOOR_COLOR,
     ENEMY_COLORS,
@@ -31,23 +44,20 @@ def render_level_preview(
     show_entities: bool = True,
     atlas: TileAtlas | None = None,
 ) -> Image.Image:
+    frames = _frames()
+    if frames is not None:
+        field = frames.render_level(level.tiles, use_level0_cells=(level.index == 0))
+        if show_entities and frames.player_frames:
+            s = TILE_PX
+            px = (level.player_x - 1) * s
+            py = (level.player_y - 1) * s
+            field.paste(frames.player_frames[0], (px, py), frames.player_frames[0])
+        if scale != 1:
+            w, h = field.size
+            field = field.resize((w * scale, h * scale), Image.Resampling.NEAREST)
+        return field.convert("RGB")
     if atlas is not None:
         field = render_level_tiles(level.tiles, atlas)
-        if show_entities:
-            enemy_sprites = load_enemy_sheet_indices()
-            player_frames = load_player_frames()
-            player_im = sheet_sprite(atlas, player_frames[0]) if player_frames else None
-            s = TILE_PX
-            for e in level.enemies:
-                ox = (e.x - 1) * s
-                oy = (e.y - 1) * s
-                spr = sheet_sprite(atlas, enemy_sprites.get(e.type_id))
-                if spr is not None:
-                    field.paste(spr, (ox, oy), spr)
-            if player_im is not None:
-                px = (level.player_x - 1) * s
-                py = (level.player_y - 1) * s
-                field.paste(player_im, (px, py), player_im)
         if scale != 1:
             w, h = field.size
             field = field.resize((w * scale, h * scale), Image.Resampling.NEAREST)
@@ -125,27 +135,16 @@ def render_entity_showcase_crop(level: Level, atlas: TileAtlas, margin_tiles: in
     """1:1 crop around player start showing tiles, gems, fuel, door, and entity markers."""
     px = (level.player_x - 1) * TILE_PX
     py = (level.player_y - 1) * TILE_PX
-    m = margin_tiles * TILE_PX
-    field = render_level_tiles(level.tiles, atlas)
     s = TILE_PX
-    player_frames = load_player_frames()
-    player_im = sheet_sprite(atlas, player_frames[0]) if player_frames else None
-    enemy_sprites = load_enemy_sheet_indices()
-    for e in level.enemies:
-        ox = (e.x - 1) * s
-        oy = (e.y - 1) * s
-        spr = sheet_sprite(atlas, enemy_sprites.get(e.type_id))
-        if spr is not None:
-            field.paste(spr, (ox, oy), spr)
-            continue
-        draw = ImageDraw.Draw(field)
-        ex = ox + s // 2
-        ey = oy + s // 2
-        col = ENEMY_COLORS.get(e.type_id, (0xFF, 0x80, 0x80))
-        draw.rectangle([ex - 6, ey - 6, ex + 6, ey + 6], fill=col)
-    if player_im is not None:
-        field.paste(player_im, (px, py), player_im)
+    m = margin_tiles * TILE_PX
+    frames = _frames()
+    if frames is not None:
+        field = frames.render_level(level.tiles, use_level0_cells=(level.index == 0))
+        if frames.player_frames:
+            field.paste(frames.player_frames[0], (px, py), frames.player_frames[0])
     else:
+        field = render_level_tiles(level.tiles, atlas)
+        s = TILE_PX
         draw = ImageDraw.Draw(field)
         draw.ellipse(
             [px + s // 2 - 8, py + s // 2 - 8, px + s // 2 + 8, py + s // 2 + 8],

@@ -11,7 +11,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from jetpack.frames_export import export_frame_pngs
+from jetpack.dos_art import export_dos_frames
+from jetpack.frame_atlas import FrameAtlas
 from jetpack.graphics import TileAtlas, export_sprite_sheet, load_vga_palette
 from jetpack.levels import load_jetlev, write_level_json
 from jetpack.render import render_level_preview
@@ -53,10 +54,21 @@ def main() -> int:
     json_dir.mkdir(parents=True, exist_ok=True)
     prev_dir.mkdir(parents=True, exist_ok=True)
 
+    preview_ref = out / "reference" / "level00_play2.png"
+    title_ref = out / "reference" / "dosbox_title.png"
+    if preview_ref.is_file():
+        export_dos_frames(out, game_dir, preview_ref, title_ref if title_ref.is_file() else None)
+        frame_atlas = FrameAtlas.load(out / "gfx" / "frames")
+    else:
+        frame_atlas = None
     atlas = TileAtlas.open(game_dir)
     for lv in levels:
         write_level_json(lv, json_dir / f"level_{lv.index:02d}.json")
-        img = render_level_preview(lv, scale=1, show_entities=False, atlas=atlas)
+        if frame_atlas is not None:
+            use_cells = lv.index == 0
+            img = frame_atlas.render_level(lv.tiles, use_level0_cells=use_cells).convert("RGB")
+        else:
+            img = render_level_preview(lv, scale=1, show_entities=False, atlas=atlas)
         img.save(prev_dir / f"level_{lv.index:02d}.png")
 
     print(f"Wrote {len(levels)} levels to {json_dir} and {prev_dir}")
@@ -72,10 +84,6 @@ def main() -> int:
             vga,
         )
         print(f"Sprite sheet: {info['slot_count']} slots -> {gfx_dir}")
-        frames_dir = gfx_dir / "frames"
-        finfo = export_frame_pngs(atlas, frames_dir, gfx_dir / "sprites_index.json")
-        print(f"Frame PNGs: {finfo['frame_count']} -> {frames_dir}")
-
     manifest = out / "SOURCE_MANIFEST.txt"
     lines = ["# Hashes of local Jetpack freeware files (not committed to git)\n"]
     for name in sorted(

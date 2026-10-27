@@ -7,8 +7,9 @@
         1
       ],
       "tile_id": null,
-      "sheet_index": 199,
-      "match_mask_mse": 0.1007
+      "dos_match": "cell 5,4",
+      "match_mask_mse": 2891.7452,
+      "atlas_source": "dosbox_capture"
     },
     {
       "reference": "door.png",
@@ -17,8 +18,9 @@
         0
       ],
       "tile_id": null,
-      "sheet_index": 199,
-      "match_mask_mse": 0.0764
+      "dos_match": "cell 24,0",
+      "match_mask_mse": 6434.1117,
+      "atlas_source": "dosbox_capture"
     },
     {
       "reference": "emerald_gem.png",
@@ -27,8 +29,9 @@
         1
       ],
       "tile_id": 4,
-      "sheet_index": 4,
-      "match_mask_mse": null
+      "dos_match": "cell 12,6",
+      "match_mask_mse": 9548.75,
+      "atlas_source": "dosbox_capture"
     },
     {
       "reference": "guy.png",
@@ -37,8 +40,9 @@
         0
       ],
       "tile_id": null,
-      "sheet_index": 309,
-      "match_mask_mse": 0.1927
+      "dos_match": "player_fly_0 (title capture)",
+      "match_mask_mse": 11402.1181,
+      "atlas_source": "dosbox_capture"
     },
     {
       "reference": "ladder.png",
@@ -47,8 +51,9 @@
         1
       ],
       "tile_id": 1,
-      "sheet_index": 1,
-      "match_mask_mse": null
+      "dos_match": "cell 7,9",
+      "match_mask_mse": 859.0264,
+      "atlas_source": "dosbox_capture"
     },
     {
       "reference": "lred.png",
@@ -56,9 +61,10 @@
         0,
         0
       ],
-      "tile_id": null,
-      "sheet_index": 275,
-      "match_mask_mse": 0.3403
+      "tile_id": 60,
+      "dos_match": "cell 10,2",
+      "match_mask_mse": 10074.3804,
+      "atlas_source": "dosbox_capture"
     },
     {
       "reference": "missile.png",
@@ -67,8 +73,9 @@
         1
       ],
       "tile_id": null,
-      "sheet_index": 301,
-      "match_mask_mse": 0.191
+      "dos_match": "cell 22,9",
+      "match_mask_mse": 4200.2715,
+      "atlas_source": "dosbox_capture"
     },
     {
       "reference": "stunner.png",
@@ -77,8 +84,9 @@
         1
       ],
       "tile_id": 19,
-      "sheet_index": 19,
-      "match_mask_mse": null
+      "dos_match": "cell 19,13",
+      "match_mask_mse": 4190.7845,
+      "atlas_source": "dosbox_capture"
     },
     {
       "reference": "tank_of_fuel.png",
@@ -87,8 +95,9 @@
         1
       ],
       "tile_id": 16,
-      "sheet_index": 16,
-      "match_mask_mse": null
+      "dos_match": "cell 22,8",
+      "match_mask_mse": 4169.0215,
+      "atlas_source": "dosbox_capture"
     },
     {
       "reference": "trackbot.png",
@@ -97,17 +106,9 @@
         1
       ],
       "tile_id": null,
-      "sheet_index": 301,
-      "match_mask_mse": 0.1215
-    },
-    {
-      "reference": "guy.png",
-      "player_animation_sheet_indices": [
-        182,
-        309,
-        182,
-        293
-      ]
+      "dos_match": "cell 12,4",
+      "match_mask_mse": 5503.1936,
+      "atlas_source": "dosbox_capture"
     }
   ]
 }
