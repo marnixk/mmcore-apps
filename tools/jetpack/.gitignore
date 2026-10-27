@@ -1,0 +1,5 @@
+_download/
+out/
+__pycache__/
+*.pyc
+.pillow_cache/
