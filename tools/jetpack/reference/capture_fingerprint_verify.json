@@ -7,24 +7,24 @@
       "file": "level_00_f0.png",
       "label": 0,
       "matched": 0,
-      "self_mse": 56.09394454956055,
-      "best_mse": 56.09394454956055,
+      "self_mse": 66.77828979492188,
+      "best_mse": 66.77828979492188,
       "ok": true
     },
     {
       "file": "level_01_f0.png",
       "label": 1,
       "matched": 1,
-      "self_mse": 46.00907897949219,
-      "best_mse": 46.00907897949219,
+      "self_mse": 79.91381072998047,
+      "best_mse": 79.91381072998047,
       "ok": true
     },
     {
       "file": "level_02_f0.png",
       "label": 2,
       "matched": 2,
-      "self_mse": 55.76809310913086,
-      "best_mse": 55.76809310913086,
+      "self_mse": 71.89379119873047,
+      "best_mse": 71.89379119873047,
       "ok": true
     },
     {
@@ -39,704 +39,704 @@
       "file": "level_04_f0.png",
       "label": 4,
       "matched": 4,
-      "self_mse": 57.35304641723633,
-      "best_mse": 57.35304641723633,
+      "self_mse": 68.56342315673828,
+      "best_mse": 68.56342315673828,
       "ok": true
     },
     {
       "file": "level_05_f0.png",
       "label": 5,
       "matched": 5,
-      "self_mse": 122.63972473144531,
-      "best_mse": 122.63972473144531,
+      "self_mse": 256.36712646484375,
+      "best_mse": 256.36712646484375,
       "ok": true
     },
     {
       "file": "level_06_f0.png",
       "label": 6,
       "matched": 6,
-      "self_mse": 21.806438446044922,
-      "best_mse": 21.806438446044922,
+      "self_mse": 43.95914840698242,
+      "best_mse": 43.95914840698242,
       "ok": true
     },
     {
       "file": "level_07_f0.png",
       "label": 7,
       "matched": 7,
-      "self_mse": 280.8419494628906,
-      "best_mse": 280.8419494628906,
+      "self_mse": 157.41903686523438,
+      "best_mse": 157.41903686523438,
       "ok": true
     },
     {
       "file": "level_08_f0.png",
       "label": 8,
       "matched": 8,
-      "self_mse": 2530.2880859375,
-      "best_mse": 2530.2880859375,
+      "self_mse": 2524.364501953125,
+      "best_mse": 2524.364501953125,
       "ok": true
     },
     {
       "file": "level_09_f0.png",
       "label": 9,
       "matched": 9,
-      "self_mse": 21.58152961730957,
-      "best_mse": 21.58152961730957,
+      "self_mse": 65.96179962158203,
+      "best_mse": 65.96179962158203,
       "ok": true
     },
     {
       "file": "level_10_f0.png",
       "label": 10,
       "matched": 10,
-      "self_mse": 114.33509826660156,
-      "best_mse": 114.33509826660156,
+      "self_mse": 143.084228515625,
+      "best_mse": 143.084228515625,
       "ok": true
     },
     {
       "file": "level_11_f0.png",
       "label": 11,
       "matched": 11,
-      "self_mse": 78.56771087646484,
-      "best_mse": 78.56771087646484,
+      "self_mse": 80.81085205078125,
+      "best_mse": 80.81085205078125,
       "ok": true
     },
     {
       "file": "level_12_f0.png",
       "label": 12,
       "matched": 12,
-      "self_mse": 90.27166748046875,
-      "best_mse": 90.27166748046875,
+      "self_mse": 161.63905334472656,
+      "best_mse": 161.63905334472656,
       "ok": true
     },
     {
       "file": "level_13_f0.png",
       "label": 13,
       "matched": 13,
-      "self_mse": 110.59624481201172,
-      "best_mse": 110.59624481201172,
+      "self_mse": 167.41506958007812,
+      "best_mse": 167.41506958007812,
       "ok": true
     },
     {
       "file": "level_14_f0.png",
       "label": 14,
       "matched": 14,
-      "self_mse": 78.9422836303711,
-      "best_mse": 78.9422836303711,
+      "self_mse": 127.66789245605469,
+      "best_mse": 127.66789245605469,
       "ok": true
     },
     {
       "file": "level_15_f0.png",
       "label": 15,
       "matched": 15,
-      "self_mse": 117.60015869140625,
-      "best_mse": 117.60015869140625,
+      "self_mse": 154.8310089111328,
+      "best_mse": 154.8310089111328,
       "ok": true
     },
     {
       "file": "level_16_f0.png",
       "label": 16,
       "matched": 16,
-      "self_mse": 104.68477630615234,
-      "best_mse": 104.68477630615234,
+      "self_mse": 103.04374694824219,
+      "best_mse": 103.04374694824219,
       "ok": true
     },
     {
       "file": "level_17_f0.png",
       "label": 17,
       "matched": 17,
-      "self_mse": 993.161376953125,
-      "best_mse": 993.161376953125,
+      "self_mse": 1003.0059204101562,
+      "best_mse": 1003.0059204101562,
       "ok": true
     },
     {
       "file": "level_18_f0.png",
       "label": 18,
       "matched": 18,
-      "self_mse": 159.94691467285156,
-      "best_mse": 159.94691467285156,
+      "self_mse": 123.92267608642578,
+      "best_mse": 123.92267608642578,
       "ok": true
     },
     {
       "file": "level_19_f0.png",
       "label": 19,
       "matched": 19,
-      "self_mse": 95.06623077392578,
-      "best_mse": 95.06623077392578,
+      "self_mse": 110.20569610595703,
+      "best_mse": 110.20569610595703,
       "ok": true
     },
     {
       "file": "level_20_f0.png",
       "label": 20,
       "matched": 20,
-      "self_mse": 95.59276580810547,
-      "best_mse": 95.59276580810547,
+      "self_mse": 215.55233764648438,
+      "best_mse": 215.55233764648438,
       "ok": true
     },
     {
       "file": "level_21_f0.png",
       "label": 21,
       "matched": 21,
-      "self_mse": 463.5534362792969,
-      "best_mse": 463.5534362792969,
+      "self_mse": 480.3621826171875,
+      "best_mse": 480.3621826171875,
       "ok": true
     },
     {
       "file": "level_22_f0.png",
       "label": 22,
       "matched": 22,
-      "self_mse": 25.892099380493164,
-      "best_mse": 25.892099380493164,
+      "self_mse": 84.88258361816406,
+      "best_mse": 84.88258361816406,
       "ok": true
     },
     {
       "file": "level_23_f0.png",
       "label": 23,
       "matched": 23,
-      "self_mse": 325.1771545410156,
-      "best_mse": 325.1771545410156,
+      "self_mse": 457.7652282714844,
+      "best_mse": 457.7652282714844,
       "ok": true
     },
     {
       "file": "level_24_f0.png",
       "label": 24,
       "matched": 24,
-      "self_mse": 27.956113815307617,
-      "best_mse": 27.956113815307617,
+      "self_mse": 64.55025482177734,
+      "best_mse": 64.55025482177734,
       "ok": true
     },
     {
       "file": "level_25_f0.png",
       "label": 25,
       "matched": 25,
-      "self_mse": 10.497186660766602,
-      "best_mse": 10.497186660766602,
+      "self_mse": 2.0085198879241943,
+      "best_mse": 2.0085198879241943,
       "ok": true
     },
     {
       "file": "level_26_f0.png",
       "label": 26,
       "matched": 26,
-      "self_mse": 78.98878479003906,
-      "best_mse": 78.98878479003906,
+      "self_mse": 401.7342834472656,
+      "best_mse": 401.7342834472656,
       "ok": true
     },
     {
       "file": "level_27_f0.png",
       "label": 27,
       "matched": 27,
-      "self_mse": 172.1162567138672,
-      "best_mse": 172.1162567138672,
+      "self_mse": 201.83834838867188,
+      "best_mse": 201.83834838867188,
       "ok": true
     },
     {
       "file": "level_28_f0.png",
       "label": 28,
       "matched": 28,
-      "self_mse": 140.47080993652344,
-      "best_mse": 140.47080993652344,
+      "self_mse": 236.5726776123047,
+      "best_mse": 236.5726776123047,
       "ok": true
     },
     {
       "file": "level_29_f0.png",
       "label": 29,
       "matched": 29,
-      "self_mse": 179.417724609375,
-      "best_mse": 179.417724609375,
+      "self_mse": 179.19004821777344,
+      "best_mse": 179.19004821777344,
       "ok": true
     },
     {
       "file": "level_30_f0.png",
       "label": 30,
       "matched": 30,
-      "self_mse": 1656.4781494140625,
-      "best_mse": 1656.4781494140625,
+      "self_mse": 1766.7823486328125,
+      "best_mse": 1766.7823486328125,
       "ok": true
     },
     {
       "file": "level_31_f0.png",
       "label": 31,
       "matched": 31,
-      "self_mse": 258.6512451171875,
-      "best_mse": 258.6512451171875,
+      "self_mse": 252.0738525390625,
+      "best_mse": 252.0738525390625,
       "ok": true
     },
     {
       "file": "level_32_f0.png",
       "label": 32,
       "matched": 32,
-      "self_mse": 47.24210739135742,
-      "best_mse": 47.24210739135742,
+      "self_mse": 120.43854522705078,
+      "best_mse": 120.43854522705078,
       "ok": true
     },
     {
       "file": "level_33_f0.png",
       "label": 33,
       "matched": 33,
-      "self_mse": 16.884122848510742,
-      "best_mse": 16.884122848510742,
+      "self_mse": 47.92321014404297,
+      "best_mse": 47.92321014404297,
       "ok": true
     },
     {
       "file": "level_34_f0.png",
       "label": 34,
       "matched": 34,
-      "self_mse": 54.45535659790039,
-      "best_mse": 54.45535659790039,
+      "self_mse": 60.264747619628906,
+      "best_mse": 60.264747619628906,
       "ok": true
     },
     {
       "file": "level_35_f0.png",
       "label": 35,
       "matched": 35,
-      "self_mse": 80.67695617675781,
-      "best_mse": 80.67695617675781,
+      "self_mse": 68.46400451660156,
+      "best_mse": 68.46400451660156,
       "ok": true
     },
     {
       "file": "level_36_f0.png",
       "label": 36,
       "matched": 36,
-      "self_mse": 67.21955871582031,
-      "best_mse": 67.21955871582031,
+      "self_mse": 62.11045837402344,
+      "best_mse": 62.11045837402344,
       "ok": true
     },
     {
       "file": "level_37_f0.png",
       "label": 37,
       "matched": 37,
-      "self_mse": 610.5435180664062,
-      "best_mse": 610.5435180664062,
+      "self_mse": 662.019775390625,
+      "best_mse": 662.019775390625,
       "ok": true
     },
     {
       "file": "level_38_f0.png",
       "label": 38,
       "matched": 38,
-      "self_mse": 178.53773498535156,
-      "best_mse": 178.53773498535156,
+      "self_mse": 231.3587646484375,
+      "best_mse": 231.3587646484375,
       "ok": true
     },
     {
       "file": "level_39_f0.png",
       "label": 39,
       "matched": 39,
-      "self_mse": 770.6981201171875,
-      "best_mse": 770.6981201171875,
+      "self_mse": 799.120849609375,
+      "best_mse": 799.120849609375,
       "ok": true
     },
     {
       "file": "level_40_f0.png",
       "label": 40,
       "matched": 40,
-      "self_mse": 328.554443359375,
-      "best_mse": 328.554443359375,
+      "self_mse": 390.9542236328125,
+      "best_mse": 390.9542236328125,
       "ok": true
     },
     {
       "file": "level_41_f0.png",
       "label": 41,
       "matched": 41,
-      "self_mse": 241.97190856933594,
-      "best_mse": 241.97190856933594,
+      "self_mse": 293.0563049316406,
+      "best_mse": 293.0563049316406,
       "ok": true
     },
     {
       "file": "level_42_f0.png",
       "label": 42,
       "matched": 42,
-      "self_mse": 2506.397216796875,
-      "best_mse": 2506.397216796875,
+      "self_mse": 2527.312255859375,
+      "best_mse": 2527.312255859375,
       "ok": true
     },
     {
       "file": "level_43_f0.png",
       "label": 43,
       "matched": 43,
-      "self_mse": 43.70869064331055,
-      "best_mse": 43.70869064331055,
+      "self_mse": 219.79251098632812,
+      "best_mse": 219.79251098632812,
       "ok": true
     },
     {
       "file": "level_44_f0.png",
       "label": 44,
       "matched": 44,
-      "self_mse": 114.46908569335938,
-      "best_mse": 114.46908569335938,
+      "self_mse": 153.7071075439453,
+      "best_mse": 153.7071075439453,
       "ok": true
     },
     {
       "file": "level_45_f0.png",
       "label": 45,
       "matched": 45,
-      "self_mse": 41.1077766418457,
-      "best_mse": 41.1077766418457,
+      "self_mse": 172.4747772216797,
+      "best_mse": 172.4747772216797,
       "ok": true
     },
     {
       "file": "level_46_f0.png",
       "label": 46,
       "matched": 46,
-      "self_mse": 108.5791015625,
-      "best_mse": 108.5791015625,
+      "self_mse": 93.74369049072266,
+      "best_mse": 93.74369049072266,
       "ok": true
     },
     {
       "file": "level_47_f0.png",
       "label": 47,
       "matched": 47,
-      "self_mse": 15.234067916870117,
-      "best_mse": 15.234067916870117,
+      "self_mse": 229.02639770507812,
+      "best_mse": 229.02639770507812,
       "ok": true
     },
     {
       "file": "level_48_f0.png",
       "label": 48,
       "matched": 48,
-      "self_mse": 125.06332397460938,
-      "best_mse": 125.06332397460938,
+      "self_mse": 204.82383728027344,
+      "best_mse": 204.82383728027344,
       "ok": true
     },
     {
       "file": "level_49_f0.png",
       "label": 49,
       "matched": 49,
-      "self_mse": 125.61457061767578,
-      "best_mse": 125.61457061767578,
+      "self_mse": 162.35980224609375,
+      "best_mse": 162.35980224609375,
       "ok": true
     },
     {
       "file": "level_50_f0.png",
       "label": 50,
       "matched": 50,
-      "self_mse": 78.54890441894531,
-      "best_mse": 78.54890441894531,
+      "self_mse": 91.14794158935547,
+      "best_mse": 91.14794158935547,
       "ok": true
     },
     {
       "file": "level_51_f0.png",
       "label": 51,
       "matched": 51,
-      "self_mse": 62.93666458129883,
-      "best_mse": 62.93666458129883,
+      "self_mse": 236.69729614257812,
+      "best_mse": 236.69729614257812,
       "ok": true
     },
     {
       "file": "level_52_f0.png",
       "label": 52,
       "matched": 52,
-      "self_mse": 63.00800323486328,
-      "best_mse": 63.00800323486328,
+      "self_mse": 79.70165252685547,
+      "best_mse": 79.70165252685547,
       "ok": true
     },
     {
       "file": "level_53_f0.png",
       "label": 53,
       "matched": 53,
-      "self_mse": 3.2712113857269287,
-      "best_mse": 3.2712113857269287,
+      "self_mse": 87.1649169921875,
+      "best_mse": 87.1649169921875,
       "ok": true
     },
     {
       "file": "level_54_f0.png",
       "label": 54,
       "matched": 54,
-      "self_mse": 405.3473205566406,
-      "best_mse": 405.3473205566406,
+      "self_mse": 443.2640075683594,
+      "best_mse": 443.2640075683594,
       "ok": true
     },
     {
       "file": "level_55_f0.png",
       "label": 55,
       "matched": 55,
-      "self_mse": 60.00238800048828,
-      "best_mse": 60.00238800048828,
+      "self_mse": 363.59478759765625,
+      "best_mse": 363.59478759765625,
       "ok": true
     },
     {
       "file": "level_56_f0.png",
       "label": 56,
       "matched": 56,
-      "self_mse": 45.71259689331055,
-      "best_mse": 45.71259689331055,
+      "self_mse": 198.65525817871094,
+      "best_mse": 198.65525817871094,
       "ok": true
     },
     {
       "file": "level_57_f0.png",
       "label": 57,
       "matched": 57,
-      "self_mse": 625.15087890625,
-      "best_mse": 625.15087890625,
+      "self_mse": 763.06103515625,
+      "best_mse": 763.06103515625,
       "ok": true
     },
     {
       "file": "level_58_f0.png",
       "label": 58,
       "matched": 58,
-      "self_mse": 147.70684814453125,
-      "best_mse": 147.70684814453125,
+      "self_mse": 149.67349243164062,
+      "best_mse": 149.67349243164062,
       "ok": true
     },
     {
       "file": "level_59_f0.png",
       "label": 59,
       "matched": 59,
-      "self_mse": 676.8269653320312,
-      "best_mse": 676.8269653320312,
+      "self_mse": 690.7467651367188,
+      "best_mse": 690.7467651367188,
       "ok": true
     },
     {
       "file": "level_60_f0.png",
       "label": 60,
       "matched": 60,
-      "self_mse": 344.6661071777344,
-      "best_mse": 344.6661071777344,
+      "self_mse": 368.6977233886719,
+      "best_mse": 368.6977233886719,
       "ok": true
     },
     {
       "file": "level_61_f0.png",
       "label": 61,
       "matched": 61,
-      "self_mse": 32.18000793457031,
-      "best_mse": 32.18000793457031,
+      "self_mse": 38.200199127197266,
+      "best_mse": 38.200199127197266,
       "ok": true
     },
     {
       "file": "level_62_f0.png",
       "label": 62,
       "matched": 62,
-      "self_mse": 54.20843505859375,
-      "best_mse": 54.20843505859375,
+      "self_mse": 332.5467224121094,
+      "best_mse": 332.5467224121094,
       "ok": true
     },
     {
       "file": "level_63_f0.png",
       "label": 63,
       "matched": 63,
-      "self_mse": 2.988100290298462,
-      "best_mse": 2.988100290298462,
+      "self_mse": 10.29858112335205,
+      "best_mse": 10.29858112335205,
       "ok": true
     },
     {
       "file": "level_64_f0.png",
       "label": 64,
       "matched": 64,
-      "self_mse": 74.99263000488281,
-      "best_mse": 74.99263000488281,
+      "self_mse": 118.0187759399414,
+      "best_mse": 118.0187759399414,
       "ok": true
     },
     {
       "file": "level_65_f0.png",
       "label": 65,
       "matched": 65,
-      "self_mse": 173.5217742919922,
-      "best_mse": 173.5217742919922,
+      "self_mse": 173.8558807373047,
+      "best_mse": 173.8558807373047,
       "ok": true
     },
     {
       "file": "level_66_f0.png",
       "label": 66,
       "matched": 66,
-      "self_mse": 188.9495086669922,
-      "best_mse": 188.9495086669922,
+      "self_mse": 204.36512756347656,
+      "best_mse": 204.36512756347656,
       "ok": true
     },
     {
       "file": "level_67_f0.png",
       "label": 67,
       "matched": 67,
-      "self_mse": 89.73094940185547,
-      "best_mse": 89.73094940185547,
+      "self_mse": 183.7952117919922,
+      "best_mse": 183.7952117919922,
       "ok": true
     },
     {
       "file": "level_68_f0.png",
       "label": 68,
       "matched": 68,
-      "self_mse": 142.88853454589844,
-      "best_mse": 142.88853454589844,
+      "self_mse": 219.2823486328125,
+      "best_mse": 219.2823486328125,
       "ok": true
     },
     {
       "file": "level_69_f0.png",
       "label": 69,
       "matched": 69,
-      "self_mse": 123.54469299316406,
-      "best_mse": 123.54469299316406,
+      "self_mse": 193.83047485351562,
+      "best_mse": 193.83047485351562,
       "ok": true
     },
     {
       "file": "level_70_f0.png",
       "label": 70,
       "matched": 70,
-      "self_mse": 1108.5400390625,
-      "best_mse": 1108.5400390625,
+      "self_mse": 1145.7054443359375,
+      "best_mse": 1145.7054443359375,
       "ok": true
     },
     {
       "file": "level_71_f0.png",
       "label": 71,
       "matched": 71,
-      "self_mse": 123.62254333496094,
-      "best_mse": 123.62254333496094,
+      "self_mse": 189.16586303710938,
+      "best_mse": 189.16586303710938,
       "ok": true
     },
     {
       "file": "level_72_f0.png",
       "label": 72,
       "matched": 72,
-      "self_mse": 218.8171844482422,
-      "best_mse": 218.8171844482422,
+      "self_mse": 293.9287414550781,
+      "best_mse": 293.9287414550781,
       "ok": true
     },
     {
       "file": "level_73_f0.png",
       "label": 73,
       "matched": 73,
-      "self_mse": 39.809234619140625,
-      "best_mse": 39.809234619140625,
+      "self_mse": 70.44930267333984,
+      "best_mse": 70.44930267333984,
       "ok": true
     },
     {
       "file": "level_74_f0.png",
       "label": 74,
       "matched": 74,
-      "self_mse": 790.0054321289062,
-      "best_mse": 790.0054321289062,
+      "self_mse": 817.0050659179688,
+      "best_mse": 817.0050659179688,
       "ok": true
     },
     {
       "file": "level_75_f0.png",
       "label": 75,
       "matched": 75,
-      "self_mse": 394.24658203125,
-      "best_mse": 394.24658203125,
+      "self_mse": 405.5440673828125,
+      "best_mse": 405.5440673828125,
       "ok": true
     },
     {
       "file": "level_76_f0.png",
       "label": 76,
       "matched": 76,
-      "self_mse": 621.4810180664062,
-      "best_mse": 621.4810180664062,
+      "self_mse": 707.3889770507812,
+      "best_mse": 707.3889770507812,
       "ok": true
     },
     {
       "file": "level_77_f0.png",
       "label": 77,
       "matched": 77,
-      "self_mse": 37.68245315551758,
-      "best_mse": 37.68245315551758,
+      "self_mse": 137.26524353027344,
+      "best_mse": 137.26524353027344,
       "ok": true
     },
     {
       "file": "level_78_f0.png",
       "label": 78,
       "matched": 78,
-      "self_mse": 147.96385192871094,
-      "best_mse": 147.96385192871094,
+      "self_mse": 210.54994201660156,
+      "best_mse": 210.54994201660156,
       "ok": true
     },
     {
       "file": "level_79_f0.png",
       "label": 79,
       "matched": 79,
-      "self_mse": 110.35186767578125,
-      "best_mse": 110.35186767578125,
+      "self_mse": 272.50390625,
+      "best_mse": 272.50390625,
       "ok": true
     },
     {
       "file": "level_80_f0.png",
       "label": 80,
       "matched": 80,
-      "self_mse": 130.42381286621094,
-      "best_mse": 130.42381286621094,
+      "self_mse": 155.30831909179688,
+      "best_mse": 155.30831909179688,
       "ok": true
     },
     {
       "file": "level_81_f0.png",
       "label": 81,
       "matched": 81,
-      "self_mse": 40.893062591552734,
-      "best_mse": 40.893062591552734,
+      "self_mse": 269.0058898925781,
+      "best_mse": 269.0058898925781,
       "ok": true
     },
     {
       "file": "level_82_f0.png",
       "label": 82,
       "matched": 82,
-      "self_mse": 63.92353057861328,
-      "best_mse": 63.92353057861328,
+      "self_mse": 138.90859985351562,
+      "best_mse": 138.90859985351562,
       "ok": true
     },
     {
       "file": "level_83_f0.png",
       "label": 83,
       "matched": 83,
-      "self_mse": 74.40772247314453,
-      "best_mse": 74.40772247314453,
+      "self_mse": 72.71721649169922,
+      "best_mse": 72.71721649169922,
       "ok": true
     },
     {
       "file": "level_84_f0.png",
       "label": 84,
       "matched": 84,
-      "self_mse": 199.9442596435547,
-      "best_mse": 199.9442596435547,
+      "self_mse": 247.76287841796875,
+      "best_mse": 247.76287841796875,
       "ok": true
     },
     {
       "file": "level_85_f0.png",
       "label": 85,
       "matched": 85,
-      "self_mse": 123.12513732910156,
-      "best_mse": 123.12513732910156,
+      "self_mse": 216.59698486328125,
+      "best_mse": 216.59698486328125,
       "ok": true
     },
     {
       "file": "level_86_f0.png",
       "label": 86,
       "matched": 86,
-      "self_mse": 29.989356994628906,
-      "best_mse": 29.989356994628906,
+      "self_mse": 24.542312622070312,
+      "best_mse": 24.542312622070312,
       "ok": true
     },
     {
       "file": "level_87_f0.png",
       "label": 87,
       "matched": 87,
-      "self_mse": 7.745874404907227,
-      "best_mse": 7.745874404907227,
+      "self_mse": 319.35247802734375,
+      "best_mse": 319.35247802734375,
       "ok": true
     },
     {
       "file": "level_88_f0.png",
       "label": 88,
       "matched": 88,
-      "self_mse": 283.90875244140625,
-      "best_mse": 283.90875244140625,
+      "self_mse": 307.1300964355469,
+      "best_mse": 307.1300964355469,
       "ok": true
     },
     {
       "file": "level_89_f0.png",
       "label": 89,
       "matched": 89,
-      "self_mse": 117.79314422607422,
-      "best_mse": 117.79314422607422,
+      "self_mse": 153.6414337158203,
+      "best_mse": 153.6414337158203,
       "ok": true
     },
     {
       "file": "level_90_f0.png",
       "label": 90,
       "matched": 90,
-      "self_mse": 166.22996520996094,
-      "best_mse": 166.22996520996094,
+      "self_mse": 429.7898254394531,
+      "best_mse": 429.7898254394531,
       "ok": true
     },
     {
       "file": "level_91_f0.png",
       "label": 91,
       "matched": 91,
-      "self_mse": 474.1496887207031,
-      "best_mse": 474.1496887207031,
+      "self_mse": 557.455322265625,
+      "best_mse": 557.455322265625,
       "ok": true
     },
     {
@@ -751,56 +751,56 @@
       "file": "level_93_f0.png",
       "label": 93,
       "matched": 93,
-      "self_mse": 199.3670654296875,
-      "best_mse": 199.3670654296875,
+      "self_mse": 243.81190490722656,
+      "best_mse": 243.81190490722656,
       "ok": true
     },
     {
       "file": "level_94_f0.png",
       "label": 94,
       "matched": 94,
-      "self_mse": 83.86824035644531,
-      "best_mse": 83.86824035644531,
+      "self_mse": 384.2627258300781,
+      "best_mse": 384.2627258300781,
       "ok": true
     },
     {
       "file": "level_95_f0.png",
       "label": 95,
       "matched": 95,
-      "self_mse": 124.57508850097656,
-      "best_mse": 124.57508850097656,
+      "self_mse": 160.3017578125,
+      "best_mse": 160.3017578125,
       "ok": true
     },
     {
       "file": "level_96_f0.png",
       "label": 96,
       "matched": 96,
-      "self_mse": 55.409915924072266,
-      "best_mse": 55.409915924072266,
+      "self_mse": 65.84219360351562,
+      "best_mse": 65.84219360351562,
       "ok": true
     },
     {
       "file": "level_97_f0.png",
       "label": 97,
       "matched": 97,
-      "self_mse": 260.7312316894531,
-      "best_mse": 260.7312316894531,
+      "self_mse": 406.2565002441406,
+      "best_mse": 406.2565002441406,
       "ok": true
     },
     {
       "file": "level_98_f0.png",
       "label": 98,
       "matched": 98,
-      "self_mse": 616.6947631835938,
-      "best_mse": 616.6947631835938,
+      "self_mse": 597.610595703125,
+      "best_mse": 597.610595703125,
       "ok": true
     },
     {
       "file": "level_99_f0.png",
       "label": 99,
       "matched": 99,
-      "self_mse": 265.21429443359375,
-      "best_mse": 265.21429443359375,
+      "self_mse": 386.3518371582031,
+      "best_mse": 386.3518371582031,
       "ok": true
     }
   ]

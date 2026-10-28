@@ -83,6 +83,10 @@ def export_play_frames(
 
     index: dict = {
         "source": "dosbox_native_composite",
+        "render_rule": (
+            "base[tile_id] + overlay[(tile_id, mask8)] for solid terrain; "
+            "mask8 = N,E,S,W + diagonal solid neighbours (decor tiles use base only)."
+        ),
         "map_layout": layout.to_dict(),
         "tile_size": TILE_PX,
         "native_resolution": list(geom.native_size),
@@ -124,10 +128,10 @@ def export_play_frames(
             {
                 "map_layout": layout.to_dict(),
                 "base_tile_count": len(atlas.base),
-                "variant_count": len(atlas.variants),
+                "overlay_count": len(atlas.overlays),
                 "flagged_tile_ids": atlas.flagged_ids,
-                "neighbour_variant_rule": (
-                    "8-bit solid-neighbour mask (N,E,S,W + diagonals); per (tile_id, mask) median RGB."
+                "edge_overlay_rule": (
+                    "8-bit solid-neighbour mask; render = base[tile_id] + overlay[(tile_id, mask8)]."
                 ),
             },
             indent=2,

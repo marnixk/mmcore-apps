@@ -8,7 +8,7 @@
     "transpose": false
   },
   "base_tile_count": 100,
-  "variant_count": 3811,
+  "overlay_count": 2155,
   "flagged_tile_ids": [
     6,
     7,
@@ -18,5 +18,5 @@
     33,
     75
   ],
-  "neighbour_variant_rule": "4-neighbour solid mask (N,E,S,W); per (tile_id, mask) median RGB residual over base."
+  "edge_overlay_rule": "4-bit cardinal solid-neighbour mask (N,E,S,W); render = base[tile_id] + overlay[(tile_id, mask)]."
 }

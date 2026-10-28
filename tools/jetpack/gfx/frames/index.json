@@ -1,5 +1,6 @@
 {
   "source": "dosbox_native_composite",
+  "render_rule": "base[tile_id] + overlay[(tile_id, mask4)] for solid terrain; mask8 = N,E,S,W + diagonal solid neighbours (decor tiles use base only).",
   "map_layout": {
     "name": "off00|row_major",
     "byte_offset": 0,

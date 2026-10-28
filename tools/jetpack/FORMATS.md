@@ -110,11 +110,11 @@ After decompress, only the first `24×24 = 576` bytes are the visible tile; rema
 
 **Capture verify:** `scripts/verify_capture_labels_fingerprint.py` — each `level_XX_f0.png` must best-match JETLEV level **XX** via composite render MSE (expect **100/100**).
 
-**Atlas:** `jetpack/tile_composite.py` — per tile ID **base** (median RGB) + full RGB **variants** keyed by **(tile_id, 8-bit solid-neighbour mask)**; per-level **witness cells** from temporally median playfields for exact rebuild; `reference/composite_atlas.pkl`, `gfx/frames/index.json` (`source: dosbox_native_composite`). Export `scripts/extract_from_play.py`.
+**Atlas:** `jetpack/tile_composite.py` — per tile ID **base** (median RGB) + **edge overlay** residuals keyed by **(tile_id, 8-bit solid-neighbour mask)**; decor/animated tiles use base only. Portable data: `gfx/frames/*.png` + `reference/composite_atlas.pkl` (overlays). Export `scripts/extract_from_play.py`.
 
 **Sprites:** `jetpack/sprites_diff.py` diffs `f1`/`f2` against static rebuild (player + enemies).
 
-**Validation:** `scripts/validate_art.py` — **coverage** on all non-backdrop cells; MSE on static cells (f0–f2 temporal mask) with rebuild using witness cells (`level_index`); `reference/validate_stats.json`, `validate_level*_side_by_side.png`.
+**Validation:** `scripts/validate_art.py` — **global-only** rebuild (no per-level data): solid terrain with agreed overlays (bucket variance ≤ 50); MSE on static eval cells; `reference/validate_stats.json`, `validate_level{00,05,37,99}_side_by_side.png`. Full captures gitignored under `reference/native/`; fixtures in `reference/fixtures/native/`.
 
 **RAM / DAC dump:** not automated; DAT decode still unverified.
 

@@ -31,8 +31,6 @@ ANIMATED_TILE_IDS = frozenset(
         0x46,
         0x47,
         0x48,
-        70,
-        73,
         0x72,
         0x75,
     }

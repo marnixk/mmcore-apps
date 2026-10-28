@@ -7,45 +7,56 @@
     "flip_row": false,
     "transpose": false
   },
-  "max_mse": 2.0,
-  "min_coverage_pct": 99.0,
+  "validation": "global_portable_atlas",
+  "max_mse": 35.0,
+  "min_coverage_pct": 85.0,
   "levels": {
     "level_00": {
-      "content_cells": 147,
-      "eval_cells": 134,
-      "coverage_pct": 100.0,
-      "atlas_has_base_pct": 100.0,
-      "mse": 0.0,
+      "structural_cells": 68,
+      "eval_cells": 66,
+      "coverage_pct": 98.52941176470588,
+      "mse": 1.2929292917251587,
       "pass": true
     },
     "level_05": {
-      "content_cells": 75,
-      "eval_cells": 75,
+      "structural_cells": 0,
+      "eval_cells": 0,
       "coverage_pct": 100.0,
-      "atlas_has_base_pct": 100.0,
-      "mse": 0.0,
+      "mse": null,
       "pass": true
     },
     "level_37": {
-      "content_cells": 223,
-      "eval_cells": 183,
-      "coverage_pct": 100.0,
-      "atlas_has_base_pct": 100.0,
-      "mse": 0.0,
+      "structural_cells": 123,
+      "eval_cells": 106,
+      "coverage_pct": 86.1788617886179,
+      "mse": 3.7410900592803955,
       "pass": true
     },
     "level_99": {
-      "content_cells": 408,
-      "eval_cells": 385,
-      "coverage_pct": 100.0,
-      "atlas_has_base_pct": 100.0,
-      "mse": 0.0,
-      "pass": true
+      "structural_cells": 52,
+      "eval_cells": 20,
+      "coverage_pct": 42.30769230769231,
+      "mse": 3.2083332538604736,
+      "pass": false
     }
   },
-  "mean_over_checked": {
-    "coverage_pct": 100.0,
-    "mse": 0.0,
-    "level_count": 4
+  "worst_10_mse": [
+    {
+      "level": 37,
+      "mse": 3.7410900592803955
+    },
+    {
+      "level": 99,
+      "mse": 3.2083332538604736
+    },
+    {
+      "level": 0,
+      "mse": 1.2929292917251587
+    }
+  ],
+  "mean_over_levels_with_eval": {
+    "coverage_pct": 81.75399146525403,
+    "mse": 2.747450868288676,
+    "level_count": 3
   }
 }
