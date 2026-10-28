@@ -48,6 +48,12 @@ apply_patch() {
     git -C "$SRC" apply "$p"
     return 0
   fi
+  # Upstream may already contain the hunk (the harness poll landed in
+  # platform_sdl.c). Treat that as applied so a newer mmcore still builds.
+  if grep -q "sdl_harness_poll" "$SRC/native/platform_sdl.c" 2>/dev/null; then
+    log "Already upstream $(basename "$p")"
+    return 0
+  fi
   echo "patch does not apply cleanly: $p" >&2
   exit 1
 }

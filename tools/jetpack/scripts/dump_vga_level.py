@@ -115,6 +115,16 @@ def main() -> int:
         default="",
         help="Capture aid: zero these enemy slot indexes in slot 0 (comma separated)",
     )
+    ap.add_argument(
+        "--player-at",
+        default="",
+        help="Capture aid: move slot-0 player to x,y (1-based)",
+    )
+    ap.add_argument(
+        "--paint",
+        default="",
+        help="Capture aid: set tiles x,y,id separated by semicolons (1-based)",
+    )
     args = ap.parse_args()
     if not COM.is_file():
         subprocess.check_call(
@@ -143,6 +153,17 @@ def main() -> int:
             dat[base : base + 3] = b"\x00\x00\x00"
         if args.clear_enemies or args.clear_enemy_slots:
             (RUNTIME / "JETLEV.DAT").write_bytes(dat)
+    if args.player_at or args.paint:
+        dat = bytearray((RUNTIME / "JETLEV.DAT").read_bytes())
+        rec = 2
+        if args.player_at:
+            px, py = (int(p) for p in args.player_at.split(","))
+            dat[rec + 0x1A2] = px
+            dat[rec + 0x1A3] = py
+        for part in [p for p in args.paint.split(";") if p.strip()]:
+            x, y, tid = (int(v) for v in part.split(","))
+            dat[rec + (y - 1) * 26 + (x - 1)] = tid
+        (RUNTIME / "JETLEV.DAT").write_bytes(dat)
     shutil.copy(COM, RUNTIME / "DUMP.COM")
     for stale in ("GO.DMP", "VGA.BIN", "SEQ.GO", "MEM.BIN"):
         p = RUNTIME / stale
