@@ -1,0 +1,44 @@
+=== retry boot 20 ===
+Failed to enter gameplay (saved /workspace/tools/jetpack/reference/_enter_gameplay_failed.png)
+fail 20
+=== retry boot 30 ===
+Failed to enter gameplay (saved /workspace/tools/jetpack/reference/_enter_gameplay_failed.png)
+fail 30
+=== retry boot 40 ===
+Failed to enter gameplay (saved /workspace/tools/jetpack/reference/_enter_gameplay_failed.png)
+fail 40
+=== retry boot 50 ===
+Failed to enter gameplay (saved /workspace/tools/jetpack/reference/_enter_gameplay_failed.png)
+fail 50
+=== retry boot 60 ===
+Failed to enter gameplay (saved /workspace/tools/jetpack/reference/_enter_gameplay_failed.png)
+fail 60
+=== retry boot 80 ===
+X Error of failed request:  BadWindow (invalid Window parameter)
+  Major opcode of failed request:  3 (X_GetWindowAttributes)
+  Resource id in failed request:  0x80000b
+  Serial number of failed request:  18
+  Current serial number in output stream:  19
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+  File "/usr/lib/python3.12/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['xdotool', 'getwindowgeometry', '--shell', '8388619']' returned non-zero exit status 1.
+Traceback (most recent call last):
+  File "/workspace/tools/jetpack/scripts/dosbox_capture.py", line 238, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/workspace/tools/jetpack/scripts/dosbox_capture.py", line 196, in main
+    if not enter_first_level(env, args.display, wid):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/tools/jetpack/scripts/dosbox_capture.py", line 70, in enter_first_level
+    grab_window(display, wid, probe)
+  File "/workspace/tools/jetpack/scripts/dosbox_capture.py", line 29, in grab_window
+    subprocess.run(
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['python3', '-c', "\nimport subprocess\nfrom mss import MSS\nfrom PIL import Image\nWID='8388619'\ngeo=subprocess.check_output(['xdotool','getwindowgeometry','--shell',WID],env={'DISPLAY':':199'}).decode()\nvals={k:int(v) for k,v in (line.split('=',1) for line in geo.strip().split(chr(10)) if '=' in line)}\nwith MSS(display=':199') as sct:\n    shot=sct.grab({'left':vals['X'],'top':vals['Y'],'width':vals['WIDTH'],'height':vals['HEIGHT']})\n    im=Image.frombytes('RGB', shot.size, shot.bgra, 'raw', 'BGRX')\n    im.save('/tmp/tmp178rlvtv.png')\n"]' returned non-zero exit status 1.
+fail 80

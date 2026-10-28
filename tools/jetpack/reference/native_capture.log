@@ -1,0 +1,32 @@
+level 20: not in gameplay, skip
+level 21: not in gameplay, skip
+level 22: not in gameplay, skip
+level 23: not in gameplay, skip
+level 24: not in gameplay, skip
+level 25: not in gameplay, skip
+level 26: not in gameplay, skip
+level 27: not in gameplay, skip
+level 28: not in gameplay, skip
+level 29: not in gameplay, skip
+level 30: not in gameplay, skip
+level 31: not in gameplay, skip
+level 00 captured (3 frames)
+level 01 captured (3 frames)
+level 02 captured (3 frames)
+level 03 captured (3 frames)
+level 04 captured (3 frames)
+level 05 captured (3 frames)
+level 06 captured (3 frames)
+level 07 captured (3 frames)
+level 08 captured (3 frames)
+level 09 captured (3 frames)
+Traceback (most recent call last):
+  File "/workspace/tools/jetpack/scripts/dosbox_capture.py", line 230, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/workspace/tools/jetpack/scripts/dosbox_capture.py", line 198, in main
+    wid = restart_session(env, args.display, lv)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/tools/jetpack/scripts/dosbox_capture.py", line 120, in restart_session
+    raise RuntimeError(f"could not enter gameplay at level {start_level}")
+RuntimeError: could not enter gameplay at level 10

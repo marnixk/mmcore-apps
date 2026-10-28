@@ -55,7 +55,12 @@ if [ -n "${MOVES:-}" ]; then
   cp "$MOVES"/moves_*.txt "$drv/g/" 2>/dev/null || true
 fi
 
-"$PY" "${HOOK:-$TDIR/hook.py}" "$drv/g" "${TH:-}" || exit 1
+# The drive copy is always folder "g". Hooks are named after the game, so
+# point hook.py at a symlink whose basename is the game.
+rm -rf "$drv/.hookname"
+mkdir -p "$drv/.hookname"
+ln -sfn "$drv/g" "$drv/.hookname/$gamebase"
+"$PY" "${HOOK:-$TDIR/hook.py}" "$drv/.hookname/$gamebase" "${TH:-}" || exit 1
 
 croot="${CROOT:-$TDIR/croot/$name}"
 if [ -z "${CROOT:-}" ]; then

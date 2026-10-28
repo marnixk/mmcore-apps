@@ -1,0 +1,865 @@
+{
+  "map_layout": {
+    "name": "off00|row_major",
+    "byte_offset": 0,
+    "order": "row_major",
+    "flip_col": false,
+    "flip_row": false,
+    "transpose": false
+  },
+  "validation": "vga_index_sheet_dac",
+  "dac": "reference/vga_dump/dac6.bin",
+  "sheet": "reference/vga_dump/sheet_12x12.u8",
+  "note": "DAC and sheet are fixed (not fit per level), so holding a level out does not change its MSE. MSE is static terrain only: backdrop, gems, enemies, the player cell, the door sprite, and animated tube/teleport ids are excluded. Exact index percent is the full playfield, including those overlays.",
+  "max_mse": 12.0,
+  "min_dat_coverage_pct": 99.0,
+  "levels": {
+    "level_00": {
+      "eval_cells": 121,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": 98.69123931623932,
+      "pass": true
+    },
+    "level_01": {
+      "eval_cells": 228,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_02": {
+      "eval_cells": 70,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_03": {
+      "eval_cells": 0,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": null,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_04": {
+      "eval_cells": 116,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_05": {
+      "eval_cells": 46,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": 97.52938034188034,
+      "pass": true
+    },
+    "level_06": {
+      "eval_cells": 191,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_07": {
+      "eval_cells": 19,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": 98.39075854700855,
+      "pass": true
+    },
+    "level_08": {
+      "eval_cells": 0,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": null,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_09": {
+      "eval_cells": 114,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_10": {
+      "eval_cells": 83,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_11": {
+      "eval_cells": 107,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_12": {
+      "eval_cells": 148,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_13": {
+      "eval_cells": 95,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_14": {
+      "eval_cells": 150,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_15": {
+      "eval_cells": 4,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_16": {
+      "eval_cells": 16,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_17": {
+      "eval_cells": 13,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_18": {
+      "eval_cells": 23,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_19": {
+      "eval_cells": 166,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_20": {
+      "eval_cells": 119,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_21": {
+      "eval_cells": 72,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_22": {
+      "eval_cells": 82,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_23": {
+      "eval_cells": 77,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_24": {
+      "eval_cells": 112,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_25": {
+      "eval_cells": 175,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_26": {
+      "eval_cells": 46,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_27": {
+      "eval_cells": 92,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_28": {
+      "eval_cells": 84,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_29": {
+      "eval_cells": 153,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_30": {
+      "eval_cells": 48,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_31": {
+      "eval_cells": 62,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_32": {
+      "eval_cells": 106,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_33": {
+      "eval_cells": 89,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_34": {
+      "eval_cells": 86,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_35": {
+      "eval_cells": 54,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_36": {
+      "eval_cells": 188,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_37": {
+      "eval_cells": 155,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": 97.04694177350427,
+      "pass": true
+    },
+    "level_38": {
+      "eval_cells": 123,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_39": {
+      "eval_cells": 133,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_40": {
+      "eval_cells": 69,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_41": {
+      "eval_cells": 164,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_42": {
+      "eval_cells": 25,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_43": {
+      "eval_cells": 118,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_44": {
+      "eval_cells": 263,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_45": {
+      "eval_cells": 44,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_46": {
+      "eval_cells": 12,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_47": {
+      "eval_cells": 136,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_48": {
+      "eval_cells": 152,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_49": {
+      "eval_cells": 163,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_50": {
+      "eval_cells": 123,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_51": {
+      "eval_cells": 3,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_52": {
+      "eval_cells": 141,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_53": {
+      "eval_cells": 23,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_54": {
+      "eval_cells": 88,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_55": {
+      "eval_cells": 37,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_56": {
+      "eval_cells": 31,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_57": {
+      "eval_cells": 39,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_58": {
+      "eval_cells": 131,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_59": {
+      "eval_cells": 30,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": 97.54607371794873,
+      "pass": true
+    },
+    "level_60": {
+      "eval_cells": 192,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_61": {
+      "eval_cells": 130,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_62": {
+      "eval_cells": 27,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_63": {
+      "eval_cells": 210,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_64": {
+      "eval_cells": 224,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_65": {
+      "eval_cells": 15,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_66": {
+      "eval_cells": 108,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_67": {
+      "eval_cells": 63,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_68": {
+      "eval_cells": 121,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_69": {
+      "eval_cells": 216,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_70": {
+      "eval_cells": 126,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_71": {
+      "eval_cells": 191,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_72": {
+      "eval_cells": 198,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_73": {
+      "eval_cells": 158,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_74": {
+      "eval_cells": 147,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_75": {
+      "eval_cells": 113,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_76": {
+      "eval_cells": 193,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_77": {
+      "eval_cells": 100,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_78": {
+      "eval_cells": 150,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_79": {
+      "eval_cells": 70,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_80": {
+      "eval_cells": 167,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_81": {
+      "eval_cells": 30,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_82": {
+      "eval_cells": 228,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_83": {
+      "eval_cells": 98,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_84": {
+      "eval_cells": 157,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_85": {
+      "eval_cells": 119,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_86": {
+      "eval_cells": 66,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_87": {
+      "eval_cells": 196,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_88": {
+      "eval_cells": 98,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_89": {
+      "eval_cells": 302,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_90": {
+      "eval_cells": 41,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_91": {
+      "eval_cells": 171,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_92": {
+      "eval_cells": 0,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": null,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_93": {
+      "eval_cells": 150,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_94": {
+      "eval_cells": 16,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_95": {
+      "eval_cells": 14,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_96": {
+      "eval_cells": 109,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_97": {
+      "eval_cells": 105,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_98": {
+      "eval_cells": 85,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": null,
+      "pass": true
+    },
+    "level_99": {
+      "eval_cells": 272,
+      "dat_coverage_pct": 100.0,
+      "anim_phase": 0,
+      "mse": 0.0,
+      "exact_index_pct": 97.4208733974359,
+      "pass": true
+    }
+  },
+  "worst_10_mse": [
+    {
+      "level": 0,
+      "mse": 0.0
+    },
+    {
+      "level": 1,
+      "mse": 0.0
+    },
+    {
+      "level": 2,
+      "mse": 0.0
+    },
+    {
+      "level": 4,
+      "mse": 0.0
+    },
+    {
+      "level": 5,
+      "mse": 0.0
+    },
+    {
+      "level": 6,
+      "mse": 0.0
+    },
+    {
+      "level": 7,
+      "mse": 0.0
+    },
+    {
+      "level": 9,
+      "mse": 0.0
+    },
+    {
+      "level": 10,
+      "mse": 0.0
+    },
+    {
+      "level": 11,
+      "mse": 0.0
+    }
+  ],
+  "mean_over_levels": {
+    "dat_coverage_pct": 100.0,
+    "mse": 0.0,
+    "level_count": 97
+  }
+}

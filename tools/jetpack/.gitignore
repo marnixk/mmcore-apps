@@ -1,0 +1,9 @@
+_download/
+_capture_runtime/
+reference/native/
+gfx/frames/context_variants/
+reference/slot0_capture.log
+out/
+__pycache__/
+*.pyc
+.pillow_cache/

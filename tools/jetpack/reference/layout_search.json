@@ -1,0 +1,83 @@
+{
+  "level_00_top5_within_id_variance": [
+    {
+      "name": "off26|row_major",
+      "mean_within_id_var": 418.07049837979406,
+      "tile_ids": 11,
+      "samples": 168
+    },
+    {
+      "name": "off00|row_major",
+      "mean_within_id_var": 987.254281616211,
+      "tile_ids": 10,
+      "samples": 160
+    },
+    {
+      "name": "off32|row_major|T|fr",
+      "mean_within_id_var": 1384.0971821871672,
+      "tile_ids": 11,
+      "samples": 106
+    },
+    {
+      "name": "off18|row_major|T|fr",
+      "mean_within_id_var": 1475.9378067652385,
+      "tile_ids": 12,
+      "samples": 122
+    },
+    {
+      "name": "off16|row_major|T",
+      "mean_within_id_var": 1533.1226507822673,
+      "tile_ids": 12,
+      "samples": 115
+    }
+  ],
+  "locked_layout": {
+    "name": "off00|row_major",
+    "byte_offset": 0,
+    "order": "row_major",
+    "flip_col": false,
+    "flip_row": false,
+    "transpose": false
+  },
+  "lock_rationale": "416-byte map at record offset 0 (door at 0x1A0=416). Top within-ID score off26|row_major shifts the grid and misaligns the level record; off00|row_major matches structure and yields ~0 static MSE with 8-neighbour context atlas.",
+  "locked_within_id_variance_on_levels": {
+    "level_00": {
+      "mean_within_id_var": 987.254281616211,
+      "tile_ids": 10,
+      "samples": 160
+    },
+    "level_05": {
+      "mean_within_id_var": 2579.0634521484376,
+      "tile_ids": 5,
+      "samples": 221
+    },
+    "level_37": {
+      "mean_within_id_var": 2850.002598353795,
+      "tile_ids": 14,
+      "samples": 223
+    },
+    "level_99": {
+      "mean_within_id_var": 1960.0846761067708,
+      "tile_ids": 9,
+      "samples": 408
+    }
+  },
+  "locked_context_static_mse_on_levels": {
+    "level_00": {
+      "static_mse": 0.0,
+      "agreed_cells": 92
+    },
+    "level_05": {
+      "static_mse": 0.1260683834552765,
+      "agreed_cells": 13
+    },
+    "level_37": {
+      "static_mse": 0.0,
+      "agreed_cells": 114
+    },
+    "level_99": {
+      "static_mse": 0.19217157363891602,
+      "agreed_cells": 138
+    }
+  }
+}

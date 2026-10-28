@@ -1,0 +1,19 @@
+{
+  "map_layout": {
+    "name": "off00|row_major",
+    "byte_offset": 0,
+    "order": "row_major",
+    "flip_col": false,
+    "flip_row": false,
+    "transpose": false
+  },
+  "base_tile_count": 89,
+  "context_variant_count": 13424,
+  "flagged_tile_ids": [
+    6,
+    8,
+    33,
+    75
+  ],
+  "context_key_rule": "8 neighbour JETLEV tile bytes + centre id (N,E,S,W,NE,NW,SE,SW); -1 outside map."
+}

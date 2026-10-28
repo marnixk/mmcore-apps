@@ -1,0 +1,114 @@
+{
+  "references": [
+    {
+      "reference": "ball.png",
+      "tas_cell": [
+        1,
+        1
+      ],
+      "tile_id": null,
+      "dos_match": "tile 0x56",
+      "match_mask_mse": 3335.4244,
+      "atlas_source": "dosbox_play_capture"
+    },
+    {
+      "reference": "door.png",
+      "tas_cell": [
+        1,
+        0
+      ],
+      "tile_id": null,
+      "dos_match": "tile 0x56",
+      "match_mask_mse": 3444.1806,
+      "atlas_source": "dosbox_play_capture"
+    },
+    {
+      "reference": "emerald_gem.png",
+      "tas_cell": [
+        1,
+        1
+      ],
+      "tile_id": 4,
+      "dos_match": "tile 0x04",
+      "match_mask_mse": 7868.0303,
+      "atlas_source": "dosbox_play_capture"
+    },
+    {
+      "reference": "guy.png",
+      "tas_cell": [
+        1,
+        0
+      ],
+      "tile_id": null,
+      "dos_match": "player_fly_0",
+      "match_mask_mse": 6335.4806,
+      "atlas_source": "dosbox_play_capture"
+    },
+    {
+      "reference": "ladder.png",
+      "tas_cell": [
+        1,
+        1
+      ],
+      "tile_id": 1,
+      "dos_match": "tile 0x01",
+      "match_mask_mse": 8457.3077,
+      "atlas_source": "dosbox_play_capture"
+    },
+    {
+      "reference": "lred.png",
+      "tas_cell": [
+        0,
+        0
+      ],
+      "tile_id": 60,
+      "dos_match": "tile 0x31",
+      "match_mask_mse": 5003.462,
+      "atlas_source": "dosbox_play_capture"
+    },
+    {
+      "reference": "missile.png",
+      "tas_cell": [
+        1,
+        1
+      ],
+      "tile_id": null,
+      "dos_match": "tile 0x0D",
+      "match_mask_mse": 4835.2379,
+      "atlas_source": "dosbox_play_capture"
+    },
+    {
+      "reference": "stunner.png",
+      "tas_cell": [
+        1,
+        1
+      ],
+      "tile_id": 19,
+      "dos_match": "tile 0x0D",
+      "match_mask_mse": 4196.5905,
+      "atlas_source": "dosbox_play_capture"
+    },
+    {
+      "reference": "tank_of_fuel.png",
+      "tas_cell": [
+        1,
+        1
+      ],
+      "tile_id": 16,
+      "dos_match": "tile 0x10",
+      "match_mask_mse": 5476.289,
+      "atlas_source": "dosbox_play_capture"
+    },
+    {
+      "reference": "trackbot.png",
+      "tas_cell": [
+        1,
+        1
+      ],
+      "tile_id": null,
+      "dos_match": "tile 0x02",
+      "match_mask_mse": 5636.8529,
+      "atlas_source": "dosbox_play_capture"
+    }
+  ]
+}

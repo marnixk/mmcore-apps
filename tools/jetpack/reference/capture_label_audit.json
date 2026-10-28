@@ -1,0 +1,707 @@
+{
+  "mislabelled_count": 97,
+  "total": 100,
+  "method": "composite_atlas_render_mse",
+  "entries": [
+    {
+      "file": "level_00_f0.png",
+      "label": 0,
+      "matched_level": 9,
+      "render_mse": 2730.122802734375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_01_f0.png",
+      "label": 1,
+      "matched_level": 9,
+      "render_mse": 2751.32958984375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_02_f0.png",
+      "label": 2,
+      "matched_level": 9,
+      "render_mse": 2752.8564453125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_03_f0.png",
+      "label": 3,
+      "matched_level": 9,
+      "render_mse": 2735.376953125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_04_f0.png",
+      "label": 4,
+      "matched_level": 9,
+      "render_mse": 2733.515380859375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_05_f0.png",
+      "label": 5,
+      "matched_level": 9,
+      "render_mse": 2737.480712890625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_06_f0.png",
+      "label": 6,
+      "matched_level": 9,
+      "render_mse": 2735.232666015625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_07_f0.png",
+      "label": 7,
+      "matched_level": 9,
+      "render_mse": 2733.525390625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_08_f0.png",
+      "label": 8,
+      "matched_level": 9,
+      "render_mse": 2733.2001953125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_09_f0.png",
+      "label": 9,
+      "matched_level": 9,
+      "render_mse": 2723.426513671875,
+      "mislabelled": false
+    },
+    {
+      "file": "level_10_f0.png",
+      "label": 10,
+      "matched_level": 9,
+      "render_mse": 2728.05078125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_11_f0.png",
+      "label": 11,
+      "matched_level": 9,
+      "render_mse": 2753.36669921875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_12_f0.png",
+      "label": 12,
+      "matched_level": 9,
+      "render_mse": 2735.606201171875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_13_f0.png",
+      "label": 13,
+      "matched_level": 9,
+      "render_mse": 2733.7451171875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_14_f0.png",
+      "label": 14,
+      "matched_level": 9,
+      "render_mse": 2714.71728515625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_15_f0.png",
+      "label": 15,
+      "matched_level": 9,
+      "render_mse": 2735.00341796875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_16_f0.png",
+      "label": 16,
+      "matched_level": 9,
+      "render_mse": 2733.142333984375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_17_f0.png",
+      "label": 17,
+      "matched_level": 9,
+      "render_mse": 2723.401123046875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_18_f0.png",
+      "label": 18,
+      "matched_level": 9,
+      "render_mse": 2724.805908203125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_19_f0.png",
+      "label": 19,
+      "matched_level": 9,
+      "render_mse": 2746.849609375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_20_f0.png",
+      "label": 20,
+      "matched_level": 35,
+      "render_mse": 3370.666748046875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_21_f0.png",
+      "label": 21,
+      "matched_level": 35,
+      "render_mse": 3440.756591796875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_22_f0.png",
+      "label": 22,
+      "matched_level": 35,
+      "render_mse": 3424.342529296875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_23_f0.png",
+      "label": 23,
+      "matched_level": 35,
+      "render_mse": 3450.27734375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_24_f0.png",
+      "label": 24,
+      "matched_level": 35,
+      "render_mse": 3435.43310546875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_25_f0.png",
+      "label": 25,
+      "matched_level": 35,
+      "render_mse": 3384.785400390625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_26_f0.png",
+      "label": 26,
+      "matched_level": 35,
+      "render_mse": 3424.33544921875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_27_f0.png",
+      "label": 27,
+      "matched_level": 35,
+      "render_mse": 3476.835205078125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_28_f0.png",
+      "label": 28,
+      "matched_level": 35,
+      "render_mse": 3422.421875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_29_f0.png",
+      "label": 29,
+      "matched_level": 35,
+      "render_mse": 3478.274658203125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_30_f0.png",
+      "label": 30,
+      "matched_level": 67,
+      "render_mse": 4161.9013671875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_31_f0.png",
+      "label": 31,
+      "matched_level": 67,
+      "render_mse": 4161.8759765625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_32_f0.png",
+      "label": 32,
+      "matched_level": 67,
+      "render_mse": 4224.3017578125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_33_f0.png",
+      "label": 33,
+      "matched_level": 67,
+      "render_mse": 4161.8779296875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_34_f0.png",
+      "label": 34,
+      "matched_level": 67,
+      "render_mse": 4161.8759765625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_35_f0.png",
+      "label": 35,
+      "matched_level": 67,
+      "render_mse": 4227.05615234375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_36_f0.png",
+      "label": 36,
+      "matched_level": 67,
+      "render_mse": 4161.9013671875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_37_f0.png",
+      "label": 37,
+      "matched_level": 67,
+      "render_mse": 4161.8828125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_38_f0.png",
+      "label": 38,
+      "matched_level": 67,
+      "render_mse": 4223.6630859375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_39_f0.png",
+      "label": 39,
+      "matched_level": 67,
+      "render_mse": 4161.939453125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_40_f0.png",
+      "label": 40,
+      "matched_level": 51,
+      "render_mse": 3582.988525390625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_41_f0.png",
+      "label": 41,
+      "matched_level": 51,
+      "render_mse": 3497.705078125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_42_f0.png",
+      "label": 42,
+      "matched_level": 51,
+      "render_mse": 3554.1826171875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_43_f0.png",
+      "label": 43,
+      "matched_level": 51,
+      "render_mse": 3575.2099609375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_44_f0.png",
+      "label": 44,
+      "matched_level": 51,
+      "render_mse": 3615.306396484375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_45_f0.png",
+      "label": 45,
+      "matched_level": 51,
+      "render_mse": 3525.499267578125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_46_f0.png",
+      "label": 46,
+      "matched_level": 51,
+      "render_mse": 3567.138671875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_47_f0.png",
+      "label": 47,
+      "matched_level": 51,
+      "render_mse": 3565.168701171875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_48_f0.png",
+      "label": 48,
+      "matched_level": 51,
+      "render_mse": 3603.073486328125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_49_f0.png",
+      "label": 49,
+      "matched_level": 51,
+      "render_mse": 3571.418701171875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_50_f0.png",
+      "label": 50,
+      "matched_level": 58,
+      "render_mse": 3898.31982421875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_51_f0.png",
+      "label": 51,
+      "matched_level": 58,
+      "render_mse": 3922.599853515625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_52_f0.png",
+      "label": 52,
+      "matched_level": 58,
+      "render_mse": 3929.906494140625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_53_f0.png",
+      "label": 53,
+      "matched_level": 58,
+      "render_mse": 3963.870361328125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_54_f0.png",
+      "label": 54,
+      "matched_level": 58,
+      "render_mse": 3946.146240234375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_55_f0.png",
+      "label": 55,
+      "matched_level": 58,
+      "render_mse": 3954.43115234375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_56_f0.png",
+      "label": 56,
+      "matched_level": 58,
+      "render_mse": 3991.775390625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_57_f0.png",
+      "label": 57,
+      "matched_level": 58,
+      "render_mse": 3960.272705078125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_58_f0.png",
+      "label": 58,
+      "matched_level": 58,
+      "render_mse": 3923.742919921875,
+      "mislabelled": false
+    },
+    {
+      "file": "level_59_f0.png",
+      "label": 59,
+      "matched_level": 58,
+      "render_mse": 3965.245361328125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_60_f0.png",
+      "label": 60,
+      "matched_level": 60,
+      "render_mse": 4097.21435546875,
+      "mislabelled": false
+    },
+    {
+      "file": "level_61_f0.png",
+      "label": 61,
+      "matched_level": 60,
+      "render_mse": 4078.94091796875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_62_f0.png",
+      "label": 62,
+      "matched_level": 60,
+      "render_mse": 4042.688232421875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_63_f0.png",
+      "label": 63,
+      "matched_level": 60,
+      "render_mse": 4094.99169921875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_64_f0.png",
+      "label": 64,
+      "matched_level": 60,
+      "render_mse": 4103.6533203125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_65_f0.png",
+      "label": 65,
+      "matched_level": 60,
+      "render_mse": 4100.39208984375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_66_f0.png",
+      "label": 66,
+      "matched_level": 60,
+      "render_mse": 4065.553466796875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_67_f0.png",
+      "label": 67,
+      "matched_level": 60,
+      "render_mse": 4080.3359375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_68_f0.png",
+      "label": 68,
+      "matched_level": 60,
+      "render_mse": 4083.54443359375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_69_f0.png",
+      "label": 69,
+      "matched_level": 60,
+      "render_mse": 4082.137939453125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_70_f0.png",
+      "label": 70,
+      "matched_level": 86,
+      "render_mse": 3720.62744140625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_71_f0.png",
+      "label": 71,
+      "matched_level": 35,
+      "render_mse": 3722.9365234375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_72_f0.png",
+      "label": 72,
+      "matched_level": 35,
+      "render_mse": 3690.74951171875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_73_f0.png",
+      "label": 73,
+      "matched_level": 35,
+      "render_mse": 3643.74853515625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_74_f0.png",
+      "label": 74,
+      "matched_level": 35,
+      "render_mse": 3707.2841796875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_75_f0.png",
+      "label": 75,
+      "matched_level": 86,
+      "render_mse": 3701.219970703125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_76_f0.png",
+      "label": 76,
+      "matched_level": 86,
+      "render_mse": 3712.710205078125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_77_f0.png",
+      "label": 77,
+      "matched_level": 86,
+      "render_mse": 3708.169921875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_78_f0.png",
+      "label": 78,
+      "matched_level": 86,
+      "render_mse": 3744.997802734375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_79_f0.png",
+      "label": 79,
+      "matched_level": 35,
+      "render_mse": 3722.91259765625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_80_f0.png",
+      "label": 80,
+      "matched_level": 51,
+      "render_mse": 3447.0634765625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_81_f0.png",
+      "label": 81,
+      "matched_level": 51,
+      "render_mse": 3387.049560546875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_82_f0.png",
+      "label": 82,
+      "matched_level": 51,
+      "render_mse": 3443.650146484375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_83_f0.png",
+      "label": 83,
+      "matched_level": 51,
+      "render_mse": 3293.53271484375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_84_f0.png",
+      "label": 84,
+      "matched_level": 51,
+      "render_mse": 3297.33935546875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_85_f0.png",
+      "label": 85,
+      "matched_level": 51,
+      "render_mse": 3221.921142578125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_86_f0.png",
+      "label": 86,
+      "matched_level": 51,
+      "render_mse": 3209.989013671875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_87_f0.png",
+      "label": 87,
+      "matched_level": 51,
+      "render_mse": 3300.811279296875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_88_f0.png",
+      "label": 88,
+      "matched_level": 51,
+      "render_mse": 3428.189453125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_89_f0.png",
+      "label": 89,
+      "matched_level": 51,
+      "render_mse": 3302.569091796875,
+      "mislabelled": true
+    },
+    {
+      "file": "level_90_f0.png",
+      "label": 90,
+      "matched_level": 8,
+      "render_mse": 2361.017333984375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_91_f0.png",
+      "label": 91,
+      "matched_level": 35,
+      "render_mse": 2348.351806640625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_92_f0.png",
+      "label": 92,
+      "matched_level": 12,
+      "render_mse": 2485.156494140625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_93_f0.png",
+      "label": 93,
+      "matched_level": 86,
+      "render_mse": 2317.34228515625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_94_f0.png",
+      "label": 94,
+      "matched_level": 8,
+      "render_mse": 2399.70947265625,
+      "mislabelled": true
+    },
+    {
+      "file": "level_95_f0.png",
+      "label": 95,
+      "matched_level": 8,
+      "render_mse": 2271.677001953125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_96_f0.png",
+      "label": 96,
+      "matched_level": 87,
+      "render_mse": 2430.0927734375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_97_f0.png",
+      "label": 97,
+      "matched_level": 86,
+      "render_mse": 2336.974609375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_98_f0.png",
+      "label": 98,
+      "matched_level": 8,
+      "render_mse": 2262.447021484375,
+      "mislabelled": true
+    },
+    {
+      "file": "level_99_f0.png",
+      "label": 99,
+      "matched_level": 87,
+      "render_mse": 2439.48779296875,
+      "mislabelled": true
+    }
+  ]
+}
