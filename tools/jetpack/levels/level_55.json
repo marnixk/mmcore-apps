@@ -1,0 +1,2112 @@
+{
+  "index": 55,
+  "name": "DEIMOS",
+  "tiles": [
+    0,
+    0,
+    0,
+    0,
+    4,
+    64,
+    61,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    64,
+    61,
+    4,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    64,
+    60,
+    60,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    60,
+    60,
+    61,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    63,
+    60,
+    60,
+    61,
+    4,
+    60,
+    60,
+    60,
+    60,
+    60,
+    60,
+    60,
+    8,
+    64,
+    60,
+    60,
+    62,
+    0,
+    0,
+    0,
+    0,
+    0,
+    70,
+    0,
+    0,
+    0,
+    0,
+    0,
+    63,
+    60,
+    60,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    60,
+    60,
+    62,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    70,
+    22,
+    70,
+    0,
+    0,
+    0,
+    0,
+    0,
+    60,
+    0,
+    0,
+    60,
+    0,
+    0,
+    0,
+    60,
+    0,
+    0,
+    60,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    70,
+    22,
+    70,
+    21,
+    70,
+    0,
+    0,
+    0,
+    0,
+    20,
+    0,
+    60,
+    0,
+    60,
+    4,
+    60,
+    72,
+    60,
+    0,
+    20,
+    0,
+    0,
+    0,
+    0,
+    0,
+    70,
+    21,
+    70,
+    22,
+    70,
+    20,
+    70,
+    0,
+    0,
+    0,
+    60,
+    0,
+    0,
+    60,
+    0,
+    6,
+    0,
+    60,
+    0,
+    0,
+    60,
+    0,
+    0,
+    0,
+    0,
+    70,
+    20,
+    70,
+    22,
+    70,
+    21,
+    70,
+    4,
+    0,
+    0,
+    0,
+    0,
+    60,
+    0,
+    0,
+    0,
+    60,
+    0,
+    0,
+    0,
+    60,
+    0,
+    0,
+    0,
+    0,
+    0,
+    4,
+    70,
+    21,
+    70,
+    22,
+    70,
+    20,
+    70,
+    0,
+    0,
+    0,
+    0,
+    20,
+    0,
+    76,
+    0,
+    76,
+    0,
+    76,
+    0,
+    20,
+    0,
+    0,
+    0,
+    0,
+    0,
+    70,
+    20,
+    70,
+    22,
+    70,
+    21,
+    70,
+    4,
+    0,
+    0,
+    0,
+    0,
+    60,
+    0,
+    0,
+    76,
+    32,
+    76,
+    0,
+    0,
+    60,
+    0,
+    0,
+    0,
+    0,
+    0,
+    4,
+    70,
+    21,
+    70,
+    22,
+    70,
+    20,
+    70,
+    0,
+    0,
+    0,
+    0,
+    0,
+    60,
+    21,
+    60,
+    0,
+    60,
+    21,
+    60,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    70,
+    20,
+    70,
+    22,
+    70,
+    21,
+    70,
+    0,
+    0,
+    0,
+    0,
+    64,
+    8,
+    0,
+    60,
+    4,
+    6,
+    4,
+    60,
+    0,
+    4,
+    61,
+    0,
+    0,
+    0,
+    0,
+    0,
+    70,
+    21,
+    70,
+    22,
+    70,
+    0,
+    0,
+    4,
+    4,
+    64,
+    60,
+    62,
+    0,
+    0,
+    60,
+    60,
+    60,
+    0,
+    0,
+    63,
+    60,
+    61,
+    4,
+    4,
+    0,
+    0,
+    0,
+    70,
+    22,
+    70,
+    0,
+    0,
+    0,
+    64,
+    60,
+    60,
+    62,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    16,
+    0,
+    63,
+    60,
+    60,
+    61,
+    0,
+    0,
+    0,
+    0,
+    70,
+    0,
+    0,
+    0,
+    0,
+    63,
+    60,
+    60,
+    0,
+    0,
+    0,
+    0,
+    70,
+    70,
+    70,
+    0,
+    0,
+    0,
+    0,
+    60,
+    60,
+    62,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    4,
+    63,
+    62,
+    0,
+    24,
+    0,
+    70,
+    20,
+    34,
+    20,
+    70,
+    0,
+    24,
+    0,
+    63,
+    62,
+    4,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "door_x": 12,
+  "door_y": 1,
+  "player_x": 8,
+  "player_y": 16,
+  "enemies": [
+    {
+      "type_id": 7,
+      "type_name": "homer",
+      "x": 11,
+      "y": 6
+    },
+    {
+      "type_id": 3,
+      "type_name": "spring",
+      "x": 7,
+      "y": 5
+    },
+    {
+      "type_id": 3,
+      "type_name": "spring",
+      "x": 19,
+      "y": 12
+    }
+  ],
+  "tiles_named": [
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 64,
+      "name": "tile_40"
+    },
+    {
+      "id": 61,
+      "name": "tile_3d"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 64,
+      "name": "tile_40"
+    },
+    {
+      "id": 61,
+      "name": "tile_3d"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 64,
+      "name": "tile_40"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 61,
+      "name": "tile_3d"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 63,
+      "name": "tile_3f"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 61,
+      "name": "tile_3d"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 8,
+      "name": "teleport_green"
+    },
+    {
+      "id": 64,
+      "name": "tile_40"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 62,
+      "name": "tile_3e"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 63,
+      "name": "tile_3f"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 62,
+      "name": "tile_3e"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 22,
+      "name": "tile_16"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 22,
+      "name": "tile_16"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 21,
+      "name": "tile_15"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 20,
+      "name": "tile_14"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 20,
+      "name": "tile_14"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 21,
+      "name": "tile_15"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 22,
+      "name": "tile_16"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 20,
+      "name": "tile_14"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 6,
+      "name": "teleport_yellow"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 20,
+      "name": "tile_14"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 22,
+      "name": "tile_16"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 21,
+      "name": "tile_15"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 21,
+      "name": "tile_15"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 22,
+      "name": "tile_16"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 20,
+      "name": "tile_14"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 20,
+      "name": "tile_14"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 76,
+      "name": "tile_4c"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 76,
+      "name": "tile_4c"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 76,
+      "name": "tile_4c"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 20,
+      "name": "tile_14"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 20,
+      "name": "tile_14"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 22,
+      "name": "tile_16"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 21,
+      "name": "tile_15"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 76,
+      "name": "tile_4c"
+    },
+    {
+      "id": 32,
+      "name": "tile_20"
+    },
+    {
+      "id": 76,
+      "name": "tile_4c"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 21,
+      "name": "tile_15"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 22,
+      "name": "tile_16"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 20,
+      "name": "tile_14"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 21,
+      "name": "tile_15"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 21,
+      "name": "tile_15"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 20,
+      "name": "tile_14"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 22,
+      "name": "tile_16"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 21,
+      "name": "tile_15"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 64,
+      "name": "tile_40"
+    },
+    {
+      "id": 8,
+      "name": "teleport_green"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 6,
+      "name": "teleport_yellow"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 61,
+      "name": "tile_3d"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 21,
+      "name": "tile_15"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 22,
+      "name": "tile_16"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 64,
+      "name": "tile_40"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 62,
+      "name": "tile_3e"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 63,
+      "name": "tile_3f"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 61,
+      "name": "tile_3d"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 22,
+      "name": "tile_16"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 64,
+      "name": "tile_40"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 62,
+      "name": "tile_3e"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 16,
+      "name": "fuel_single"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 63,
+      "name": "tile_3f"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 61,
+      "name": "tile_3d"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 63,
+      "name": "tile_3f"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 60,
+      "name": "backdrop"
+    },
+    {
+      "id": 62,
+      "name": "tile_3e"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 63,
+      "name": "tile_3f"
+    },
+    {
+      "id": 62,
+      "name": "tile_3e"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 24,
+      "name": "tile_18"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 20,
+      "name": "tile_14"
+    },
+    {
+      "id": 34,
+      "name": "tile_22"
+    },
+    {
+      "id": 20,
+      "name": "tile_14"
+    },
+    {
+      "id": 70,
+      "name": "crate"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 24,
+      "name": "tile_18"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 63,
+      "name": "tile_3f"
+    },
+    {
+      "id": 62,
+      "name": "tile_3e"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    }
+  ]
+}

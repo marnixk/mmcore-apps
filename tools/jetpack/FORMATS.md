@@ -1,0 +1,145 @@
+# Jetpack (DOS v1.5) data formats
+
+Sources: `MANUAL.TXT`, [TASVideos GameResources](https://tasvideos.org/GameResources/DOS/Jetpack), [downerj level layout gist](https://gist.github.com/downerj/0bd0664cd407da0eb4d438531176fd37), reverse engineering of `jetpak15.zip`, and `SCLM.DAT` (Adept shared library).
+
+## Campaign levels — `JETLEV.DAT`
+
+| Field | Value |
+|-------|--------|
+| Size | 50 602 bytes |
+| Header | **2 bytes** (`0x86 0xE6` in v1.5 freeware) then level records |
+| Record count | **100** × 506 bytes |
+| Custom levels | Separate `*.JET` files (same 506-byte layout), up to 10 000+ in editor |
+
+### `.JET` / level record (506 bytes, `0x000`–`0x1F9`)
+
+| Offset | Size | Content |
+|--------|------|---------|
+| `0x000`–`0x19F` | 416 | Map tiles, **column-major** 26×16, 1 byte tile ID (`0x00`–`0x77`) |
+| `0x1A0`–`0x1A1` | 2 | Exit door top-left (X `1`–`25`, Y `1`–`15`; door is 2×2 tiles) |
+| `0x1A2`–`0x1A3` | 2 | Player start (X `1`–`26`, Y `1`–`16`) |
+| `0x1A4`–`0x1DF` | 60 | 20 × (enemy_id, x, y); `enemy_id == 0` = empty slot |
+| `0x1E0`–`0x1F9` | 26 | Level title (JetSCII subset of ASCII) |
+
+### Enemy IDs
+
+| ID | Name |
+|----|------|
+| 1 | Trackbot |
+| 2 | Steel ball |
+| 3 | Spring |
+| 4 | Missile |
+| 5 | Spikes (spinner) |
+| 6 | Flitzer |
+| 7 | Homer |
+| 8 | Batbot |
+
+Full tile ID table: see `jetpack/constants.py` and the gist linked above.
+
+## Palette — `JETPAL.DAT`
+
+785 bytes. Repeating records:
+
+- Optional separator `0x55`
+- `index`, `0x01`, `0x00`, then **VGA 6-bit** R/G/B (each ×4 for 8-bit RGB)
+
+Used at runtime for blitted sprites and UI.
+
+## `JETPACK.EXE` (v1.5 freeware) — RE notes
+
+Binary: **141 152** bytes, plain **MZ** (no PKLITE/LZEXE wrapper). **MZ header** = **448** paragraphs (**7168** bytes, `e_cparhdr`); code/data follow at file offset **0x1C00**. Filename strings sit in the tail of the image (e.g. `JETPACK0.DAT` @ file **0x1F125**, `SCLM.DAT` @ **0x1F1BF**, `JETLEV.DAT` @ **0x1F208**).
+
+| File offset | Role |
+|-------------|------|
+| **0x31A7** | DOS **read** wrapper — `int 21h` **`AH=3Fh`** @ **0x31BE** (`CX` = length, `DS:DX` = buffer, `BX` = handle). |
+| **0x4CAD** | Open path used by stdio-style I/O (`int 21h` **`AH=3Dh`** inside **0x5A00** @ **0x5A26** for low-level open). |
+| **0x5891** | `creat` / open helper (`AH=3Ch` @ **0x5864** for create; **`AH=3Dh`** via **0x5A00**). |
+| **0x3B42** | VGA dispatch (sets **`DS=0x40`**, **`int 10h`** for mode **13h** when `AL=40h`; checks **`byte [0x84] == 0x18`** (24) before accepting mode 13h @ **0x3BC1**). |
+| **0x4730** | Tile/sprite **blit** loop — resolves map coordinates via **0x46C4**, fetches pixels through **0x3B42** with **`AH=8` / `AH=9`** (SCLM blitter entry points). |
+| **0x3896** | VRAM **rep mov** to port **0x3DA** (VGA latch), used on the blit path when `word [0x311C] != 0`. |
+| **0x3871** | **Map index** — 1-based `(col, row)` → byte offset into level map at `DS:[0x311F]` using width **`byte [0x311A]`** (26) and base **`word [0x311D]`** (`index = (col−1)×26 + (row−1)`, then `×2` for word-sized strip state). |
+| **0x46C4** | Pixel/tile coordinate → `(row, col)` on the 26-wide grid (uses **`[0x311A]`**). |
+| **0x47FA** | **Per-cell terrain draw** — gameplay path calls **0x4730** (SCLM blit); editor/VRAM path calls **0x3896**. |
+| **0x4730** | **Strip blit** — walks cells; when the **map tile id** at the leading edge differs from the trailing edge (**0x46C4** + compare), fetches a new **24×24** via SCLM **`AH=8`** (base) and composites an edge with **`AH=9`** (transparent index 0). **`word [0x311F]`** is the player/blank sentinel tile id for “no edge”. |
+| **0x48AD** | **Edge/shadow rectangle pass** (gameplay, `[bp+4]==1`) — for each border pixel runs **0x460C** (Bresenham over the map) and **0x43D1** / **0x4427** to stamp edge strips; **0x488B** writes SCLM slot words with **`CH = byte [0x3116]`** (current centre **tile id**) and **`CL = 0x20`**. Neighbour cells are read with **0x3871** at offsets around the rectangle (see branches @ **0x4979** vs **0x48E8** for corner case **`[bp+0xE]==6`**). |
+| **0x3BC0** | Playfield setup — sets **`[0x311A]=26`**, **`[0x3119]=height`**, **`[0x311F]`** map segment, **`[0x311B]`** editor vs play flag. **No extra tileset byte** in the 506-byte level record after the 416-byte map (door @ **0x1A0**, player, enemies, title only). |
+
+**`SCLM.DAT`** (loaded at runtime, not linked at fixed addresses in the EXE):
+
+| SCLM file offset | Role |
+|------------------|------|
+| **0x0000** | Mode **13h** init, table-driven blit to **0xA000:0000** (`call` through offset table @ **0x22A**). |
+| **0x0087** | **LZ77 decompressor** — `shr`/`jb` bit test on control byte, literal `movsb`, match `rep movsb` with `length = ((AH>>4)&0xF)+2`, `offset = AX & 0xFFF` (same as Python `sclm_lz77_decompress`). Called from **0x002A** inside SCLM with arguments on the stack. |
+
+The game opens `JETPACKn.DAT` through the **0x5891 / 0x4CAD** open layer, reads **512-byte** compressed blobs with the **0x31A7** reader, and decompresses each blob through the **SCLM `0x87`** routine into a **576-byte** (**24×24**) scratch buffer before **0x4730** draws with index **0** transparent.
+
+## Graphics archives — `JETPACK0.DAT` … `JETPACK5.DAT`
+
+| File | Size (v1.5) | Slots (512-byte blobs) |
+|------|-------------|-------------------------|
+| JETPACK0.DAT | 43 559 | 83 |
+| JETPACK1.DAT | 30 487 | 58 |
+| JETPACK2.DAT | 33 739 | 64 |
+| JETPACK3.DAT | 38 840 | 74 |
+| JETPACK4.DAT | 21 048 | 39 |
+| JETPACK5.DAT | 17 686 | 33 |
+
+**351** compressed slots total; campaign **tile IDs `0x00`–`0x77` (120)** map to the first 120 slots across `JETPACK0` + `JETPACK1` (tile `N` → file `0` slot `N` for `N < 83`, else file `1` slot `N − 83`, etc.).
+
+### Per-file layout
+
+1. **512-byte header**: repeating **3-byte** stride tags `(0,0,0)`, `(2,2,2)`, `(4,4,4)`, … (i.e. even steps `0,2,4,…` tripled). Runtime and `jetpack/graphics.py` use fixed **`512 + slot_index × 514`** (514 = 512-byte LZ payload + **2** pad bytes between slots).
+2. **Slot `i`** at offset `512 + i × 514`, length **512** bytes compressed payload (2 trailing bytes in the stride are padding; not part of the bitstream).
+3. Decompress each 512-byte payload to **576** bytes via **SCLM LZ77** (see below), then use the first **576** bytes as a **24×24** indexed bitmap (**index 0 = transparent** when compositing).
+
+### SCLM LZ77 (from `SCLM.DAT` offset `0x87`)
+
+Bitstream: LSB-first within each control byte; **0 = literal** (next source byte), **1 = LZ** (next `uint16` LE):
+
+- `length = ((high_byte >> 4) & 0x0F) + 2`
+- `offset = word & 0x0FFF` (copy from `output_len - offset`)
+
+After decompress, only the first `24×24 = 576` bytes are the visible tile; remaining bytes in the 576-byte buffer are unused padding from the original blitter.
+
+`jetpack/graphics.py` implements the LZ77 step and can export `gfx/sprites_vga.png` + `sprites_index.json`, but **indexed DAT → RGBA using `JETPAL.DAT` alone does not reproduce in-game colours** (sparse/nonzero bytes after decompress, ~16 brown gradient entries in `JETPAL.DAT`). Bit-plane order, runtime DAC reprogramming, and/or a different palette source remain **unverified** — treat DAT bitmap decode as **broken** until matched to DOS captures.
+
+### Art pipeline in this repo (v1.5 phase 1)
+
+**Ground truth:** native VGA PNGs `reference/native/level_XX_fN.png` (**640×400**, `scaler=none`, no resample). Legacy window captures are rejected.
+
+**Playfield:** crop **(8, 0)–(632, 384)** = **26×16×24 px** (`reference/playfield_geometry.json`, `jetpack/native_vga.py`).
+
+**Capture:** `scripts/dosbox_capture_slot0.py` — per level, copy campaign record into **slot 0** of a writable `JETLEV.DAT` (`jetpack/jetlev_swap.py`), fresh Xvfb + DOSBox per level, grab **640×400** root framebuffer. Legacy `scripts/dosbox_capture.py` (TAB+2+S skip) is deprecated after mis-label bugs.
+
+**Map layout:** `scripts/find_map_layout.py` scores 416-byte map candidates (offsets 0–32, row/column major, flips); locked layout in `reference/map_layout.json` (**`off00|row_major`**, bytes 0–415 — door at 0x1A0). Raw within-ID variance favours `off26|row_major` on level 0 but misaligns the level record; see `reference/layout_search.json`.
+
+**Capture verify:** `scripts/verify_capture_labels_fingerprint.py` — each `level_XX_f0.png` must best-match JETLEV level **XX** via DAT compositor render MSE (expect **100/100** when DAC calibration matches DOS).
+
+**Terrain compositing (`jetpack/tile_composite.py`):** no context→RGB lookup table.
+
+1. **Base** — decompress campaign slot for map tile id (`AH=8` path in **0x4730**); index **0** leaves the playfield backdrop visible.
+2. **Edges** — when a cardinal neighbour’s tile id differs (and is non-blank), composite the **edge strip** DAT slot **`120 + centre_tile_id`** into an **8 px** border band (N/S/E/W), matching the rectangle stamps from **0x43D1** / **0x4427** after **0x488B** fills strip words `(tile_id << 8) | 0x20` (`CH` = **`[0x3116]`**, `CL` = **0x20**).
+3. **DAC** — `jetpack/palette_fit.py` maps each palette index to RGB using **interior-cell** medians from native captures, **leave-one-level-out** when validating that level (not a per-context RGB table).
+4. **Animation** — map id **75 (0x4B, blue tube horizontal)** and ids **0x4A–0x4F** use alternate DAT slots (`TUBE_ANIM_SLOTS` in `tile_composite.py`); validation picks **f0/f1/f2** phase by lowest MSE on animated cells only.
+
+**`gfx/frames`** — per-id **base** PNGs from DAT decode + DAC fit. Export: `scripts/extract_from_play.py`.
+
+**Sprites:** `jetpack/sprites_diff.py` diffs `f1`/`f2` against static rebuild (player + enemies).
+
+**Validation:** `scripts/validate_art.py` — **leave-one-level-out** DAT compositor; **gems + enemy cells** masked; MSE vs **f0**; `reference/validate_stats.json`, side-by-sides for levels **0, 5, 7, 37, 59, 99**. `reference/composite_atlas.pkl` removed.
+
+**Known gap (honest):** mean LOO MSE remains high until **indexed blob ↔ on-screen pixels** is fully verified (JETPAL/DAC alone is insufficient; see note above § graphics). Strip-accurate **0x4730** strip walking is approximated by per-cell border bands.
+
+## Other files
+
+| File | Notes |
+|------|--------|
+| `JETDEMO.DAT` | Demo replay data |
+| `JETSOUND.DAT` | Digitized SFX |
+| `SCLM.DAT` | Adept VGA/sound library (mode 13h setup, LZ77 above, blit helpers) |
+| `_JETP_*.DAT` | Graphics module switcher variants (Christmas, Junior, etc.) |
+| `JSWITCH.EXE` | Module switcher tool |
+
+## Playfield geometry (original)
+
+- **26 × 16** tiles, **24 px** per tile → **624 × 384** px playfield (single screen, no scroll).

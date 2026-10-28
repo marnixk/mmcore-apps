@@ -1,0 +1,8 @@
+{
+  "name": "off00|row_major",
+  "byte_offset": 0,
+  "order": "row_major",
+  "flip_col": false,
+  "flip_row": false,
+  "transpose": false
+}

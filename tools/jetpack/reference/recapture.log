@@ -1,0 +1,33 @@
+Error: Can't open display: (null)
+Failed creating new xdo instance
+X Error of failed request:  BadWindow (invalid Window parameter)
+  Major opcode of failed request:  3 (X_GetWindowAttributes)
+  Resource id in failed request:  0x80000b
+  Serial number of failed request:  18
+  Current serial number in output stream:  19
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+  File "/usr/lib/python3.12/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['xdotool', 'getwindowgeometry', '--shell', '8388619']' returned non-zero exit status 1.
+level 00 captured (3 frames)
+Traceback (most recent call last):
+  File "/workspace/tools/jetpack/scripts/dosbox_capture.py", line 257, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/workspace/tools/jetpack/scripts/dosbox_capture.py", line 188, in main
+    wid = restart_session(env, args.display, lv)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/tools/jetpack/scripts/dosbox_capture.py", line 118, in restart_session
+    if not enter_first_level(env, display, wid):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/tools/jetpack/scripts/dosbox_capture.py", line 70, in enter_first_level
+    grab_window(display, wid, probe)
+  File "/workspace/tools/jetpack/scripts/dosbox_capture.py", line 29, in grab_window
+    subprocess.run(
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['python3', '-c', "\nimport subprocess\nfrom mss import MSS\nfrom PIL import Image\nWID='8388619'\ngeo=subprocess.check_output(['xdotool','getwindowgeometry','--shell',WID],env={'DISPLAY':':199'}).decode()\nvals={k:int(v) for k,v in (line.split('=',1) for line in geo.strip().split(chr(10)) if '=' in line)}\nwith MSS(display=':199') as sct:\n    shot=sct.grab({'left':vals['X'],'top':vals['Y'],'width':vals['WIDTH'],'height':vals['HEIGHT']})\n    im=Image.frombytes('RGB', shot.size, shot.bgra, 'raw', 'BGRX')\n    im.save('/tmp/tmpalhnuggj.png')\n"]' returned non-zero exit status 1.
