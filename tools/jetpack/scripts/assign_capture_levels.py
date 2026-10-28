@@ -45,24 +45,31 @@ def main() -> int:
         for j, jfp in enumerate(jet_fps):
             cost[i, j] = fingerprint_distance(cfp, jfp)
 
-    row_ind, col_ind = linear_sum_assignment(cost)
-    mapping = {labels[row_ind[k]]: col_ind[k] for k in range(n)}
+    # Greedy minimum-cost matching (fallback without scipy).
+    mapping: dict[int, int] = {}
+    used_cols: set[int] = set()
+    pairs = [(cost[i, j], i, j) for i in range(n) for j in range(n)]
+    pairs.sort(key=lambda x: x[0])
+    for _, i, j in pairs:
+        lab = labels[i]
+        if lab in mapping or j in used_cols:
+            continue
+        mapping[lab] = j
+        used_cols.add(j)
+    for lab in labels:
+        if lab not in mapping:
+            mapping[lab] = lab
     mis = int(sum(1 for lab, true in mapping.items() if lab != true))
 
-    entries = []
-    for k in range(n):
-        lab = labels[row_ind[k]]
-        assigned = int(col_ind[k])
-        entries.append(
-            {
-                "file": f"level_{lab:02d}_f0.png",
-                "label": lab,
-                "assigned_level": assigned,
-                "cost": float(cost[row_ind[k], col_ind[k]]),
-                "mislabelled": lab != assigned,
-            }
-        )
-    entries.sort(key=lambda e: e["label"])
+    entries = [
+        {
+            "file": f"level_{lab:02d}_f0.png",
+            "label": lab,
+            "assigned_level": int(mapping[lab]),
+            "mislabelled": lab != mapping[lab],
+        }
+        for lab in sorted(mapping)
+    ]
     out = ROOT / "reference" / "capture_assignment.json"
     out.write_text(
         json.dumps({"mislabelled_count": mis, "total": n, "entries": entries}, indent=2) + "\n",
