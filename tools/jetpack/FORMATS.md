@@ -125,6 +125,48 @@ Pixel index match of sheet[tile id] against the dumped playfield (sparks, door, 
 
 **Validation:** `scripts/validate_art.py` renders the sheet through the dumped DAC and compares to native `f0`. The sheet and DAC do not depend on the held-out level. MSE skips backdrop, gems, enemies, the player cell, the door sprite, and animated tube/teleport ids. Side-by-sides for levels **0, 5, 7, 37, 59, 99**.
 
+### Moving graphics (sheet rows past the 120 terrain cells)
+
+The same buffer continues below the terrain. Separator rows (index `0x66`) at y = 114, 127, 140, 153, 166 and 179 bound six rows of 12×12 cells. Content of column `c` is `x = c*13+1`, width 12, columns 0–23. Overlay sprites use the transparent blitter: index **0 is skipped**. The door is a separate **opaque** 24×24 blit from the right margin at `(y, x)` in `(0, 25, 50, 75) × (265, 290)`.
+
+`scripts/vga_dump.asm` writes a `JPFR` frame when `SEQ.GO` is present: magic, IRQ0 tick (uint16), frame index, mode byte, 768-byte DAC, 64000 bytes of plane 0. `scripts/dump_vga_level.py --sequence` keeps one frame every **3** IRQ0 ticks, then `MEM.BIN`. `scripts/export_moving.py` finds the sheet by matching terrain tile 0 (the linear base moves with the EXE load segment; it was `0x4AED4` in the level-99 dump and `0x4AFC4` in the level-55 dump) and writes `gfx/anim/*.png`, `gfx/anim/frames.u8` and `gfx/sprites.json`. Rows at y ≥ 192 are the high-score / menu / title bitmap and are not exported.
+
+**Palette cycle.** Only DAC indices 247–254 change. They are two groups of four, `(247–250)` and `(251–254)`, and each group rotates right by one. One step per 3 IRQ0 ticks (measured ticks 269, 272, 275, 278, then the four colors repeat). Period is 12 ticks, about 0.66 s at 18.2065 Hz. The 6-bit RGB of the first step is in `gfx/sprites.json`. Index 248 is `(57, 57, 58)`; the others in that step are grey. Homer’s bright pixels are 247 and 254, so the homer blinks with this cycle even though its bitmap does not change.
+
+**What actually moves.**
+
+| Thing | Stored frames | On the dumped frames |
+| --- | --- | --- |
+| Tubes `0x4A`–`0x4F` | one 12×12 gradient each (indices 145–150) | Level 7, 20 frames, **0** pixels changed on `0x4A`, `0x4B`, `0x4D`. The gradient row occurs only in the terrain band. |
+| Teleports 6/7/8, conveyors `0x72`/`0x75`, toggles `0x09`–`0x0E` | one bitmap | Not in the timed capture. No second phase in the buffer. |
+| Gem (tile 4), fuel (`0x0F`, `0x10`) | the map tile | Not overlay sprites. Pixels that change on a gem are spark indices, not a second gem. |
+| Door | 8 unique 24×24 frames, closed through open | Only frame 0 (closed). Opening was not on screen, so ticks per frame were not measured. |
+| Steel ball (type 2) | row 166, cols 0–3 | Col 0 only. It did not advance in ~3.3 s. |
+| Trackbot (type 1) | row 166, cols 4–11 | Col 4 only. |
+| Spring (type 3) | row 166, cols 12–15 (14 is the mirror of 13) | Col 13 only. |
+| Spikes (type 5) | row 166, cols 16–18 | Col 16 only. |
+| Homer (type 7) | row 166, cols 19–20 | Col 19, on level 55 at the homer’s tile. |
+| Missile (type 4) | row 166 cols 21–23 (exhaust index 39 on the bottom of col 21) and row 179 cols 0–8 | Every missile in levels 5, 7 and 99 is col 21. The other facings are stored and were not on screen. |
+| Flitzer (type 6) | row 179, cols 9–17, one silhouette | Col 9 only. |
+| Batbot (type 8) | row 179, cols 18–21 (22 copies 20, 23 copies 19) | Col 18 only. |
+| Player | rows 114, 127, 140, 153 | **Not on any dumped frame**, including 20 frames of levels 7 and 99. |
+
+Thirteen columns of row 127 are the horizontal mirror of the same column of row 114 (columns 1, 4 and 7–17). Every frame of those two rows contains flame index 247, 224 or 133, so walking, climbing and thrust are not separate sheets. No digging or phaser bitmap was found. Row 153 is the breakup / burst sequence in the sheet; it was not observed in play. Enemy frames other than the column above did not change during the capture, so ticks per enemy frame were not measured.
+
+**Composite check** (`reference/sprite_match.json`). Terrain, the closed door at the level-record cell, and the sprite frame that is actually on screen:
+
+| Level | Exact index | Placed |
+| --- | --- | --- |
+| 0 | 99.7613% | door, trackbot, spikes |
+| 5 | 99.7029% | door, 14 missiles |
+| 7 | 99.5509% | door, 2 missiles, spikes |
+| 37 | 98.6595% (99.9100% outside black corners) | door, 5 trackbots, 2 flitzers |
+| 55 | 99.0802% (99.8399% outside black corners) | door, 2 springs, homer |
+| 59 | 98.6562% (99.9066% outside black corners) | door, steel ball, spring |
+| 99 | 99.5509% | door and both of each of the seven types on that level |
+
+The pixels that remain are spark indices (180, 178, 133, 224, 150, 86, 85, 84, 24, 19, 13, 7 and the 247–254 cycle) and, on levels 37, 55 and 59, the four corners of the framebuffer, which are index 0 for about one tile regardless of the map cell. Nothing else is masked. A sprite that sits on a black corner is clipped there; the visible half still matches the sheet.
+
 ## Other files
 
 | File | Notes |

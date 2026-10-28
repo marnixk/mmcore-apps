@@ -1,0 +1,938 @@
+{
+  "sheet_base": 306900,
+  "levels": {
+    "0": {
+      "placed": [
+        {
+          "name": "door",
+          "frame": 0,
+          "at": [
+            0,
+            288
+          ],
+          "error": 7,
+          "gained": 568
+        },
+        {
+          "name": "trackbot",
+          "col": 4,
+          "at": [
+            0,
+            132
+          ],
+          "gained": 57,
+          "spark_or_phase_pixels": 4,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "spikes",
+          "col": 16,
+          "at": [
+            180,
+            0
+          ],
+          "gained": 16,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        }
+      ],
+      "pixels": 59904,
+      "mismatch": 143,
+      "exact_index_pct": 99.7613,
+      "residual_spark_indices": 57,
+      "residual_framebuffer_zero": 0,
+      "residual_other": 86,
+      "corner_zero_pixels": 0,
+      "exact_index_pct_outside_corners": 99.7613,
+      "enemies": [
+        {
+          "type_id": 1,
+          "name": "trackbot",
+          "x": 12,
+          "y": 1
+        },
+        {
+          "type_id": 5,
+          "name": "spikes",
+          "x": 1,
+          "y": 16
+        }
+      ]
+    },
+    "5": {
+      "placed": [
+        {
+          "name": "door",
+          "frame": 0,
+          "at": [
+            0,
+            144
+          ],
+          "error": 0,
+          "gained": 575
+        },
+        {
+          "name": "missile_up",
+          "col": 21,
+          "at": [
+            156,
+            240
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_up",
+          "col": 21,
+          "at": [
+            156,
+            24
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_up",
+          "col": 21,
+          "at": [
+            132,
+            264
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_up",
+          "col": 21,
+          "at": [
+            132,
+            60
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_up",
+          "col": 21,
+          "at": [
+            108,
+            276
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_up",
+          "col": 21,
+          "at": [
+            108,
+            48
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_up",
+          "col": 21,
+          "at": [
+            84,
+            252
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_up",
+          "col": 21,
+          "at": [
+            84,
+            24
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_up",
+          "col": 21,
+          "at": [
+            60,
+            300
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_up",
+          "col": 21,
+          "at": [
+            60,
+            72
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_up",
+          "col": 21,
+          "at": [
+            36,
+            264
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_up",
+          "col": 21,
+          "at": [
+            0,
+            204
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_up",
+          "col": 21,
+          "at": [
+            0,
+            0
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_up",
+          "col": 21,
+          "at": [
+            36,
+            60
+          ],
+          "gained": 51,
+          "spark_or_phase_pixels": 1,
+          "clipped_by_zero": 0
+        }
+      ],
+      "pixels": 59904,
+      "mismatch": 178,
+      "exact_index_pct": 99.7029,
+      "residual_spark_indices": 69,
+      "residual_framebuffer_zero": 0,
+      "residual_other": 109,
+      "corner_zero_pixels": 0,
+      "exact_index_pct_outside_corners": 99.7029,
+      "enemies": [
+        {
+          "type_id": 4,
+          "name": "missile",
+          "x": 7,
+          "y": 6
+        },
+        {
+          "type_id": 4,
+          "name": "missile",
+          "x": 23,
+          "y": 4
+        },
+        {
+          "type_id": 4,
+          "name": "missile",
+          "x": 26,
+          "y": 6
+        },
+        {
+          "type_id": 4,
+          "name": "missile",
+          "x": 5,
+          "y": 10
+        },
+        {
+          "type_id": 4,
+          "name": "missile",
+          "x": 24,
+          "y": 10
+        },
+        {
+          "type_id": 4,
+          "name": "missile",
+          "x": 3,
+          "y": 14
+        },
+        {
+          "type_id": 4,
+          "name": "missile",
+          "x": 3,
+          "y": 8
+        },
+        {
+          "type_id": 4,
+          "name": "missile",
+          "x": 6,
+          "y": 4
+        },
+        {
+          "type_id": 4,
+          "name": "missile",
+          "x": 22,
+          "y": 8
+        },
+        {
+          "type_id": 4,
+          "name": "missile",
+          "x": 21,
+          "y": 14
+        },
+        {
+          "type_id": 4,
+          "name": "missile",
+          "x": 23,
+          "y": 12
+        },
+        {
+          "type_id": 4,
+          "name": "missile",
+          "x": 6,
+          "y": 12
+        },
+        {
+          "type_id": 4,
+          "name": "missile",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type_id": 4,
+          "name": "missile",
+          "x": 18,
+          "y": 1
+        }
+      ]
+    },
+    "7": {
+      "placed": [
+        {
+          "name": "door",
+          "frame": 0,
+          "at": [
+            132,
+            72
+          ],
+          "error": 0,
+          "gained": 575
+        },
+        {
+          "name": "missile_up",
+          "col": 21,
+          "at": [
+            120,
+            24
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_up",
+          "col": 21,
+          "at": [
+            108,
+            204
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "spikes",
+          "col": 16,
+          "at": [
+            36,
+            288
+          ],
+          "gained": 16,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        }
+      ],
+      "pixels": 59904,
+      "mismatch": 269,
+      "exact_index_pct": 99.5509,
+      "residual_spark_indices": 105,
+      "residual_framebuffer_zero": 0,
+      "residual_other": 164,
+      "corner_zero_pixels": 0,
+      "exact_index_pct_outside_corners": 99.5509,
+      "enemies": [
+        {
+          "type_id": 5,
+          "name": "spikes",
+          "x": 25,
+          "y": 4
+        },
+        {
+          "type_id": 4,
+          "name": "missile",
+          "x": 18,
+          "y": 10
+        },
+        {
+          "type_id": 4,
+          "name": "missile",
+          "x": 3,
+          "y": 11
+        }
+      ]
+    },
+    "37": {
+      "placed": [
+        {
+          "name": "door",
+          "frame": 0,
+          "at": [
+            168,
+            276
+          ],
+          "error": 53,
+          "gained": 522
+        },
+        {
+          "name": "flitzer",
+          "col": 9,
+          "at": [
+            156,
+            0
+          ],
+          "gained": 69,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "flitzer",
+          "col": 9,
+          "at": [
+            144,
+            132
+          ],
+          "gained": 69,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "trackbot",
+          "col": 4,
+          "at": [
+            60,
+            228
+          ],
+          "gained": 62,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "trackbot",
+          "col": 4,
+          "at": [
+            180,
+            252
+          ],
+          "gained": 61,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "trackbot",
+          "col": 4,
+          "at": [
+            180,
+            96
+          ],
+          "gained": 61,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "trackbot",
+          "col": 4,
+          "at": [
+            96,
+            72
+          ],
+          "gained": 61,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "trackbot",
+          "col": 4,
+          "at": [
+            48,
+            24
+          ],
+          "gained": 61,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        }
+      ],
+      "pixels": 59904,
+      "mismatch": 803,
+      "exact_index_pct": 98.6595,
+      "residual_spark_indices": 0,
+      "residual_framebuffer_zero": 803,
+      "residual_other": 803,
+      "corner_zero_pixels": 1008,
+      "exact_index_pct_outside_corners": 99.91,
+      "enemies": [
+        {
+          "type_id": 6,
+          "name": "flitzer",
+          "x": 1,
+          "y": 14
+        },
+        {
+          "type_id": 1,
+          "name": "trackbot",
+          "x": 20,
+          "y": 6
+        },
+        {
+          "type_id": 1,
+          "name": "trackbot",
+          "x": 22,
+          "y": 16
+        },
+        {
+          "type_id": 1,
+          "name": "trackbot",
+          "x": 9,
+          "y": 16
+        },
+        {
+          "type_id": 6,
+          "name": "flitzer",
+          "x": 12,
+          "y": 13
+        },
+        {
+          "type_id": 1,
+          "name": "trackbot",
+          "x": 7,
+          "y": 9
+        },
+        {
+          "type_id": 1,
+          "name": "trackbot",
+          "x": 3,
+          "y": 5
+        }
+      ]
+    },
+    "55": {
+      "placed": [
+        {
+          "name": "door",
+          "frame": 0,
+          "at": [
+            0,
+            132
+          ],
+          "error": 0,
+          "gained": 575
+        },
+        {
+          "name": "spring",
+          "col": 13,
+          "at": [
+            132,
+            216
+          ],
+          "gained": 21,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "spring",
+          "col": 13,
+          "at": [
+            48,
+            72
+          ],
+          "gained": 21,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "homer",
+          "col": 19,
+          "at": [
+            60,
+            120
+          ],
+          "gained": 11,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        }
+      ],
+      "pixels": 59904,
+      "mismatch": 551,
+      "exact_index_pct": 99.0802,
+      "residual_spark_indices": 0,
+      "residual_framebuffer_zero": 551,
+      "residual_other": 551,
+      "corner_zero_pixels": 576,
+      "exact_index_pct_outside_corners": 99.8399,
+      "enemies": [
+        {
+          "type_id": 7,
+          "name": "homer",
+          "x": 11,
+          "y": 6
+        },
+        {
+          "type_id": 3,
+          "name": "spring",
+          "x": 7,
+          "y": 5
+        },
+        {
+          "type_id": 3,
+          "name": "spring",
+          "x": 19,
+          "y": 12
+        }
+      ]
+    },
+    "59": {
+      "placed": [
+        {
+          "name": "door",
+          "frame": 0,
+          "at": [
+            24,
+            288
+          ],
+          "error": 0,
+          "gained": 575
+        },
+        {
+          "name": "steel_ball",
+          "col": 0,
+          "at": [
+            0,
+            288
+          ],
+          "gained": 69,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 48
+        },
+        {
+          "name": "spring",
+          "col": 13,
+          "at": [
+            180,
+            108
+          ],
+          "gained": 21,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        }
+      ],
+      "pixels": 59904,
+      "mismatch": 805,
+      "exact_index_pct": 98.6562,
+      "residual_spark_indices": 0,
+      "residual_framebuffer_zero": 805,
+      "residual_other": 805,
+      "corner_zero_pixels": 1008,
+      "exact_index_pct_outside_corners": 99.9066,
+      "enemies": [
+        {
+          "type_id": 2,
+          "name": "steel_ball",
+          "x": 25,
+          "y": 1
+        },
+        {
+          "type_id": 3,
+          "name": "spring",
+          "x": 10,
+          "y": 16
+        }
+      ]
+    },
+    "99": {
+      "placed": [
+        {
+          "name": "door",
+          "frame": 0,
+          "at": [
+            144,
+            276
+          ],
+          "error": 7,
+          "gained": 568
+        },
+        {
+          "name": "steel_ball",
+          "col": 0,
+          "at": [
+            180,
+            60
+          ],
+          "gained": 120,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "steel_ball",
+          "col": 0,
+          "at": [
+            180,
+            48
+          ],
+          "gained": 120,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "flitzer",
+          "col": 9,
+          "at": [
+            180,
+            252
+          ],
+          "gained": 69,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "flitzer",
+          "col": 9,
+          "at": [
+            180,
+            240
+          ],
+          "gained": 69,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "trackbot",
+          "col": 4,
+          "at": [
+            180,
+            12
+          ],
+          "gained": 62,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "trackbot",
+          "col": 4,
+          "at": [
+            180,
+            0
+          ],
+          "gained": 62,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_up",
+          "col": 21,
+          "at": [
+            180,
+            156
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_up",
+          "col": 21,
+          "at": [
+            180,
+            144
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "spring",
+          "col": 13,
+          "at": [
+            180,
+            108
+          ],
+          "gained": 21,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "spring",
+          "col": 13,
+          "at": [
+            180,
+            96
+          ],
+          "gained": 21,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "spikes",
+          "col": 16,
+          "at": [
+            180,
+            204
+          ],
+          "gained": 16,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "spikes",
+          "col": 16,
+          "at": [
+            180,
+            192
+          ],
+          "gained": 16,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "batbot",
+          "col": 18,
+          "at": [
+            180,
+            300
+          ],
+          "gained": 14,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "batbot",
+          "col": 18,
+          "at": [
+            180,
+            288
+          ],
+          "gained": 14,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        }
+      ],
+      "pixels": 59904,
+      "mismatch": 269,
+      "exact_index_pct": 99.5509,
+      "residual_spark_indices": 102,
+      "residual_framebuffer_zero": 0,
+      "residual_other": 167,
+      "corner_zero_pixels": 576,
+      "exact_index_pct_outside_corners": 99.5466,
+      "enemies": [
+        {
+          "type_id": 5,
+          "name": "spikes",
+          "x": 17,
+          "y": 16
+        },
+        {
+          "type_id": 4,
+          "name": "missile",
+          "x": 14,
+          "y": 16
+        },
+        {
+          "type_id": 4,
+          "name": "missile",
+          "x": 13,
+          "y": 16
+        },
+        {
+          "type_id": 3,
+          "name": "spring",
+          "x": 10,
+          "y": 16
+        },
+        {
+          "type_id": 1,
+          "name": "trackbot",
+          "x": 2,
+          "y": 16
+        },
+        {
+          "type_id": 2,
+          "name": "steel_ball",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "type_id": 8,
+          "name": "batbot",
+          "x": 26,
+          "y": 16
+        },
+        {
+          "type_id": 8,
+          "name": "batbot",
+          "x": 25,
+          "y": 16
+        },
+        {
+          "type_id": 6,
+          "name": "flitzer",
+          "x": 22,
+          "y": 16
+        },
+        {
+          "type_id": 6,
+          "name": "flitzer",
+          "x": 21,
+          "y": 16
+        },
+        {
+          "type_id": 5,
+          "name": "spikes",
+          "x": 18,
+          "y": 16
+        },
+        {
+          "type_id": 1,
+          "name": "trackbot",
+          "x": 1,
+          "y": 16
+        },
+        {
+          "type_id": 2,
+          "name": "steel_ball",
+          "x": 5,
+          "y": 16
+        },
+        {
+          "type_id": 3,
+          "name": "spring",
+          "x": 9,
+          "y": 16
+        }
+      ]
+    }
+  }
+}

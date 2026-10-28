@@ -45,6 +45,11 @@ def main() -> int:
     ap.add_argument("--level", type=int, default=0)
     ap.add_argument("--display", default=":240")
     ap.add_argument("--out", type=Path, required=True)
+    ap.add_argument(
+        "--sequence",
+        action="store_true",
+        help="Write F00.BIN..F19.BIN (JPFR frames, 3 timer ticks apart) plus MEM.BIN",
+    )
     args = ap.parse_args()
     if not COM.is_file():
         subprocess.check_call(
@@ -55,10 +60,12 @@ def main() -> int:
     prepare_runtime_game_dir(GAME_SRC, RUNTIME)
     write_slot0_level(GAME_SRC / "JETLEV.DAT", RUNTIME / "JETLEV.DAT", args.level)
     shutil.copy(COM, RUNTIME / "DUMP.COM")
-    for stale in ("GO.DMP", "VGA.BIN"):
+    for stale in ("GO.DMP", "VGA.BIN", "SEQ.GO", "MEM.BIN"):
         p = RUNTIME / stale
         if p.exists():
             p.unlink()
+    for old in RUNTIME.glob("F??.BIN"):
+        old.unlink()
 
     conf = ROOT / "_dosbox" / "vga_dump.conf"
     conf.write_text(
@@ -223,6 +230,39 @@ jetpack.exe
             print("failed to reach gameplay", file=sys.stderr)
             return 1
         grab(args.display, shot)
+        if args.sequence:
+            (RUNTIME / "SEQ.GO").write_bytes(b"")
+            deadline = time.time() + 40
+            last = RUNTIME / "F19.BIN"
+            while time.time() < deadline:
+                if last.is_file() and last.stat().st_size >= 8 + 768 + 64000:
+                    break
+                time.sleep(0.25)
+            else:
+                n = len(list(RUNTIME.glob("F??.BIN")))
+                print(f"sequence short ({n} frames)", file=sys.stderr)
+                return 1
+            mem = RUNTIME / "MEM.BIN"
+            stable = -1
+            while time.time() < deadline:
+                if mem.is_file():
+                    sz = mem.stat().st_size
+                    if sz == 640 * 1024 and sz == stable:
+                        break
+                    stable = sz
+                time.sleep(0.25)
+            else:
+                print(f"MEM.BIN missing or short ({mem.stat().st_size if mem.is_file() else 0})", file=sys.stderr)
+                return 1
+            seq_dir = out.parent / (out.stem + "_frames")
+            if seq_dir.exists():
+                shutil.rmtree(seq_dir)
+            seq_dir.mkdir(parents=True)
+            for frm in sorted(RUNTIME.glob("F??.BIN")):
+                shutil.copy(frm, seq_dir / frm.name)
+            shutil.copy(mem, out.with_name(out.stem + "_mem.bin"))
+            print(f"wrote {seq_dir} ({len(list(seq_dir.glob('F??.BIN')))} frames) shot {shot}")
+            return 0
         (RUNTIME / "GO.DMP").write_bytes(b"")
         deadline = time.time() + 25
         vga = RUNTIME / "VGA.BIN"

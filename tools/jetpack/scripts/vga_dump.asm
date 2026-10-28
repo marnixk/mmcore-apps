@@ -28,6 +28,7 @@ start:
 hook:
     cmp byte [cs:busy], 0
     jne .chain
+    inc word [cs:ticks]
     cmp byte [cs:done], 0
     jne .chain
     mov byte [cs:busy], 1
@@ -65,6 +66,20 @@ try_dump:
     jne .out
     push cs
     pop ds
+    cmp byte [seq_on], 0
+    jne .seq_step
+    mov dx, seq_name
+    mov ax, 3D00h
+    int 21h
+    jc .single
+    mov bx, ax
+    mov ah, 3Eh
+    int 21h
+    mov byte [seq_on], 1
+    mov ax, [ticks]
+    mov [last_tick], ax
+    jmp .out
+.single:
     mov dx, go_name
     mov ax, 3D00h
     int 21h
@@ -73,6 +88,22 @@ try_dump:
     mov ah, 3Eh
     int 21h
     call write_dump
+    mov byte [cs:done], 1
+    jmp .out
+.seq_step:
+    mov ax, [ticks]
+    sub ax, [last_tick]
+    cmp ax, 3
+    jb .out
+    mov ax, [ticks]
+    mov [last_tick], ax
+    cmp byte [frame_i], 20
+    jae .seq_done
+    call write_frame
+    inc byte [frame_i]
+    jmp .out
+.seq_done:
+    call dump_mem
     mov byte [cs:done], 1
 .out:
     pop es
@@ -159,6 +190,58 @@ dump_mem:
 .done:
     ret
 
+; One mode-13h frame: "JPFR", tick, index, mode, 768 DAC bytes, 64000 plane-0 bytes.
+write_frame:
+    push cs
+    pop ds
+    call read_regs
+    mov al, [mode]
+    mov [frm_mode], al
+    mov al, [frame_i]
+    xor ah, ah
+    mov bl, 10
+    div bl
+    add ax, 3030h
+    mov [frm_name+1], al
+    mov [frm_name+2], ah
+    mov dx, frm_name
+    xor cx, cx
+    mov ah, 3Ch
+    int 21h
+    jc .fail
+    mov [handle], ax
+    mov al, [frame_i]
+    mov [frm_index], al
+    mov ax, [ticks]
+    mov [frm_tick], ax
+    mov dx, frm_header
+    mov cx, frm_header_len
+    call write_cx
+    mov dx, dac
+    mov cx, 768
+    call write_cx
+    mov dx, 3CEh
+    mov al, 4
+    out dx, al
+    inc dx
+    xor al, al
+    out dx, al
+    mov ax, 0A000h
+    mov ds, ax
+    xor dx, dx
+    mov cx, 7D00h
+    call write_cx_ds
+    mov dx, 7D00h
+    mov cx, 7D00h
+    call write_cx_ds
+    push cs
+    pop ds
+    mov bx, [handle]
+    mov ah, 3Eh
+    int 21h
+.fail:
+    ret
+
 write_cx:
     mov bx, [handle]
     mov ah, 40h
@@ -239,10 +322,22 @@ save_ss dw 0
 save_sp dw 0
 busy db 0
 done db 0
+seq_on db 0
+frame_i db 0
+ticks dw 0
+last_tick dw 0
 handle dw 0
 go_name db "GO.DMP", 0
+seq_name db "SEQ.GO", 0
+frm_name db "F00.BIN", 0
 out_name db "VGA.BIN", 0
 mem_name db "MEM.BIN", 0
+frm_header:
+    db "JPFR"
+frm_tick dw 0
+frm_index db 0
+frm_mode db 0
+frm_header_len equ $ - frm_header
 header:
     db "JPVG"
 mode db 0
