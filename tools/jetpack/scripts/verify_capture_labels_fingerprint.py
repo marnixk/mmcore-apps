@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import json
-import pickle
 import sys
 from pathlib import Path
 
@@ -18,7 +17,7 @@ from jetpack.atlas_median import masked_mse
 from jetpack.constants import MAP_H, MAP_W
 from jetpack.levels import load_jetlev
 from jetpack.native_vga import load_geometry, playfield_from_native
-from jetpack.tile_composite import BACKDROP_RENDER_IDS
+from jetpack.tile_composite import BACKDROP_RENDER_IDS, DatCompositor
 
 
 def content_mask(tiles: list[int]) -> np.ndarray:
@@ -32,14 +31,11 @@ def content_mask(tiles: list[int]) -> np.ndarray:
 
 
 def main() -> int:
-    pkl = ROOT / "reference" / "composite_atlas.pkl"
-    if not pkl.is_file():
-        print("Run extract_from_play.py first to build composite_atlas.pkl", file=sys.stderr)
-        return 1
-    atlas = pickle.loads(pkl.read_bytes())
     geom = load_geometry()
-    levels = load_jetlev(ROOT / "_download/extracted/jetpak15/JETLEV.DAT")
+    game = ROOT / "_download/extracted/jetpak15"
+    levels = load_jetlev(game / "JETLEV.DAT")
     native = ROOT / "reference" / "native"
+    comp = DatCompositor.open(game, native, levels, exclude_level=None)
 
     mis = 0
     rows = []
@@ -54,7 +50,7 @@ def main() -> int:
         best_mse = float("inf")
         self_mse = float("nan")
         for lv in levels:
-            rend = np.array(atlas.render_level(lv.tiles))
+            rend = np.array(comp.render_level(lv.tiles))
             mse = masked_mse(cap, rend, content_mask(lv.tiles))
             if lv.index == label:
                 self_mse = mse

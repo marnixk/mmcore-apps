@@ -113,17 +113,22 @@ After decompress, only the first `24×24 = 576` bytes are the visible tile; rema
 
 **Map layout:** `scripts/find_map_layout.py` scores 416-byte map candidates (offsets 0–32, row/column major, flips); locked layout in `reference/map_layout.json` (**`off00|row_major`**, bytes 0–415 — door at 0x1A0). Raw within-ID variance favours `off26|row_major` on level 0 but misaligns the level record; see `reference/layout_search.json`.
 
-**Capture verify:** `scripts/verify_capture_labels_fingerprint.py` — each `level_XX_f0.png` must best-match JETLEV level **XX** via composite render MSE (expect **100/100**).
+**Capture verify:** `scripts/verify_capture_labels_fingerprint.py` — each `level_XX_f0.png` must best-match JETLEV level **XX** via DAT compositor render MSE (expect **100/100** when DAC calibration matches DOS).
 
-**Terrain compositing rule (portable):** centre **tile id** plus the **eight adjacent JETLEV map bytes** (N, E, S, W, NE, NW, SE, SW; **−1** off-map) — same tuple as `jetpack/map_layout.py` **`context_key()`**, matching the neighbour reads on the **0x48AD** / **0x4730** paths above (tile **ids**, not solid/not-solid). **`gfx/frames`** exports per-id **base** medians; **`reference/composite_atlas.pkl`** holds full **24×24 RGB** per context key. Animated tiles validated at **animation frame 0** (`level_XX_f0.png`). Export: `scripts/extract_from_play.py`.
+**Terrain compositing (`jetpack/tile_composite.py`):** no context→RGB lookup table.
+
+1. **Base** — decompress campaign slot for map tile id (`AH=8` path in **0x4730**); index **0** leaves the playfield backdrop visible.
+2. **Edges** — when a cardinal neighbour’s tile id differs (and is non-blank), composite the **edge strip** DAT slot **`120 + centre_tile_id`** into an **8 px** border band (N/S/E/W), matching the rectangle stamps from **0x43D1** / **0x4427** after **0x488B** fills strip words `(tile_id << 8) | 0x20` (`CH` = **`[0x3116]`**, `CL` = **0x20**).
+3. **DAC** — `jetpack/palette_fit.py` maps each palette index to RGB using **interior-cell** medians from native captures, **leave-one-level-out** when validating that level (not a per-context RGB table).
+4. **Animation** — map id **75 (0x4B, blue tube horizontal)** and ids **0x4A–0x4F** use alternate DAT slots (`TUBE_ANIM_SLOTS` in `tile_composite.py`); validation picks **f0/f1/f2** phase by lowest MSE on animated cells only.
+
+**`gfx/frames`** — per-id **base** PNGs from DAT decode + DAC fit. Export: `scripts/extract_from_play.py`.
 
 **Sprites:** `jetpack/sprites_diff.py` diffs `f1`/`f2` against static rebuild (player + enemies).
 
-**Validation:** `scripts/validate_art.py` — global context atlas only; **gems + enemy cells** masked out; MSE vs **f0** capture; `reference/validate_stats.json`, `validate_level{00,05,07,37,99}_side_by_side.png`. Captures gitignored under `reference/native/`; fixtures in `reference/fixtures/native/`.
+**Validation:** `scripts/validate_art.py` — **leave-one-level-out** DAT compositor; **gems + enemy cells** masked; MSE vs **f0**; `reference/validate_stats.json`, side-by-sides for levels **0, 5, 7, 37, 59, 99**. `reference/composite_atlas.pkl` removed.
 
-**RAM / DAC dump:** not automated; DAT decode still unverified.
-
-**Known gap (honest):** a few levels (e.g. **59**, **80**) still show elevated MSE on specific cells while **context coverage stays 100%**. Those cells use map ids such as **75** whose f0 RGB varies across levels that share the same neighbour-id tuple — likely **runtime draw state** (phase/mirage or strip cursor state at **0x4730**, not serialized in the 506-byte JETLEV record). No additional per-level header field after **0x1A0** was found in **JETPACK.EXE** that selects among those variants.
+**Known gap (honest):** mean LOO MSE remains high until **indexed blob ↔ on-screen pixels** is fully verified (JETPAL/DAC alone is insufficient; see note above § graphics). Strip-accurate **0x4730** strip walking is approximated by per-cell border bands.
 
 ## Other files
 

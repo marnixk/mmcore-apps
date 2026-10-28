@@ -1,154 +1,249 @@
-"""Portable atlas: base tile ID + 8-neighbour tile-ID context (DOS draw rule)."""
+"""DAT-based terrain compositor (JETPACK.EXE 0x4730 / 0x48AD rules)."""
 
 from __future__ import annotations
 
-from collections import defaultdict
-from dataclasses import dataclass, field
+import json
+from dataclasses import dataclass
+from pathlib import Path
 
 import numpy as np
 from PIL import Image
 
-from .constants import ITEM_TILE_IDS, MAP_H, MAP_W, SPAWN_MARKER_TILE_IDS, TILE_PX
+from .atlas_median import ANIMATED_TILE_IDS, temporal_static_mask
+from .constants import MAP_H, MAP_W, SPAWN_MARKER_TILE_IDS, TILE_PX
+
+GEM_TILE_IDS = frozenset({4, 5})
+from .graphics import DAT_SLOT_COUNTS, TileAtlas
 from .levels import Level
-from .map_layout import context_key
-from .native_vga import playfield_from_native
+from .palette_fit import fit_tile_palettes, fit_vga_palette, slot_to_rgb
 
 PLAYFIELD_W = MAP_W * TILE_PX
 PLAYFIELD_H = MAP_H * TILE_PX
 
 BACKDROP_RENDER_IDS = frozenset({0, 60, 0x3C}) | SPAWN_MARKER_TILE_IDS
-GEM_TILE_IDS = frozenset({4, 5})
+BLANK_SENTINEL = 0xB000  # word [0x311F] playfield blank sentinel (not a map byte)
+
+# Tube / conveyor tiles (0x4A–0x4F): extra DAT slots after the 120 campaign ids.
+TUBE_ANIM_SLOTS: dict[int, tuple[int, ...]] = {
+    0x4A: (142, 143, 144),
+    0x4B: (143, 144, 145),
+    0x4C: (145, 146, 147),
+    0x4D: (146, 147, 148),
+    0x4E: (148, 149, 150),
+    0x4F: (149, 150, 151),
+}
+
+_EDGE_JSON = Path(__file__).resolve().parent / "edge_slots.json"
+
+_DIR_OFFSETS = {
+    "N": (-1, 0),
+    "E": (0, 1),
+    "S": (1, 0),
+    "W": (0, -1),
+}
+
+# Border bands composited when neighbour tile id differs (0x48AD / 0x4730 strip pass).
+_EDGE_BANDS: dict[str, tuple[int, int, int, int]] = {
+    "N": (0, 0, TILE_PX, 8),
+    "S": (0, TILE_PX - 8, TILE_PX, TILE_PX),
+    "W": (0, 0, 8, TILE_PX),
+    "E": (TILE_PX - 8, 0, TILE_PX, TILE_PX),
+}
 
 
 def _norm_tid(tid: int) -> int:
-    if tid == 0:
-        return 0x3C
-    return tid
+    return 0x3C if tid == 0 else tid
 
 
-def render_context_key(tiles: list[int], row: int, col: int, tid: int) -> tuple:
-    """Same key as JETPACK.EXE neighbour reads around (row,col) — see FORMATS.md RE."""
-    return context_key(tiles, row, col, _norm_tid(tid))
+def _neighbor_tid(tiles: list[int], row: int, col: int, dr: int, dc: int) -> int:
+    r, c = row + dr, col + dc
+    if 0 <= r < MAP_H and 0 <= c < MAP_W:
+        return tiles[r * MAP_W + c]
+    return -1
 
 
-def _neighbor_hamming(a: tuple, b: tuple) -> int:
-    if a[0] != b[0]:
-        return 999
-    return sum(1 for x, y in zip(a[1:], b[1:]) if x != y)
+def _needs_edge(center: int, neighbor: int) -> bool:
+    if neighbor < 0:
+        return False
+    if neighbor == center:
+        return False
+    if neighbor == 0:
+        return False
+    return True
+
+
+def edge_dat_slot(center_tid: int, direction: str) -> int | None:
+    """SCLM descriptor CL=0x20 uses centre tile id (CH); edge art at 120+tid."""
+    key = f"{center_tid}:{direction}"
+    if _EDGE_JSON.is_file():
+        table = json.loads(_EDGE_JSON.read_text(encoding="utf-8"))
+        if key in table:
+            return int(table[key])
+    slot = 120 + center_tid
+    total = sum(DAT_SLOT_COUNTS)
+    if slot >= total:
+        return None
+    return slot
+
+
+def _apply_edge_band(cell: np.ndarray, overlay_rgba: np.ndarray, rect: tuple[int, int, int, int]) -> None:
+    x0, y0, x1, y1 = rect
+    sub = cell[y0:y1, x0:x1]
+    cell[y0:y1, x0:x1] = _composite_rgba(sub, overlay_rgba[y0:y1, x0:x1])
+
+
+def _composite_rgba(base_rgb: np.ndarray, overlay: np.ndarray) -> np.ndarray:
+    out = base_rgb.astype(np.float32)
+    if overlay.shape[-1] == 4:
+        rgb = overlay[:, :, :3].astype(np.float32)
+        alpha = overlay[:, :, 3:4].astype(np.float32) / 255.0
+        out = out * (1 - alpha) + rgb * alpha
+    else:
+        mask = np.any(overlay != 0, axis=2)
+        out[mask] = overlay[mask].astype(np.float32)
+    return np.clip(out, 0, 255).astype(np.uint8)
+
+
+def _tile_rgba(
+    atlas: TileAtlas,
+    palette: list[tuple[int, int, int]] | dict[int, tuple[int, int, int]],
+    slot: int,
+) -> np.ndarray | None:
+    px = atlas.tile_pixels(slot)
+    if not px:
+        return None
+    rgb = slot_to_rgb(px, palette)
+    alpha = np.zeros((TILE_PX, TILE_PX, 1), dtype=np.uint8)
+    for i, idx in enumerate(px):
+        if idx != 0:
+            x, y = i % TILE_PX, i // TILE_PX
+            alpha[y, x, 0] = 255
+    return np.concatenate([rgb, alpha], axis=2)
 
 
 @dataclass
-class CompositeAtlas:
-    base: dict[int, np.ndarray]
-    context: dict[tuple, np.ndarray]  # context_key -> full RGB 24×24
+class DatCompositor:
+    atlas: TileAtlas
+    global_palette: list[tuple[int, int, int]]
+    tile_palettes: dict[int, dict[int, tuple[int, int, int]]]
     backdrop: np.ndarray
-    counts: dict[int, int] = field(default_factory=dict)
-    flagged_ids: list[int] = field(default_factory=list)
+    anim_phase: int = 0
 
-    def has_tile(self, tid: int) -> bool:
-        if tid in BACKDROP_RENDER_IDS:
-            return True
-        return tid in self.base
+    @classmethod
+    def open(
+        cls,
+        game_dir: Path,
+        native_dir: Path,
+        levels: list[Level],
+        exclude_level: int | None = None,
+        anim_phase: int = 0,
+    ) -> DatCompositor:
+        atlas = TileAtlas.open(game_dir)
+        lvlist = levels if isinstance(levels, list) else list(levels.values())
+        global_palette = fit_vga_palette(game_dir, native_dir, lvlist, exclude_level=exclude_level)
+        tile_palettes = fit_tile_palettes(game_dir, native_dir, lvlist, exclude_level=exclude_level)
+        px = atlas.tile_pixels(0x3C)
+        pal = tile_palettes.get(0x3C) or global_palette
+        backdrop = slot_to_rgb(px, pal) if px else np.full((TILE_PX, TILE_PX, 3), (0x28, 0x20, 0x38), np.uint8)
+        return cls(
+            atlas=atlas,
+            global_palette=global_palette,
+            tile_palettes=tile_palettes,
+            backdrop=backdrop,
+            anim_phase=anim_phase,
+        )
 
-    def lookup_context(self, tiles: list[int], row: int, col: int, tid: int) -> np.ndarray | None:
-        key = render_context_key(tiles, row, col, tid)
-        if key in self.context:
-            return self.context[key]
-        keys = [k for k in self.context if k[0] == key[0]]
-        if not keys:
-            return None
-        best = min(keys, key=lambda k: _neighbor_hamming(key, k))
-        if _neighbor_hamming(key, best) > 3:
-            return None
-        return self.context[best]
+    def _palette_for(self, tid: int) -> list[tuple[int, int, int]] | dict[int, tuple[int, int, int]]:
+        tid = _norm_tid(tid)
+        if tid in self.tile_palettes:
+            return self.tile_palettes[tid]
+        return self.global_palette
 
-    def render_tile(self, tiles: list[int], row: int, col: int, tid: int) -> np.ndarray:
+    def _base_slot(self, tid: int) -> int:
+        tid = _norm_tid(tid)
+        if tid in TUBE_ANIM_SLOTS:
+            frames = TUBE_ANIM_SLOTS[tid]
+            return frames[self.anim_phase % len(frames)]
+        return tid
+
+    def render_cell(self, tiles: list[int], row: int, col: int, tid: int) -> np.ndarray:
         if tid in BACKDROP_RENDER_IDS or tid == 0:
             return self.backdrop.copy()
-        cell = self.lookup_context(tiles, row, col, tid)
-        if cell is not None:
-            return cell.copy()
-        base = self.base.get(_norm_tid(tid))
-        if base is not None:
-            return base.copy()
-        return self.backdrop.copy()
+        slot = self._base_slot(tid)
+        px = self.atlas.tile_pixels(slot)
+        if not px:
+            return self.backdrop.copy()
+        pal = self._palette_for(tid)
+        # Start from playfield backdrop; AH=8 blit uses palette index 0 transparent.
+        cell = self.backdrop.copy()
+        base_rgba = _tile_rgba(self.atlas, pal, slot)
+        if base_rgba is not None:
+            cell = _composite_rgba(cell, base_rgba)
+        center = _norm_tid(tid)
+        for dname, (dr, dc) in _DIR_OFFSETS.items():
+            nb = _neighbor_tid(tiles, row, col, dr, dc)
+            if not _needs_edge(center, _norm_tid(nb) if nb >= 0 else -1):
+                continue
+            eslot = edge_dat_slot(center, dname)
+            if eslot is None:
+                continue
+            edge = _tile_rgba(self.atlas, self.global_palette, eslot)
+            if edge is not None:
+                _apply_edge_band(cell, edge, _EDGE_BANDS[dname])
+        return cell
 
     def render_level(self, tile_ids: list[int]) -> Image.Image:
         out = np.zeros((PLAYFIELD_H, PLAYFIELD_W, 3), dtype=np.uint8)
         for row in range(MAP_H):
             for col in range(MAP_W):
                 tid = tile_ids[row * MAP_W + col]
-                tile = self.render_tile(tile_ids, row, col, tid)
+                tile = self.render_cell(tile_ids, row, col, tid)
                 y0, x0 = row * TILE_PX, col * TILE_PX
                 out[y0 : y0 + TILE_PX, x0 : x0 + TILE_PX] = tile
         return Image.fromarray(out, "RGB")
 
 
-def _cell(field: np.ndarray, row: int, col: int) -> np.ndarray:
-    y0, x0 = row * TILE_PX, col * TILE_PX
-    return field[y0 : y0 + TILE_PX, x0 : x0 + TILE_PX]
+def pick_anim_phase(
+    level: Level,
+    native_dir: Path,
+    geom,
+    game_dir: Path,
+    exclude_level: int | None = None,
+) -> int:
+    """Choose f0/f1/f2 phase for animated tiles (e.g. tube 0x4B / decimal 75)."""
+    from .atlas_median import ANIMATED_TILE_IDS
 
+    if not any(t in ANIMATED_TILE_IDS for t in level.tiles):
+        return 0
+    paths = [native_dir / f"level_{level.index:02d}_f{n}.png" for n in range(3)]
+    paths = [p for p in paths if p.is_file()]
+    if len(paths) < 2:
+        return 0
+    from .native_vga import playfield_from_native
 
-def build_composite_atlas(
-    captures: list[tuple[Level, Image.Image, np.ndarray | None]],
-) -> CompositeAtlas:
-    by_level: dict[int, tuple[Level, Image.Image, np.ndarray | None]] = {}
-    for level, native, static in captures:
-        if level.index not in by_level:
-            by_level[level.index] = (level, native, static)
-
-    buckets: dict[int, list[np.ndarray]] = defaultdict(list)
-    context_buckets: dict[tuple, list[np.ndarray]] = defaultdict(list)
-    backdrop_samples: list[np.ndarray] = []
-
-    for level, native, static in by_level.values():
-        field = np.array(playfield_from_native(native))
-        tiles = level.tiles
+    caps = [np.array(playfield_from_native(Image.open(p).convert("RGB"), geom)) for p in paths]
+    best_phase, best_mse = 0, float("inf")
+    levels = [level]
+    for phase in range(3):
+        comp = DatCompositor.open(game_dir, native_dir, levels, exclude_level=exclude_level, anim_phase=phase)
+        rend = np.array(comp.render_level(level.tiles))
+        mask = np.zeros((MAP_H, MAP_W), dtype=bool)
         for row in range(MAP_H):
             for col in range(MAP_W):
-                tid = tiles[row * MAP_W + col]
-                cell = _cell(field, row, col)
-                if tid in BACKDROP_RENDER_IDS or tid == 0:
-                    backdrop_samples.append(cell)
-                    continue
-                ntid = _norm_tid(tid)
-                buckets[ntid].append(cell)
-                if static is not None and not static[row, col]:
-                    continue
-                key = render_context_key(tiles, row, col, tid)
-                context_buckets[key].append(cell)
-
-    backdrop = (
-        np.median(np.stack(backdrop_samples, axis=0), axis=0).astype(np.uint8)
-        if backdrop_samples
-        else np.full((TILE_PX, TILE_PX, 3), (0x28, 0x20, 0x38), dtype=np.uint8)
-    )
-
-    base: dict[int, np.ndarray] = {}
-    counts: dict[int, int] = {}
-    flagged: list[int] = []
-    for tid, samples in buckets.items():
-        stack = np.stack(samples, axis=0).astype(np.float32)
-        base[tid] = np.median(stack, axis=0).astype(np.uint8)
-        counts[tid] = len(samples)
-        if float(np.mean(np.var(stack, axis=0))) > 400.0:
-            flagged.append(tid)
-
-    context: dict[tuple, np.ndarray] = {}
-    for key, samples in context_buckets.items():
-        context[key] = np.median(np.stack(samples, axis=0), axis=0).astype(np.uint8)
-
-    return CompositeAtlas(
-        base=base,
-        context=context,
-        backdrop=backdrop,
-        counts=counts,
-        flagged_ids=sorted(flagged),
-    )
+                tid = level.tiles[row * MAP_W + col]
+                if tid in ANIMATED_TILE_IDS:
+                    mask[row, col] = True
+        if not np.any(mask):
+            return 0
+        m = mask.repeat(TILE_PX, 0).repeat(TILE_PX, 1)
+        diff = (caps[0].astype(np.float32) - rend.astype(np.float32)) ** 2
+        mse = float(np.mean(diff[m]))
+        if mse < best_mse:
+            best_mse, best_phase = mse, phase
+    return best_phase
 
 
 def validation_eval_mask(level: Level, static_mask: np.ndarray) -> np.ndarray:
-    """All map cells except backdrop, spawn markers, gems, and entity slots."""
     m = np.zeros((MAP_H, MAP_W), dtype=bool)
     tiles = level.tiles
     enemy_cells = {(e.x - 1, e.y - 1) for e in level.enemies}
@@ -168,15 +263,28 @@ def validation_eval_mask(level: Level, static_mask: np.ndarray) -> np.ndarray:
     return m
 
 
-def coverage_mask(tile_ids: list[int], atlas: CompositeAtlas) -> np.ndarray:
-    """Cells where an exact context_key exists in the atlas."""
+def coverage_mask(tile_ids: list[int], compositor: DatCompositor) -> np.ndarray:
+    """Cells where base DAT art exists for the map tile id."""
     m = np.zeros((MAP_H, MAP_W), dtype=bool)
     for row in range(MAP_H):
         for col in range(MAP_W):
             tid = tile_ids[row * MAP_W + col]
             if tid in BACKDROP_RENDER_IDS or tid == 0:
                 continue
-            key = render_context_key(tile_ids, row, col, tid)
-            if key in atlas.context:
+            slot = compositor._base_slot(tid)
+            if compositor.atlas.tile_pixels(slot) is not None:
                 m[row, col] = True
     return m
+
+
+# Legacy no-op types for scripts still importing CompositeAtlas
+@dataclass
+class CompositeAtlas:
+    backdrop: np.ndarray
+
+    def render_level(self, tile_ids: list[int]) -> Image.Image:
+        raise RuntimeError("Use DatCompositor instead of CompositeAtlas pickle")
+
+
+def build_composite_atlas(*_args, **_kwargs):
+    raise RuntimeError("composite_atlas.pkl removed; use DatCompositor")

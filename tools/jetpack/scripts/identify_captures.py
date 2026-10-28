@@ -17,7 +17,7 @@ sys.path.insert(0, str(ROOT))
 from jetpack.atlas_median import masked_mse, temporal_static_mask
 from jetpack.levels import Level, load_jetlev
 from jetpack.native_vga import load_geometry, playfield_from_native
-from jetpack.tile_composite import build_composite_atlas
+from jetpack.tile_composite import DatCompositor
 
 
 def load_capture_pairs(native: Path) -> list[tuple[int, Level, list[np.ndarray]]]:
@@ -50,12 +50,8 @@ def main() -> int:
     native = args.native.expanduser().resolve()
     all_levels = load_jetlev(ROOT / "_download/extracted/jetpak15/JETLEV.DAT")
 
-    # Train atlas on filename-labelled pairs (bootstrap).
-    pairs = []
-    for label, lv, _ in load_capture_pairs(native):
-        f0 = native / f"level_{label:02d}_f0.png"
-        pairs.append((lv, Image.open(f0).convert("RGB")))
-    atlas = build_composite_atlas([(lv, img, None) for lv, img in pairs])
+    game = ROOT / "_download/extracted/jetpak15"
+    comp = DatCompositor.open(game, native, all_levels, exclude_level=None)
 
     results = []
     mis = 0
@@ -67,7 +63,7 @@ def main() -> int:
         best_i = 0
         best_mse = float("inf")
         for lv in all_levels:
-            rend = np.array(atlas.render_level(lv.tiles))
+            rend = np.array(comp.render_level(lv.tiles))
             # Compare on non-backdrop cells only, no sprite mask yet
             mask = np.ones((16, 26), dtype=bool)
             for row in range(16):
@@ -95,7 +91,7 @@ def main() -> int:
     audit = {
         "mislabelled_count": mis,
         "total": len(results),
-        "method": "composite_atlas_render_mse",
+        "method": "dat_compositor_render_mse",
         "entries": results,
     }
     out_path = ROOT / "reference" / "capture_label_audit.json"

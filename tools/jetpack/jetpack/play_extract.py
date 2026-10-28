@@ -1,23 +1,18 @@
-"""Export gfx/frames from native VGA captures using composite tile atlas."""
+"""Export gfx/frames from DAT decode + DAC calibration (no context RGB atlas)."""
 
 from __future__ import annotations
 
 import json
-import pickle
 from pathlib import Path
 
-import numpy as np
-from jetpack.native_vga import playfield_from_native
 from PIL import Image
 
 from .constants import ENEMY_NAMES, SPAWN_MARKER_TILE_IDS, TILE_NAMES, TILE_PX
+from .graphics import TileAtlas
 from .levels import load_jetlev
 from .map_layout import default_layout
 from .native_vga import calibrate_origin, load_geometry, save_geometry
-from .atlas_median import temporal_static_mask
-from .tile_composite import CompositeAtlas, build_composite_atlas
-
-
+from .palette_fit import fit_tile_palettes, fit_vga_palette, slot_to_rgb
 def _slug(name: str) -> str:
     import re
 
@@ -44,34 +39,24 @@ def export_play_frames(
     native_dir: Path,
 ) -> dict:
     layout = default_layout()
-    levels = {lv.index: lv for lv in load_jetlev(game_dir / "JETLEV.DAT")}
+    levels = load_jetlev(game_dir / "JETLEV.DAT")
     caps = load_native_captures(native_dir)
     if not caps:
         raise FileNotFoundError(f"no native captures in {native_dir}")
 
-    lv0 = levels[0]
+    lv0 = next(lv for lv in levels if lv.index == 0)
     ref = Image.open(caps[0][0])
     origin = calibrate_origin(lv0.tiles, ref)
     geom = load_geometry()
     geom = type(geom)(geom.native_size, origin, geom.tile_px, geom.map_size)
     save_geometry(geom)
 
-    capture_pairs: list[tuple] = []
-    for idx, paths in sorted(caps.items()):
-        if idx not in levels:
-            continue
-        frames = [
-            np.array(playfield_from_native(Image.open(p).convert("RGB"), geom)) for p in paths
-        ]
-        static = temporal_static_mask(frames) if len(frames) > 1 else None
-        native = Image.open(paths[0]).convert("RGB")
-        capture_pairs.append((levels[idx], native, static))
+    atlas = TileAtlas.open(game_dir)
+    global_pal = fit_vga_palette(game_dir, native_dir, levels)
+    tile_pals = fit_tile_palettes(game_dir, native_dir, levels)
 
-    atlas = build_composite_atlas(capture_pairs)
     ref_dir = root / "reference"
     ref_dir.mkdir(parents=True, exist_ok=True)
-    with (ref_dir / "composite_atlas.pkl").open("wb") as f:
-        pickle.dump(atlas, f, protocol=pickle.HIGHEST_PROTOCOL)
 
     out_dir = root / "gfx" / "frames"
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -79,16 +64,15 @@ def export_play_frames(
         old.unlink()
 
     index: dict = {
-        "source": "dosbox_native_composite",
+        "source": "dat_sclm_decode",
         "render_rule": (
-            "context_rgb[(tile_id, N,E,S,W,NE,NW,SE,SW neighbour tile ids)]; "
-            "fallback base[tile_id] (see FORMATS.md JETPACK.EXE 0x48AD/0x3871)."
+            "JETPACKn.DAT base (AH=8) + edge strip slot 120+tile_id (AH=9, index 0 transparent); "
+            "DAC from interior-cell capture medians; see FORMATS.md 0x4730/0x48AD."
         ),
         "map_layout": layout.to_dict(),
         "tile_size": TILE_PX,
         "native_resolution": list(geom.native_size),
         "playfield_origin": list(geom.origin),
-        "flagged_tile_ids": atlas.flagged_ids,
         "tiles": [],
         "player": [],
         "enemies": [],
@@ -96,21 +80,24 @@ def export_play_frames(
     }
 
     exported: set[int] = set()
-    for tid in sorted(atlas.base):
+    for tid in range(120):
         if tid in SPAWN_MARKER_TILE_IDS or tid in exported:
             continue
+        px = atlas.tile_pixels(tid)
+        if not px:
+            continue
+        pal = tile_pals.get(tid) or global_pal
+        rgb = slot_to_rgb(px, pal)
         name = TILE_NAMES.get(tid, f"id_{tid:02x}")
         fname = f"tile_{tid:03d}_{_slug(name)}.png"
-        Image.fromarray(atlas.base[tid], "RGB").convert("RGBA").save(out_dir / fname)
-        index["tiles"].append(
-            {"file": fname, "tile_id": tid, "name": name, "samples": atlas.counts.get(tid, 0)}
-        )
+        Image.fromarray(rgb, "RGB").convert("RGBA").save(out_dir / fname)
+        index["tiles"].append({"file": fname, "tile_id": tid, "name": name, "samples": 0})
         exported.add(tid)
 
     if 0 in caps and len(caps[0]) >= 2:
         from .sprites_diff import extract_sprite_frames
 
-        spr = extract_sprite_frames(caps[0], levels[0], geom)
+        spr = extract_sprite_frames(caps[0], lv0, geom)
         if spr.player:
             spr.player.save(out_dir / "player_fly_0.png")
             index["player"].append({"file": "player_fly_0.png", "frame": 0, "role": "fly"})
@@ -124,12 +111,9 @@ def export_play_frames(
         json.dumps(
             {
                 "map_layout": layout.to_dict(),
-                "base_tile_count": len(atlas.base),
-                "context_variant_count": len(atlas.context),
-                "flagged_tile_ids": atlas.flagged_ids,
-                "context_key_rule": (
-                    "8 neighbour JETLEV tile bytes + centre id (N,E,S,W,NE,NW,SE,SW); -1 outside map."
-                ),
+                "base_tile_count": len(exported),
+                "context_variant_count": 0,
+                "renderer": "dat_compositor",
             },
             indent=2,
         )
