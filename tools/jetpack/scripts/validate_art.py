@@ -23,7 +23,7 @@ from jetpack.native_vga import load_geometry, playfield_from_native
 from jetpack.tile_composite import BACKDROP_RENDER_IDS, coverage_mask
 
 CHECK_LEVELS = (0, 5, 37, 99)
-MAX_MSE = 5.0
+MAX_MSE = 2.0
 MIN_COVERAGE = 0.99
 
 
@@ -74,8 +74,8 @@ def eval_level(
     if not paths:
         return {"skip": True}
     fields = [np.array(playfield_from_native(Image.open(p).convert("RGB"), geom)) for p in paths]
-    cap = fields[0]
-    rend = np.array(atlas.render_level(lv.tiles).convert("RGB"))
+    cap = np.median(np.stack(fields, axis=0), axis=0).astype(np.uint8) if len(fields) > 1 else fields[0]
+    rend = np.array(atlas.render_level(lv.tiles, level_index=lv.index).convert("RGB"))
     content = content_mask(lv.tiles)
     sprites = ~temporal_static_mask(fields)
     eval_mask = content & ~sprites
@@ -138,12 +138,21 @@ def main() -> int:
             f"{'OK' if ok else 'FAIL'}"
         )
         if idx in CHECK_LEVELS or not args.all_levels:
-            cap_img = Image.fromarray(
-                np.array(playfield_from_native(Image.open(ref / "native" / f"level_{idx:02d}_f0.png"), geom)),
-                "RGB",
+            paths = [ref / "native" / f"level_{idx:02d}_f{n}.png" for n in range(3)]
+            paths = [p for p in paths if p.is_file()]
+            fields = [
+                np.array(playfield_from_native(Image.open(p).convert("RGB"), geom)) for p in paths
+            ]
+            cap_arr = (
+                np.median(np.stack(fields, axis=0), axis=0).astype(np.uint8)
+                if len(fields) > 1
+                else fields[0]
             )
+            cap_img = Image.fromarray(cap_arr, "RGB")
             rend_img = Image.fromarray(
-                np.array(atlas.render_level(levels[idx].tiles).convert("RGB")),
+                np.array(
+                    atlas.render_level(levels[idx].tiles, level_index=idx).convert("RGB"),
+                ),
                 "RGB",
             )
             side = side_by_side(

@@ -7,45 +7,45 @@
     "flip_row": false,
     "transpose": false
   },
-  "max_mse": 5.0,
+  "max_mse": 2.0,
   "min_coverage_pct": 99.0,
   "levels": {
     "level_00": {
       "content_cells": 147,
-      "eval_cells": 145,
+      "eval_cells": 134,
       "coverage_pct": 100.0,
       "atlas_has_base_pct": 100.0,
-      "mse": 4311.88818359375,
-      "pass": false
+      "mse": 0.0,
+      "pass": true
     },
     "level_05": {
       "content_cells": 75,
-      "eval_cells": 71,
+      "eval_cells": 75,
       "coverage_pct": 100.0,
       "atlas_has_base_pct": 100.0,
-      "mse": 3395.13916015625,
-      "pass": false
+      "mse": 0.0,
+      "pass": true
     },
     "level_37": {
       "content_cells": 223,
-      "eval_cells": 210,
+      "eval_cells": 183,
       "coverage_pct": 100.0,
       "atlas_has_base_pct": 100.0,
-      "mse": 5448.44580078125,
-      "pass": false
+      "mse": 0.0,
+      "pass": true
     },
     "level_99": {
       "content_cells": 408,
-      "eval_cells": 369,
+      "eval_cells": 385,
       "coverage_pct": 100.0,
       "atlas_has_base_pct": 100.0,
-      "mse": 2558.5908203125,
-      "pass": false
+      "mse": 0.0,
+      "pass": true
     }
   },
   "mean_over_checked": {
     "coverage_pct": 100.0,
-    "mse": 3928.5159912109375,
+    "mse": 0.0,
     "level_count": 4
   }
 }

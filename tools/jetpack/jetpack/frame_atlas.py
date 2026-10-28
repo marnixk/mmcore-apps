@@ -53,9 +53,9 @@ class FrameAtlas:
     def tile_image(self, tile_id: int) -> Image.Image | None:
         return self.tiles.get(tile_id)
 
-    def render_level(self, tile_ids: list[int], **kwargs) -> Image.Image:
+    def render_level(self, tile_ids: list[int], level_index: int | None = None, **kwargs) -> Image.Image:
         if self.composite is not None:
-            return self.composite.render_level(tile_ids).convert("RGBA")
+            return self.composite.render_level(tile_ids, level_index=level_index).convert("RGBA")
         from .tile_composite import CompositeAtlas
         import numpy as np
         from .atlas_median import TileAtlasStats, render_level_from_atlas

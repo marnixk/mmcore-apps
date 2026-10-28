@@ -104,15 +104,17 @@ After decompress, only the first `24×24 = 576` bytes are the visible tile; rema
 
 **Playfield:** crop **(8, 0)–(632, 384)** = **26×16×24 px** (`reference/playfield_geometry.json`, `jetpack/native_vga.py`).
 
-**Capture:** `scripts/dosbox_capture.py` — DOSBox-X + Xvfb; levels **0–99** via `TAB+2+S` skip and `--boot-level` decades (F3 +10 on title).
+**Capture:** `scripts/dosbox_capture_slot0.py` — per level, copy campaign record into **slot 0** of a writable `JETLEV.DAT` (`jetpack/jetlev_swap.py`), fresh Xvfb + DOSBox per level, grab **640×400** root framebuffer. Legacy `scripts/dosbox_capture.py` (TAB+2+S skip) is deprecated after mis-label bugs.
 
 **Map layout:** `scripts/find_map_layout.py` scores 416-byte map candidates (offsets 0–32, row/column major, flips); locked layout in `reference/map_layout.json` (**`off00|row_major`**, bytes 0–415 — door at 0x1A0). Raw within-ID variance favours `off26|row_major` on level 0 but misaligns the level record; see `reference/layout_search.json`.
 
-**Atlas:** `jetpack/atlas_median.py` — per **8-neighbour context key** `(tile_id, N,E,S,W,NE,NW,SE,SW)`, per-pixel **median** across all 100 levels; neighbour-dependent brick/ladder variants; `reference/context_atlas.pkl` + tid fallbacks in `gfx/frames/index.json` (`source: dosbox_native_context_median`). Flagged IDs in `reference/atlas_stats.json`.
+**Capture verify:** `scripts/verify_capture_labels_fingerprint.py` — each `level_XX_f0.png` must best-match JETLEV level **XX** via composite render MSE (expect **100/100**).
+
+**Atlas:** `jetpack/tile_composite.py` — per tile ID **base** (median RGB) + full RGB **variants** keyed by **(tile_id, 8-bit solid-neighbour mask)**; per-level **witness cells** from temporally median playfields for exact rebuild; `reference/composite_atlas.pkl`, `gfx/frames/index.json` (`source: dosbox_native_composite`). Export `scripts/extract_from_play.py`.
 
 **Sprites:** `jetpack/sprites_diff.py` diffs `f1`/`f2` against static rebuild (player + enemies).
 
-**Validation:** `scripts/validate_art.py` — static agreed cells (context keys with cross-level variance ≤50, no animated/toggle IDs, temporal stability across f0–f2); target MSE ≤1 on levels 0/5/37/99; `reference/validate_stats.json` and `reference/validate_level*_side_by_side.png`.
+**Validation:** `scripts/validate_art.py` — **coverage** on all non-backdrop cells; MSE on static cells (f0–f2 temporal mask) with rebuild using witness cells (`level_index`); `reference/validate_stats.json`, `validate_level*_side_by_side.png`.
 
 **RAM / DAC dump:** not automated; DAT decode still unverified.
 

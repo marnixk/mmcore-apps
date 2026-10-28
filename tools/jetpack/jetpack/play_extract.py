@@ -7,6 +7,7 @@ import pickle
 from pathlib import Path
 
 import numpy as np
+from jetpack.native_vga import playfield_from_native
 from PIL import Image
 
 from .constants import ENEMY_NAMES, SPAWN_MARKER_TILE_IDS, TILE_NAMES, TILE_PX
@@ -58,8 +59,16 @@ def export_play_frames(
     for idx, paths in sorted(caps.items()):
         if idx not in levels:
             continue
-        for p in paths:
-            capture_pairs.append((levels[idx], Image.open(p).convert("RGB")))
+        frames = [np.array(playfield_from_native(Image.open(p).convert("RGB"), geom)) for p in paths]
+        if len(frames) > 1:
+            med = np.median(np.stack(frames, axis=0), axis=0).astype(np.uint8)
+            # Keep HUD/status from f0; only the playfield is temporally filtered.
+            native = Image.open(paths[0]).convert("RGB")
+            pf = Image.fromarray(med, "RGB")
+            native.paste(pf, geom.origin)
+        else:
+            native = Image.open(paths[0]).convert("RGB")
+        capture_pairs.append((levels[idx], native))
 
     atlas = build_composite_atlas(capture_pairs)
     ref_dir = root / "reference"
@@ -115,10 +124,10 @@ def export_play_frames(
             {
                 "map_layout": layout.to_dict(),
                 "base_tile_count": len(atlas.base),
-                "overlay_variant_count": len(atlas.overlay),
+                "variant_count": len(atlas.variants),
                 "flagged_tile_ids": atlas.flagged_ids,
                 "neighbour_variant_rule": (
-                    "4-neighbour solid mask (N,E,S,W); per (tile_id, mask) median RGB residual over base."
+                    "8-bit solid-neighbour mask (N,E,S,W + diagonals); per (tile_id, mask) median RGB."
                 ),
             },
             indent=2,

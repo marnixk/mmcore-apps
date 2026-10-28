@@ -18,713 +18,617 @@
     0
   ],
   "flagged_tile_ids": [
-    1,
-    2,
-    3,
-    4,
-    5,
     6,
     7,
     8,
-    9,
-    10,
-    11,
-    12,
-    13,
     15,
-    16,
-    17,
-    18,
-    19,
-    20,
-    21,
-    22,
-    23,
-    24,
     25,
-    26,
-    27,
-    28,
-    29,
-    30,
-    31,
-    32,
     33,
-    34,
-    35,
-    36,
-    37,
-    38,
-    39,
-    40,
-    41,
-    42,
-    43,
-    44,
-    45,
-    46,
-    47,
-    48,
-    69,
-    70,
-    71,
-    72,
-    73,
-    74,
-    75,
-    76,
-    77,
-    78,
-    79,
-    80,
-    81,
-    82,
-    83,
-    84,
-    85,
-    86,
-    87,
-    88,
-    89,
-    90,
-    91,
-    92,
-    93,
-    94,
-    95,
-    96,
-    97,
-    99,
-    100,
-    101,
-    102,
-    103,
-    104,
-    105,
-    106,
-    107,
-    108,
-    109,
-    110,
-    111,
-    112,
-    113,
-    114,
-    115,
-    116,
-    117,
-    118,
-    119
+    75
   ],
   "tiles": [
     {
       "file": "tile_001_ladder.png",
       "tile_id": 1,
       "name": "ladder",
-      "samples": 4950
+      "samples": 1650
     },
     {
       "file": "tile_002_escalator_up.png",
       "tile_id": 2,
       "name": "escalator_up",
-      "samples": 675
+      "samples": 225
     },
     {
       "file": "tile_003_escalator_down.png",
       "tile_id": 3,
       "name": "escalator_down",
-      "samples": 810
+      "samples": 270
     },
     {
       "file": "tile_004_gem.png",
       "tile_id": 4,
       "name": "gem",
-      "samples": 9654
+      "samples": 3218
     },
     {
       "file": "tile_005_gem_collected.png",
       "tile_id": 5,
       "name": "gem_collected",
-      "samples": 12
+      "samples": 4
     },
     {
       "file": "tile_006_teleport_yellow.png",
       "tile_id": 6,
       "name": "teleport_yellow",
-      "samples": 276
+      "samples": 92
     },
     {
       "file": "tile_007_teleport_pink.png",
       "tile_id": 7,
       "name": "teleport_pink",
-      "samples": 243
+      "samples": 81
     },
     {
       "file": "tile_008_teleport_green.png",
       "tile_id": 8,
       "name": "teleport_green",
-      "samples": 216
+      "samples": 72
     },
     {
       "file": "tile_009_toggle_blue_off.png",
       "tile_id": 9,
       "name": "toggle_blue_off",
-      "samples": 126
+      "samples": 42
     },
     {
       "file": "tile_010_toggle_blue_on.png",
       "tile_id": 10,
       "name": "toggle_blue_on",
-      "samples": 18
+      "samples": 6
     },
     {
       "file": "tile_011_toggle_red_off.png",
       "tile_id": 11,
       "name": "toggle_red_off",
-      "samples": 81
+      "samples": 27
     },
     {
       "file": "tile_012_toggle_red_on.png",
       "tile_id": 12,
       "name": "toggle_red_on",
-      "samples": 12
+      "samples": 4
     },
     {
       "file": "tile_013_toggle_cyan_off.png",
       "tile_id": 13,
       "name": "toggle_cyan_off",
-      "samples": 75
+      "samples": 25
     },
     {
       "file": "tile_014_toggle_cyan_on.png",
       "tile_id": 14,
       "name": "toggle_cyan_on",
-      "samples": 3
+      "samples": 1
     },
     {
       "file": "tile_015_fuel_double.png",
       "tile_id": 15,
       "name": "fuel_double",
-      "samples": 276
+      "samples": 92
     },
     {
       "file": "tile_016_fuel_single.png",
       "tile_id": 16,
       "name": "fuel_single",
-      "samples": 297
+      "samples": 99
     },
     {
       "file": "tile_017_charger.png",
       "tile_id": 17,
       "name": "charger",
-      "samples": 288
+      "samples": 96
     },
     {
       "file": "tile_018_drain.png",
       "tile_id": 18,
       "name": "drain",
-      "samples": 1023
+      "samples": 341
     },
     {
       "file": "tile_019_stunner.png",
       "tile_id": 19,
       "name": "stunner",
-      "samples": 81
+      "samples": 27
     },
     {
       "file": "tile_020_id_14.png",
       "tile_id": 20,
       "name": "id_14",
-      "samples": 2238
+      "samples": 746
     },
     {
       "file": "tile_021_id_15.png",
       "tile_id": 21,
       "name": "id_15",
-      "samples": 1680
+      "samples": 560
     },
     {
       "file": "tile_022_id_16.png",
       "tile_id": 22,
       "name": "id_16",
-      "samples": 1149
+      "samples": 383
     },
     {
       "file": "tile_023_id_17.png",
       "tile_id": 23,
       "name": "id_17",
-      "samples": 204
+      "samples": 68
     },
     {
       "file": "tile_024_id_18.png",
       "tile_id": 24,
       "name": "id_18",
-      "samples": 120
+      "samples": 40
     },
     {
       "file": "tile_025_id_19.png",
       "tile_id": 25,
       "name": "id_19",
-      "samples": 513
+      "samples": 171
     },
     {
       "file": "tile_026_id_1a.png",
       "tile_id": 26,
       "name": "id_1a",
-      "samples": 270
+      "samples": 90
     },
     {
       "file": "tile_027_id_1b.png",
       "tile_id": 27,
       "name": "id_1b",
-      "samples": 765
+      "samples": 255
     },
     {
       "file": "tile_028_id_1c.png",
       "tile_id": 28,
       "name": "id_1c",
-      "samples": 1146
+      "samples": 382
     },
     {
       "file": "tile_029_id_1d.png",
       "tile_id": 29,
       "name": "id_1d",
-      "samples": 1920
+      "samples": 640
     },
     {
       "file": "tile_030_id_1e.png",
       "tile_id": 30,
       "name": "id_1e",
-      "samples": 69
+      "samples": 23
     },
     {
       "file": "tile_031_id_1f.png",
       "tile_id": 31,
       "name": "id_1f",
-      "samples": 96
+      "samples": 32
     },
     {
       "file": "tile_032_id_20.png",
       "tile_id": 32,
       "name": "id_20",
-      "samples": 516
+      "samples": 172
     },
     {
       "file": "tile_033_id_21.png",
       "tile_id": 33,
       "name": "id_21",
-      "samples": 72
+      "samples": 24
     },
     {
       "file": "tile_034_id_22.png",
       "tile_id": 34,
       "name": "id_22",
-      "samples": 48
+      "samples": 16
     },
     {
       "file": "tile_035_id_23.png",
       "tile_id": 35,
       "name": "id_23",
-      "samples": 18
+      "samples": 6
     },
     {
       "file": "tile_036_id_24.png",
       "tile_id": 36,
       "name": "id_24",
-      "samples": 633
+      "samples": 211
     },
     {
       "file": "tile_037_id_25.png",
       "tile_id": 37,
       "name": "id_25",
-      "samples": 102
+      "samples": 34
     },
     {
       "file": "tile_038_id_26.png",
       "tile_id": 38,
       "name": "id_26",
-      "samples": 480
+      "samples": 160
     },
     {
       "file": "tile_039_id_27.png",
       "tile_id": 39,
       "name": "id_27",
-      "samples": 102
+      "samples": 34
     },
     {
       "file": "tile_040_id_28.png",
       "tile_id": 40,
       "name": "id_28",
-      "samples": 3735
+      "samples": 1245
     },
     {
       "file": "tile_041_id_29.png",
       "tile_id": 41,
       "name": "id_29",
-      "samples": 66
+      "samples": 22
     },
     {
       "file": "tile_042_id_2a.png",
       "tile_id": 42,
       "name": "id_2a",
-      "samples": 84
+      "samples": 28
     },
     {
       "file": "tile_043_id_2b.png",
       "tile_id": 43,
       "name": "id_2b",
-      "samples": 90
+      "samples": 30
     },
     {
       "file": "tile_044_id_2c.png",
       "tile_id": 44,
       "name": "id_2c",
-      "samples": 48
+      "samples": 16
     },
     {
       "file": "tile_045_id_2d.png",
       "tile_id": 45,
       "name": "id_2d",
-      "samples": 33
+      "samples": 11
     },
     {
       "file": "tile_046_id_2e.png",
       "tile_id": 46,
       "name": "id_2e",
-      "samples": 63
+      "samples": 21
     },
     {
       "file": "tile_047_id_2f.png",
       "tile_id": 47,
       "name": "id_2f",
-      "samples": 96
+      "samples": 32
     },
     {
       "file": "tile_048_id_30.png",
       "tile_id": 48,
       "name": "id_30",
-      "samples": 48
+      "samples": 16
     },
     {
       "file": "tile_049_id_31.png",
       "tile_id": 49,
       "name": "id_31",
-      "samples": 3
+      "samples": 1
     },
     {
       "file": "tile_069_id_45.png",
       "tile_id": 69,
       "name": "id_45",
-      "samples": 66
+      "samples": 22
     },
     {
       "file": "tile_070_crate.png",
       "tile_id": 70,
       "name": "crate",
-      "samples": 2736
+      "samples": 912
     },
     {
       "file": "tile_071_steel_barrier.png",
       "tile_id": 71,
       "name": "steel_barrier",
-      "samples": 774
+      "samples": 258
     },
     {
       "file": "tile_072_diamond_block.png",
       "tile_id": 72,
       "name": "diamond_block",
-      "samples": 5553
+      "samples": 1851
     },
     {
       "file": "tile_073_id_49.png",
       "tile_id": 73,
       "name": "id_49",
-      "samples": 2556
+      "samples": 852
     },
     {
       "file": "tile_074_id_4a.png",
       "tile_id": 74,
       "name": "id_4a",
-      "samples": 831
+      "samples": 277
     },
     {
       "file": "tile_075_id_4b.png",
       "tile_id": 75,
       "name": "id_4b",
-      "samples": 783
+      "samples": 261
     },
     {
       "file": "tile_076_id_4c.png",
       "tile_id": 76,
       "name": "id_4c",
-      "samples": 669
+      "samples": 223
     },
     {
       "file": "tile_077_id_4d.png",
       "tile_id": 77,
       "name": "id_4d",
-      "samples": 615
+      "samples": 205
     },
     {
       "file": "tile_078_id_4e.png",
       "tile_id": 78,
       "name": "id_4e",
-      "samples": 459
+      "samples": 153
     },
     {
       "file": "tile_079_id_4f.png",
       "tile_id": 79,
       "name": "id_4f",
-      "samples": 261
+      "samples": 87
     },
     {
       "file": "tile_080_id_50.png",
       "tile_id": 80,
       "name": "id_50",
-      "samples": 744
+      "samples": 248
     },
     {
       "file": "tile_081_id_51.png",
       "tile_id": 81,
       "name": "id_51",
-      "samples": 537
+      "samples": 179
     },
     {
       "file": "tile_082_id_52.png",
       "tile_id": 82,
       "name": "id_52",
-      "samples": 351
+      "samples": 117
     },
     {
       "file": "tile_083_id_53.png",
       "tile_id": 83,
       "name": "id_53",
-      "samples": 204
+      "samples": 68
     },
     {
       "file": "tile_084_id_54.png",
       "tile_id": 84,
       "name": "id_54",
-      "samples": 252
+      "samples": 84
     },
     {
       "file": "tile_085_id_55.png",
       "tile_id": 85,
       "name": "id_55",
-      "samples": 201
+      "samples": 67
     },
     {
       "file": "tile_086_id_56.png",
       "tile_id": 86,
       "name": "id_56",
-      "samples": 285
+      "samples": 95
     },
     {
       "file": "tile_087_id_57.png",
       "tile_id": 87,
       "name": "id_57",
-      "samples": 363
+      "samples": 121
     },
     {
       "file": "tile_088_id_58.png",
       "tile_id": 88,
       "name": "id_58",
-      "samples": 297
+      "samples": 99
     },
     {
       "file": "tile_089_id_59.png",
       "tile_id": 89,
       "name": "id_59",
-      "samples": 309
+      "samples": 103
     },
     {
       "file": "tile_090_id_5a.png",
       "tile_id": 90,
       "name": "id_5a",
-      "samples": 99
+      "samples": 33
     },
     {
       "file": "tile_091_id_5b.png",
       "tile_id": 91,
       "name": "id_5b",
-      "samples": 111
+      "samples": 37
     },
     {
       "file": "tile_092_id_5c.png",
       "tile_id": 92,
       "name": "id_5c",
-      "samples": 84
+      "samples": 28
     },
     {
       "file": "tile_093_id_5d.png",
       "tile_id": 93,
       "name": "id_5d",
-      "samples": 120
+      "samples": 40
     },
     {
       "file": "tile_094_id_5e.png",
       "tile_id": 94,
       "name": "id_5e",
-      "samples": 426
+      "samples": 142
     },
     {
       "file": "tile_095_id_5f.png",
       "tile_id": 95,
       "name": "id_5f",
-      "samples": 168
+      "samples": 56
     },
     {
       "file": "tile_096_id_60.png",
       "tile_id": 96,
       "name": "id_60",
-      "samples": 729
+      "samples": 243
     },
     {
       "file": "tile_097_id_61.png",
       "tile_id": 97,
       "name": "id_61",
-      "samples": 186
+      "samples": 62
     },
     {
       "file": "tile_098_id_62.png",
       "tile_id": 98,
       "name": "id_62",
-      "samples": 3
+      "samples": 1
     },
     {
       "file": "tile_099_id_63.png",
       "tile_id": 99,
       "name": "id_63",
-      "samples": 54
+      "samples": 18
     },
     {
       "file": "tile_100_id_64.png",
       "tile_id": 100,
       "name": "id_64",
-      "samples": 585
+      "samples": 195
     },
     {
       "file": "tile_101_id_65.png",
       "tile_id": 101,
       "name": "id_65",
-      "samples": 192
+      "samples": 64
     },
     {
       "file": "tile_102_id_66.png",
       "tile_id": 102,
       "name": "id_66",
-      "samples": 288
+      "samples": 96
     },
     {
       "file": "tile_103_id_67.png",
       "tile_id": 103,
       "name": "id_67",
-      "samples": 168
+      "samples": 56
     },
     {
       "file": "tile_104_id_68.png",
       "tile_id": 104,
       "name": "id_68",
-      "samples": 498
+      "samples": 166
     },
     {
       "file": "tile_105_id_69.png",
       "tile_id": 105,
       "name": "id_69",
-      "samples": 93
+      "samples": 31
     },
     {
       "file": "tile_106_id_6a.png",
       "tile_id": 106,
       "name": "id_6a",
-      "samples": 99
+      "samples": 33
     },
     {
       "file": "tile_107_id_6b.png",
       "tile_id": 107,
       "name": "id_6b",
-      "samples": 117
+      "samples": 39
     },
     {
       "file": "tile_108_id_6c.png",
       "tile_id": 108,
       "name": "id_6c",
-      "samples": 114
+      "samples": 38
     },
     {
       "file": "tile_109_id_6d.png",
       "tile_id": 109,
       "name": "id_6d",
-      "samples": 108
+      "samples": 36
     },
     {
       "file": "tile_110_id_6e.png",
       "tile_id": 110,
       "name": "id_6e",
-      "samples": 105
+      "samples": 35
     },
     {
       "file": "tile_111_id_6f.png",
       "tile_id": 111,
       "name": "id_6f",
-      "samples": 114
+      "samples": 38
     },
     {
       "file": "tile_112_id_70.png",
       "tile_id": 112,
       "name": "id_70",
-      "samples": 51
+      "samples": 17
     },
     {
       "file": "tile_113_id_71.png",
       "tile_id": 113,
       "name": "id_71",
-      "samples": 96
+      "samples": 32
     },
     {
       "file": "tile_114_conveyor_left.png",
       "tile_id": 114,
       "name": "conveyor_left",
-      "samples": 75
+      "samples": 25
     },
     {
       "file": "tile_115_id_73.png",
       "tile_id": 115,
       "name": "id_73",
-      "samples": 48
+      "samples": 16
     },
     {
       "file": "tile_116_id_74.png",
       "tile_id": 116,
       "name": "id_74",
-      "samples": 201
+      "samples": 67
     },
     {
       "file": "tile_117_conveyor_right.png",
       "tile_id": 117,
       "name": "conveyor_right",
-      "samples": 90
+      "samples": 30
     },
     {
       "file": "tile_118_id_76.png",
       "tile_id": 118,
       "name": "id_76",
-      "samples": 57
+      "samples": 19
     },
     {
       "file": "tile_119_id_77.png",
       "tile_id": 119,
       "name": "id_77",
-      "samples": 147
+      "samples": 49
     }
   ],
-  "player": [
-    {
-      "file": "player_fly_0.png",
-      "frame": 0,
-      "role": "fly"
-    }
-  ],
+  "player": [],
   "enemies": [
     {
       "file": "enemy_trackbot_0.png",

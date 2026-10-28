@@ -80,17 +80,30 @@ def is_title_menu(native_rgb: Image.Image) -> bool:
     return float(sky.mean()) > 85.0
 
 
+def _has_status_bar(arr) -> bool:
+    import numpy as np
+
+    hud_full = arr[360:394, 8:632]
+    cyan = (hud_full[:, :, 1].astype(np.float32) + hud_full[:, :, 2].astype(np.float32)) / 2.0
+    return float(cyan.mean()) > 48.0 and float(cyan.max()) > 100.0
+
+
 def is_gameplay_frame(native_rgb: Image.Image) -> bool:
     """In-play: dark playfield + bright HUD; not title sky or editor."""
     import numpy as np
 
-    if is_title_menu(native_rgb):
-        return False
     arr = np.array(native_rgb.convert("RGB"))
     if arr.shape[:2] != (NATIVE_HEIGHT, NATIVE_WIDTH):
         return False
-    hud = arr[364:382, 24:220]
-    return float(hud.mean()) > 45.0
+    if _has_status_bar(arr):
+        return True
+    if is_title_menu(native_rgb):
+        return False
+    hud_left = arr[364:382, 24:220]
+    playfield = arr[8:360, 8:632]
+    if float(playfield.mean()) > 120.0:
+        return False
+    return float(hud_left.mean()) > 45.0
 
 
 def calibrate_origin(level_tiles: list[int], native_rgb: Image.Image) -> tuple[int, int]:
