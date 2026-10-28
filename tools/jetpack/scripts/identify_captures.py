@@ -55,7 +55,7 @@ def main() -> int:
     for label, lv, _ in load_capture_pairs(native):
         f0 = native / f"level_{label:02d}_f0.png"
         pairs.append((lv, Image.open(f0).convert("RGB")))
-    atlas = build_composite_atlas(pairs)
+    atlas = build_composite_atlas([(lv, img, None) for lv, img in pairs])
 
     results = []
     mis = 0

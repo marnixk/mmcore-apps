@@ -14,6 +14,7 @@ from .constants import ENEMY_NAMES, SPAWN_MARKER_TILE_IDS, TILE_NAMES, TILE_PX
 from .levels import load_jetlev
 from .map_layout import default_layout
 from .native_vga import calibrate_origin, load_geometry, save_geometry
+from .atlas_median import temporal_static_mask
 from .tile_composite import CompositeAtlas, build_composite_atlas
 
 
@@ -59,16 +60,12 @@ def export_play_frames(
     for idx, paths in sorted(caps.items()):
         if idx not in levels:
             continue
-        frames = [np.array(playfield_from_native(Image.open(p).convert("RGB"), geom)) for p in paths]
-        if len(frames) > 1:
-            med = np.median(np.stack(frames, axis=0), axis=0).astype(np.uint8)
-            # Keep HUD/status from f0; only the playfield is temporally filtered.
-            native = Image.open(paths[0]).convert("RGB")
-            pf = Image.fromarray(med, "RGB")
-            native.paste(pf, geom.origin)
-        else:
-            native = Image.open(paths[0]).convert("RGB")
-        capture_pairs.append((levels[idx], native))
+        frames = [
+            np.array(playfield_from_native(Image.open(p).convert("RGB"), geom)) for p in paths
+        ]
+        static = temporal_static_mask(frames) if len(frames) > 1 else None
+        native = Image.open(paths[0]).convert("RGB")
+        capture_pairs.append((levels[idx], native, static))
 
     atlas = build_composite_atlas(capture_pairs)
     ref_dir = root / "reference"
@@ -84,8 +81,8 @@ def export_play_frames(
     index: dict = {
         "source": "dosbox_native_composite",
         "render_rule": (
-            "base[tile_id] + overlay[(tile_id, mask8)] for solid terrain; "
-            "mask8 = N,E,S,W + diagonal solid neighbours (decor tiles use base only)."
+            "context_rgb[(tile_id, N,E,S,W,NE,NW,SE,SW neighbour tile ids)]; "
+            "fallback base[tile_id] (see FORMATS.md JETPACK.EXE 0x48AD/0x3871)."
         ),
         "map_layout": layout.to_dict(),
         "tile_size": TILE_PX,
@@ -128,10 +125,10 @@ def export_play_frames(
             {
                 "map_layout": layout.to_dict(),
                 "base_tile_count": len(atlas.base),
-                "overlay_count": len(atlas.overlays),
+                "context_variant_count": len(atlas.context),
                 "flagged_tile_ids": atlas.flagged_ids,
-                "edge_overlay_rule": (
-                    "8-bit solid-neighbour mask; render = base[tile_id] + overlay[(tile_id, mask8)]."
+                "context_key_rule": (
+                    "8 neighbour JETLEV tile bytes + centre id (N,E,S,W,NE,NW,SE,SW); -1 outside map."
                 ),
             },
             indent=2,

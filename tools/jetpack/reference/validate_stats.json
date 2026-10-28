@@ -7,56 +7,66 @@
     "flip_row": false,
     "transpose": false
   },
-  "validation": "global_portable_atlas",
-  "max_mse": 35.0,
-  "min_coverage_pct": 85.0,
+  "validation": "global_context_key_atlas_f0",
+  "max_mse": 12.0,
+  "min_context_coverage_pct": 99.0,
   "levels": {
     "level_00": {
-      "structural_cells": 68,
-      "eval_cells": 66,
-      "coverage_pct": 98.52941176470588,
-      "mse": 1.2929292917251587,
+      "eval_cells": 119,
+      "context_coverage_pct": 100.0,
+      "mse": 0.1805555522441864,
       "pass": true
     },
     "level_05": {
-      "structural_cells": 0,
-      "eval_cells": 0,
-      "coverage_pct": 100.0,
-      "mse": null,
+      "eval_cells": 58,
+      "context_coverage_pct": 100.0,
+      "mse": 0.0,
+      "pass": true
+    },
+    "level_07": {
+      "eval_cells": 30,
+      "context_coverage_pct": 100.0,
+      "mse": 0.0,
       "pass": true
     },
     "level_37": {
-      "structural_cells": 123,
-      "eval_cells": 106,
-      "coverage_pct": 86.1788617886179,
-      "mse": 3.7410900592803955,
+      "eval_cells": 168,
+      "context_coverage_pct": 100.0,
+      "mse": 0.23222552239894867,
       "pass": true
     },
     "level_99": {
-      "structural_cells": 52,
-      "eval_cells": 20,
-      "coverage_pct": 42.30769230769231,
-      "mse": 3.2083332538604736,
-      "pass": false
+      "eval_cells": 333,
+      "context_coverage_pct": 100.0,
+      "mse": 0.0,
+      "pass": true
     }
   },
   "worst_10_mse": [
     {
       "level": 37,
-      "mse": 3.7410900592803955
-    },
-    {
-      "level": 99,
-      "mse": 3.2083332538604736
+      "mse": 0.23222552239894867
     },
     {
       "level": 0,
-      "mse": 1.2929292917251587
+      "mse": 0.1805555522441864
+    },
+    {
+      "level": 5,
+      "mse": 0.0
+    },
+    {
+      "level": 7,
+      "mse": 0.0
+    },
+    {
+      "level": 99,
+      "mse": 0.0
     }
   ],
-  "mean_over_levels_with_eval": {
-    "coverage_pct": 81.75399146525403,
-    "mse": 2.747450868288676,
-    "level_count": 3
+  "mean_over_levels": {
+    "context_coverage_pct": 100.0,
+    "mse": 0.08255621492862701,
+    "level_count": 5
   }
 }

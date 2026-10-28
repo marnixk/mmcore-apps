@@ -57,7 +57,12 @@ Binary: **141 152** bytes, plain **MZ** (no PKLITE/LZEXE wrapper). **MZ header
 | **0x3B42** | VGA dispatch (sets **`DS=0x40`**, **`int 10h`** for mode **13h** when `AL=40h`; checks **`byte [0x84] == 0x18`** (24) before accepting mode 13h @ **0x3BC1**). |
 | **0x4730** | Tile/sprite **blit** loop — resolves map coordinates via **0x46C4**, fetches pixels through **0x3B42** with **`AH=8` / `AH=9`** (SCLM blitter entry points). |
 | **0x3896** | VRAM **rep mov** to port **0x3DA** (VGA latch), used on the blit path when `word [0x311C] != 0`. |
-| **0x48AD** | Palette / fill helper (invoked from gameplay draw setup). |
+| **0x3871** | **Map index** — 1-based `(col, row)` → byte offset into level map at `DS:[0x311F]` using width **`byte [0x311A]`** (26) and base **`word [0x311D]`** (`index = (col−1)×26 + (row−1)`, then `×2` for word-sized strip state). |
+| **0x46C4** | Pixel/tile coordinate → `(row, col)` on the 26-wide grid (uses **`[0x311A]`**). |
+| **0x47FA** | **Per-cell terrain draw** — gameplay path calls **0x4730** (SCLM blit); editor/VRAM path calls **0x3896**. |
+| **0x4730** | **Strip blit** — walks cells; when the **map tile id** at the leading edge differs from the trailing edge (**0x46C4** + compare), fetches a new **24×24** via SCLM **`AH=8`** (base) and composites an edge with **`AH=9`** (transparent index 0). **`word [0x311F]`** is the player/blank sentinel tile id for “no edge”. |
+| **0x48AD** | **Edge/shadow rectangle pass** (gameplay, `[bp+4]==1`) — for each border pixel runs **0x460C** (Bresenham over the map) and **0x43D1** / **0x4427** to stamp edge strips; **0x488B** writes SCLM slot words with **`CH = byte [0x3116]`** (current centre **tile id**) and **`CL = 0x20`**. Neighbour cells are read with **0x3871** at offsets around the rectangle (see branches @ **0x4979** vs **0x48E8** for corner case **`[bp+0xE]==6`**). |
+| **0x3BC0** | Playfield setup — sets **`[0x311A]=26`**, **`[0x3119]=height`**, **`[0x311F]`** map segment, **`[0x311B]`** editor vs play flag. **No extra tileset byte** in the 506-byte level record after the 416-byte map (door @ **0x1A0**, player, enemies, title only). |
 
 **`SCLM.DAT`** (loaded at runtime, not linked at fixed addresses in the EXE):
 
@@ -110,11 +115,11 @@ After decompress, only the first `24×24 = 576` bytes are the visible tile; rema
 
 **Capture verify:** `scripts/verify_capture_labels_fingerprint.py` — each `level_XX_f0.png` must best-match JETLEV level **XX** via composite render MSE (expect **100/100**).
 
-**Atlas:** `jetpack/tile_composite.py` — per tile ID **base** (median RGB) + **edge overlay** residuals keyed by **(tile_id, 8-bit solid-neighbour mask)**; decor/animated tiles use base only. Portable data: `gfx/frames/*.png` + `reference/composite_atlas.pkl` (overlays). Export `scripts/extract_from_play.py`.
+**Terrain compositing rule (portable):** centre **tile id** plus the **eight adjacent JETLEV map bytes** (N, E, S, W, NE, NW, SE, SW; **−1** off-map) — same tuple as `jetpack/map_layout.py` **`context_key()`**, matching the neighbour reads on the **0x48AD** / **0x4730** paths above (tile **ids**, not solid/not-solid). **`gfx/frames`** exports per-id **base** medians; **`reference/composite_atlas.pkl`** holds full **24×24 RGB** per context key. Animated tiles validated at **animation frame 0** (`level_XX_f0.png`). Export: `scripts/extract_from_play.py`.
 
 **Sprites:** `jetpack/sprites_diff.py` diffs `f1`/`f2` against static rebuild (player + enemies).
 
-**Validation:** `scripts/validate_art.py` — **global-only** rebuild (no per-level data): solid terrain with agreed overlays (bucket variance ≤ 50); MSE on static eval cells; `reference/validate_stats.json`, `validate_level{00,05,37,99}_side_by_side.png`. Full captures gitignored under `reference/native/`; fixtures in `reference/fixtures/native/`.
+**Validation:** `scripts/validate_art.py` — global context atlas only; **gems + enemy cells** masked out; MSE vs **f0** capture; `reference/validate_stats.json`, `validate_level{00,05,07,37,99}_side_by_side.png`. Captures gitignored under `reference/native/`; fixtures in `reference/fixtures/native/`.
 
 **RAM / DAC dump:** not automated; DAT decode still unverified.
 

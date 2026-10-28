@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate portable composite atlas: base tiles + 4-neighbour edge overlays only."""
+"""Validate portable atlas: base + 8-neighbour tile-ID context (JETPACK.EXE rule)."""
 
 from __future__ import annotations
 
@@ -15,16 +15,16 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from jetpack.atlas_median import masked_mse, temporal_static_mask
-from jetpack.constants import MAP_H, MAP_W, TILE_PX
+from jetpack.constants import MAP_H, MAP_W
 from jetpack.frame_atlas import FrameAtlas
 from jetpack.levels import load_jetlev
 from jetpack.map_layout import default_layout
 from jetpack.native_vga import load_geometry, playfield_from_native
-from jetpack.tile_composite import coverage_mask, structural_eval_mask
+from jetpack.tile_composite import coverage_mask, validation_eval_mask
 
-CHECK_LEVELS = (0, 5, 37, 99)
-MAX_MSE = 35.0
-MIN_COVERAGE = 0.85
+CHECK_LEVELS = (0, 5, 7, 37, 99)
+MAX_MSE = 12.0
+MIN_COVERAGE = 0.99
 
 
 def side_by_side(cap: Image.Image, rend: Image.Image, label: str) -> Image.Image:
@@ -36,15 +36,11 @@ def side_by_side(cap: Image.Image, rend: Image.Image, label: str) -> Image.Image
     return out
 
 
-def capture_median(idx: int, ref: Path, geom) -> np.ndarray | None:
-    paths = [ref / "native" / f"level_{idx:02d}_f{n}.png" for n in range(3)]
-    paths = [p for p in paths if p.is_file()]
-    if not paths:
+def capture_f0(idx: int, ref: Path, geom) -> np.ndarray | None:
+    p = ref / "native" / f"level_{idx:02d}_f0.png"
+    if not p.is_file():
         return None
-    fields = [np.array(playfield_from_native(Image.open(p).convert("RGB"), geom)) for p in paths]
-    if len(fields) > 1:
-        return np.median(np.stack(fields, axis=0), axis=0).astype(np.uint8)
-    return fields[0]
+    return np.array(playfield_from_native(Image.open(p).convert("RGB"), geom))
 
 
 def eval_level(
@@ -55,33 +51,25 @@ def eval_level(
     geom,
     max_mse: float,
 ) -> dict:
-    cap = capture_median(idx, ref, geom)
+    cap = capture_f0(idx, ref, geom)
     if cap is None:
         return {"skip": True}
     paths = [ref / "native" / f"level_{idx:02d}_f{n}.png" for n in range(3)]
     paths = [p for p in paths if p.is_file()]
     fields = [np.array(playfield_from_native(Image.open(p).convert("RGB"), geom)) for p in paths]
     static = temporal_static_mask(fields)
-    eval_mask = structural_eval_mask(lv.tiles, static, atlas.composite)
+    eval_mask = validation_eval_mask(lv, static)
     rend = np.array(atlas.render_level(lv.tiles).convert("RGB"))
-    cov_cells = coverage_mask(lv.tiles, atlas.composite)
-    structural = np.zeros((MAP_H, MAP_W), dtype=bool)
-    for row in range(MAP_H):
-        for col in range(MAP_W):
-            from jetpack.tile_composite import is_solid_terrain
-
-            tid = lv.tiles[row * MAP_W + col]
-            if is_solid_terrain(tid):
-                structural[row, col] = True
-    coverage = (
-        float(np.sum(structural & cov_cells) / np.sum(structural)) if np.any(structural) else 1.0
-    )
+    ctx = coverage_mask(lv.tiles, atlas.composite)
+    if np.any(eval_mask):
+        coverage = float(np.sum(eval_mask & ctx) / np.sum(eval_mask))
+    else:
+        coverage = 1.0
     mse = float(masked_mse(cap, rend, eval_mask)) if np.any(eval_mask) else None
     ok = coverage >= MIN_COVERAGE and (mse is None or mse <= max_mse)
     return {
-        "structural_cells": int(structural.sum()),
         "eval_cells": int(eval_mask.sum()),
-        "coverage_pct": float(coverage * 100.0),
+        "context_coverage_pct": float(coverage * 100.0),
         "mse": mse,
         "pass": ok,
     }
@@ -106,9 +94,9 @@ def main() -> int:
     check = list(range(100)) if args.all_levels else (args.levels or list(CHECK_LEVELS))
     stats_out: dict = {
         "map_layout": layout.to_dict(),
-        "validation": "global_portable_atlas",
+        "validation": "global_context_key_atlas_f0",
         "max_mse": args.max_mse,
-        "min_coverage_pct": MIN_COVERAGE * 100,
+        "min_context_coverage_pct": MIN_COVERAGE * 100,
         "levels": {},
     }
     failed = False
@@ -124,38 +112,42 @@ def main() -> int:
         stats_out["levels"][f"level_{idx:02d}"] = row
         if row["mse"] is not None:
             mses.append((idx, row["mse"]))
-        covs.append(row["coverage_pct"])
+        covs.append(row["context_coverage_pct"])
         ok = row["pass"]
         failed = failed or not ok
         mse_s = "n/a" if row["mse"] is None else f"{row['mse']:.2f}"
         print(
-            f"level_{idx:02d}  coverage={row['coverage_pct']:.1f}%  "
+            f"level_{idx:02d}  coverage={row['context_coverage_pct']:.1f}%  "
             f"MSE={mse_s}  eval_cells={row['eval_cells']}  "
             f"{'OK' if ok else 'FAIL'}"
         )
         if idx in CHECK_LEVELS:
-            cap_arr = capture_median(idx, ref, geom)
+            cap_arr = capture_f0(idx, ref, geom)
             assert cap_arr is not None
             cap_img = Image.fromarray(cap_arr, "RGB")
-            rend_img = Image.fromarray(np.array(atlas.render_level(levels[idx].tiles).convert("RGB")), "RGB")
+            rend_img = Image.fromarray(
+                np.array(atlas.render_level(levels[idx].tiles).convert("RGB")),
+                "RGB",
+            )
             side = side_by_side(
                 cap_img,
                 rend_img,
-                f"L{idx:02d} global atlas cov={row['coverage_pct']:.1f}% MSE={mse_s}",
+                f"L{idx:02d} context atlas cov={row['context_coverage_pct']:.1f}% MSE={mse_s}",
             )
             side.save(ref / f"validate_level{idx:02d}_side_by_side.png")
 
     if mses:
         mses.sort(key=lambda x: x[1], reverse=True)
-        stats_out["worst_10_mse"] = [
-            {"level": i, "mse": float(m)} for i, m in mses[:10]
-        ]
-        stats_out["mean_over_levels_with_eval"] = {
-            "coverage_pct": float(np.mean(covs)),
+        stats_out["worst_10_mse"] = [{"level": i, "mse": float(m)} for i, m in mses[:10]]
+        stats_out["mean_over_levels"] = {
+            "context_coverage_pct": float(np.mean(covs)),
             "mse": float(np.mean([m for _, m in mses])),
             "level_count": len(mses),
         }
-        print(f"Mean MSE ({len(mses)} levels with eval cells): {stats_out['mean_over_levels_with_eval']['mse']:.2f}")
+        print(
+            f"Mean coverage {stats_out['mean_over_levels']['context_coverage_pct']:.1f}%  "
+            f"MSE {stats_out['mean_over_levels']['mse']:.2f} ({len(mses)} levels)"
+        )
         print("Worst 10 MSE:")
         for i, m in mses[:10]:
             print(f"  level_{i:02d}  {m:.2f}")

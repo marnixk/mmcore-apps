@@ -1,6 +1,6 @@
 {
   "source": "dosbox_native_composite",
-  "render_rule": "base[tile_id] + overlay[(tile_id, mask4)] for solid terrain; mask8 = N,E,S,W + diagonal solid neighbours (decor tiles use base only).",
+  "render_rule": "context_rgb[(tile_id, N,E,S,W,NE,NW,SE,SW neighbour tile ids)]; fallback base[tile_id] (see FORMATS.md JETPACK.EXE 0x48AD/0x3871).",
   "map_layout": {
     "name": "off00|row_major",
     "byte_offset": 0,
@@ -20,10 +20,7 @@
   ],
   "flagged_tile_ids": [
     6,
-    7,
     8,
-    15,
-    25,
     33,
     75
   ],
@@ -32,49 +29,37 @@
       "file": "tile_001_ladder.png",
       "tile_id": 1,
       "name": "ladder",
-      "samples": 1650
-    },
-    {
-      "file": "tile_002_escalator_up.png",
-      "tile_id": 2,
-      "name": "escalator_up",
-      "samples": 225
-    },
-    {
-      "file": "tile_003_escalator_down.png",
-      "tile_id": 3,
-      "name": "escalator_down",
-      "samples": 270
+      "samples": 1639
     },
     {
       "file": "tile_004_gem.png",
       "tile_id": 4,
       "name": "gem",
-      "samples": 3218
+      "samples": 3187
     },
     {
       "file": "tile_005_gem_collected.png",
       "tile_id": 5,
       "name": "gem_collected",
-      "samples": 4
+      "samples": 2
     },
     {
       "file": "tile_006_teleport_yellow.png",
       "tile_id": 6,
       "name": "teleport_yellow",
-      "samples": 92
+      "samples": 90
     },
     {
       "file": "tile_007_teleport_pink.png",
       "tile_id": 7,
       "name": "teleport_pink",
-      "samples": 81
+      "samples": 79
     },
     {
       "file": "tile_008_teleport_green.png",
       "tile_id": 8,
       "name": "teleport_green",
-      "samples": 72
+      "samples": 70
     },
     {
       "file": "tile_009_toggle_blue_off.png",
@@ -104,7 +89,7 @@
       "file": "tile_013_toggle_cyan_off.png",
       "tile_id": 13,
       "name": "toggle_cyan_off",
-      "samples": 25
+      "samples": 24
     },
     {
       "file": "tile_014_toggle_cyan_on.png",
@@ -116,43 +101,25 @@
       "file": "tile_015_fuel_double.png",
       "tile_id": 15,
       "name": "fuel_double",
-      "samples": 92
+      "samples": 59
     },
     {
       "file": "tile_016_fuel_single.png",
       "tile_id": 16,
       "name": "fuel_single",
-      "samples": 99
-    },
-    {
-      "file": "tile_017_charger.png",
-      "tile_id": 17,
-      "name": "charger",
       "samples": 96
-    },
-    {
-      "file": "tile_018_drain.png",
-      "tile_id": 18,
-      "name": "drain",
-      "samples": 341
-    },
-    {
-      "file": "tile_019_stunner.png",
-      "tile_id": 19,
-      "name": "stunner",
-      "samples": 27
     },
     {
       "file": "tile_020_id_14.png",
       "tile_id": 20,
       "name": "id_14",
-      "samples": 746
+      "samples": 740
     },
     {
       "file": "tile_021_id_15.png",
       "tile_id": 21,
       "name": "id_15",
-      "samples": 560
+      "samples": 546
     },
     {
       "file": "tile_022_id_16.png",
@@ -164,7 +131,7 @@
       "file": "tile_023_id_17.png",
       "tile_id": 23,
       "name": "id_17",
-      "samples": 68
+      "samples": 67
     },
     {
       "file": "tile_024_id_18.png",
@@ -176,13 +143,13 @@
       "file": "tile_025_id_19.png",
       "tile_id": 25,
       "name": "id_19",
-      "samples": 171
+      "samples": 146
     },
     {
       "file": "tile_026_id_1a.png",
       "tile_id": 26,
       "name": "id_1a",
-      "samples": 90
+      "samples": 87
     },
     {
       "file": "tile_027_id_1b.png",
@@ -194,13 +161,13 @@
       "file": "tile_028_id_1c.png",
       "tile_id": 28,
       "name": "id_1c",
-      "samples": 382
+      "samples": 381
     },
     {
       "file": "tile_029_id_1d.png",
       "tile_id": 29,
       "name": "id_1d",
-      "samples": 640
+      "samples": 637
     },
     {
       "file": "tile_030_id_1e.png",
@@ -218,13 +185,13 @@
       "file": "tile_032_id_20.png",
       "tile_id": 32,
       "name": "id_20",
-      "samples": 172
+      "samples": 170
     },
     {
       "file": "tile_033_id_21.png",
       "tile_id": 33,
       "name": "id_21",
-      "samples": 24
+      "samples": 23
     },
     {
       "file": "tile_034_id_22.png",
@@ -242,7 +209,7 @@
       "file": "tile_036_id_24.png",
       "tile_id": 36,
       "name": "id_24",
-      "samples": 211
+      "samples": 208
     },
     {
       "file": "tile_037_id_25.png",
@@ -254,7 +221,7 @@
       "file": "tile_038_id_26.png",
       "tile_id": 38,
       "name": "id_26",
-      "samples": 160
+      "samples": 158
     },
     {
       "file": "tile_039_id_27.png",
@@ -266,7 +233,7 @@
       "file": "tile_040_id_28.png",
       "tile_id": 40,
       "name": "id_28",
-      "samples": 1245
+      "samples": 1227
     },
     {
       "file": "tile_041_id_29.png",
@@ -332,13 +299,13 @@
       "file": "tile_070_crate.png",
       "tile_id": 70,
       "name": "crate",
-      "samples": 912
+      "samples": 886
     },
     {
       "file": "tile_071_steel_barrier.png",
       "tile_id": 71,
       "name": "steel_barrier",
-      "samples": 258
+      "samples": 253
     },
     {
       "file": "tile_072_diamond_block.png",
@@ -350,25 +317,25 @@
       "file": "tile_073_id_49.png",
       "tile_id": 73,
       "name": "id_49",
-      "samples": 852
+      "samples": 848
     },
     {
       "file": "tile_074_id_4a.png",
       "tile_id": 74,
       "name": "id_4a",
-      "samples": 277
+      "samples": 275
     },
     {
       "file": "tile_075_id_4b.png",
       "tile_id": 75,
       "name": "id_4b",
-      "samples": 261
+      "samples": 260
     },
     {
       "file": "tile_076_id_4c.png",
       "tile_id": 76,
       "name": "id_4c",
-      "samples": 223
+      "samples": 220
     },
     {
       "file": "tile_077_id_4d.png",
@@ -404,7 +371,7 @@
       "file": "tile_082_id_52.png",
       "tile_id": 82,
       "name": "id_52",
-      "samples": 117
+      "samples": 115
     },
     {
       "file": "tile_083_id_53.png",
@@ -428,7 +395,7 @@
       "file": "tile_086_id_56.png",
       "tile_id": 86,
       "name": "id_56",
-      "samples": 95
+      "samples": 94
     },
     {
       "file": "tile_087_id_57.png",
@@ -440,7 +407,7 @@
       "file": "tile_088_id_58.png",
       "tile_id": 88,
       "name": "id_58",
-      "samples": 99
+      "samples": 98
     },
     {
       "file": "tile_089_id_59.png",
@@ -452,7 +419,7 @@
       "file": "tile_090_id_5a.png",
       "tile_id": 90,
       "name": "id_5a",
-      "samples": 33
+      "samples": 30
     },
     {
       "file": "tile_091_id_5b.png",
@@ -464,13 +431,13 @@
       "file": "tile_092_id_5c.png",
       "tile_id": 92,
       "name": "id_5c",
-      "samples": 28
+      "samples": 22
     },
     {
       "file": "tile_093_id_5d.png",
       "tile_id": 93,
       "name": "id_5d",
-      "samples": 40
+      "samples": 39
     },
     {
       "file": "tile_094_id_5e.png",
@@ -506,7 +473,7 @@
       "file": "tile_099_id_63.png",
       "tile_id": 99,
       "name": "id_63",
-      "samples": 18
+      "samples": 17
     },
     {
       "file": "tile_100_id_64.png",
@@ -524,7 +491,7 @@
       "file": "tile_102_id_66.png",
       "tile_id": 102,
       "name": "id_66",
-      "samples": 96
+      "samples": 95
     },
     {
       "file": "tile_103_id_67.png",
@@ -591,42 +558,6 @@
       "tile_id": 113,
       "name": "id_71",
       "samples": 32
-    },
-    {
-      "file": "tile_114_conveyor_left.png",
-      "tile_id": 114,
-      "name": "conveyor_left",
-      "samples": 25
-    },
-    {
-      "file": "tile_115_id_73.png",
-      "tile_id": 115,
-      "name": "id_73",
-      "samples": 16
-    },
-    {
-      "file": "tile_116_id_74.png",
-      "tile_id": 116,
-      "name": "id_74",
-      "samples": 67
-    },
-    {
-      "file": "tile_117_conveyor_right.png",
-      "tile_id": 117,
-      "name": "conveyor_right",
-      "samples": 30
-    },
-    {
-      "file": "tile_118_id_76.png",
-      "tile_id": 118,
-      "name": "id_76",
-      "samples": 19
-    },
-    {
-      "file": "tile_119_id_77.png",
-      "tile_id": 119,
-      "name": "id_77",
-      "samples": 49
     }
   ],
   "player": [],
