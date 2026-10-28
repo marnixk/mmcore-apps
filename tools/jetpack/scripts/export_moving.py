@@ -52,10 +52,18 @@ GROUPS = [
         "row": 114,
         "cols": list(range(18)),
         "enemy_type_id": None,
-        "observed_cols": [],
+        "observed_cols": [0, 1, 2, 3, 10, 16, 17],
         "note": (
-            "Suited figure. Every frame contains at least one of indices "
-            "247, 224 or 133 (flame / spark). Not drawn on any dumped frame."
+            "Facing right, frame = column. Walk cols 0–3 are (x >> 6) mod 4, taken from x "
+            "before the step is added (EXE file 0x10175). Levels 5 and 37 stored all four "
+            "while x changed, and the bitmap of column 0 and column 1 was exact on level 1. "
+            "There is no fixed IRQ period: the frame follows position. Cols 4–9 are the jet "
+            "flame (EXE file 0xFEAA): (counter >> 1) mod 3, plus 7 when thrusting right, "
+            "plus 4 when the thrust axis is zero, two counter ticks per step. Cols 10–12 "
+            "are the phaser pose, not the jet (EXE file 0x1146B); level 1 drew column 10 "
+            "exactly while Delete was held. Cols 16 and 17 are the airborne poses level 6 "
+            "stored while the jet key was held. Cols 13–15 were not sampled, and the "
+            "flame cycle in cols 4–9 did not run during that hold."
         ),
     },
     {
@@ -63,21 +71,32 @@ GROUPS = [
         "row": 127,
         "cols": list(range(18)),
         "enemy_type_id": None,
-        "observed_cols": [],
+        "observed_cols": [0, 1, 2, 3, 16, 17],
         "note": (
-            "Second facing. Thirteen of the eighteen frames are the horizontal "
-            "mirror of the same column of player_facing_a. Not observed in play."
+            "Facing left, frame = 24 + column. Walk frames 24–27 are the same (x >> 6) mod 4 "
+            "plus 24 (EXE file 0x10175 when the facing word is negative). Levels 5 and 1 "
+            "stored all four, and level 1 drew frames 24 and 26 with every opaque pixel "
+            "matching the sheet. The left jet is frames 31–33 or 28–30 (EXE file 0xFED7 / "
+            "0xFEFF) and the left phaser is frames 34–39 (EXE file 0x113DA). Those were not "
+            "sampled. Frames 40 and 41 (cols 16 and 17) are the left airborne poses and "
+            "level 6 stored both while the jet key was held."
         ),
     },
     {
         "name": "player_more",
         "row": 140,
-        "cols": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 17, 18, 19, 20, 21, 22],
+        "cols": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 17, 18, 19, 20, 21, 22, 23],
         "enemy_type_id": None,
-        "observed_cols": [],
+        "observed_cols": [0, 1, 2, 3],
         "note": (
-            "Further suited frames. Columns 10–12 use helmet indices 84–89 and "
-            "150–152 and do not use index 180. Not observed in play."
+            "Climb is frames 48–51 (cols 0–3): (y / 200) mod 4 + 48 (EXE file 0x101AA). "
+            "Level 1 drew all four, each an exact sheet match, while y changed on a ladder. "
+            "The frame follows y, so it has no fixed IRQ period. Cols 4–13 are the up/down "
+            "phaser poses (frames 52–60, EXE file 0x114B2 and 0x11513) and were not sampled. "
+            "Cols 17–22 are frames 65–70, a counter flash written just before one blit "
+            "(EXE file 0x142FA) and not seen. Col 23 is frame 71, the breakup hold for "
+            "counter/100 = 0 (EXE file 0x1241A); the deaths captured were later groups and "
+            "held 83, 89 and 95 instead."
         ),
     },
     {
@@ -85,11 +104,19 @@ GROUPS = [
         "row": 153,
         "cols": list(range(24)),
         "enemy_type_id": None,
-        "observed_cols": [],
+        "observed_cols": [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
         "note": (
-            "Opaque count falls from a full figure to a few pixels, then index-224 "
-            "bursts. The nearest thing in the sheet to a death sequence. "
-            "Not observed in play. No digging or phaser bitmap is in these rows."
+            "Death breakup, EXE file 0x123C2. While (counter mod 100) < 36 and counter < 1000, "
+            "frame = (counter/100)*6 + ((counter mod 100)/6) mod 6 + 72. Each of those six "
+            "steps is 6 counter ticks. After that the frame holds: 71 when counter/100 is 0, "
+            "otherwise (counter/100)*6 + 77 (83, 89 or 95). Level 1 (died on a ladder) stored "
+            "84–89 and held 89; frames 86 and 89 matched the sheet exactly, and 84 was still "
+            "the climb sprite, so the byte leads the blit by about one update. Level 8 "
+            "stored 79–83 and held 83. Levels 6 and 37 stored 91–95 and held 95. Each of "
+            "the six frames occupied one sample, and samples are 3 IRQ0 ticks apart, so "
+            "the on-screen hold per frame is one sample under this DOSBox run. Group "
+            "72–77 did not come up. The same routine covers every death; nothing in it "
+            "branches on enemy versus spark."
         ),
     },
     {
@@ -97,24 +124,44 @@ GROUPS = [
         "row": 166,
         "cols": [0, 1, 2, 3],
         "enemy_type_id": 2,
-        "observed_cols": [0],
-        "note": "Four highlight positions. Only column 0 was on screen, for the whole timed capture.",
+        "observed_cols": [0, 1, 2, 3],
+        "note": (
+            "Roll, EXE file 0x15472. While the anim byte is below 0x40 the frame is "
+            "2 - ((byte >> 1) mod 3), so 2, 1, 0 for two counter ticks each. At or above "
+            "0x40 the frame is the remainder itself, 0, 1, 2. Frame 3 is written when the "
+            "bounce flag is set (EXE file 0x154D0). Level 1 stored all four. Bounce holds "
+            "were 1–14 samples and roll holds 1–4 samples; a sample is 3 IRQ0 ticks."
+        ),
     },
     {
         "name": "trackbot",
         "row": 166,
         "cols": [4, 5, 6, 7, 8, 9, 10, 11],
         "enemy_type_id": 1,
-        "observed_cols": [4],
-        "note": "Eight stored frames. Only column 4 was on screen.",
+        "observed_cols": [4, 5, 6, 7, 8, 9, 10, 11],
+        "note": (
+            "Walk, EXE file 0x14E83: (x >> 6) mod 3 + 4, plus 3 when horizontal velocity "
+            "is negative, so frames 4–6 and 7–9. Ladder, EXE file 0x14E58: (y >> 6) bit 0 "
+            "+ 10, frames 10–11. Level 37 stored all eight. While the bot was moving a "
+            "frame usually lasted 1–2 samples (3–6 IRQ0 ticks); it also sat on one frame "
+            "for the rest of a capture. The frame follows position, not a timer."
+        ),
     },
     {
         "name": "spring",
         "row": 166,
         "cols": [12, 13, 14, 15],
         "enemy_type_id": 3,
-        "observed_cols": [13],
-        "note": "Column 14 is the horizontal mirror of column 13. Only column 13 was on screen.",
+        "observed_cols": [12, 13, 14, 15],
+        "note": (
+            "Bob, EXE file 0x15924: (y / 200) bit 0 + 13, frames 13 and 14. Turn poses are "
+            "immediates: frame 12 when the anim byte is 0 against a solid tile (the byte "
+            "is then set to 10) and frame 15 when it is 1 (set to 20), EXE file 0x15905 "
+            "and 0x15967. A level-16 capture stored all four. Bob holds were 1–8 samples "
+            "and each turn pose was a single sample (3 IRQ0 ticks). How fast the anim byte "
+            "counts is not separated from that. Level 55 left both springs on 13 for the "
+            "whole 13 s, so the bob does not always run."
+        ),
     },
     {
         "name": "spikes",
@@ -122,7 +169,13 @@ GROUPS = [
         "cols": [16, 17, 18],
         "enemy_type_id": 5,
         "observed_cols": [16],
-        "note": "Three shapes, not rotations of one bitmap. Only column 16 was on screen.",
+        "note": (
+            "Init frame is 16 (EXE file 0xDDBF and the same store at 0xE538). One later "
+            "store, EXE file 0x16450, writes (x >> 5) mod 3 + 16, which can be 16, 17 or 18, "
+            "but the same block multiplies both velocity words by 20, so it is a launch "
+            "rather than a per-frame cycle. Level 3 held frame 16 on all four spikes for "
+            "every sample. Frames 17 and 18 were not stored."
+        ),
     },
     {
         "name": "homer",
@@ -131,8 +184,12 @@ GROUPS = [
         "enemy_type_id": 7,
         "observed_cols": [19],
         "note": (
-            "Small spark. Column 19 sits on the level-55 homer. It uses DAC-cycled "
-            "indices 247 and 254, so it blinks with the palette cycle. Column 20 was not on screen."
+            "EXE file 0x16D96 increments a byte, wraps it at 0x40, and stores (byte >> 5) + 19. "
+            "That is frame 19 for 32 counter ticks, then frame 20 for 32, then repeat. "
+            "Level 55 kept the byte at 19 for all 80 samples (about 13 s) while the "
+            "playfield still changed by 5487 pixels, so the switch to frame 20 was not "
+            "observed and the call rate of this routine is not known. Both columns use "
+            "indices 247 and 254, so a homer on frame 19 still blinks with the palette cycle."
         ),
     },
     {
@@ -140,11 +197,13 @@ GROUPS = [
         "row": 166,
         "cols": [21, 22, 23],
         "enemy_type_id": 4,
-        "observed_cols": [21],
+        "observed_cols": [21, 23],
         "note": (
-            "Column 21 has exhaust index 39 on the bottom edge and is every missile "
-            "in the level 5, 7 and 99 dumps. Columns 22 and 23 are other exhaust frames "
-            "and were not on screen."
+            "EXE file 0x15E32: frame = (counter / 10) * 3 + ((counter >> 1) mod 3) + 21. "
+            "The /10 term is the facing (0 up, 1 down, 2 left, 3 right) and the shift is "
+            "the flame, two counter ticks per flame step. This row is facing 0, frames "
+            "21–23. Level 5 stored 21 and 23. Frame 22 was not in a sample. Holds of a "
+            "single flame step were 1–4 samples (3–12 IRQ0 ticks)."
         ),
     },
     {
@@ -152,11 +211,12 @@ GROUPS = [
         "row": 179,
         "cols": [0, 1, 2, 3, 4, 5, 6, 7, 8],
         "enemy_type_id": 4,
-        "observed_cols": [],
+        "observed_cols": [0, 1, 2, 4, 5, 6, 7, 8],
         "note": (
-            "Column 3 is the vertical flip of missile_up column 21 (exhaust on top). "
-            "Column 0 has exhaust index 39 on the left; column 6 is its horizontal mirror. "
-            "None of these were the bitmap in the dumps."
+            "Facings 1–3 of the same formula: frames 24–26, 27–29 and 30–32. Level 5 "
+            "stored 24, 25, 26, 28, 29, 30, 31 and 32. Frame 27 (column 3) was not in a "
+            "sample. Frame 32 matched the sheet at one cell with every opaque pixel. "
+            "Flame holds were 1–4 samples, the same as the upward facing."
         ),
     },
     {
@@ -164,16 +224,29 @@ GROUPS = [
         "row": 179,
         "cols": list(range(9, 18)),
         "enemy_type_id": 6,
-        "observed_cols": [9],
-        "note": "Nine frames, one silhouette. Only column 9 was on screen, and it did not advance.",
+        "observed_cols": [9, 11, 12, 13, 14, 15, 16, 17],
+        "note": (
+            "EXE file 0x16B22 stores (counter / 20) + 33. Frame 33 is the value it has at "
+            "rest. Level 37 stored 33 and 35–41. Frame 34 was not in a sample. The byte "
+            "jumps (33 then 38 then 37) instead of counting up, and a frame then sat for "
+            "58 samples, so this is a direction id rather than a 9-step cycle. When it "
+            "did change, the new frame usually lasted 1–3 samples (3–9 IRQ0 ticks)."
+        ),
     },
     {
         "name": "batbot",
         "row": 179,
-        "cols": [18, 19, 20, 21],
+        "cols": [18, 19, 20, 21, 22],
         "enemy_type_id": 8,
         "observed_cols": [18],
-        "note": "Column 22 duplicates column 20 and column 23 duplicates column 19, so those two are not separate frames. Only column 18 was on screen.",
+        "note": (
+            "EXE file 0x17374 writes frame 42 while vertical velocity is positive. Otherwise "
+            "frame = (counter >> 4) / 3 + 42, and another block adds 0x10 to that counter "
+            "while a timer is below 15, then clears the high nibble. Quotients 0–4 are "
+            "frames 42–46; three increments of the high nibble share one frame. Col 23 "
+            "duplicates an earlier cell and is not its own frame number. Level 8 held "
+            "frame 42 for every sample. Frames 43–46 were not stored."
+        ),
     },
 ]
 
@@ -194,6 +267,91 @@ STATIC_TILES = [
     ("fuel_double", 0x0F),
     ("fuel_single", 0x10),
 ]
+
+
+STATE_LABEL = {
+    "player_facing_a": "player right — walk 0-3; jet 4-9; phaser 10-15",
+    "player_facing_b": "player left — walk 24-27; jet 28-33; phaser 34-39",
+    "player_more": "climb 48-51; phaser up/down 52-60; flash 65-70",
+    "player_breakup": "death — six frames x 6 counter ticks, then a hold",
+    "steel_ball": "steel ball — roll 0-2 (2 counts), bounce 3",
+    "trackbot": "trackbot — walk 4-9 by (x>>6) mod 3; climb 10-11",
+    "spring": "spring — bob 13/14 by y/200; turn poses 12 and 15",
+    "spikes": "spikes — init 16; 17 and 18 only from the launch store",
+    "homer": "homer — 19 then 20, 32 counter ticks each",
+    "missile_up": "missile up 21-23 — flame (counter>>1) mod 3",
+    "missile_other": "missile down/left/right 24-32, same flame",
+    "flitzer": "flitzer — frame = counter/20 + 33 (33 and 35-41 seen)",
+    "batbot": "batbot — 42 while rising, else (counter>>4)/3 + 42",
+}
+
+
+# Absolute frame ids. sheet column is frame % 24 on that group's row.
+# timing is the EXE rule. observed is what the scripted captures stored.
+ANIM_STATES = {
+    "player_facing_a": [
+        {"name": "walk_right", "frames": [0, 1, 2, 3], "timing": "(x >> 6) mod 4, from x before the step is added. One step per physics update, not a fixed IRQ period.", "exe_file": "0x10175", "observed": True},
+        {"name": "jet_right", "frames": [7, 8, 9], "timing": "(counter >> 1) mod 3 + 7 while thrusting right. Two counter ticks per frame.", "exe_file": "0xFEAA", "observed": False},
+        {"name": "jet_idle_right", "frames": [4, 5, 6], "timing": "(counter >> 1) mod 3 + 4 when the thrust axis is zero and the suit is still facing right.", "exe_file": "0xFEFF", "observed": False},
+        {"name": "phaser_right", "frames": [10, 11, 12], "timing": "(counter >> 1) mod 3 + 10. Two counter ticks per frame. No separate beam bitmap; the routine then reads the map cell ahead.", "exe_file": "0x1146B", "observed": "frame 10 only"},
+        {"name": "phaser_right_alt", "frames": [13, 14, 15], "timing": "Same cycle plus 3 when the alt byte is set.", "exe_file": "0x1146B",         "observed": False},
+        {"name": "airborne_right", "frames": [16, 17], "timing": "Single poses: 16 when horizontal speed is past 0x14, else 17. Level 6 stored both while the jet key was held.", "exe_file": "0x1043D", "observed": True},
+    ],
+    "player_facing_b": [
+        {"name": "walk_left", "frames": [24, 25, 26, 27], "timing": "(x >> 6) mod 4 + 24.", "exe_file": "0x10175", "observed": True},
+        {"name": "jet_left", "frames": [31, 32, 33], "timing": "(counter >> 1) mod 3 + 31.", "exe_file": "0xFED7", "observed": False},
+        {"name": "jet_idle_left", "frames": [28, 29, 30], "timing": "(counter >> 1) mod 3 + 28.", "exe_file": "0xFEFF", "observed": False},
+        {"name": "phaser_left", "frames": [34, 35, 36], "timing": "(counter >> 1) mod 3 + 34, or +37 when the alt byte is set.", "exe_file": "0x113DA", "observed": False},
+        {"name": "airborne_left", "frames": [40, 41], "timing": "40 when horizontal speed is past 0x14, else 41. Level 6 stored both.", "exe_file": "0x1044A", "observed": True},
+    ],
+    "player_more": [
+        {"name": "climb", "frames": [48, 49, 50, 51], "timing": "(y / 200) mod 4 + 48. Follows height, no fixed IRQ period.", "exe_file": "0x101AA", "observed": True},
+        {"name": "phaser_up", "frames": [52, 53, 54, 55, 56, 57], "timing": "(counter >> 1) mod 3 + 52, plus 3 when the alt byte is set.", "exe_file": "0x114D9", "observed": False},
+        {"name": "phaser_down", "frames": [58, 59, 60], "timing": "(counter mod 3) + 58. One counter tick per frame.", "exe_file": "0x11522", "observed": False},
+        {"name": "airborne_state4", "frames": [61], "timing": "Single pose when the state byte is 4.", "exe_file": "0x10481", "observed": False},
+        {"name": "flash", "frames": [65, 66, 67, 68, 69, 70], "timing": "Mostly 65/66 (counter bit 1) while counter mod 25 is 0..17; briefly 67/68 then 69/70.", "exe_file": "0x142FA", "observed": False},
+        {"name": "breakup_hold_group0", "frames": [71], "timing": "Hold when the death counter mod 100 has passed 35 and counter/100 is 0.", "exe_file": "0x1241A", "observed": False},
+    ],
+    "player_breakup": [
+        {"name": "breakup", "frames": list(range(72, 96)), "timing": "Six frames of 6 counter ticks, group = counter/100 (0..3), then hold 71, 83, 89 or 95. Captured holds were 83, 89 and 95. Each captured step lasted one 3-IRQ sample.", "exe_file": "0x123C2", "observed": "groups 1, 2 and 3"},
+    ],
+    "steel_ball": [
+        {"name": "roll", "frames": [0, 1, 2], "timing": "Two counter ticks per frame. Order 2,1,0 while the anim byte is below 64, else 0,1,2.", "exe_file": "0x15472", "observed": True},
+        {"name": "bounce", "frames": [3], "timing": "Written for the bounce, not a timed cycle. Holds of 1–14 samples on level 1.", "exe_file": "0x154D0", "observed": True},
+    ],
+    "trackbot": [
+        {"name": "walk_right", "frames": [4, 5, 6], "timing": "(x >> 6) mod 3 + 4.", "exe_file": "0x14E83", "observed": True},
+        {"name": "walk_left", "frames": [7, 8, 9], "timing": "Same plus 3 when velocity is negative.", "exe_file": "0x14E83", "observed": True},
+        {"name": "climb", "frames": [10, 11], "timing": "(y >> 6) bit 0 + 10.", "exe_file": "0x14E58", "observed": True},
+    ],
+    "spring": [
+        {"name": "turn_ground", "frames": [12], "timing": "Set when the anim byte is 0 on a solid tile; the byte is then loaded with 10.", "exe_file": "0x15905", "observed": True},
+        {"name": "bob", "frames": [13, 14], "timing": "(y / 200) bit 0 + 13.", "exe_file": "0x15924", "observed": True},
+        {"name": "turn_ceiling", "frames": [15], "timing": "Set when the anim byte is 1 on a solid tile; the byte is then loaded with 20.", "exe_file": "0x15967", "observed": True},
+    ],
+    "spikes": [
+        {"name": "idle", "frames": [16], "timing": "Init value. No per-frame cycle was found.", "exe_file": "0xDDBF", "observed": True},
+        {"name": "launch_pose", "frames": [16, 17, 18], "timing": "(x >> 5) mod 3 + 16, in the block that also multiplies velocity by 20. Not shown to repeat.", "exe_file": "0x16450", "observed": False},
+    ],
+    "homer": [
+        {"name": "blink_pose", "frames": [19, 20], "timing": "(counter >> 5) + 19, counter wraps at 64, so 32 counter ticks each. The 19 to 20 switch was not seen in 13 s.", "exe_file": "0x16D96", "observed": "frame 19 only"},
+    ],
+    "missile_up": [
+        {"name": "up", "frames": [21, 22, 23], "timing": "Facing 0 of (counter/10)*3 + ((counter>>1) mod 3) + 21. Two counter ticks per flame frame.", "exe_file": "0x15E32", "observed": "21 and 23"},
+    ],
+    "missile_other": [
+        {"name": "down", "frames": [24, 25, 26], "timing": "Facing 1, same flame.", "exe_file": "0x15E32", "observed": True},
+        {"name": "left", "frames": [27, 28, 29], "timing": "Facing 2, same flame.", "exe_file": "0x15E32", "observed": "28 and 29"},
+        {"name": "right", "frames": [30, 31, 32], "timing": "Facing 3, same flame.", "exe_file": "0x15E32", "observed": True},
+    ],
+    "flitzer": [
+        {"name": "direction", "frames": list(range(33, 42)), "timing": "(counter / 20) + 33. Capture stored 33 and 35–41, jumping rather than counting, usually for 1–3 samples.", "exe_file": "0x16B22", "observed": "all except 34"},
+    ],
+    "batbot": [
+        {"name": "rise", "frames": [42], "timing": "While vertical velocity is positive. Level 8 stayed on 42 for every sample.", "exe_file": "0x17382", "observed": True},
+        {"name": "fly", "frames": [42, 43, 44, 45, 46], "timing": "(counter >> 4) / 3 + 42. Three high-nibble steps share a frame. Frames 43–46 were not stored.", "exe_file": "0x17390", "observed": False},
+    ],
+}
 
 
 def rgba_of(sprite: np.ndarray, rgb: np.ndarray, transparent: bool) -> Image.Image:
@@ -327,8 +485,6 @@ def composite_level(buf: np.ndarray, tiles: list[int], door: tuple[int, int], fb
 
     candidates = []
     for group in GROUPS:
-        if group["enemy_type_id"] is None:
-            continue
         for col in group["cols"]:
             sprite = cell(buf, group["row"], col)
             mask = sprite != 0
@@ -476,7 +632,7 @@ def main() -> int:
             continue
         image = strip(frames, rgb, transparent=True)
         image.save(args.anim_dir / f"{group['name']}.png")
-        contact_rows.append((group["name"], image))
+        contact_rows.append((STATE_LABEL.get(group["name"], group["name"]), image))
         catalog.append(
             {
                 "name": group["name"],
@@ -485,6 +641,7 @@ def main() -> int:
                 "size": [12, 12],
                 "transparency_index": 0,
                 "frames": meta_frames,
+                "states": ANIM_STATES.get(group["name"], []),
                 "note": group["note"],
             }
         )
@@ -492,7 +649,7 @@ def main() -> int:
     doors = [door_frame(buf, i) for i in range(len(DOOR_ORIGINS))]
     door_img = strip(doors, rgb, transparent=False)
     door_img.save(args.anim_dir / "door.png")
-    contact_rows.append(("door (closed, then opening, then open)", door_img))
+    contact_rows.append(("door — frames 0-7, one step per 3 IRQ0 ticks, then hold open", door_img))
     door_frames = []
     for i, (sprite, (y, x)) in enumerate(zip(doors, DOOR_ORIGINS)):
         raw = sprite.tobytes()
@@ -503,7 +660,7 @@ def main() -> int:
                 "sheet_y": y,
                 "sheet_x": x,
                 "atlas_offset": atlas_at,
-                "observed": i == 0,
+                "observed": True,
             }
         )
         atlas_at += len(raw)
@@ -516,9 +673,13 @@ def main() -> int:
             "blit": "opaque",
             "frames": door_frames,
             "note": (
-                "Eight unique 24×24 frames in the right margin. Frame 0 is the closed door "
-                "and is the only one on the dumped levels. Opening and open were not on screen, "
-                "so the ticks per frame were not measured."
+                "Eight unique 24×24 opaque frames. Level 16, with one gem placed on the "
+                "player's right and the enemies removed, drew frame 0 closed, then frames "
+                "1 through 7 in order. Each of 1–6 was on screen for one sample and frame 7 "
+                "then held. Samples are 3 IRQ0 ticks apart and no opening frame was skipped "
+                "or repeated, so the door advances one frame per 3 IRQ0 ticks and stays on "
+                "the open frame. The 38-frame delay after the last gem (TAS) falls inside "
+                "the sample before frame 1 and was not measured on its own."
             ),
         }
     )
@@ -616,15 +777,15 @@ def main() -> int:
         "timed_tile_changes": tube_changes(args.sequence, args.sequence_level),
         "player_mirror_columns": mirror_pairs,
         "not_found": [
-            "No dumped frame shows the player. Rows 114, 127, 140 and 153 are the suited figure and a breakup sequence, but none of those bitmaps occur in levels 0, 5, 7, 37, 55, 59, 99 or in 20 frames of levels 7 and 99.",
-            "Walking, climbing, jetpack thrust, digging and death were therefore not timed. Every frame of rows 114 and 127 already contains a flame index, so those states are not separate sheets.",
-            "No phaser or digging bitmap was found in the sprite rows.",
-            "Tubes 0x4A–0x4F are one static vertical gradient each (indices 145–150). The timed level-7 capture changed 0 tube pixels. The gradient row occurs only in the terrain band, not in a second sheet.",
-            "Teleports 6/7/8, conveyors 0x72/0x75 and toggles 0x09–0x0E have one bitmap. They were not in the timed capture, and no second phase was found in the buffer.",
-            "The door's seven opening frames are stored and were not on screen.",
-            "Enemy frames other than the observed column stayed unused for the whole ~3.3 s capture, so ticks per enemy frame were not measured.",
-            "Gem tile 4 does not have a second bitmap. A few pixels on top of it change; they are spark indices (180, 22, 60, 86, 150), not a stored gem phase.",
-            "Fuel is map tiles 0x0F and 0x10, not an overlay sprite.",
+            "No separate phaser or digging bitmap. Delete cycles the player through directional poses (right 10–15, left 34–39, up 52–57, down 58–60) and reads the map cell in front. Level 1 drew pose 10 exactly; the other poses and the tile-erase timing were not measured. TAS quotes 5, 26 and 56 frames for crate, light brick and dark brick; that clock was not re-measured.",
+            "Jet flame frames 4–9 and 28–33 are what EXE file 0xFEAA stores. Holding the jet key on level 6 produced the airborne poses 16, 17, 40 and 41 instead, so the flame cycle was not the bitmap at a sample.",
+            "Frame 61 and the pre-blit flash 65–70 are in the EXE and were not on screen.",
+            "Death group 72–77. The deaths captured held 83, 89 and 95.",
+            "Missile frames 22 and 27. The other ten missile frames were stored on level 5.",
+            "Flitzer frame 34. Frames 33 and 35–41 were stored on level 37.",
+            "Homer frame 20. Level 55 stayed on 19 for about 13 s. The EXE does define 20.",
+            "Spikes frames 17 and 18. Level 3 held 16. Batbot frames 43–46. Level 8 held 42.",
+            "Tubes, teleports, conveyors and toggles still have one bitmap each. Fuel and the gem are map tiles. Spark pixels are the palette cycle, not a second bitmap, and the breakup routine does not branch on spark versus enemy.",
         ],
         "sprites": catalog,
     }

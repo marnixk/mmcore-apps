@@ -129,43 +129,58 @@ Pixel index match of sheet[tile id] against the dumped playfield (sparks, door, 
 
 The same buffer continues below the terrain. Separator rows (index `0x66`) at y = 114, 127, 140, 153, 166 and 179 bound six rows of 12×12 cells. Content of column `c` is `x = c*13+1`, width 12, columns 0–23. Overlay sprites use the transparent blitter: index **0 is skipped**. The door is a separate **opaque** 24×24 blit from the right margin at `(y, x)` in `(0, 25, 50, 75) × (265, 290)`.
 
-`scripts/vga_dump.asm` writes a `JPFR` frame when `SEQ.GO` is present: magic, IRQ0 tick (uint16), frame index, mode byte, 768-byte DAC, 64000 bytes of plane 0. `scripts/dump_vga_level.py --sequence` keeps one frame every **3** IRQ0 ticks, then `MEM.BIN`. `scripts/export_moving.py` finds the sheet by matching terrain tile 0 (the linear base moves with the EXE load segment; it was `0x4AED4` in the level-99 dump and `0x4AFC4` in the level-55 dump) and writes `gfx/anim/*.png`, `gfx/anim/frames.u8` and `gfx/sprites.json`. Rows at y ≥ 192 are the high-score / menu / title bitmap and are not exported.
+The player blit (EXE file `0x1438D`) takes frame `F` from `DS:0x32C7`, column `F mod 24`, row band `F / 24`. The source address is `column * 13 + band * word [DS:0xAE] + 1`. Enemy frames use the same split with a base on row 166, so enemy frame 0 is row 166 column 0 and enemy frame 24 is row 179 column 0. Player frame 0 is row 114. Exact sheet matches during play (climb frames 48–51, walk frames 24 and 26, death frames 86 and 89, steel-ball frame 3, missile frame 32, door frames 0–7) are what pin that mapping. A frame byte can lead the pixels by about one update: level 1 stored death frame 84 while the climb sprite was still on screen, and stored 11 while column 10 was what was drawn.
 
-**Palette cycle.** Only DAC indices 247–254 change. They are two groups of four, `(247–250)` and `(251–254)`, and each group rotates right by one. One step per 3 IRQ0 ticks (measured ticks 269, 272, 275, 278, then the four colors repeat). Period is 12 ticks, about 0.66 s at 18.2065 Hz. The 6-bit RGB of the first step is in `gfx/sprites.json`. Index 248 is `(57, 57, 58)`; the others in that step are grey. Homer’s bright pixels are 247 and 254, so the homer blinks with this cycle even though its bitmap does not change.
+`scripts/vga_dump.asm` writes a `JPFR` frame when `SEQ.GO` is present: magic, IRQ0 tick (uint16), frame index, mode byte, 768-byte DAC, 64000 bytes of plane 0, then a 32-byte trailer (player frame, 20 enemy frames, player subpixel x/y, a found flag, enemy count). The trailer’s game DS is found by the signature `B8 40 01 2B 46 10` at image `0x188CB`. `scripts/dump_vga_level.py --sequence` keeps one frame every **3** IRQ0 ticks (80 frames, about 13 s) and can hold keys with `--keys`. `--gem-at` and `--clear-enemies` rewrite slot 0 before boot so a door or a death can be forced. Those rewrites are capture aids, not level data.
 
-**What actually moves.**
+**Palette cycle.** Only DAC indices 247–254 change. They are two groups of four, `(247–250)` and `(251–254)`, and each group rotates right by one. One step per 3 IRQ0 ticks. Period is 12 ticks, about 0.66 s at 18.2065 Hz. Homer pixels use 247 and 254, so a homer blinks with this cycle even when its frame byte stays put.
 
-| Thing | Stored frames | On the dumped frames |
-| --- | --- | --- |
-| Tubes `0x4A`–`0x4F` | one 12×12 gradient each (indices 145–150) | Level 7, 20 frames, **0** pixels changed on `0x4A`, `0x4B`, `0x4D`. The gradient row occurs only in the terrain band. |
-| Teleports 6/7/8, conveyors `0x72`/`0x75`, toggles `0x09`–`0x0E` | one bitmap | Not in the timed capture. No second phase in the buffer. |
-| Gem (tile 4), fuel (`0x0F`, `0x10`) | the map tile | Not overlay sprites. Pixels that change on a gem are spark indices, not a second gem. |
-| Door | 8 unique 24×24 frames, closed through open | Only frame 0 (closed). Opening was not on screen, so ticks per frame were not measured. |
-| Steel ball (type 2) | row 166, cols 0–3 | Col 0 only. It did not advance in ~3.3 s. |
-| Trackbot (type 1) | row 166, cols 4–11 | Col 4 only. |
-| Spring (type 3) | row 166, cols 12–15 (14 is the mirror of 13) | Col 13 only. |
-| Spikes (type 5) | row 166, cols 16–18 | Col 16 only. |
-| Homer (type 7) | row 166, cols 19–20 | Col 19, on level 55 at the homer’s tile. |
-| Missile (type 4) | row 166 cols 21–23 (exhaust index 39 on the bottom of col 21) and row 179 cols 0–8 | Every missile in levels 5, 7 and 99 is col 21. The other facings are stored and were not on screen. |
-| Flitzer (type 6) | row 179, cols 9–17, one silhouette | Col 9 only. |
-| Batbot (type 8) | row 179, cols 18–21 (22 copies 20, 23 copies 19) | Col 18 only. |
-| Player | rows 114, 127, 140, 153 | **Not on any dumped frame**, including 20 frames of levels 7 and 99. |
+**Player** (rows 114, 127, 140, 153). Frame lists are in `gfx/sprites.json` under `states`.
 
-Thirteen columns of row 127 are the horizontal mirror of the same column of row 114 (columns 1, 4 and 7–17). Every frame of those two rows contains flame index 247, 224 or 133, so walking, climbing and thrust are not separate sheets. No digging or phaser bitmap was found. Row 153 is the breakup / burst sequence in the sheet; it was not observed in play. Enemy frames other than the column above did not change during the capture, so ticks per enemy frame were not measured.
+| State | Frames | Rule | What the captures showed |
+| --- | --- | --- | --- |
+| Walk right | 0–3 | `(x >> 6) mod 4`, from x before the step (EXE file `0x10175`) | Levels 5 and 37 stored all four. Level 1 drew columns 0 and 1 exactly. No fixed IRQ period. |
+| Walk left | 24–27 | same, plus 24 | Levels 1 and 5 stored all four. Frames 24 and 26 matched the sheet exactly. |
+| Climb | 48–51 | `(y / 200) mod 4 + 48` (EXE file `0x101AA`) | Level 1 drew all four, each exact, while y changed on a ladder. |
+| Jet key | 16, 17 and 40, 41 | single poses while state is 3 (EXE file `0x1043D`) | Level 6, jet held: 16 for three samples, 17 for one, then 40 and 41 facing the other way. |
+| Jet flame | 7–9, 4–6, 31–33, 28–30 | `(counter >> 1) mod 3` plus a base (EXE file `0xFEAA`). Two counter ticks a frame. | Not the bitmap during the jet holds. The key took the state-3 poses instead. |
+| Phaser | 10–15 right, 34–39 left, 52–57 up, 58–60 down | two counter ticks a frame, except down which is one (EXE file `0x113B8`) | No beam sprite. Level 1 drew frame 10 exactly on Delete. The other poses were not sampled. The routine reads the map cell ahead; the tile timer was not measured. |
+| Death | 72–95 | six frames of 6 counter ticks, group `counter/100`, then hold 71, 83, 89 or 95 (EXE file `0x123C2`) | Holds 83 (level 8), 89 (level 1) and 95 (levels 6 and 37). Each step was one 3-IRQ sample. Group 72–77 did not come up. The routine does not branch on enemy versus spark. |
 
-**Composite check** (`reference/sprite_match.json`). Terrain, the closed door at the level-record cell, and the sprite frame that is actually on screen:
+**Enemies.** Init bytes at EXE file `0xDD87`: steel ball 0, trackbot 4, spring 13, missile 21, spikes 16, flitzer 33, homer 19, batbot 42.
 
-| Level | Exact index | Placed |
-| --- | --- | --- |
-| 0 | 99.7613% | door, trackbot, spikes |
-| 5 | 99.7029% | door, 14 missiles |
-| 7 | 99.5509% | door, 2 missiles, spikes |
-| 37 | 98.6595% (99.9100% outside black corners) | door, 5 trackbots, 2 flitzers |
-| 55 | 99.0802% (99.8399% outside black corners) | door, 2 springs, homer |
-| 59 | 98.6562% (99.9066% outside black corners) | door, steel ball, spring |
-| 99 | 99.5509% | door and both of each of the seven types on that level |
+| Enemy | Frames | Rule | Capture |
+| --- | --- | --- | --- |
+| Steel ball | 0–2 roll, 3 bounce | two counter ticks; order 2,1,0 below anim 64, else 0,1,2 (EXE file `0x15472`). Bounce is an immediate. | Level 1 stored all four. Roll holds 1–4 samples, bounce 1–14. Frame 3 matched the sheet. |
+| Trackbot | 4–9 walk, 10–11 ladder | `(x >> 6) mod 3 + 4`, plus 3 if velocity is negative. Ladder `(y >> 6) bit 0 + 10`. | Level 37 stored all eight. Moving holds were usually 1–2 samples. |
+| Spring | 13–14 bob, 12 and 15 turns | bob `(y / 200) bit 0 + 13`. Turn 12 loads the anim byte with 10; turn 15 loads 20. | One level-16 capture stored all four. Bob holds 1–8 samples, turns one sample. Level 55 stayed on 13. |
+| Spikes | 16, and 17–18 only in a launch store | init 16. `(x >> 5) mod 3 + 16` sits in the block that multiplies velocity by 20, so it is not a cycle. | Level 3 held 16 on every spike for every sample. 17 and 18 were not stored. |
+| Homer | 19 then 20 | 32 counter ticks each, wrap at 64 (EXE file `0x16D96`) | Level 55 stayed on 19 for about 13 s while the playfield still changed. Frame 20 was not seen, so the call rate is unknown. |
+| Missile | 21–23 up, 24–26 down, 27–29 left, 30–32 right | `(counter/10)*3 + ((counter>>1) mod 3) + 21`. Two counter ticks per flame step. | Level 5 stored every frame except 22 and 27. Holds 1–4 samples. Frame 32 matched the sheet. |
+| Flitzer | 33–41 | `(counter/20)+33` (EXE file `0x16B22`) | Level 37 stored 33 and 35–41, jumping rather than counting. Frame 34 was absent. Changes lasted 1–3 samples, then one frame sat for 58. |
+| Batbot | 42 while rising, else 42–46 | `(counter>>4)/3 + 42`, three high-nibble steps per frame (EXE file `0x17374`) | Level 8 held 42 for every sample. 43–46 were not stored. |
 
-The pixels that remain are spark indices (180, 178, 133, 224, 150, 86, 85, 84, 24, 19, 13, 7 and the 247–254 cycle) and, on levels 37, 55 and 59, the four corners of the framebuffer, which are index 0 for about one tile regardless of the map cell. Nothing else is masked. A sprite that sits on a black corner is clipped there; the visible half still matches the sheet.
+**Door.** Eight 24×24 frames. On level 16, with the single gem moved to the player’s right and the enemies removed, the door went 0 (closed), then 1, 2, 3, 4, 5, 6, 7 and held 7. Each of 1–6 was one sample and none was skipped, so the opening advances one frame per 3 IRQ0 ticks. The TAS 38-frame pause after the last gem sits inside the sample before frame 1 and was not measured separately.
+
+**Still one bitmap.** Tubes `0x4A`–`0x4F`, teleports 6/7/8, conveyors `0x72`/`0x75`, toggles `0x09`–`0x0E`. Fuel and the gem are map tiles. Spark indices ride the palette cycle; they are not a second sprite, and they are not a separate death.
+
+**Composite check** (`reference/sprite_match.json`). The sheet's terrain, door frame 0, and the 12×12 cell (player included) that matches the framebuffer. Played rows are one `JPFR` sample from the scripted run. Idle rows are the level-load dumps, which still have no player sprite.
+
+| Level | Source | Exact index | What was placed |
+| --- | --- | --- | --- |
+| 1 | played, climbing | 99.9533% | door, climb frame 50, steel ball 3, trackbot 8 |
+| 3 | played | 100% | door, player frame 0, four spikes on frame 16 |
+| 5 | played, walking | 100% | door, walk frame 3, 14 missiles |
+| 6 | played, jet held | 100% | door, airborne frame 17, two trackbots |
+| 8 | played | 100% | door, player frame 0, five trackbots, batbot 42 |
+| 37 | played, walking | 99.9349% | door, walk frame 1, five trackbots, two flitzers |
+| 55 | played, standing | 100% | door, homer 19, two springs on 13. No separate player cell; the crop already matched. |
+| 0 | idle load | 99.7613% | door, trackbot, spikes |
+| 7 | idle load | 99.5509% | door, two missiles, spikes |
+| 59 | idle load | 98.6562% (99.9066% outside the black corners) | door, steel ball, spring |
+| 99 | idle load | 99.5509% | door and the enemies on that level |
+
+The pixels that remain on the idle loads are spark indices and, on level 59, the framebuffer corners, which are index 0 for about one tile. The level-16 door capture is not in this table: that run moved the gem and cleared the enemies, so it is not the campaign map. Its door timing is above.
 
 ## Other files
 

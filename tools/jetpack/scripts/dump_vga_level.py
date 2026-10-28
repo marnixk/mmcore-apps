@@ -21,6 +21,50 @@ RUNTIME = ROOT / "_capture_runtime" / "vga_dump"
 COM = Path("/tmp/vga_dump.com")
 
 
+KEYSYM = {
+    "left": "Left",
+    "right": "Right",
+    "up": "Up",
+    "down": "Down",
+    "jet": "Insert",
+    "phase": "Delete",
+    "space": "space",
+}
+
+
+def run_keys(wid: str, env: dict, script: str) -> None:
+    """Hold keys while the resident hook is already writing frames.
+
+    Steps are comma-separated `name[:seconds]`. `+` holds several keys
+    together. Names are left/right/up/down/jet/phase or an xdotool keysym.
+    """
+    for step in script.split(","):
+        step = step.strip()
+        if not step:
+            continue
+        if ":" in step:
+            names, dur = step.split(":", 1)
+            seconds = float(dur)
+        else:
+            names, seconds = step, 0.3
+        held = []
+        for name in names.split("+"):
+            key = KEYSYM.get(name.strip().lower(), name.strip())
+            subprocess.run(
+                ["xdotool", "keydown", "--window", wid, key],
+                env=env,
+                check=False,
+            )
+            held.append(key)
+        time.sleep(seconds)
+        for key in reversed(held):
+            subprocess.run(
+                ["xdotool", "keyup", "--window", wid, key],
+                env=env,
+                check=False,
+            )
+
+
 def grab(display: str, dest: Path) -> None:
     subprocess.run(
         [
@@ -48,7 +92,28 @@ def main() -> int:
     ap.add_argument(
         "--sequence",
         action="store_true",
-        help="Write F00.BIN..F19.BIN (JPFR frames, 3 timer ticks apart) plus MEM.BIN",
+        help="Write F00.BIN..F79.BIN (JPFR frames, 3 timer ticks apart) plus MEM.BIN",
+    )
+    ap.add_argument(
+        "--keys",
+        default="",
+        help="Hold keys during the sequence, e.g. Right:1.2,Left:1.0,Up+Insert:1.5",
+    )
+    ap.add_argument("--frames", type=int, default=80)
+    ap.add_argument(
+        "--gem-at",
+        default="",
+        help="Capture aid: clear slot-0 gems and place one at x,y (1-based) so the door can open",
+    )
+    ap.add_argument(
+        "--clear-enemies",
+        action="store_true",
+        help="Capture aid: zero the 20 enemy slots in slot 0",
+    )
+    ap.add_argument(
+        "--clear-enemy-slots",
+        default="",
+        help="Capture aid: zero these enemy slot indexes in slot 0 (comma separated)",
     )
     args = ap.parse_args()
     if not COM.is_file():
@@ -59,6 +124,25 @@ def main() -> int:
         shutil.rmtree(RUNTIME)
     prepare_runtime_game_dir(GAME_SRC, RUNTIME)
     write_slot0_level(GAME_SRC / "JETLEV.DAT", RUNTIME / "JETLEV.DAT", args.level)
+    if args.gem_at:
+        gx, gy = (int(p) for p in args.gem_at.split(","))
+        dat = bytearray((RUNTIME / "JETLEV.DAT").read_bytes())
+        rec = 2  # slot 0
+        for i in range(26 * 16):
+            if dat[rec + i] == 4:
+                dat[rec + i] = 0
+        dat[rec + (gy - 1) * 26 + (gx - 1)] = 4
+        (RUNTIME / "JETLEV.DAT").write_bytes(dat)
+    if args.clear_enemies or args.gem_at:
+        dat = bytearray((RUNTIME / "JETLEV.DAT").read_bytes())
+        if args.clear_enemies:
+            for i in range(20 * 3):
+                dat[2 + 0x1A4 + i] = 0
+        for slot in [int(s) for s in args.clear_enemy_slots.split(",") if s.strip()]:
+            base = 2 + 0x1A4 + slot * 3
+            dat[base : base + 3] = b"\x00\x00\x00"
+        if args.clear_enemies or args.clear_enemy_slots:
+            (RUNTIME / "JETLEV.DAT").write_bytes(dat)
     shutil.copy(COM, RUNTIME / "DUMP.COM")
     for stale in ("GO.DMP", "VGA.BIN", "SEQ.GO", "MEM.BIN"):
         p = RUNTIME / stale
@@ -232,8 +316,11 @@ jetpack.exe
         grab(args.display, shot)
         if args.sequence:
             (RUNTIME / "SEQ.GO").write_bytes(b"")
-            deadline = time.time() + 40
-            last = RUNTIME / "F19.BIN"
+            if args.keys:
+                time.sleep(0.4)
+                run_keys(wid, env, args.keys)
+            deadline = time.time() + 150
+            last = RUNTIME / f"F{args.frames - 1:02d}.BIN"
             while time.time() < deadline:
                 if last.is_file() and last.stat().st_size >= 8 + 768 + 64000:
                     break

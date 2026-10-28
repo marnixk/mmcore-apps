@@ -97,7 +97,7 @@ try_dump:
     jb .out
     mov ax, [ticks]
     mov [last_tick], ax
-    cmp byte [frame_i], 20
+    cmp byte [frame_i], 80
     jae .seq_done
     call write_frame
     inc byte [frame_i]
@@ -236,10 +236,102 @@ write_frame:
     call write_cx_ds
     push cs
     pop ds
+    call capture_state
+    mov dx, state_buf
+    mov cx, 32
+    call write_cx
     mov bx, [handle]
     mov ah, 3Eh
     int 21h
 .fail:
+    ret
+
+; Trailer after the plane: player frame, 20 enemy frames, player x, player y.
+; game DS = EXE load segment + 0x1D03. The load segment comes from the
+; signature B8 40 01 2B 46 10 at image offset 0x188CB.
+capture_state:
+    push ds
+    cmp word [cs:game_ds], 0
+    jnz .read
+    call find_game
+    cmp word [cs:game_ds], 0
+    jz .miss
+.read:
+    mov ds, [cs:game_ds]
+    mov al, [0x32c7]
+    mov [cs:state_buf], al
+    mov al, [0x32c6]
+    mov [cs:state_buf+26], al
+    mov ax, [0x34d3]
+    mov [cs:state_buf+21], ax
+    mov ax, [0x34d1]
+    mov [cs:state_buf+23], ax
+    mov si, 0x329e
+    mov cx, 20
+.copye:
+    mov al, [si]
+    mov bx, si
+    sub bx, 0x329e
+    mov [cs:state_buf+1+bx], al
+    inc si
+    loop .copye
+    mov byte [cs:state_buf+25], 1
+    pop ds
+    ret
+.miss:
+    mov byte [cs:state_buf+25], 0
+    pop ds
+    ret
+
+find_game:
+    mov ax, 0x700
+.segloop:
+    add ax, 0xFF0
+    cmp ax, 0xA000
+    jae .no
+    mov es, ax
+    xor bx, bx
+.byteloop:
+    cmp byte [es:bx], 0xB8
+    jne .next
+    cmp byte [es:bx+1], 0x40
+    jne .next
+    cmp byte [es:bx+2], 0x01
+    jne .next
+    cmp byte [es:bx+3], 0x2B
+    jne .next
+    cmp byte [es:bx+4], 0x46
+    jne .next
+    cmp byte [es:bx+5], 0x10
+    jne .next
+    push ax
+    mov dx, ax
+    mov cl, 4
+    shl ax, cl
+    mov cl, 12
+    shr dx, cl
+    add ax, bx
+    adc dx, 0
+    sub ax, 0x88CB
+    sbb dx, 1
+    test al, 0x0F
+    jnz .notsig
+    mov cl, 4
+    shr ax, cl
+    mov cl, 12
+    shl dx, cl
+    or ax, dx
+    add ax, 0x1D03
+    mov [cs:game_ds], ax
+    pop ax
+    ret
+.notsig:
+    pop ax
+.next:
+    inc bx
+    jnz .byteloop
+    jmp .segloop
+.no:
     ret
 
 write_cx:
@@ -324,6 +416,8 @@ busy db 0
 done db 0
 seq_on db 0
 frame_i db 0
+game_ds dw 0
+state_buf times 32 db 0
 ticks dw 0
 last_tick dw 0
 handle dw 0

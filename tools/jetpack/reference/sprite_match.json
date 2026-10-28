@@ -1,5 +1,5 @@
 {
-  "sheet_base": 306900,
+  "sheet_base": 307380,
   "levels": {
     "0": {
       "placed": [
@@ -59,6 +59,178 @@
         }
       ]
     },
+    "1": {
+      "placed": [
+        {
+          "name": "door",
+          "frame": 0,
+          "at": [
+            48,
+            72
+          ],
+          "error": 0,
+          "gained": 575
+        },
+        {
+          "name": "steel_ball",
+          "col": 3,
+          "at": [
+            148,
+            120
+          ],
+          "gained": 114,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "trackbot",
+          "col": 8,
+          "at": [
+            96,
+            193
+          ],
+          "gained": 59,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "player_more",
+          "col": 2,
+          "at": [
+            180,
+            120
+          ],
+          "gained": 58,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        }
+      ],
+      "pixels": 59904,
+      "mismatch": 28,
+      "exact_index_pct": 99.9533,
+      "residual_spark_indices": 0,
+      "residual_framebuffer_zero": 0,
+      "residual_other": 28,
+      "corner_zero_pixels": 0,
+      "exact_index_pct_outside_corners": 99.9533,
+      "enemies": [
+        {
+          "type_id": 1,
+          "name": "trackbot",
+          "x": 26,
+          "y": 1
+        },
+        {
+          "type_id": 2,
+          "name": "steel_ball",
+          "x": 2,
+          "y": 2
+        }
+      ]
+    },
+    "3": {
+      "placed": [
+        {
+          "name": "door",
+          "frame": 0,
+          "at": [
+            132,
+            108
+          ],
+          "error": 0,
+          "gained": 575
+        },
+        {
+          "name": "player_facing_a",
+          "col": 0,
+          "at": [
+            180,
+            300
+          ],
+          "gained": 55,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "spikes",
+          "col": 16,
+          "at": [
+            144,
+            132
+          ],
+          "gained": 16,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "spikes",
+          "col": 16,
+          "at": [
+            96,
+            0
+          ],
+          "gained": 16,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "spikes",
+          "col": 16,
+          "at": [
+            0,
+            204
+          ],
+          "gained": 16,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "spikes",
+          "col": 16,
+          "at": [
+            0,
+            0
+          ],
+          "gained": 16,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        }
+      ],
+      "pixels": 59904,
+      "mismatch": 0,
+      "exact_index_pct": 100.0,
+      "residual_spark_indices": 0,
+      "residual_framebuffer_zero": 0,
+      "residual_other": 0,
+      "corner_zero_pixels": 0,
+      "exact_index_pct_outside_corners": 100.0,
+      "enemies": [
+        {
+          "type_id": 5,
+          "name": "spikes",
+          "x": 1,
+          "y": 9
+        },
+        {
+          "type_id": 5,
+          "name": "spikes",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type_id": 5,
+          "name": "spikes",
+          "x": 18,
+          "y": 1
+        },
+        {
+          "type_id": 5,
+          "name": "spikes",
+          "x": 12,
+          "y": 13
+        }
+      ]
+    },
     "5": {
       "placed": [
         {
@@ -72,46 +244,13 @@
           "gained": 575
         },
         {
-          "name": "missile_up",
-          "col": 21,
+          "name": "player_facing_a",
+          "col": 3,
           "at": [
-            156,
-            240
+            180,
+            180
           ],
-          "gained": 52,
-          "spark_or_phase_pixels": 0,
-          "clipped_by_zero": 0
-        },
-        {
-          "name": "missile_up",
-          "col": 21,
-          "at": [
-            156,
-            24
-          ],
-          "gained": 52,
-          "spark_or_phase_pixels": 0,
-          "clipped_by_zero": 0
-        },
-        {
-          "name": "missile_up",
-          "col": 21,
-          "at": [
-            132,
-            264
-          ],
-          "gained": 52,
-          "spark_or_phase_pixels": 0,
-          "clipped_by_zero": 0
-        },
-        {
-          "name": "missile_up",
-          "col": 21,
-          "at": [
-            132,
-            60
-          ],
-          "gained": 52,
+          "gained": 57,
           "spark_or_phase_pixels": 0,
           "clipped_by_zero": 0
         },
@@ -120,50 +259,6 @@
           "col": 21,
           "at": [
             108,
-            276
-          ],
-          "gained": 52,
-          "spark_or_phase_pixels": 0,
-          "clipped_by_zero": 0
-        },
-        {
-          "name": "missile_up",
-          "col": 21,
-          "at": [
-            108,
-            48
-          ],
-          "gained": 52,
-          "spark_or_phase_pixels": 0,
-          "clipped_by_zero": 0
-        },
-        {
-          "name": "missile_up",
-          "col": 21,
-          "at": [
-            84,
-            252
-          ],
-          "gained": 52,
-          "spark_or_phase_pixels": 0,
-          "clipped_by_zero": 0
-        },
-        {
-          "name": "missile_up",
-          "col": 21,
-          "at": [
-            84,
-            24
-          ],
-          "gained": 52,
-          "spark_or_phase_pixels": 0,
-          "clipped_by_zero": 0
-        },
-        {
-          "name": "missile_up",
-          "col": 21,
-          "at": [
-            60,
             300
           ],
           "gained": 52,
@@ -171,69 +266,157 @@
           "clipped_by_zero": 0
         },
         {
-          "name": "missile_up",
-          "col": 21,
+          "name": "missile_other",
+          "col": 0,
+          "at": [
+            132,
+            290
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_other",
+          "col": 0,
+          "at": [
+            132,
+            86
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_other",
+          "col": 0,
+          "at": [
+            84,
+            278
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_other",
+          "col": 0,
+          "at": [
+            84,
+            50
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_other",
+          "col": 0,
+          "at": [
+            36,
+            290
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_other",
+          "col": 0,
+          "at": [
+            0,
+            230
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_other",
+          "col": 0,
+          "at": [
+            0,
+            26
+          ],
+          "gained": 52,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_other",
+          "col": 0,
           "at": [
             60,
-            72
-          ],
-          "gained": 52,
-          "spark_or_phase_pixels": 0,
-          "clipped_by_zero": 0
-        },
-        {
-          "name": "missile_up",
-          "col": 21,
-          "at": [
-            36,
-            264
-          ],
-          "gained": 52,
-          "spark_or_phase_pixels": 0,
-          "clipped_by_zero": 0
-        },
-        {
-          "name": "missile_up",
-          "col": 21,
-          "at": [
-            0,
-            204
-          ],
-          "gained": 52,
-          "spark_or_phase_pixels": 0,
-          "clipped_by_zero": 0
-        },
-        {
-          "name": "missile_up",
-          "col": 21,
-          "at": [
-            0,
-            0
-          ],
-          "gained": 52,
-          "spark_or_phase_pixels": 0,
-          "clipped_by_zero": 0
-        },
-        {
-          "name": "missile_up",
-          "col": 21,
-          "at": [
-            36,
-            60
+            98
           ],
           "gained": 51,
-          "spark_or_phase_pixels": 1,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_other",
+          "col": 0,
+          "at": [
+            36,
+            86
+          ],
+          "gained": 51,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_other",
+          "col": 0,
+          "at": [
+            156,
+            266
+          ],
+          "gained": 50,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_other",
+          "col": 0,
+          "at": [
+            108,
+            74
+          ],
+          "gained": 50,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_other",
+          "col": 0,
+          "at": [
+            156,
+            50
+          ],
+          "gained": 49,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "missile_other",
+          "col": 7,
+          "at": [
+            60,
+            274
+          ],
+          "gained": 48,
+          "spark_or_phase_pixels": 0,
           "clipped_by_zero": 0
         }
       ],
       "pixels": 59904,
-      "mismatch": 178,
-      "exact_index_pct": 99.7029,
-      "residual_spark_indices": 69,
+      "mismatch": 0,
+      "exact_index_pct": 100.0,
+      "residual_spark_indices": 0,
       "residual_framebuffer_zero": 0,
-      "residual_other": 109,
+      "residual_other": 0,
       "corner_zero_pixels": 0,
-      "exact_index_pct_outside_corners": 99.7029,
+      "exact_index_pct_outside_corners": 100.0,
       "enemies": [
         {
           "type_id": 4,
@@ -321,6 +504,75 @@
         }
       ]
     },
+    "6": {
+      "placed": [
+        {
+          "name": "door",
+          "frame": 0,
+          "at": [
+            0,
+            276
+          ],
+          "error": 0,
+          "gained": 575
+        },
+        {
+          "name": "trackbot",
+          "col": 11,
+          "at": [
+            24,
+            120
+          ],
+          "gained": 62,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "trackbot",
+          "col": 8,
+          "at": [
+            168,
+            91
+          ],
+          "gained": 59,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "player_facing_a",
+          "col": 17,
+          "at": [
+            167,
+            49
+          ],
+          "gained": 57,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        }
+      ],
+      "pixels": 59904,
+      "mismatch": 0,
+      "exact_index_pct": 100.0,
+      "residual_spark_indices": 0,
+      "residual_framebuffer_zero": 0,
+      "residual_other": 0,
+      "corner_zero_pixels": 0,
+      "exact_index_pct_outside_corners": 100.0,
+      "enemies": [
+        {
+          "type_id": 1,
+          "name": "trackbot",
+          "x": 19,
+          "y": 1
+        },
+        {
+          "type_id": 1,
+          "name": "trackbot",
+          "x": 14,
+          "y": 11
+        }
+      ]
+    },
     "7": {
       "placed": [
         {
@@ -396,6 +648,143 @@
         }
       ]
     },
+    "8": {
+      "placed": [
+        {
+          "name": "door",
+          "frame": 0,
+          "at": [
+            0,
+            288
+          ],
+          "error": 0,
+          "gained": 575
+        },
+        {
+          "name": "trackbot",
+          "col": 6,
+          "at": [
+            180,
+            12
+          ],
+          "gained": 61,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "trackbot",
+          "col": 7,
+          "at": [
+            180,
+            275
+          ],
+          "gained": 59,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "trackbot",
+          "col": 7,
+          "at": [
+            180,
+            203
+          ],
+          "gained": 59,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "trackbot",
+          "col": 7,
+          "at": [
+            180,
+            131
+          ],
+          "gained": 59,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "trackbot",
+          "col": 7,
+          "at": [
+            180,
+            59
+          ],
+          "gained": 59,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "player_facing_a",
+          "col": 0,
+          "at": [
+            162,
+            47
+          ],
+          "gained": 56,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "batbot",
+          "col": 18,
+          "at": [
+            4,
+            153
+          ],
+          "gained": 14,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        }
+      ],
+      "pixels": 59904,
+      "mismatch": 0,
+      "exact_index_pct": 100.0,
+      "residual_spark_indices": 0,
+      "residual_framebuffer_zero": 0,
+      "residual_other": 0,
+      "corner_zero_pixels": 0,
+      "exact_index_pct_outside_corners": 100.0,
+      "enemies": [
+        {
+          "type_id": 1,
+          "name": "trackbot",
+          "x": 1,
+          "y": 16
+        },
+        {
+          "type_id": 1,
+          "name": "trackbot",
+          "x": 7,
+          "y": 16
+        },
+        {
+          "type_id": 1,
+          "name": "trackbot",
+          "x": 13,
+          "y": 16
+        },
+        {
+          "type_id": 1,
+          "name": "trackbot",
+          "x": 19,
+          "y": 16
+        },
+        {
+          "type_id": 1,
+          "name": "trackbot",
+          "x": 25,
+          "y": 16
+        },
+        {
+          "type_id": 8,
+          "name": "batbot",
+          "x": 14,
+          "y": 1
+        }
+      ]
+    },
     "37": {
       "placed": [
         {
@@ -405,8 +794,8 @@
             168,
             276
           ],
-          "error": 53,
-          "gained": 522
+          "error": 0,
+          "gained": 575
         },
         {
           "name": "flitzer",
@@ -432,68 +821,79 @@
         },
         {
           "name": "trackbot",
-          "col": 4,
-          "at": [
-            60,
-            228
-          ],
-          "gained": 62,
-          "spark_or_phase_pixels": 0,
-          "clipped_by_zero": 0
-        },
-        {
-          "name": "trackbot",
-          "col": 4,
+          "col": 8,
           "at": [
             180,
-            252
+            247
           ],
-          "gained": 61,
+          "gained": 59,
           "spark_or_phase_pixels": 0,
           "clipped_by_zero": 0
         },
         {
           "name": "trackbot",
-          "col": 4,
+          "col": 8,
           "at": [
             180,
-            96
+            91
           ],
-          "gained": 61,
+          "gained": 59,
           "spark_or_phase_pixels": 0,
           "clipped_by_zero": 0
         },
         {
           "name": "trackbot",
-          "col": 4,
+          "col": 8,
           "at": [
             96,
-            72
+            67
           ],
-          "gained": 61,
+          "gained": 59,
           "spark_or_phase_pixels": 0,
           "clipped_by_zero": 0
         },
         {
           "name": "trackbot",
-          "col": 4,
+          "col": 8,
+          "at": [
+            60,
+            223
+          ],
+          "gained": 59,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "trackbot",
+          "col": 8,
           "at": [
             48,
-            24
+            19
           ],
-          "gained": 61,
+          "gained": 59,
+          "spark_or_phase_pixels": 0,
+          "clipped_by_zero": 0
+        },
+        {
+          "name": "player_facing_a",
+          "col": 1,
+          "at": [
+            96,
+            17
+          ],
+          "gained": 55,
           "spark_or_phase_pixels": 0,
           "clipped_by_zero": 0
         }
       ],
       "pixels": 59904,
-      "mismatch": 803,
-      "exact_index_pct": 98.6595,
+      "mismatch": 39,
+      "exact_index_pct": 99.9349,
       "residual_spark_indices": 0,
-      "residual_framebuffer_zero": 803,
-      "residual_other": 803,
-      "corner_zero_pixels": 1008,
-      "exact_index_pct_outside_corners": 99.91,
+      "residual_framebuffer_zero": 0,
+      "residual_other": 39,
+      "corner_zero_pixels": 0,
+      "exact_index_pct_outside_corners": 99.9349,
       "enemies": [
         {
           "type_id": 6,
@@ -586,13 +986,13 @@
         }
       ],
       "pixels": 59904,
-      "mismatch": 551,
-      "exact_index_pct": 99.0802,
+      "mismatch": 0,
+      "exact_index_pct": 100.0,
       "residual_spark_indices": 0,
-      "residual_framebuffer_zero": 551,
-      "residual_other": 551,
-      "corner_zero_pixels": 576,
-      "exact_index_pct_outside_corners": 99.8399,
+      "residual_framebuffer_zero": 0,
+      "residual_other": 0,
+      "corner_zero_pixels": 0,
+      "exact_index_pct_outside_corners": 100.0,
       "enemies": [
         {
           "type_id": 7,
