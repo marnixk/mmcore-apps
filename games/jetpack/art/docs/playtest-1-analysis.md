@@ -1,9 +1,11 @@
 # Jetpack playtest 1 — analysis
 
-Analysis only. No gameplay change in this branch. Compared with `JETPACK.EXE`
+Compared with `JETPACK.EXE`
 (image base = file offset `0x1C00`, DS = `0x1D03`) and with
 `tools/jetpack/reference/dosbox_play_level00.png`. The port sources cited are
-`games/jetpack/includes/play.inc` on `27f697a`.
+`games/jetpack/includes/play.inc` on `27f697a`. The fixes below are in this
+branch. Starting fuel is 0, matching the EXE play entry, which the original
+write-up had left for a later change. Conveyor bias is still not implemented.
 
 Level 0 in `data/levels.dat` is DOS level 1, “WELCOME TO JETPACK!”. Its enemy
 line is `1,12,1 5,1,16`: one trackbot and one spikes. Positions are the

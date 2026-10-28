@@ -30,13 +30,15 @@ dim mt.x(7), mt.y(7), mt.tm(7), mt.cl(7), mt.hid(7)
 
 dim en.n
 dim en.ty(19), en.x(19), en.y(19), en.vx(19), en.vy(19), en.fr(19), en.st(19)
+dim en.pr(11)
 
 dim sp.on, sp.x, sp.y
 
 dim spr.fr(23), spr.kind(23), spr.on(23)
 dim spr.x(23), spr.y(23), spr.w(23), spr.h(23)
 
-dim hud.dirty, fld.mark
+dim hud.dirty, fld.mark, fld.n
+dim fld.q(415)
 dim integer p_c, p_r, p_c0, p_c1, p_r0, p_r1, p_n, p_id, p_k, p_x0, p_y0, p_w
 dim integer p_a, p_b, p_d, p_c2, p_r2, p_hit, p_f, p_h, p_col, p_i, p_bit
 dim integer mt_c, mt_r, mt_j, sx0, sy0
@@ -314,12 +316,31 @@ sub fld.blit(c, r)
   if fld.mark <> 0 then scr.mark(dx, dy, lay.tile, lay.tile)
 end sub
 
+sub fld.touch(c, r)
+  if c < 0 or r < 0 or c > 25 or r > 15 then
+    exit sub
+  end if
+  if lv.ch(c, r) then
+    exit sub
+  end if
+  lv.ch(c, r) = 1
+  if fld.n >= 416 then
+    exit sub
+  end if
+  fld.q(fld.n) = c + r * 26
+  fld.n = fld.n + 1
+end sub
+
 sub fld.flush()
-  for p_r = 0 to 15
-    for p_c = 0 to 25
-      if lv.ch(p_c, p_r) then fld.blit(p_c, p_r)
-    next p_c
-  next p_r
+  if fld.n = 0 then
+    exit sub
+  end if
+  for p_i = 0 to fld.n - 1
+    p_c = fld.q(p_i) mod 26
+    p_r = fld.q(p_i) \ 26
+    if lv.ch(p_c, p_r) then fld.blit(p_c, p_r)
+  next p_i
+  fld.n = 0
 end sub
 
 sub fld.paint()
@@ -331,13 +352,14 @@ sub fld.paint()
       blit 0, 3 * lay.tile, x, y, lay.tile, lay.tile, PG_DIM
     next x
   next y
+  fld.n = 0
+  fld.mark = 0
   for p_r = 0 to 15
     for p_c = 0 to 25
-      lv.ch(p_c, p_r) = 1
+      lv.ch(p_c, p_r) = 0
+      fld.blit(p_c, p_r)
     next p_c
   next p_r
-  fld.mark = 0
-  fld.flush()
   fld.mark = 1
 end sub
 
@@ -385,7 +407,7 @@ end function
 sub mt.drop(i)
   p_a = 0
   if mt.hot = i then p_a = 1
-  lv.ch(mt.x(i), mt.y(i)) = 1
+  fld.touch(mt.x(i), mt.y(i))
   gm.tiles = TRUE
   mt_j = mt.n - 1
   if i <> mt_j then
@@ -404,14 +426,14 @@ sub mt.hide(i)
   p_id = lv.id(mt.x(i), mt.y(i))
   lv.id(mt.x(i), mt.y(i)) = (p_id and 127) or 128
   mt.hid(i) = 1
-  lv.ch(mt.x(i), mt.y(i)) = 1
+  fld.touch(mt.x(i), mt.y(i))
   gm.tiles = TRUE
 end sub
 
 sub mt.back(i)
   lv.id(mt.x(i), mt.y(i)) = lv.id(mt.x(i), mt.y(i)) and 127
   mt.hid(i) = 2
-  lv.ch(mt.x(i), mt.y(i)) = 1
+  fld.touch(mt.x(i), mt.y(i))
   gm.tiles = TRUE
 end sub
 
@@ -419,7 +441,7 @@ sub mt.expire(i)
   if mt.cl(i) = 2 and mt.tm(i) >= 5 then
     lv.id(mt.x(i), mt.y(i)) = 0
     mt.hid(i) = 2
-    lv.ch(mt.x(i), mt.y(i)) = 1
+    fld.touch(mt.x(i), mt.y(i))
     gm.tiles = TRUE
     exit sub
   end if
@@ -501,7 +523,7 @@ sub mt.step()
     if mt.hid(p_i) = 0 then
       if p_i = mt.hot then
         mt.tm(p_i) = mt.tm(p_i) + 1
-        lv.ch(mt.x(p_i), mt.y(p_i)) = 1
+        fld.touch(mt.x(p_i), mt.y(p_i))
         gm.tiles = TRUE
         mt.expire(p_i)
         if mt.hid(p_i) = 2 then
@@ -514,7 +536,7 @@ sub mt.step()
       end if
     else
       mt.tm(p_i) = mt.tm(p_i) + 1
-      lv.ch(mt.x(p_i), mt.y(p_i)) = 1
+      fld.touch(mt.x(p_i), mt.y(p_i))
       gm.tiles = TRUE
       mt.expire(p_i)
       if mt.hid(p_i) = 2 then
@@ -850,7 +872,7 @@ sub pl.take(c, r)
   end if
   if gm.fuel > FUEL_MAX then gm.fuel = FUEL_MAX
   lv.id(c, r) = 0
-  lv.ch(c, r) = 1
+  fld.touch(c, r)
   gm.tiles = TRUE
   if p_k = 4 or p_k = 5 or p_k = 6 or p_k = 12 then hud.dirty = TRUE
 end sub
@@ -913,11 +935,11 @@ sub lv.flip(k)
     for p_c = 0 to 25
       if lv.id(p_c, p_r) = p_b then
         lv.id(p_c, p_r) = p_a
-        lv.ch(p_c, p_r) = 1
+        fld.touch(p_c, p_r)
       end if
       if lv.id(p_c, p_r) = 200 then
         lv.id(p_c, p_r) = p_b
-        lv.ch(p_c, p_r) = 1
+        fld.touch(p_c, p_r)
       end if
     next p_c
   next p_r
@@ -1163,41 +1185,213 @@ sub en.move(i, solid)
   end if
 end sub
 
+function en.tid(xu, yu)
+  en.tid = 255
+  if xu < 0 or yu < 0 then
+    exit function
+  end if
+  p_c = xu \ 384
+  p_r = yu \ 384
+  if p_c > 25 or p_r > 15 then
+    exit function
+  end if
+  p_id = lv.id(p_c, p_r)
+  if p_id >= 128 then p_id = 0
+  en.tid = p_id
+end function
+
+function en.sar5(v)
+  if v >= 0 then
+    en.sar5 = v \ 32
+    exit function
+  end if
+  en.sar5 = -((-v + 31) \ 32)
+end function
+
+sub en.probes(i)
+  p_x0 = en.x(i) - 384
+  p_y0 = en.y(i) - 384
+  en.pr(0) = en.tid(p_x0 + 192, p_y0 + 192)
+  en.pr(1) = en.tid(p_x0 + 64, p_y0 - 32)
+  en.pr(2) = en.tid(p_x0 + 288, p_y0 - 32)
+  en.pr(3) = en.tid(p_x0 + 384, p_y0)
+  en.pr(4) = en.tid(p_x0 + 384, p_y0 + 352)
+  en.pr(5) = en.tid(p_x0 + 288, p_y0 + 384)
+  en.pr(6) = en.tid(p_x0 + 192, p_y0 + 352)
+  en.pr(7) = en.tid(p_x0 + 64, p_y0 + 384)
+  en.pr(8) = en.tid(p_x0 - 32, p_y0 + 352)
+  en.pr(9) = en.tid(p_x0 - 32, p_y0)
+  en.pr(10) = en.tid(p_x0 + 384, p_y0 + 384)
+  en.pr(11) = en.tid(p_x0 - 32, p_y0 + 384)
+end sub
+
+sub en.track(i)
+  en.probes(i)
+  p_n = (en.x(i) \ 32) mod 12
+  if p_n < 0 then p_n = p_n + 12
+  p_b = 0
+  if en.pr(8) < 40 and en.pr(9) < 40 then p_b = p_b or 1
+  if en.pr(3) < 40 and en.pr(4) < 40 then p_b = p_b or 2
+  if en.pr(1) < 40 and en.pr(2) < 40 and p_n < 2 then
+    if en.pr(6) >= 1 and en.pr(6) <= 3 then p_b = p_b or 4
+  end if
+  if en.pr(5) < 40 and en.pr(7) < 40 and p_n < 2 then
+    p_d = 0
+    if en.pr(0) >= 1 and en.pr(0) <= 3 then p_d = 1
+    if en.pr(5) >= 1 and en.pr(5) <= 3 and en.pr(7) >= 1 and en.pr(7) <= 3 then p_d = 1
+    if p_d = 1 then p_b = p_b or 8
+  end if
+  p_c2 = en.sar5(en.x(i) - pl.x)
+  p_r2 = en.sar5(en.y(i) - pl.y)
+  p_k = en.st(i)
+  p_h = 0
+  if p_k = 4 and (p_b and 4) <> 0 then p_h = 1
+  if p_k = 8 and (p_b and 8) <> 0 then p_h = 1
+  if p_h = 1 then
+    p_a = 0
+    if p_r2 > 0 and p_k = 8 then p_a = 1
+    if p_r2 < 0 and p_k = 4 then p_a = 1
+    p_f = 0
+    if p_a = 0 then
+      if int(rnd * 3) <> 0 then p_f = 1
+    end if
+    if p_f = 0 then
+      p_d = 0
+      if p_c2 > 0 then p_d = 1
+      if p_d = 0 then
+        if int(rnd * 20) = 0 then p_d = 1
+      end if
+      if p_d = 1 and (p_b and 1) <> 0 then
+        if en.pr(11) >= 40 or (en.pr(11) >= 1 and en.pr(11) <= 3) then
+          p_k = 1
+          p_f = 1
+        end if
+      end if
+      if p_f = 0 then
+        p_d = 0
+        if p_c2 < 0 then p_d = 1
+        if p_d = 0 then
+          if int(rnd * 20) = 0 then p_d = 1
+        end if
+        if p_d = 1 and (p_b and 2) <> 0 then
+          if en.pr(10) >= 40 or (en.pr(10) >= 1 and en.pr(10) <= 3) then p_k = 2
+        end if
+      end if
+    end if
+  else
+    p_h = 0
+    if p_k = 1 and (p_b and 1) <> 0 then p_h = 1
+    if p_k = 2 and (p_b and 2) <> 0 then p_h = 1
+    if p_h = 1 then
+      p_a = 0
+      if p_c2 > 0 and p_k = 2 then p_a = 1
+      if p_c2 < 0 and p_k = 1 then p_a = 1
+      p_f = 0
+      if p_a = 0 then
+        if int(rnd * 3) <> 0 then p_f = 1
+      end if
+      if p_f = 0 then
+        p_d = 0
+        if p_r2 > 0 then p_d = 1
+        if p_d = 0 then
+          if int(rnd * 20) = 0 then p_d = 1
+        end if
+        if p_d = 1 and (p_b and 4) <> 0 then
+          p_k = 4
+          p_f = 1
+        end if
+        if p_f = 0 then
+          p_d = 0
+          if p_r2 < 0 then p_d = 1
+          if p_d = 0 then
+            if int(rnd * 20) = 0 then p_d = 1
+          end if
+          if p_d = 1 and (p_b and 8) <> 0 then p_k = 8
+        end if
+      end if
+    else
+      p_bit = p_k and 12
+      p_col = p_k and 3
+      if p_bit = 0 and p_r2 > 0 and (p_b and 4) <> 0 then
+        p_k = 4
+      else
+        if p_bit = 0 and p_r2 < 0 and (p_b and 8) <> 0 then
+          p_k = 8
+        else
+          if p_col = 0 and p_c2 > 0 and (p_b and 1) <> 0 then
+            p_k = 1
+          else
+            if p_col = 0 and p_c2 < 0 and (p_b and 2) <> 0 then
+              p_k = 2
+            else
+              if p_bit = 0 and (p_b and 4) <> 0 then
+                p_k = 4
+              else
+                if p_bit = 0 and (p_b and 8) <> 0 then
+                  p_k = 8
+                else
+                  if p_col = 0 and (p_b and 1) <> 0 then
+                    p_k = 1
+                  else
+                    if p_col = 0 and (p_b and 2) <> 0 then
+                      p_k = 2
+                    else
+                      p_k = 0
+                    end if
+                  end if
+                end if
+              end if
+            end if
+          end if
+        end if
+      end if
+    end if
+  end if
+  en.st(i) = p_k
+  if en.pr(0) >= 40 then
+    en.vx(i) = 0
+    en.vy(i) = 0
+  else
+    p_w = 0
+    if en.pr(0) >= 1 and en.pr(0) <= 3 then p_w = 1
+    if en.pr(5) >= 40 or (en.pr(5) >= 1 and en.pr(5) <= 3) then p_w = 1
+    if en.pr(7) >= 40 or (en.pr(7) >= 1 and en.pr(7) <= 3) then p_w = 1
+    if p_w = 0 then
+      en.st(i) = 0
+      en.vx(i) = 0
+      en.vy(i) = 64
+    else
+      en.vx(i) = 0
+      en.vy(i) = 0
+      if p_k = 1 then en.vx(i) = -43
+      if p_k = 2 then en.vx(i) = 43
+      if p_k = 4 then en.vy(i) = -33
+      if p_k = 8 then en.vy(i) = 33
+      if p_k = 4 or p_k = 8 then
+        if p_n >= 6 then en.vx(i) = 32
+        if p_n >= 1 and p_n < 6 then en.vx(i) = -32
+      end if
+    end if
+  end if
+  if en.vy(i) <> 0 and en.vy(i) <> 64 then
+    en.fr(i) = 10 + ((en.y(i) \ 64) and 1)
+  else
+    if en.vx(i) <> 0 then
+      en.fr(i) = 4 + ((en.x(i) \ 64) mod 3)
+      if en.vx(i) < 0 then en.fr(i) = en.fr(i) + 3
+    else
+      en.fr(i) = 4
+    end if
+  end if
+  en.x(i) = en.x(i) + en.vx(i)
+  en.y(i) = en.y(i) + en.vy(i)
+end sub
+
 sub en.think(i)
   p_k = en.ty(i)
   if p_k = 1 then
-    p_c = (en.x(i) - 192) \ 384
-    p_r = (en.y(i) - 192) \ 384
-    p_a = 0
-    if p_c >= 0 and p_r >= 0 and p_c <= 25 and p_r <= 15 then
-      p_id = lv.id(p_c, p_r)
-      if p_id < 128 then
-        if tf.k(p_id) = 2 then p_a = 1
-      end if
-    end if
-    if p_a = 1 and abs(pl.y - en.y(i)) > 200 then
-      en.vx(i) = 0
-      if pl.y < en.y(i) then
-        en.vy(i) = -33
-      else
-        en.vy(i) = 33
-      end if
-    else
-      en.vy(i) = en.vy(i) + 5
-      if en.vy(i) > 64 then en.vy(i) = 64
-      if pl.x >= en.x(i) then
-        en.vx(i) = 43
-      else
-        en.vx(i) = -43
-      end if
-    end if
-    en.move(i, TRUE)
-    if p_a = 1 then
-      en.fr(i) = 10 + ((en.y(i) \ 64) and 1)
-    else
-      en.fr(i) = 4 + ((en.x(i) \ 64) mod 3)
-      if en.vx(i) < 0 then en.fr(i) = en.fr(i) + 3
-    end if
+    en.track(i)
+    p_k = 1
   end if
   if p_k = 2 then
     if en.vx(i) = 0 then en.vx(i) = 59
@@ -1534,7 +1728,6 @@ sub gm.step()
   pl.anim()
   key.prevJ = key.jet
   key.prevD = key.dn
-  hud.dirty = TRUE
 end sub
 
 sub gm.tick()
