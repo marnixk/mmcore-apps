@@ -123,6 +123,8 @@ After decompress, only the first `24×24 = 576` bytes are the visible tile; rema
 
 **RAM / DAC dump:** not automated; DAT decode still unverified.
 
+**Known gap (honest):** a few levels (e.g. **59**, **80**) still show elevated MSE on specific cells while **context coverage stays 100%**. Those cells use map ids such as **75** whose f0 RGB varies across levels that share the same neighbour-id tuple — likely **runtime draw state** (phase/mirage or strip cursor state at **0x4730**, not serialized in the 506-byte JETLEV record). No additional per-level header field after **0x1A0** was found in **JETPACK.EXE** that selects among those variants.
+
 ## Other files
 
 | File | Notes |

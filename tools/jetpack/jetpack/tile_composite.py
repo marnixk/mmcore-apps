@@ -106,8 +106,6 @@ def build_composite_atlas(
         tiles = level.tiles
         for row in range(MAP_H):
             for col in range(MAP_W):
-                if static is not None and not static[row, col]:
-                    continue
                 tid = tiles[row * MAP_W + col]
                 cell = _cell(field, row, col)
                 if tid in BACKDROP_RENDER_IDS or tid == 0:
@@ -115,6 +113,8 @@ def build_composite_atlas(
                     continue
                 ntid = _norm_tid(tid)
                 buckets[ntid].append(cell)
+                if static is not None and not static[row, col]:
+                    continue
                 key = render_context_key(tiles, row, col, tid)
                 context_buckets[key].append(cell)
 
