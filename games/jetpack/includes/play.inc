@@ -129,11 +129,6 @@ sub lv.oneEn(s$)
   en.fr(en.n) = 0
   if ty = 2 then en.vx(en.n) = 59
   if ty = 4 then en.st(en.n) = 1
-  if ty = 5 then
-    en.vx(en.n) = 20
-    en.vy(en.n) = 20
-    if (en.n mod 2) = 1 then en.vx(en.n) = -20
-  end if
   en.n = en.n + 1
 end sub
 
@@ -1118,6 +1113,33 @@ end sub
 
 ' ---------- enemies ----------
 
+function en.blocked(x, y)
+  en.blocked = 1
+  if x < 384 or y < 384 then
+    exit function
+  end if
+  p_c0 = (x - 384) \ 384
+  p_c1 = (x - 1) \ 384
+  p_r0 = (y - 384) \ 384
+  p_r1 = (y - 1) \ 384
+  if p_c1 > 25 or p_r1 > 15 then
+    exit function
+  end if
+  if p_c0 < 0 then p_c0 = 0
+  if p_r0 < 0 then p_r0 = 0
+  for p_r = p_r0 to p_r1
+    for p_c = p_c0 to p_c1
+      p_id = lv.id(p_c, p_r)
+      if p_id < 128 then
+        if p_id >= 40 then
+          exit function
+        end if
+      end if
+    next p_c
+  next p_r
+  en.blocked = 0
+end function
+
 sub en.bounceX(i)
   en.x(i) = en.x(i) - en.vx(i)
   en.vx(i) = -en.vx(i)
@@ -1230,10 +1252,36 @@ sub en.think(i)
     en.fr(i) = 21 + en.st(i) * 3 + ((gm.frm \ 2) mod 3)
   end if
   if p_k = 5 then
-    if en.vx(i) = 0 then en.vx(i) = 20
-    if en.vy(i) = 0 then en.vy(i) = 20
-    en.move(i, TRUE)
-    en.fr(i) = 16
+    if en.st(i) = 0 then
+      en.st(i) = int(rnd * 4) + 1
+      en.vx(i) = 20
+      en.vy(i) = 20
+      if en.st(i) = 1 or en.st(i) = 4 then en.vx(i) = -20
+      if en.st(i) = 1 or en.st(i) = 2 then en.vy(i) = -20
+    end if
+    if en.vx(i) < 0 then
+      en.vx(i) = -20
+    else
+      en.vx(i) = 20
+    end if
+    if en.vy(i) < 0 then
+      en.vy(i) = -20
+    else
+      en.vy(i) = 20
+    end if
+    en.x(i) = en.x(i) + en.vx(i)
+    p_hit = en.blocked(en.x(i), en.y(i))
+    if p_hit then
+      en.x(i) = en.x(i) - en.vx(i)
+      en.vx(i) = -en.vx(i)
+    end if
+    en.y(i) = en.y(i) + en.vy(i)
+    p_hit = en.blocked(en.x(i), en.y(i))
+    if p_hit then
+      en.y(i) = en.y(i) - en.vy(i)
+      en.vy(i) = -en.vy(i)
+    end if
+    en.fr(i) = 16 + ((en.x(i) \ 32) mod 3)
   end if
   if p_k = 6 then
     p_d = ((gm.frm \ 8) + i) mod 8
