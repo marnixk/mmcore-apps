@@ -857,7 +857,7 @@ sub pl.take(c, r)
   lv.id(c, r) = 0
   lv.ch(c, r) = 1
   gm.tiles = TRUE
-  hud.dirty = TRUE
+  if p_k = 4 or p_k = 5 or p_k = 6 or p_k = 12 then hud.dirty = TRUE
 end sub
 
 sub pl.cellFuel(c, r)
@@ -869,13 +869,15 @@ sub pl.cellFuel(c, r)
     exit sub
   end if
   p_k = tf.k(p_id and 127)
+  if p_k <> 7 and p_k <> 8 then
+    exit sub
+  end if
+  p_h = gm.fuel
   if p_k = 7 then gm.fuel = gm.fuel + 30
   if p_k = 8 then gm.fuel = gm.fuel - 20
-  if p_k = 7 or p_k = 8 then
-    if gm.fuel > FUEL_MAX then gm.fuel = FUEL_MAX
-    if gm.fuel < 0 then gm.fuel = 0
-    hud.dirty = TRUE
-  end if
+  if gm.fuel > FUEL_MAX then gm.fuel = FUEL_MAX
+  if gm.fuel < 0 then gm.fuel = 0
+  if gm.fuel <> p_h then hud.dirty = TRUE
 end sub
 
 sub pl.pickups()
@@ -1320,16 +1322,51 @@ end sub
 ' ---------- draw ----------
 
 sub hud.draw()
+  local gx, gy, gw, gh, bev, well, fill, row, c0, c1, c2
   if lay.ox < 20 then
     exit sub
   end if
   box 0, 0, lay.ox, scr.H, 1, rgb(16, 12, 14), rgb(16, 12, 14)
-  p_h = scr.H - 28 * lay.fsc
-  if p_h < 24 then p_h = 24
-  p_f = p_h * gm.fuel \ FUEL_MAX
-  p_col = rgb(232, 168, 48)
-  if gm.fuel < 2000 then p_col = rgb(210, 48, 36)
-  if p_f > 0 then box 4, 8 + p_h - p_f, 8 * lay.fsc, p_f, 1, p_col, p_col
+  bev = lay.fsc
+  gx = 2 * bev
+  gw = lay.ox - gx * 2
+  if gw > 91 * lay.fsc then gw = 91 * lay.fsc
+  gh = bev * 2 + 3 * lay.fsc
+  gy = 4
+  if lay.ox >= 4 * 8 * lay.fsc + gx then
+    font 1, lay.fsc
+    text gx, gy, "FUEL", rgb(73, 251, 203)
+    font 1, 1
+    gy = gy + 16 * lay.fsc
+  end if
+  box gx, gy, gw, gh, 1, rgb(96, 100, 108), rgb(96, 100, 108)
+  box gx, gy, gw, bev, 1, rgb(220, 224, 232), rgb(220, 224, 232)
+  box gx, gy + gh - bev, gw, bev, 1, rgb(32, 34, 40), rgb(32, 34, 40)
+  box gx, gy, bev, gh, 1, rgb(220, 224, 232), rgb(220, 224, 232)
+  box gx + gw - bev, gy, bev, gh, 1, rgb(32, 34, 40), rgb(32, 34, 40)
+  well = gw - bev * 2
+  row = 3 * lay.fsc
+  box gx + bev, gy + bev, well, row, 1, rgb(0, 0, 0), rgb(0, 0, 0)
+  c0 = rgb(170, 0, 0)
+  c1 = rgb(199, 0, 0)
+  c2 = rgb(227, 0, 0)
+  if gm.fuel >= 1500 then
+    c0 = rgb(170, 158, 0)
+    c1 = rgb(199, 186, 0)
+    c2 = rgb(227, 219, 0)
+  end if
+  if gm.fuel >= 3000 then
+    c0 = rgb(0, 142, 0)
+    c1 = rgb(0, 170, 0)
+    c2 = rgb(0, 199, 0)
+  end if
+  fill = well * gm.fuel \ FUEL_MAX
+  if fill > well then fill = well
+  if fill > 0 then
+    box gx + bev, gy + bev, fill, lay.fsc, 1, c0, c0
+    box gx + bev, gy + bev + lay.fsc, fill, lay.fsc, 1, c1, c1
+    box gx + bev, gy + bev + lay.fsc * 2, fill, lay.fsc, 1, c2, c2
+  end if
   ui.text(3, scr.H - 20 * lay.fsc, num$(pl.gems), 2)
   ui.text(3, scr.H - 10 * lay.fsc, num$(gm.lives), 2)
   scr.mark(0, 0, lay.ox, scr.H)
@@ -1616,7 +1653,7 @@ sub gm.run()
   gm.lives = LIVES0
   if TH_LIVES > 0 then gm.lives = TH_LIVES
   gm.score = 0
-  gm.fuel = FUEL_MAX
+  gm.fuel = 0
   gm.lifeAt = 0
   gm.frm = 0
   do
