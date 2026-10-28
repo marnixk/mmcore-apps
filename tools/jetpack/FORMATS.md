@@ -94,7 +94,7 @@ The game opens `JETPACKn.DAT` through the **0x5891 / 0x4CAD** open layer, reads 
 
 ### SCLM LZ77 (from `SCLM.DAT` offset `0x87`)
 
-Bitstream: LSB-first within each control byte; **0 = literal** (next source byte), **1 = LZ** (next `uint16` LE):
+Bitstream: LSB-first within each control byte; **1 = literal** (next source byte), **0 = LZ** (next `uint16` LE). `SCLM.DAT` at `0x87`: `shr` / `jc` takes the literal when CF=1.
 
 - `length = ((high_byte >> 4) & 0x0F) + 2`
 - `offset = word & 0x0FFF` (copy from `output_len - offset`)
@@ -107,7 +107,7 @@ After decompress, only the first `24×24 = 576` bytes are the visible tile; rema
 
 **Ground truth:** native VGA PNGs `reference/native/level_XX_fN.png` (**640×400**, `scaler=none`, no resample). Legacy window captures are rejected.
 
-**Playfield:** crop **(8, 0)–(632, 384)** = **26×16×24 px** (`reference/playfield_geometry.json`, `jetpack/native_vga.py`).
+**Playfield:** VGA mode 13h is 320×200, chain-4 (sequencer index 4 = `0x0E`). The playfield is **26×16 tiles of 12×12** indices at VGA origin **(4, 0)** (312×192). Doubled 640×400 captures crop **(9, 0)–(633, 384)** = **26×16×24 px** (`reference/playfield_geometry.json`). Column 8 of those PNGs is a black gutter; the doubled pixels start at x=9.
 
 **Capture:** `scripts/dosbox_capture_slot0.py` — per level, copy campaign record into **slot 0** of a writable `JETLEV.DAT` (`jetpack/jetlev_swap.py`), fresh Xvfb + DOSBox per level, grab **640×400** root framebuffer. Legacy `scripts/dosbox_capture.py` (TAB+2+S skip) is deprecated after mis-label bugs.
 
@@ -115,20 +115,15 @@ After decompress, only the first `24×24 = 576` bytes are the visible tile; rema
 
 **Capture verify:** `scripts/verify_capture_labels_fingerprint.py` — each `level_XX_f0.png` must best-match JETLEV level **XX** via DAT compositor render MSE (expect **100/100** when DAC calibration matches DOS).
 
-**Terrain compositing (`jetpack/tile_composite.py`):** no context→RGB lookup table.
+**Playfield draw (`jetpack/vga_index.py`):** each map cell is one 12×12 cell from the in-memory sheet. There is no VGA edge compositor. `0x4730` / `0x48AD` are the text-mode editor blit (`int 10h` AH=8/9). The VGA path copies a 12×12 sheet cell with the stride-320 blitter at file `0x1A3CE` (segment `0x187B` offset `0x1E`).
 
-1. **Base** — decompress campaign slot for map tile id (`AH=8` path in **0x4730**); index **0** leaves the playfield backdrop visible.
-2. **Edges** — when a cardinal neighbour’s tile id differs (and is non-blank), composite the **edge strip** DAT slot **`120 + centre_tile_id`** into an **8 px** border band (N/S/E/W), matching the rectangle stamps from **0x43D1** / **0x4427** after **0x488B** fills strip words `(tile_id << 8) | 0x20` (`CH` = **`[0x3116]`**, `CL` = **0x20**).
-3. **DAC** — `jetpack/palette_fit.py` maps each palette index to RGB using **interior-cell** medians from native captures, **leave-one-level-out** when validating that level (not a per-context RGB table).
-4. **Animation** — map id **75 (0x4B, blue tube horizontal)** and ids **0x4A–0x4F** use alternate DAT slots (`TUBE_ANIM_SLOTS` in `tile_composite.py`); validation picks **f0/f1/f2** phase by lowest MSE on animated cells only.
+**Index ground truth:** `scripts/dump_vga_level.py` boots slot 0 under DOSBox-X and the `vga_dump.asm` TSR writes a `JPVG` dump (BIOS mode, sequencer/CRTC/graphics registers, 768-byte 6-bit DAC, then four 64KiB plane reads). Mode is **13h**, sequencer index 4 is `0x0E` (chain-4), and the four planes are identical, so the framebuffer is the linear A000 image. `dac6.bin` is the level-0 DAC. Indices 0–246 match on levels 5, 7, 37, 59 and 99; indices 247–254 are the spark cycle. `sheet_12x12.u8` is the 120-tile sheet at linear `0x4AED5` (stride 320, 20 columns, pitch 13, separator index `0x66`). The same 120 cells are at that address in the level-5 memory dump. Tile id `N` is cell `N`. RGB uses `(v<<2)|(v>>4)` on the 6-bit DAC, with no palette fitting.
 
-**`gfx/frames`** — per-id **base** PNGs from DAT decode + DAC fit. Export: `scripts/extract_from_play.py`.
+Pixel index match of sheet[tile id] against the dumped playfield (sparks, door, player and enemies included): level 0 **98.691%**, 5 **97.529%**, 7 **98.391%**, 37 **97.047%**, 59 **97.546%**, 99 **97.421%**. Interior 3×3-uniform cells on level 0 are 34/37 exact; the three misses are spark pixels on tile 0.
 
-**Sprites:** `jetpack/sprites_diff.py` diffs `f1`/`f2` against static rebuild (player + enemies).
+`sclm_lz77_decompress` matches `SCLM.DAT` `0x87` (bit 1 = literal), but those decompressed `JETPACK*.DAT` blobs do **not** contain the 12×12 indices (the brick row `07 26 27 27 …` never appears). The on-screen indices are the memory sheet, not a raw LZ bitmap.
 
-**Validation:** `scripts/validate_art.py` — **leave-one-level-out** DAT compositor; **gems + enemy cells** masked; MSE vs **f0**; `reference/validate_stats.json`, side-by-sides for levels **0, 5, 7, 37, 59, 99**. `reference/composite_atlas.pkl` removed.
-
-**Known gap (honest):** mean LOO MSE remains high until **indexed blob ↔ on-screen pixels** is fully verified (JETPAL/DAC alone is insufficient; see note above § graphics). Strip-accurate **0x4730** strip walking is approximated by per-cell border bands.
+**Validation:** `scripts/validate_art.py` renders the sheet through the dumped DAC and compares to native `f0`. The sheet and DAC do not depend on the held-out level. MSE skips backdrop, gems, enemies, the player cell, the door sprite, and animated tube/teleport ids. Side-by-sides for levels **0, 5, 7, 37, 59, 99**.
 
 ## Other files
 
@@ -142,4 +137,4 @@ After decompress, only the first `24×24 = 576` bytes are the visible tile; rema
 
 ## Playfield geometry (original)
 
-- **26 × 16** tiles, **24 px** per tile → **624 × 384** px playfield (single screen, no scroll).
+- **26 × 16** tiles, **12 VGA px** per tile → **312 × 192** at A000 (x = 4). Doubled captures are **624 × 384**.

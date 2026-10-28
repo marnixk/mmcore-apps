@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Leave-one-level-out validation: DAT tiles + edge rule (no per-level capture atlas)."""
+"""Validate the mode-13h index sheet against native captures.
+
+The dumped DAC and the 12×12 sheet do not depend on the held-out level, so
+leave-one-level-out MSE equals a full-set comparison. Exact index match is
+reported for levels that have a JPVG dump.
+"""
 
 from __future__ import annotations
 
@@ -14,16 +19,17 @@ from PIL import Image, ImageDraw
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from jetpack.atlas_median import masked_mse, temporal_static_mask
+from jetpack.atlas_median import ANIMATED_TILE_IDS, masked_mse, temporal_static_mask
 from jetpack.constants import MAP_H, MAP_W
 from jetpack.levels import load_jetlev
 from jetpack.map_layout import default_layout
 from jetpack.native_vga import load_geometry, playfield_from_native
-from jetpack.tile_composite import (
-    DatCompositor,
-    coverage_mask,
-    pick_anim_phase,
-    validation_eval_mask,
+from jetpack.tile_composite import validation_eval_mask
+from jetpack.vga_index import (
+    SHEET_TILES,
+    framebuffer_playfield,
+    render_indices,
+    render_level_rgb,
 )
 
 CHECK_LEVELS = (0, 5, 7, 37, 59, 99)
@@ -47,11 +53,19 @@ def capture_f0(idx: int, ref: Path, geom) -> np.ndarray | None:
     return np.array(playfield_from_native(Image.open(p).convert("RGB"), geom))
 
 
+def _covered(tile_ids: list[int]) -> np.ndarray:
+    m = np.zeros((MAP_H, MAP_W), dtype=bool)
+    for row in range(MAP_H):
+        for col in range(MAP_W):
+            tid = tile_ids[row * MAP_W + col]
+            if 0 <= tid < SHEET_TILES:
+                m[row, col] = True
+    return m
+
+
 def eval_level(
     idx: int,
     lv,
-    levels,
-    game_dir: Path,
     ref: Path,
     geom,
     max_mse: float,
@@ -64,28 +78,39 @@ def eval_level(
     fields = [np.array(playfield_from_native(Image.open(p).convert("RGB"), geom)) for p in paths]
     static = temporal_static_mask(fields)
     eval_mask = validation_eval_mask(lv, static)
-    phase = pick_anim_phase(lv, ref / "native", geom, game_dir, exclude_level=idx)
-    comp = DatCompositor.open(
-        game_dir,
-        ref / "native",
-        levels,
-        exclude_level=idx,
-        anim_phase=phase,
-    )
-    rend = np.array(comp.render_level(lv.tiles).convert("RGB"))
-    cov = coverage_mask(lv.tiles, comp)
+    # One sheet frame cannot match a conveyor/teleport phase, and the door
+    # sprite is drawn on top of whatever map cell it covers.
+    animated = ANIMATED_TILE_IDS | set(range(0x4A, 0x50)) | {6, 7, 8}
+    door_c, door_r = lv.door_x - 1, lv.door_y - 1
+    for row in range(MAP_H):
+        for col in range(MAP_W):
+            tid = lv.tiles[row * MAP_W + col]
+            if tid in animated:
+                eval_mask[row, col] = False
+            if door_c <= col < door_c + 2 and door_r <= row < door_r + 2:
+                eval_mask[row, col] = False
+    rend = np.array(render_level_rgb(lv.tiles))
+    cov = _covered(lv.tiles)
     if np.any(eval_mask):
         coverage = float(np.sum(eval_mask & cov) / np.sum(eval_mask))
     else:
         coverage = 1.0
     mse = float(masked_mse(cap, rend, eval_mask)) if np.any(eval_mask) else None
+    dump = ref / "vga_dump" / f"level_{idx:02d}.bin"
+    exact = None
+    if dump.is_file():
+        got = render_indices(lv.tiles)
+        truth = framebuffer_playfield(dump)
+        exact = float(np.mean(got == truth) * 100.0)
     ok = coverage >= MIN_COVERAGE and (mse is None or mse <= max_mse)
     return {
         "eval_cells": int(eval_mask.sum()),
         "dat_coverage_pct": float(coverage * 100.0),
-        "anim_phase": phase,
+        "anim_phase": 0,
         "mse": mse,
+        "exact_index_pct": exact,
         "pass": ok,
+        "render": rend,
     }
 
 
@@ -105,7 +130,15 @@ def main() -> int:
     check = list(range(100)) if args.all_levels else (args.levels or list(CHECK_LEVELS))
     stats_out: dict = {
         "map_layout": layout.to_dict(),
-        "validation": "loo_dat_compositor_f0",
+        "validation": "vga_index_sheet_dac",
+        "dac": "reference/vga_dump/dac6.bin",
+        "sheet": "reference/vga_dump/sheet_12x12.u8",
+        "note": (
+            "DAC and sheet are fixed (not fit per level), so holding a level out does not change its MSE. "
+            "MSE is static terrain only: backdrop, gems, enemies, the player cell, the door sprite, "
+            "and animated tube/teleport ids are excluded. Exact index percent is the full playfield, "
+            "including those overlays."
+        ),
         "max_mse": args.max_mse,
         "min_dat_coverage_pct": MIN_COVERAGE * 100,
         "levels": {},
@@ -118,10 +151,11 @@ def main() -> int:
         lv = next((l for l in levels if l.index == idx), None)
         if lv is None:
             continue
-        row = eval_level(idx, lv, levels, game_dir, ref, geom, args.max_mse)
+        row = eval_level(idx, lv, ref, geom, args.max_mse)
         if row.get("skip"):
             print(f"level_{idx:02d}: skip (no capture)")
             continue
+        rend = row.pop("render")
         stats_out["levels"][f"level_{idx:02d}"] = row
         if row["mse"] is not None:
             mses.append((idx, row["mse"]))
@@ -129,27 +163,21 @@ def main() -> int:
         ok = row["pass"]
         failed = failed or not ok
         mse_s = "n/a" if row["mse"] is None else f"{row['mse']:.2f}"
+        exact_s = "" if row["exact_index_pct"] is None else f"  index={row['exact_index_pct']:.2f}%"
         print(
             f"level_{idx:02d}  coverage={row['dat_coverage_pct']:.1f}%  "
-            f"MSE={mse_s}  phase={row['anim_phase']}  eval_cells={row['eval_cells']}  "
+            f"MSE={mse_s}  eval_cells={row['eval_cells']}{exact_s}  "
             f"{'OK' if ok else 'FAIL'}"
         )
         if idx in side_levels:
             cap_arr = capture_f0(idx, ref, geom)
             assert cap_arr is not None
-            phase = row["anim_phase"]
-            comp = DatCompositor.open(
-                game_dir, ref / "native", levels, exclude_level=idx, anim_phase=phase
-            )
             cap_img = Image.fromarray(cap_arr, "RGB")
-            rend_img = Image.fromarray(
-                np.array(comp.render_level(lv.tiles).convert("RGB")),
-                "RGB",
-            )
+            rend_img = Image.fromarray(rend, "RGB")
             side = side_by_side(
                 cap_img,
                 rend_img,
-                f"L{idx:02d} LOO DAT cov={row['dat_coverage_pct']:.1f}% MSE={mse_s}",
+                f"L{idx:02d} sheet cov={row['dat_coverage_pct']:.1f}% MSE={mse_s}",
             )
             side.save(ref / f"validate_level{idx:02d}_side_by_side.png")
 
