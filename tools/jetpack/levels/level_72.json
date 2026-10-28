@@ -4,75 +4,11 @@
   "tiles": [
     2,
     28,
-    72,
-    72,
-    72,
-    72,
-    72,
-    28,
-    72,
-    0,
-    0,
     28,
     28,
     28,
     28,
     28,
-    72,
-    28,
-    2,
-    0,
-    28,
-    72,
-    72,
-    72,
-    72,
-    28,
-    28,
-    28,
-    72,
-    72,
-    72,
-    72,
-    72,
-    28,
-    28,
-    0,
-    0,
-    28,
-    28,
-    28,
-    72,
-    72,
-    72,
-    28,
-    72,
-    28,
-    72,
-    2,
-    72,
-    72,
-    72,
-    28,
-    28,
-    28,
-    72,
-    72,
-    72,
-    72,
-    72,
-    72,
-    2,
-    72,
-    72,
-    28,
-    28,
-    72,
-    28,
-    28,
-    72,
-    72,
-    72,
     28,
     28,
     28,
@@ -82,172 +18,70 @@
     28,
     28,
     28,
-    72,
     28,
     28,
-    72,
-    4,
-    28,
-    72,
-    72,
-    28,
-    72,
-    72,
-    0,
-    72,
-    28,
-    72,
     28,
     28,
-    72,
     28,
     28,
-    72,
-    72,
-    72,
     28,
     28,
     28,
     28,
     2,
-    28,
-    72,
-    4,
-    72,
-    28,
-    28,
-    28,
     72,
     72,
-    0,
-    28,
-    2,
-    28,
-    28,
+    72,
+    72,
+    72,
     72,
     72,
     72,
     72,
     28,
-    28,
     72,
-    28,
-    28,
-    28,
-    72,
-    28,
-    28,
-    7,
-    28,
-    72,
-    72,
-    72,
-    2,
-    28,
-    72,
-    0,
-    28,
-    72,
-    72,
-    28,
-    28,
-    72,
-    28,
-    72,
-    28,
-    28,
-    2,
-    28,
-    28,
-    28,
     23,
     28,
-    28,
-    28,
-    72,
-    72,
-    72,
-    28,
-    72,
-    2,
-    28,
-    72,
-    28,
-    72,
-    2,
-    28,
-    28,
-    72,
-    28,
-    4,
-    28,
-    72,
-    72,
-    72,
-    28,
-    28,
-    28,
-    28,
-    28,
-    72,
-    28,
     72,
     72,
     72,
     72,
     72,
-    28,
-    28,
-    28,
-    28,
-    28,
+    72,
+    72,
+    72,
+    72,
+    72,
     72,
     28,
     2,
     28,
+    28,
+    28,
+    28,
+    28,
+    28,
+    28,
+    28,
+    72,
+    28,
+    72,
+    72,
+    72,
+    72,
+    28,
+    28,
+    28,
+    28,
+    28,
+    28,
+    4,
     4,
     72,
     72,
-    72,
     28,
-    28,
-    28,
-    72,
-    28,
-    28,
-    4,
     2,
-    28,
-    28,
-    28,
-    28,
     72,
-    28,
-    28,
-    28,
-    72,
-    28,
-    72,
-    28,
-    28,
-    28,
-    4,
-    28,
-    72,
-    28,
-    28,
-    28,
-    28,
-    72,
-    28,
-    4,
-    4,
-    72,
-    28,
-    28,
-    28,
-    28,
-    0,
     72,
     72,
     72,
@@ -255,124 +89,309 @@
     72,
     7,
     28,
+    72,
+    4,
+    4,
+    4,
+    4,
+    72,
+    28,
     28,
     72,
+    72,
+    72,
+    72,
+    4,
     4,
     28,
     72,
-    28,
-    28,
     28,
     2,
     72,
     28,
-    4,
-    4,
     28,
     28,
+    28,
+    28,
+    72,
+    28,
+    28,
+    72,
+    28,
+    72,
+    72,
+    72,
+    72,
+    28,
+    28,
+    28,
+    28,
+    72,
+    72,
+    72,
+    28,
+    72,
+    28,
+    2,
+    72,
+    28,
+    72,
+    72,
+    72,
+    28,
+    28,
+    72,
+    2,
+    28,
+    4,
+    72,
+    72,
+    0,
+    0,
+    72,
+    72,
+    28,
+    72,
+    28,
+    72,
+    28,
+    28,
+    72,
+    28,
+    2,
+    72,
+    28,
+    0,
+    0,
+    0,
+    72,
+    28,
+    28,
+    2,
+    72,
+    72,
+    28,
+    28,
+    0,
+    0,
+    72,
+    28,
+    28,
+    28,
+    28,
+    28,
+    28,
+    72,
+    72,
+    28,
+    2,
     72,
     72,
     0,
     15,
+    0,
     72,
+    72,
+    28,
+    2,
+    28,
+    28,
+    28,
+    72,
+    72,
+    72,
+    28,
+    28,
+    28,
+    72,
+    72,
+    72,
+    72,
+    72,
+    28,
+    28,
+    28,
+    28,
+    72,
+    0,
+    0,
+    0,
+    72,
+    28,
+    28,
+    72,
+    2,
+    28,
+    72,
+    28,
+    28,
+    28,
+    28,
+    72,
+    28,
+    72,
+    28,
+    28,
+    28,
+    28,
+    28,
+    72,
+    72,
+    28,
+    28,
+    72,
+    72,
+    28,
+    28,
+    72,
+    28,
+    28,
     2,
     72,
     72,
     28,
+    72,
+    72,
+    72,
+    72,
+    28,
+    28,
+    28,
+    72,
+    72,
+    72,
+    72,
+    72,
+    28,
+    72,
+    2,
+    28,
+    28,
+    72,
+    28,
+    28,
+    72,
+    72,
+    72,
+    72,
+    28,
+    28,
+    72,
+    28,
+    28,
+    28,
+    28,
+    72,
+    72,
+    7,
+    28,
+    28,
+    28,
+    2,
     28,
     28,
     2,
     72,
     72,
+    28,
+    72,
+    28,
+    28,
+    28,
+    28,
+    28,
+    28,
     72,
     72,
+    28,
+    28,
+    28,
+    0,
+    28,
+    28,
+    72,
+    72,
+    72,
+    72,
+    2,
+    28,
+    28,
+    2,
     28,
     28,
     72,
     72,
     72,
     28,
+    72,
+    28,
+    28,
+    72,
+    28,
+    28,
+    28,
+    28,
+    72,
+    72,
+    72,
+    28,
+    28,
+    28,
+    72,
+    72,
+    2,
+    28,
+    28,
+    72,
     72,
     4,
-    28,
-    28,
-    2,
-    28,
-    0,
-    0,
-    72,
-    28,
-    28,
-    72,
-    28,
-    28,
-    72,
-    28,
-    72,
-    28,
-    2,
-    28,
-    28,
-    28,
-    72,
-    72,
-    72,
-    28,
-    72,
-    72,
-    28,
-    72,
-    28,
-    2,
-    72,
-    72,
-    72,
-    72,
-    28,
-    28,
-    72,
-    28,
-    72,
-    28,
-    28,
-    72,
-    72,
-    28,
-    28,
-    28,
-    28,
-    72,
-    72,
-    72,
-    28,
-    28,
-    28,
-    72,
+    4,
+    4,
     4,
     72,
     28,
     72,
+    28,
+    28,
+    28,
+    72,
     72,
     28,
     72,
+    28,
+    28,
+    28,
+    72,
+    28,
     28,
     72,
     2,
-    28,
     72,
-    28,
-    28,
-    28,
-    72,
-    28,
     28,
     28,
     72,
     72,
+    72,
+    72,
+    72,
     28,
+    28,
+    72,
+    72,
+    72,
+    72,
+    72,
+    28,
+    28,
+    72,
+    28,
+    72,
+    72,
+    72,
+    72,
+    72,
+    72,
     2,
-    28,
-    28,
     72,
     72,
     28,
@@ -380,12 +399,8 @@
     28,
     28,
     28,
-    72,
-    28,
-    72,
     28,
     28,
-    72,
     28,
     28,
     28,
@@ -394,28 +409,13 @@
     28,
     28,
     72,
-    72,
-    72,
-    72,
-    72,
-    72,
-    28,
-    72,
-    0,
-    28,
-    2,
     28,
     28,
     28,
-    72,
-    72,
     28,
     28,
-    72,
-    72,
     28,
-    72,
-    72,
+    28,
     28,
     2
   ],
@@ -453,42 +453,6 @@
       "name": "tile_1c"
     },
     {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
       "id": 28,
       "name": "tile_1c"
     },
@@ -507,226 +471,6 @@
     {
       "id": 28,
       "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 2,
-      "name": "escalator_up"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 2,
-      "name": "escalator_up"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 2,
-      "name": "escalator_up"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
     },
     {
       "id": 28,
@@ -765,8 +509,12 @@
       "name": "tile_1c"
     },
     {
-      "id": 72,
-      "name": "diamond_block"
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
     },
     {
       "id": 28,
@@ -777,84 +525,12 @@
       "name": "tile_1c"
     },
     {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
       "id": 28,
       "name": "tile_1c"
     },
     {
       "id": 28,
       "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
     },
     {
       "id": 28,
@@ -877,32 +553,12 @@
       "name": "escalator_up"
     },
     {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
       "id": 72,
       "name": "diamond_block"
     },
     {
-      "id": 4,
-      "name": "gem"
-    },
-    {
       "id": 72,
       "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
     },
     {
       "id": 72,
@@ -913,24 +569,8 @@
       "name": "diamond_block"
     },
     {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 2,
-      "name": "escalator_up"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
+      "id": 72,
+      "name": "diamond_block"
     },
     {
       "id": 72,
@@ -953,128 +593,8 @@
       "name": "tile_1c"
     },
     {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
       "id": 72,
       "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 7,
-      "name": "teleport_pink"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 2,
-      "name": "escalator_up"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 2,
-      "name": "escalator_up"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
     },
     {
       "id": 23,
@@ -1085,14 +605,6 @@
       "name": "tile_1c"
     },
     {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
       "id": 72,
       "name": "diamond_block"
     },
@@ -1105,100 +617,8 @@
       "name": "diamond_block"
     },
     {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
       "id": 72,
       "name": "diamond_block"
-    },
-    {
-      "id": 2,
-      "name": "escalator_up"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 2,
-      "name": "escalator_up"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
     },
     {
       "id": 72,
@@ -1221,24 +641,8 @@
       "name": "diamond_block"
     },
     {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
+      "id": 72,
+      "name": "diamond_block"
     },
     {
       "id": 72,
@@ -1257,6 +661,86 @@
       "name": "tile_1c"
     },
     {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
       "id": 4,
       "name": "gem"
     },
@@ -1269,164 +753,16 @@
       "name": "diamond_block"
     },
     {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
       "id": 28,
       "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 4,
-      "name": "gem"
     },
     {
       "id": 2,
       "name": "escalator_up"
     },
     {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
       "id": 72,
       "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 4,
-      "name": "gem"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 0,
-      "name": "blank"
     },
     {
       "id": 72,
@@ -1457,12 +793,56 @@
       "name": "tile_1c"
     },
     {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
       "id": 28,
       "name": "tile_1c"
     },
     {
       "id": 72,
       "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 4,
+      "name": "gem"
     },
     {
       "id": 4,
@@ -1475,14 +855,6 @@
     {
       "id": 72,
       "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
     },
     {
       "id": 28,
@@ -1501,12 +873,12 @@
       "name": "tile_1c"
     },
     {
-      "id": 4,
-      "name": "gem"
+      "id": 28,
+      "name": "tile_1c"
     },
     {
-      "id": 4,
-      "name": "gem"
+      "id": 28,
+      "name": "tile_1c"
     },
     {
       "id": 28,
@@ -1515,6 +887,294 @@
     {
       "id": 28,
       "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 2,
+      "name": "escalator_up"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 2,
+      "name": "escalator_up"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 4,
+      "name": "gem"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 2,
+      "name": "escalator_up"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 2,
+      "name": "escalator_up"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 2,
+      "name": "escalator_up"
     },
     {
       "id": 72,
@@ -1533,8 +1193,232 @@
       "name": "fuel_double"
     },
     {
+      "id": 0,
+      "name": "blank"
+    },
+    {
       "id": 72,
       "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 2,
+      "name": "escalator_up"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 2,
+      "name": "escalator_up"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
     },
     {
       "id": 2,
@@ -1553,6 +1437,158 @@
       "name": "tile_1c"
     },
     {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 2,
+      "name": "escalator_up"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 7,
+      "name": "teleport_pink"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 2,
+      "name": "escalator_up"
+    },
+    {
       "id": 28,
       "name": "tile_1c"
     },
@@ -1573,12 +1609,100 @@
       "name": "diamond_block"
     },
     {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
       "id": 72,
       "name": "diamond_block"
     },
     {
       "id": 72,
       "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 0,
+      "name": "blank"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 2,
+      "name": "escalator_up"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 2,
+      "name": "escalator_up"
     },
     {
       "id": 28,
@@ -1603,6 +1727,86 @@
     {
       "id": 28,
       "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 2,
+      "name": "escalator_up"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
     },
     {
       "id": 72,
@@ -1613,220 +1817,12 @@
       "name": "gem"
     },
     {
-      "id": 28,
-      "name": "tile_1c"
+      "id": 4,
+      "name": "gem"
     },
     {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 2,
-      "name": "escalator_up"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 2,
-      "name": "escalator_up"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 2,
-      "name": "escalator_up"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
+      "id": 4,
+      "name": "gem"
     },
     {
       "id": 4,
@@ -1845,6 +1841,22 @@
       "name": "diamond_block"
     },
     {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
       "id": 72,
       "name": "diamond_block"
     },
@@ -1855,6 +1867,26 @@
     {
       "id": 72,
       "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
     },
     {
       "id": 28,
@@ -1869,32 +1901,8 @@
       "name": "escalator_up"
     },
     {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
       "id": 72,
       "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
     },
     {
       "id": 28,
@@ -1913,22 +1921,90 @@
       "name": "diamond_block"
     },
     {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
       "id": 28,
       "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 28,
+      "name": "tile_1c"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
+    },
+    {
+      "id": 72,
+      "name": "diamond_block"
     },
     {
       "id": 2,
       "name": "escalator_up"
     },
     {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
       "id": 72,
       "name": "diamond_block"
     },
@@ -1957,28 +2033,12 @@
       "name": "tile_1c"
     },
     {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
       "id": 28,
       "name": "tile_1c"
     },
     {
       "id": 28,
       "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
     },
     {
       "id": 28,
@@ -2013,44 +2073,16 @@
       "name": "diamond_block"
     },
     {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
+      "id": 28,
+      "name": "tile_1c"
     },
     {
       "id": 28,
       "name": "tile_1c"
     },
     {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 0,
-      "name": "blank"
-    },
-    {
       "id": 28,
       "name": "tile_1c"
-    },
-    {
-      "id": 2,
-      "name": "escalator_up"
     },
     {
       "id": 28,
@@ -2065,40 +2097,8 @@
       "name": "tile_1c"
     },
     {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
       "id": 28,
       "name": "tile_1c"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 28,
-      "name": "tile_1c"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
-    },
-    {
-      "id": 72,
-      "name": "diamond_block"
     },
     {
       "id": 28,

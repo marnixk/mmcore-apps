@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate median atlas rebuild vs native captures (structural cells)."""
+"""Validate context-median atlas rebuild vs native captures (static agreed cells)."""
 
 from __future__ import annotations
 
@@ -14,37 +14,19 @@ from PIL import Image, ImageDraw
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from jetpack.constants import ITEM_TILE_IDS, MAP_H, MAP_W, SPAWN_MARKER_TILE_IDS, TILE_PX
+from jetpack.atlas_median import masked_mse, temporal_static_mask, validation_mask
 from jetpack.frame_atlas import FrameAtlas
 from jetpack.levels import load_jetlev
+from jetpack.map_layout import default_layout
 from jetpack.native_vga import load_geometry, playfield_from_native
 
-MAX_MSE = 120.0
+MAX_MSE = 1.0
 CHECK_LEVELS = (0, 5, 37, 99)
 
 
-def _native_frame(ref: Path, idx: int) -> Path | None:
-    native = ref / "native" / f"level_{idx:02d}_f0.png"
-    return native if native.is_file() else None
-
-
-def structural_mask(level) -> np.ndarray:
-    mask = np.ones((MAP_H, MAP_W), dtype=bool)
-    for row in range(MAP_H):
-        for col in range(MAP_W):
-            tid = level.tiles[row * MAP_W + col]
-            if tid in (0, 60, 0x3C) or tid in SPAWN_MARKER_TILE_IDS or tid in ITEM_TILE_IDS:
-                mask[row, col] = False
-    mask[level.player_y - 1, level.player_x - 1] = False
-    for e in level.enemies:
-        mask[e.y - 1, e.x - 1] = False
-    return mask
-
-
-def masked_mse(cap: np.ndarray, rend: np.ndarray, mask: np.ndarray) -> float:
-    from jetpack.atlas_median import masked_mse as _mse
-
-    return _mse(cap, rend, mask)
+def _native_frames(ref: Path, idx: int) -> list[Path]:
+    paths = [ref / "native" / f"level_{idx:02d}_f{n}.png" for n in range(3)]
+    return [p for p in paths if p.is_file()]
 
 
 def side_by_side(cap: Image.Image, rend: Image.Image, label: str) -> Image.Image:
@@ -66,25 +48,37 @@ def main() -> int:
     ref = args.reference.expanduser().resolve()
     levels = {lv.index: lv for lv in load_jetlev(args.game_dir / "JETLEV.DAT")}
     atlas = FrameAtlas.load(ROOT / "gfx" / "frames")
+    if atlas.context_stats is None:
+        print("ERROR: missing reference/context_atlas.pkl — run extract_from_play.py", file=sys.stderr)
+        return 1
     geom = load_geometry()
-    stats_out: dict[str, dict] = {}
+    layout = default_layout()
+    stats_out: dict[str, dict] = {
+        "map_layout": layout.to_dict(),
+        "max_mse": args.max_mse,
+        "levels": {},
+    }
     failed = False
     for idx in args.levels:
-        cap_path = _native_frame(ref, idx)
-        if cap_path is None:
+        cap_paths = _native_frames(ref, idx)
+        if not cap_paths:
             print(f"level_{idx:02d}: skip (no capture)")
             continue
         lv = levels[idx]
-        im = Image.open(cap_path).convert("RGB")
-        ref_field = np.array(playfield_from_native(im, geom))
+        fields = [np.array(playfield_from_native(Image.open(p).convert("RGB"), geom)) for p in cap_paths]
+        ref_field = fields[0]
         rend = np.array(atlas.render_level(lv.tiles).convert("RGB"))
-        mask = structural_mask(lv)
+        mask = validation_mask(lv, atlas.context_stats) & temporal_static_mask(fields)
         mse = masked_mse(ref_field, rend, mask)
         ok = mse <= args.max_mse
         failed = failed or not ok
-        stats_out[f"level_{idx:02d}"] = {"structural_mse": mse, "pass": ok, "cells": int(mask.sum())}
+        stats_out["levels"][f"level_{idx:02d}"] = {
+            "static_mse": mse,
+            "pass": ok,
+            "cells": int(mask.sum()),
+        }
         print(
-            f"level_{idx:02d} structural MSE: {mse:.2f} (max {args.max_mse}) "
+            f"level_{idx:02d} static MSE: {mse:.4f} (max {args.max_mse}) "
             f"{'OK' if ok else 'FAIL'} [{mask.sum()} cells]"
         )
         cap_img = Image.fromarray(ref_field, "RGB")
@@ -92,7 +86,7 @@ def main() -> int:
         side = side_by_side(
             cap_img,
             rend_img,
-            f"level {idx:02d}  top=native  bottom=rebuild  structural_MSE={mse:.1f}",
+            f"level {idx:02d}  top=native  bottom=context rebuild  static_MSE={mse:.4f}",
         )
         side.save(ref / f"validate_level{idx:02d}_side_by_side.png")
         rend_img.save(ref / f"validate_level{idx:02d}_render.png")

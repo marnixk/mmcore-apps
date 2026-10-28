@@ -14,6 +14,7 @@ from .constants import (
     MAP_W,
     TILE_NAMES,
 )
+from .map_layout import default_layout
 
 
 @dataclass
@@ -47,8 +48,8 @@ def _jetscii_name(raw: bytes) -> str:
 def parse_level_blob(blob: bytes, index: int) -> Level:
     if len(blob) != LEVEL_SIZE:
         raise ValueError(f"level blob must be {LEVEL_SIZE} bytes, got {len(blob)}")
-    raw = list(blob[0:416])
-    tiles = [raw[col * MAP_H + row] for row in range(MAP_H) for col in range(MAP_W)]
+    layout = default_layout()
+    tiles = layout.read_grid(blob)
     door_x, door_y = blob[0x1A0], blob[0x1A1]
     player_x, player_y = blob[0x1A2], blob[0x1A3]
     enemies: list[Enemy] = []

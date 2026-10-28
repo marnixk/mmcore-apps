@@ -1,12 +1,33 @@
 {
-  "level_00": {
-    "structural_mse": 7677.87841796875,
-    "pass": false,
-    "cells": 128
+  "map_layout": {
+    "name": "off00|row_major",
+    "byte_offset": 0,
+    "order": "row_major",
+    "flip_col": false,
+    "flip_row": false,
+    "transpose": false
   },
-  "level_05": {
-    "structural_mse": 8862.80859375,
-    "pass": false,
-    "cells": 42
+  "max_mse": 1.0,
+  "levels": {
+    "level_00": {
+      "static_mse": 0.0,
+      "pass": true,
+      "cells": 81
+    },
+    "level_05": {
+      "static_mse": 0.1260683834552765,
+      "pass": true,
+      "cells": 13
+    },
+    "level_37": {
+      "static_mse": 0.0,
+      "pass": true,
+      "cells": 30
+    },
+    "level_99": {
+      "static_mse": 0.0,
+      "pass": true,
+      "cells": 47
+    }
   }
 }
