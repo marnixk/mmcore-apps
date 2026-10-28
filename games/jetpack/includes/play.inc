@@ -31,6 +31,7 @@ dim mt.x(7), mt.y(7), mt.tm(7), mt.cl(7), mt.hid(7)
 dim en.n
 dim en.ty(19), en.x(19), en.y(19), en.vx(19), en.vy(19), en.fr(19), en.st(19)
 dim en.pr(11)
+dim float en.rf
 
 dim sp.on, sp.x, sp.y
 
@@ -1253,13 +1254,15 @@ sub en.track(i)
     if p_r2 < 0 and p_k = 4 then p_a = 1
     p_f = 0
     if p_a = 0 then
-      if int(rnd * 3) <> 0 then p_f = 1
+      en.rf = rnd
+      if int(en.rf * 3) <> 0 then p_f = 1
     end if
     if p_f = 0 then
       p_d = 0
       if p_c2 > 0 then p_d = 1
       if p_d = 0 then
-        if int(rnd * 20) = 0 then p_d = 1
+        en.rf = rnd
+        if int(en.rf * 20) = 0 then p_d = 1
       end if
       if p_d = 1 and (p_b and 1) <> 0 then
         if en.pr(11) >= 40 or (en.pr(11) >= 1 and en.pr(11) <= 3) then
@@ -1271,7 +1274,8 @@ sub en.track(i)
         p_d = 0
         if p_c2 < 0 then p_d = 1
         if p_d = 0 then
-          if int(rnd * 20) = 0 then p_d = 1
+          en.rf = rnd
+        if int(en.rf * 20) = 0 then p_d = 1
         end if
         if p_d = 1 and (p_b and 2) <> 0 then
           if en.pr(10) >= 40 or (en.pr(10) >= 1 and en.pr(10) <= 3) then p_k = 2
@@ -1288,13 +1292,15 @@ sub en.track(i)
       if p_c2 < 0 and p_k = 1 then p_a = 1
       p_f = 0
       if p_a = 0 then
-        if int(rnd * 3) <> 0 then p_f = 1
+        en.rf = rnd
+      if int(en.rf * 3) <> 0 then p_f = 1
       end if
       if p_f = 0 then
         p_d = 0
         if p_r2 > 0 then p_d = 1
         if p_d = 0 then
-          if int(rnd * 20) = 0 then p_d = 1
+          en.rf = rnd
+        if int(en.rf * 20) = 0 then p_d = 1
         end if
         if p_d = 1 and (p_b and 4) <> 0 then
           p_k = 4
@@ -1304,7 +1310,8 @@ sub en.track(i)
           p_d = 0
           if p_r2 < 0 then p_d = 1
           if p_d = 0 then
-            if int(rnd * 20) = 0 then p_d = 1
+            en.rf = rnd
+        if int(en.rf * 20) = 0 then p_d = 1
           end if
           if p_d = 1 and (p_b and 8) <> 0 then p_k = 8
         end if
@@ -1447,7 +1454,8 @@ sub en.think(i)
   end if
   if p_k = 5 then
     if en.st(i) = 0 then
-      en.st(i) = int(rnd * 4) + 1
+      en.rf = rnd
+      en.st(i) = int(en.rf * 4) + 1
       en.vx(i) = 20
       en.vy(i) = 20
       if en.st(i) = 1 or en.st(i) = 4 then en.vx(i) = -20
