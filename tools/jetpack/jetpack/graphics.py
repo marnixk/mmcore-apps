@@ -51,7 +51,8 @@ def sclm_lz77_decompress(src: bytes, out_size: int = TILE_RLE_OUT) -> bytes:
                 break
             bit = bits & 1
             bits >>= 1
-            if bit == 0:
+            # SCLM 0x87: SHR sets CF from the low bit; JB (CF=1) is a literal.
+            if bit == 1:
                 if si >= len(src):
                     break
                 out.append(src[si])

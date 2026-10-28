@@ -16,7 +16,7 @@ NATIVE_HEIGHT = 400
 PLAYFIELD_W = MAP_W * TILE_PX  # 624
 PLAYFIELD_H = MAP_H * TILE_PX  # 384
 # Default origin: centred horizontally, playfield at top (16px HUD strip below).
-DEFAULT_ORIGIN = (8, 0)
+DEFAULT_ORIGIN = (9, 0)
 
 _GEOM_PATH = Path(__file__).resolve().parents[1] / "reference" / "playfield_geometry.json"
 
