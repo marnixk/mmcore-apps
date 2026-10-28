@@ -47,6 +47,10 @@ def main() -> int:
     atlas = TileAtlas.open(game_dir)
     composite_gameplay_frame(lv, 683, 384, label, atlas=atlas).save(out / "gameplay_683x384.png")
     composite_gameplay_frame(lv, 1280, 720, label, atlas=atlas).save(out / "gameplay_1280x720.png")
+    fw, fh = 26 * 24, 16 * 24
+    sc683 = min(683 // fw, 384 // fh)
+    sc720 = min(1280 // fw, 720 // fh)
+    print(f"Playfield integer scale: 683×384 → {sc683}×, 1280×720 → {sc720}× (2× needs 1248×768 height)")
     render_entity_showcase_crop(lv, atlas).save(out / "entity_showcase_1x1.png")
 
     print(f"Mockups written to {out}")

@@ -106,11 +106,13 @@ After decompress, only the first `24×24 = 576` bytes are the visible tile; rema
 
 **Capture:** `scripts/dosbox_capture.py` — DOSBox-X + Xvfb; levels **0–99** via `TAB+2+S` skip and `--boot-level` decades (F3 +10 on title).
 
-**Atlas:** `jetpack/atlas_median.py` — per tile ID, pick highest-variance clean cell sample across all captures (medoid fallback); `scripts/extract_from_play.py` → `gfx/frames/index.json` (`source: dosbox_native_median`).
+**Map layout:** `scripts/find_map_layout.py` scores 416-byte map candidates (offsets 0–32, row/column major, flips); locked layout in `reference/map_layout.json` (**`off00|row_major`**, bytes 0–415 — door at 0x1A0). Raw within-ID variance favours `off26|row_major` on level 0 but misaligns the level record; see `reference/layout_search.json`.
+
+**Atlas:** `jetpack/atlas_median.py` — per **8-neighbour context key** `(tile_id, N,E,S,W,NE,NW,SE,SW)`, per-pixel **median** across all 100 levels; neighbour-dependent brick/ladder variants; `reference/context_atlas.pkl` + tid fallbacks in `gfx/frames/index.json` (`source: dosbox_native_context_median`). Flagged IDs in `reference/atlas_stats.json`.
 
 **Sprites:** `jetpack/sprites_diff.py` diffs `f1`/`f2` against static rebuild (player + enemies).
 
-**Validation:** `scripts/validate_art.py` — structural cells only (excludes backdrop, items, spawn markers, player/enemy cells); side-by-sides `reference/validate_level*_side_by_side.png`.
+**Validation:** `scripts/validate_art.py` — static agreed cells (context keys with cross-level variance ≤50, no animated/toggle IDs, temporal stability across f0–f2); target MSE ≤1 on levels 0/5/37/99; `reference/validate_stats.json` and `reference/validate_level*_side_by_side.png`.
 
 **RAM / DAC dump:** not automated; DAT decode still unverified.
 

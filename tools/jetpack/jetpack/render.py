@@ -105,10 +105,8 @@ def composite_gameplay_frame(
 ) -> Image.Image:
     """Full-screen gameplay mockup: scaled playfield + HUD gutters."""
     field_w, field_h = MAP_W * TILE_PX, MAP_H * TILE_PX
-    if out_w >= field_w * 2 and out_h >= field_h * 2:
-        tile_sc = 2
-    else:
-        tile_sc = max(1, min(out_w // field_w, out_h // field_h))
+    tile_sc = max(1, min(out_w // field_w, out_h // field_h))
+    # 624×384 playfield: 2× (1248×768) does not fit in 1280×720; use tile_sc=1 and center.
     preview = render_level_preview(level, scale=tile_sc, show_entities=True, atlas=atlas)
     fw, fh = preview.size
     ox = (out_w - fw) // 2

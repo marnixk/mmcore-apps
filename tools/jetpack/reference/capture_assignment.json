@@ -1,0 +1,706 @@
+{
+  "mislabelled_count": 100,
+  "total": 100,
+  "entries": [
+    {
+      "file": "level_00_f0.png",
+      "label": 0,
+      "assigned_level": 3,
+      "cost": 0.10463665425777435,
+      "mislabelled": true
+    },
+    {
+      "file": "level_01_f0.png",
+      "label": 1,
+      "assigned_level": 0,
+      "cost": 0.04904770478606224,
+      "mislabelled": true
+    },
+    {
+      "file": "level_02_f0.png",
+      "label": 2,
+      "assigned_level": 31,
+      "cost": 0.09291790425777435,
+      "mislabelled": true
+    },
+    {
+      "file": "level_03_f0.png",
+      "label": 3,
+      "assigned_level": 92,
+      "cost": 0.1394461989402771,
+      "mislabelled": true
+    },
+    {
+      "file": "level_04_f0.png",
+      "label": 4,
+      "assigned_level": 25,
+      "cost": 0.1733889877796173,
+      "mislabelled": true
+    },
+    {
+      "file": "level_05_f0.png",
+      "label": 5,
+      "assigned_level": 96,
+      "cost": 0.11159393191337585,
+      "mislabelled": true
+    },
+    {
+      "file": "level_06_f0.png",
+      "label": 6,
+      "assigned_level": 8,
+      "cost": 0.11167483031749725,
+      "mislabelled": true
+    },
+    {
+      "file": "level_07_f0.png",
+      "label": 7,
+      "assigned_level": 93,
+      "cost": 0.06743481755256653,
+      "mislabelled": true
+    },
+    {
+      "file": "level_08_f0.png",
+      "label": 8,
+      "assigned_level": 47,
+      "cost": 0.11049602180719376,
+      "mislabelled": true
+    },
+    {
+      "file": "level_09_f0.png",
+      "label": 9,
+      "assigned_level": 53,
+      "cost": 0.07339820265769958,
+      "mislabelled": true
+    },
+    {
+      "file": "level_10_f0.png",
+      "label": 10,
+      "assigned_level": 95,
+      "cost": 0.11261094361543655,
+      "mislabelled": true
+    },
+    {
+      "file": "level_11_f0.png",
+      "label": 11,
+      "assigned_level": 33,
+      "cost": 0.13381794095039368,
+      "mislabelled": true
+    },
+    {
+      "file": "level_12_f0.png",
+      "label": 12,
+      "assigned_level": 34,
+      "cost": 0.07308617234230042,
+      "mislabelled": true
+    },
+    {
+      "file": "level_13_f0.png",
+      "label": 13,
+      "assigned_level": 78,
+      "cost": 0.0826437696814537,
+      "mislabelled": true
+    },
+    {
+      "file": "level_14_f0.png",
+      "label": 14,
+      "assigned_level": 45,
+      "cost": 0.08354520797729492,
+      "mislabelled": true
+    },
+    {
+      "file": "level_15_f0.png",
+      "label": 15,
+      "assigned_level": 88,
+      "cost": 0.08875738084316254,
+      "mislabelled": true
+    },
+    {
+      "file": "level_16_f0.png",
+      "label": 16,
+      "assigned_level": 67,
+      "cost": 0.06410640478134155,
+      "mislabelled": true
+    },
+    {
+      "file": "level_17_f0.png",
+      "label": 17,
+      "assigned_level": 24,
+      "cost": 0.04946375638246536,
+      "mislabelled": true
+    },
+    {
+      "file": "level_18_f0.png",
+      "label": 18,
+      "assigned_level": 42,
+      "cost": 0.09176219254732132,
+      "mislabelled": true
+    },
+    {
+      "file": "level_19_f0.png",
+      "label": 19,
+      "assigned_level": 11,
+      "cost": 0.06426821649074554,
+      "mislabelled": true
+    },
+    {
+      "file": "level_20_f0.png",
+      "label": 20,
+      "assigned_level": 27,
+      "cost": 0.1252080202102661,
+      "mislabelled": true
+    },
+    {
+      "file": "level_21_f0.png",
+      "label": 21,
+      "assigned_level": 38,
+      "cost": 0.06475360691547394,
+      "mislabelled": true
+    },
+    {
+      "file": "level_22_f0.png",
+      "label": 22,
+      "assigned_level": 37,
+      "cost": 0.16016781330108643,
+      "mislabelled": true
+    },
+    {
+      "file": "level_23_f0.png",
+      "label": 23,
+      "assigned_level": 75,
+      "cost": 0.046331822872161865,
+      "mislabelled": true
+    },
+    {
+      "file": "level_24_f0.png",
+      "label": 24,
+      "assigned_level": 21,
+      "cost": 0.07359467446804047,
+      "mislabelled": true
+    },
+    {
+      "file": "level_25_f0.png",
+      "label": 25,
+      "assigned_level": 46,
+      "cost": 0.11075028032064438,
+      "mislabelled": true
+    },
+    {
+      "file": "level_26_f0.png",
+      "label": 26,
+      "assigned_level": 10,
+      "cost": 0.0817076563835144,
+      "mislabelled": true
+    },
+    {
+      "file": "level_27_f0.png",
+      "label": 27,
+      "assigned_level": 15,
+      "cost": 0.1175573319196701,
+      "mislabelled": true
+    },
+    {
+      "file": "level_28_f0.png",
+      "label": 28,
+      "assigned_level": 20,
+      "cost": 0.1317954957485199,
+      "mislabelled": true
+    },
+    {
+      "file": "level_29_f0.png",
+      "label": 29,
+      "assigned_level": 54,
+      "cost": 0.09815319627523422,
+      "mislabelled": true
+    },
+    {
+      "file": "level_30_f0.png",
+      "label": 30,
+      "assigned_level": 36,
+      "cost": 0.2705944776535034,
+      "mislabelled": true
+    },
+    {
+      "file": "level_31_f0.png",
+      "label": 31,
+      "assigned_level": 19,
+      "cost": 0.23259523510932922,
+      "mislabelled": true
+    },
+    {
+      "file": "level_32_f0.png",
+      "label": 32,
+      "assigned_level": 79,
+      "cost": 0.7080482244491577,
+      "mislabelled": true
+    },
+    {
+      "file": "level_33_f0.png",
+      "label": 33,
+      "assigned_level": 87,
+      "cost": 0.22093427181243896,
+      "mislabelled": true
+    },
+    {
+      "file": "level_34_f0.png",
+      "label": 34,
+      "assigned_level": 72,
+      "cost": 0.7369868755340576,
+      "mislabelled": true
+    },
+    {
+      "file": "level_35_f0.png",
+      "label": 35,
+      "assigned_level": 85,
+      "cost": 0.2770664095878601,
+      "mislabelled": true
+    },
+    {
+      "file": "level_36_f0.png",
+      "label": 36,
+      "assigned_level": 13,
+      "cost": 0.41981786489486694,
+      "mislabelled": true
+    },
+    {
+      "file": "level_37_f0.png",
+      "label": 37,
+      "assigned_level": 89,
+      "cost": 0.46593010425567627,
+      "mislabelled": true
+    },
+    {
+      "file": "level_38_f0.png",
+      "label": 38,
+      "assigned_level": 69,
+      "cost": 0.30014562606811523,
+      "mislabelled": true
+    },
+    {
+      "file": "level_39_f0.png",
+      "label": 39,
+      "assigned_level": 32,
+      "cost": 0.40765994787216187,
+      "mislabelled": true
+    },
+    {
+      "file": "level_40_f0.png",
+      "label": 40,
+      "assigned_level": 84,
+      "cost": 0.08869960904121399,
+      "mislabelled": true
+    },
+    {
+      "file": "level_41_f0.png",
+      "label": 41,
+      "assigned_level": 63,
+      "cost": 0.16941337287425995,
+      "mislabelled": true
+    },
+    {
+      "file": "level_42_f0.png",
+      "label": 42,
+      "assigned_level": 64,
+      "cost": 0.1400124728679657,
+      "mislabelled": true
+    },
+    {
+      "file": "level_43_f0.png",
+      "label": 43,
+      "assigned_level": 94,
+      "cost": 0.24794286489486694,
+      "mislabelled": true
+    },
+    {
+      "file": "level_44_f0.png",
+      "label": 44,
+      "assigned_level": 50,
+      "cost": 0.07668039202690125,
+      "mislabelled": true
+    },
+    {
+      "file": "level_45_f0.png",
+      "label": 45,
+      "assigned_level": 60,
+      "cost": 0.1342339962720871,
+      "mislabelled": true
+    },
+    {
+      "file": "level_46_f0.png",
+      "label": 46,
+      "assigned_level": 81,
+      "cost": 0.24671782553195953,
+      "mislabelled": true
+    },
+    {
+      "file": "level_47_f0.png",
+      "label": 47,
+      "assigned_level": 82,
+      "cost": 0.13731971383094788,
+      "mislabelled": true
+    },
+    {
+      "file": "level_48_f0.png",
+      "label": 48,
+      "assigned_level": 70,
+      "cost": 0.13957330584526062,
+      "mislabelled": true
+    },
+    {
+      "file": "level_49_f0.png",
+      "label": 49,
+      "assigned_level": 26,
+      "cost": 0.2508668005466461,
+      "mislabelled": true
+    },
+    {
+      "file": "level_50_f0.png",
+      "label": 50,
+      "assigned_level": 98,
+      "cost": 0.23057274520397186,
+      "mislabelled": true
+    },
+    {
+      "file": "level_51_f0.png",
+      "label": 51,
+      "assigned_level": 44,
+      "cost": 0.33859559893608093,
+      "mislabelled": true
+    },
+    {
+      "file": "level_52_f0.png",
+      "label": 52,
+      "assigned_level": 62,
+      "cost": 0.3211677074432373,
+      "mislabelled": true
+    },
+    {
+      "file": "level_53_f0.png",
+      "label": 53,
+      "assigned_level": 43,
+      "cost": 0.2670118510723114,
+      "mislabelled": true
+    },
+    {
+      "file": "level_54_f0.png",
+      "label": 54,
+      "assigned_level": 90,
+      "cost": 0.06588619947433472,
+      "mislabelled": true
+    },
+    {
+      "file": "level_55_f0.png",
+      "label": 55,
+      "assigned_level": 77,
+      "cost": 0.2738535404205322,
+      "mislabelled": true
+    },
+    {
+      "file": "level_56_f0.png",
+      "label": 56,
+      "assigned_level": 97,
+      "cost": 0.3458186984062195,
+      "mislabelled": true
+    },
+    {
+      "file": "level_57_f0.png",
+      "label": 57,
+      "assigned_level": 80,
+      "cost": 0.14587187767028809,
+      "mislabelled": true
+    },
+    {
+      "file": "level_58_f0.png",
+      "label": 58,
+      "assigned_level": 9,
+      "cost": 0.1418038010597229,
+      "mislabelled": true
+    },
+    {
+      "file": "level_59_f0.png",
+      "label": 59,
+      "assigned_level": 55,
+      "cost": 0.11714126914739609,
+      "mislabelled": true
+    },
+    {
+      "file": "level_60_f0.png",
+      "label": 60,
+      "assigned_level": 29,
+      "cost": 0.2182992696762085,
+      "mislabelled": true
+    },
+    {
+      "file": "level_61_f0.png",
+      "label": 61,
+      "assigned_level": 74,
+      "cost": 0.33982062339782715,
+      "mislabelled": true
+    },
+    {
+      "file": "level_62_f0.png",
+      "label": 62,
+      "assigned_level": 56,
+      "cost": 0.5727047920227051,
+      "mislabelled": true
+    },
+    {
+      "file": "level_63_f0.png",
+      "label": 63,
+      "assigned_level": 41,
+      "cost": 0.14521309733390808,
+      "mislabelled": true
+    },
+    {
+      "file": "level_64_f0.png",
+      "label": 64,
+      "assigned_level": 48,
+      "cost": 0.2996486723423004,
+      "mislabelled": true
+    },
+    {
+      "file": "level_65_f0.png",
+      "label": 65,
+      "assigned_level": 16,
+      "cost": 0.2511094808578491,
+      "mislabelled": true
+    },
+    {
+      "file": "level_66_f0.png",
+      "label": 66,
+      "assigned_level": 76,
+      "cost": 0.4770941138267517,
+      "mislabelled": true
+    },
+    {
+      "file": "level_67_f0.png",
+      "label": 67,
+      "assigned_level": 91,
+      "cost": 0.3551104664802551,
+      "mislabelled": true
+    },
+    {
+      "file": "level_68_f0.png",
+      "label": 68,
+      "assigned_level": 22,
+      "cost": 0.8303208351135254,
+      "mislabelled": true
+    },
+    {
+      "file": "level_69_f0.png",
+      "label": 69,
+      "assigned_level": 99,
+      "cost": 0.4004252851009369,
+      "mislabelled": true
+    },
+    {
+      "file": "level_70_f0.png",
+      "label": 70,
+      "assigned_level": 6,
+      "cost": 0.11291142553091049,
+      "mislabelled": true
+    },
+    {
+      "file": "level_71_f0.png",
+      "label": 71,
+      "assigned_level": 14,
+      "cost": 0.09878883510828018,
+      "mislabelled": true
+    },
+    {
+      "file": "level_72_f0.png",
+      "label": 72,
+      "assigned_level": 35,
+      "cost": 0.1561690866947174,
+      "mislabelled": true
+    },
+    {
+      "file": "level_73_f0.png",
+      "label": 73,
+      "assigned_level": 52,
+      "cost": 0.10143537074327469,
+      "mislabelled": true
+    },
+    {
+      "file": "level_74_f0.png",
+      "label": 74,
+      "assigned_level": 1,
+      "cost": 0.11064626276493073,
+      "mislabelled": true
+    },
+    {
+      "file": "level_75_f0.png",
+      "label": 75,
+      "assigned_level": 83,
+      "cost": 0.14268213510513306,
+      "mislabelled": true
+    },
+    {
+      "file": "level_76_f0.png",
+      "label": 76,
+      "assigned_level": 73,
+      "cost": 0.09487102925777435,
+      "mislabelled": true
+    },
+    {
+      "file": "level_77_f0.png",
+      "label": 77,
+      "assigned_level": 86,
+      "cost": 0.29351192712783813,
+      "mislabelled": true
+    },
+    {
+      "file": "level_78_f0.png",
+      "label": 78,
+      "assigned_level": 71,
+      "cost": 0.1688586175441742,
+      "mislabelled": true
+    },
+    {
+      "file": "level_79_f0.png",
+      "label": 79,
+      "assigned_level": 39,
+      "cost": 0.09235160797834396,
+      "mislabelled": true
+    },
+    {
+      "file": "level_80_f0.png",
+      "label": 80,
+      "assigned_level": 57,
+      "cost": 0.13890303671360016,
+      "mislabelled": true
+    },
+    {
+      "file": "level_81_f0.png",
+      "label": 81,
+      "assigned_level": 4,
+      "cost": 0.11739553511142731,
+      "mislabelled": true
+    },
+    {
+      "file": "level_82_f0.png",
+      "label": 82,
+      "assigned_level": 61,
+      "cost": 0.1297961324453354,
+      "mislabelled": true
+    },
+    {
+      "file": "level_83_f0.png",
+      "label": 83,
+      "assigned_level": 65,
+      "cost": 0.09592270106077194,
+      "mislabelled": true
+    },
+    {
+      "file": "level_84_f0.png",
+      "label": 84,
+      "assigned_level": 28,
+      "cost": 0.1335868090391159,
+      "mislabelled": true
+    },
+    {
+      "file": "level_85_f0.png",
+      "label": 85,
+      "assigned_level": 7,
+      "cost": 0.11953353881835938,
+      "mislabelled": true
+    },
+    {
+      "file": "level_86_f0.png",
+      "label": 86,
+      "assigned_level": 17,
+      "cost": 0.10891273617744446,
+      "mislabelled": true
+    },
+    {
+      "file": "level_87_f0.png",
+      "label": 87,
+      "assigned_level": 68,
+      "cost": 0.14305196702480316,
+      "mislabelled": true
+    },
+    {
+      "file": "level_88_f0.png",
+      "label": 88,
+      "assigned_level": 49,
+      "cost": 0.1354590505361557,
+      "mislabelled": true
+    },
+    {
+      "file": "level_89_f0.png",
+      "label": 89,
+      "assigned_level": 40,
+      "cost": 0.07056675106287003,
+      "mislabelled": true
+    },
+    {
+      "file": "level_90_f0.png",
+      "label": 90,
+      "assigned_level": 18,
+      "cost": 0.1686968207359314,
+      "mislabelled": true
+    },
+    {
+      "file": "level_91_f0.png",
+      "label": 91,
+      "assigned_level": 58,
+      "cost": 0.17575813829898834,
+      "mislabelled": true
+    },
+    {
+      "file": "level_92_f0.png",
+      "label": 92,
+      "assigned_level": 59,
+      "cost": 0.06381748616695404,
+      "mislabelled": true
+    },
+    {
+      "file": "level_93_f0.png",
+      "label": 93,
+      "assigned_level": 5,
+      "cost": 0.10945591330528259,
+      "mislabelled": true
+    },
+    {
+      "file": "level_94_f0.png",
+      "label": 94,
+      "assigned_level": 23,
+      "cost": 0.1638197898864746,
+      "mislabelled": true
+    },
+    {
+      "file": "level_95_f0.png",
+      "label": 95,
+      "assigned_level": 51,
+      "cost": 0.16111546754837036,
+      "mislabelled": true
+    },
+    {
+      "file": "level_96_f0.png",
+      "label": 96,
+      "assigned_level": 66,
+      "cost": 0.1493273824453354,
+      "mislabelled": true
+    },
+    {
+      "file": "level_97_f0.png",
+      "label": 97,
+      "assigned_level": 2,
+      "cost": 0.1585729420185089,
+      "mislabelled": true
+    },
+    {
+      "file": "level_98_f0.png",
+      "label": 98,
+      "assigned_level": 30,
+      "cost": 0.15050619840621948,
+      "mislabelled": true
+    },
+    {
+      "file": "level_99_f0.png",
+      "label": 99,
+      "assigned_level": 12,
+      "cost": 0.15098001062870026,
+      "mislabelled": true
+    }
+  ]
+}
