@@ -30,7 +30,7 @@ dim mt.x(7), mt.y(7), mt.tm(7), mt.cl(7), mt.hid(7)
 
 dim en.n
 dim en.ty(19), en.x(19), en.y(19), en.vx(19), en.vy(19), en.fr(19), en.st(19)
-dim en.pr(11)
+dim en.pr(11), en.cd(19), en.latch(19)
 dim float en.rf
 
 dim sp.on, sp.x, sp.y
@@ -41,7 +41,7 @@ dim spr.x(23), spr.y(23), spr.w(23), spr.h(23)
 dim hud.dirty, fld.mark, fld.n
 dim fld.q(415)
 dim integer p_c, p_r, p_c0, p_c1, p_r0, p_r1, p_n, p_id, p_k, p_x0, p_y0, p_w
-dim integer p_a, p_b, p_d, p_c2, p_r2, p_hit, p_f, p_h, p_col, p_i, p_bit
+dim integer p_a, p_b, p_d, p_c2, p_r2, p_hit, p_f, p_h, p_col, p_i, p_bit, p_qx, p_qy
 dim integer mt_c, mt_r, mt_j, sx0, sy0
 
 ' ---------- level file ----------
@@ -130,6 +130,8 @@ sub lv.oneEn(s$)
   en.vy(en.n) = 0
   en.st(en.n) = 0
   en.fr(en.n) = 0
+  en.cd(en.n) = 0
+  en.latch(en.n) = 0
   if ty = 2 then en.vx(en.n) = 59
   if ty = 4 then en.st(en.n) = 1
   en.n = en.n + 1
@@ -1226,6 +1228,176 @@ sub en.probes(i)
   en.pr(11) = en.tid(p_x0 - 32, p_y0 + 384)
 end sub
 
+' Trackbot element pass, after the director and before the integrator.
+' EXE file 0x14C6B escalators, 0x14F58 conveyors, 0x15033 clamps,
+' 0x150C7 floor switches, 0x15126 teleport. Steel balls share the
+' pad table and the 0x17577 epilogue (velocity cleared).
+sub en.belt(i)
+  p_a = 0
+  p_d = 0
+  if en.pr(5) >= 114 and en.pr(5) <= 116 then p_a = 1
+  if en.pr(7) >= 114 and en.pr(7) <= 116 then p_d = 1
+  if p_a = 1 and p_d = 1 then
+    if en.vx(i) < 0 then
+      en.vx(i) = -55
+    else
+      if en.vx(i) > 0 then
+        en.vx(i) = 20
+      else
+        en.vx(i) = -40
+      end if
+    end if
+  end if
+  p_a = 0
+  p_d = 0
+  if en.pr(5) >= 117 and en.pr(5) <= 119 then p_a = 1
+  if en.pr(7) >= 117 and en.pr(7) <= 119 then p_d = 1
+  if p_a = 1 and p_d = 1 then
+    if en.vx(i) > 0 then
+      en.vx(i) = 55
+    else
+      if en.vx(i) < 0 then
+        en.vx(i) = -20
+      else
+        en.vx(i) = 40
+      end if
+    end if
+  end if
+end sub
+
+sub en.cap(i)
+  if en.vy(i) < -32 then
+    p_h = en.tid(en.x(i) - 192, en.y(i) - 64)
+    if p_h >= 1 and p_h <= 3 then
+      p_id = en.tid(en.x(i) - 192, en.y(i) - 448)
+      if p_id >= 40 then en.vy(i) = -32
+    else
+      en.vy(i) = -32
+    end if
+  end if
+  if en.vy(i) > 32 then
+    p_h = en.tid(en.x(i) - 192, en.y(i) + 32)
+    if p_h >= 40 then
+      en.vy(i) = 32
+    else
+      if en.pr(0) >= 1 and en.pr(0) <= 3 then
+        p_a = 0
+      else
+        if p_h >= 1 and p_h <= 3 then en.vy(i) = 32
+      end if
+    end if
+  end if
+end sub
+
+sub en.sw(i)
+  p_id = en.pr(0)
+  if p_id >= 33 and p_id <= 35 then
+    p_n = en.sar5(en.y(i)) - 1
+    p_n = p_n mod 12
+    if p_n < 0 then p_n = p_n + 12
+    if p_n > 10 then
+      if en.latch(i) = 0 then
+        if p_id = 33 then lv.flip(17)
+        if p_id = 34 then lv.flip(18)
+        if p_id = 35 then lv.flip(19)
+        en.latch(i) = 1
+      end if
+      exit sub
+    end if
+  end if
+  en.latch(i) = 0
+end sub
+
+sub en.pad(i)
+  p_id = en.pr(0)
+  p_a = 0
+  for p_r = 0 to 15
+    for p_c = 0 to 25
+      p_h = lv.id(p_c, p_r)
+      if p_h < 128 then
+        if p_h = p_id then p_a = p_a + 1
+      end if
+    next p_c
+  next p_r
+  if p_a < 1 then
+    exit sub
+  end if
+  p_c2 = 0
+  p_r2 = 0
+  p_qx = en.sar5(en.x(i) + 192) \ 12
+  p_qy = en.sar5(en.y(i) + 352) \ 12
+  p_n = 0
+  do
+    en.rf = rnd
+    p_w = int(en.rf * p_a)
+    if p_w < 0 then p_w = 0
+    if p_w >= p_a then p_w = p_a - 1
+    p_b = 0
+    for p_r = 0 to 15
+      for p_c = 0 to 25
+        p_h = lv.id(p_c, p_r)
+        if p_h < 128 then
+          if p_h = p_id then
+            if p_b = p_w then
+              p_c2 = p_c
+              p_r2 = p_r
+            end if
+            p_b = p_b + 1
+          end if
+        end if
+      next p_c
+    next p_r
+    p_n = p_n + 1
+    if (p_c2 + 1) <> p_qx or (p_r2 + 1) <> p_qy then p_n = 10
+  loop until p_n >= 10
+  en.x(i) = (p_c2 + 1) * 384
+  en.y(i) = (p_r2 + 1) * 384
+  en.vx(i) = 0
+  en.vy(i) = 0
+  en.cd(i) = 1
+end sub
+
+sub en.gate(i, wide)
+  p_id = en.pr(0)
+  if p_id < 6 or p_id > 8 then
+    en.cd(i) = en.cd(i) and 16
+    exit sub
+  end if
+  p_h = en.cd(i) and 15
+  if p_h <> 0 then
+    p_bit = en.cd(i) and 16
+    if p_h = 15 then
+      en.cd(i) = p_bit
+    else
+      en.cd(i) = p_h + 1
+      if p_bit <> 0 then en.cd(i) = en.cd(i) or 16
+    end if
+    exit sub
+  end if
+  p_n = en.sar5(en.x(i)) mod 12
+  if p_n < 0 then p_n = p_n + 12
+  p_d = en.sar5(en.y(i)) mod 12
+  if p_d < 0 then p_d = p_d + 12
+  p_a = 0
+  if wide = 0 then
+    if p_n < 2 and p_d < 2 then p_a = 1
+  else
+    if p_d < 2 then
+      if p_n < 2 or p_n >= 11 then p_a = 1
+    end if
+  end if
+  if p_a = 0 then
+    exit sub
+  end if
+  p_bit = 0
+  if wide = 0 then en.st(i) = 0
+  if wide <> 0 then
+    if en.vx(i) < 0 then p_bit = 16
+  end if
+  en.pad(i)
+  if p_bit <> 0 then en.cd(i) = en.cd(i) or 16
+end sub
+
 sub en.track(i)
   en.probes(i)
   p_n = (en.x(i) \ 32) mod 12
@@ -1378,6 +1550,26 @@ sub en.track(i)
         if p_n >= 6 then en.vx(i) = 32
         if p_n >= 1 and p_n < 6 then en.vx(i) = -32
       end if
+      if en.vy(i) <> 0 then
+        p_d = 0
+        if en.pr(0) = 2 or en.pr(5) = 2 or en.pr(7) = 2 then p_d = 1
+        if p_d = 1 and (p_b and 4) <> 0 then
+          if en.vy(i) < 0 then
+            en.vy(i) = -61
+          else
+            en.vy(i) = 16
+          end if
+        end if
+        p_d = 0
+        if en.pr(0) = 3 or en.pr(5) = 3 or en.pr(7) = 3 then p_d = 1
+        if p_d = 1 and (p_b and 8) <> 0 then
+          if en.vy(i) > 0 then
+            en.vy(i) = 61
+          else
+            en.vy(i) = -16
+          end if
+        end if
+      end if
     end if
   end if
   if en.vy(i) <> 0 and en.vy(i) <> 64 then
@@ -1390,6 +1582,15 @@ sub en.track(i)
       en.fr(i) = 4
     end if
   end if
+  en.belt(i)
+  en.cap(i)
+  en.sw(i)
+  en.gate(i, 0)
+  if en.pr(0) >= 40 then
+    en.vx(i) = 0
+    en.vy(i) = 0
+    en.fr(i) = 10
+  end if
   en.x(i) = en.x(i) + en.vx(i)
   en.y(i) = en.y(i) + en.vy(i)
 end sub
@@ -1401,9 +1602,15 @@ sub en.think(i)
     p_k = 1
   end if
   if p_k = 2 then
-    if en.vx(i) = 0 then en.vx(i) = 59
+    if en.vx(i) = 0 then
+      en.vx(i) = 59
+      if (en.cd(i) and 16) <> 0 then en.vx(i) = -59
+      en.cd(i) = en.cd(i) and 15
+    end if
     en.vy(i) = en.vy(i) + 5
     if en.vy(i) > 64 then en.vy(i) = 64
+    en.probes(i)
+    en.gate(i, 1)
     en.move(i, TRUE)
     if en.st(i) = 0 and en.vy(i) = 0 then en.st(i) = 4
     if en.st(i) > 0 then

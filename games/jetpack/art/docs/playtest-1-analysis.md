@@ -5,7 +5,9 @@ Compared with `JETPACK.EXE`
 `tools/jetpack/reference/dosbox_play_level00.png`. The port sources cited are
 `games/jetpack/includes/play.inc` on `27f697a`. The fixes below are in this
 branch. Starting fuel is 0, matching the EXE play entry, which the original
-write-up had left for a later change. Conveyor bias is still not implemented.
+write-up had left for a later change. Trackbot conveyors, escalators,
+floor switches, and teleports, and steel-ball teleports, are in the
+section at the end of this file.
 
 Level 0 in `data/levels.dat` is DOS level 1, “WELCOME TO JETPACK!”. Its enemy
 line is `1,12,1 5,1,16`: one trackbot and one spikes. Positions are the
@@ -249,8 +251,9 @@ Replace the type-1 branch with the director above. `en.st` is unused for type
   `rnd() mod 20` as above.
 - If the feet are not supported, vx = 0 and vy = 64. Do not call `en.land`
   to cancel a climb, and do not recompute vx toward the player every frame.
-- Conveyor bias (± the `0x14F58` adjustment) can follow; it is not what pins
-  the bot on level 0.
+- Conveyor bias (± the `0x14F58` adjustment) was not part of that fix. It
+  is in the element section at the end. It is not what pins the bot on
+  level 0.
 
 Effort: one enemy routine, plus a shared “is this tile a wall / a ladder”
 probe. It wants a pass on a level that is mostly trackbots (level 37 in the
@@ -349,3 +352,131 @@ stuck robot expensive.
 | Ping-pong enemy | Level 0 type 5 (spikes). `en.land` zeroes vy, then the think writes +20. The EXE steps ±20 on both axes and reflects off tile id ≥ 40. | Negate both components. No gravity. Random initial diagonal. | Restores the original. |
 | Stuck trackbot | Type 1 chases with vx ±43 and gravity, so it walks off the shelf onto tile `0x5E` and never takes the ladder at column 15. The EXE climbs at ±33, turns at walls, and drops straight (vx 0, vy 64) only after it loses the floor. | Replace the type-1 branch with that director. | Restores the original, including ladders. |
 | Slow | Every draw spends ~1255 statements in `fld.flush` scanning 416 clean cells. The stuck bot adds no extra scan. `bod.hit` is already per cell. | Dirty-cell list, and stop marking the gutter every tick. Tile probes are a later, smaller saving. | The scan removal does not change play. |
+
+## Trackbot elements and steel-ball teleports
+
+Read from `JETPACK.EXE` (file offsets). The trackbot thinker is
+`0x14800`–`0x15277`, then a jump to the shared epilogue at `0x17577`.
+Enemy words: vx `[bx+0x3226]`, vy `[bx+0x31FE]`, x `[bx+0x3276]`,
+y `[bx+0x324E]`, direction `[bx+0x3536]`, flags `[bx+0x3522]` (low
+nibble teleport cooldown, bit `0x10` switch latch). The integrator at
+`0x127EF` adds vx and vy once, after this thinker. Probes are VGA
+pixels from the sprite top-left. Feet are `0x354F` and `0x3551`.
+Center is `0x354A`. Id ≥ 128 is empty. Id ≥ 40 (`0x28`) is a wall.
+
+### Conveyors
+
+Both feet must be on the belt. One foot does nothing.
+
+| Belt | Ids | vx &lt; 0 | vx &gt; 0 | vx = 0 |
+| --- | --- | --- | --- | --- |
+| Left (`0x14F58`) | `0x72`–`0x74` | −55 | 20 | −40 |
+| Right (`0x14FC2`) | `0x75`–`0x77` | −20 | 55 | 40 |
+
+Frames are chosen from the pre-belt velocity. A later test (`0x1520E`)
+zeroes vx and vy if the center is a wall, so a belt cannot carry a bot
+whose center is inside a solid. The port does that zero after the belt
+and sets the stuck frame to 10, which is what `0x1523A` writes.
+
+### Escalators
+
+Only on the supported path. The unsupported drop (`0x14D9D`, vy = 64)
+skips this. Id 2 (`0x14C6B`): vy ≠ 0, center or either foot is 2, and
+the up bit of the open mask is set. Then vy = −61 going up, or +16
+going down. Id 3 (`0x14CDF`) is the same test with the down bit, and
+overwrites: +61 going down, or −16 going up. The mask bit still
+requires the x alignment the director already uses (`(x >> 5) mod 12`
+&lt; 2). A bot whose center is an escalator but which is not lined up
+does not take the escalator speed.
+
+Clamps run after the belt (`0x15033`, `0x1508E`) and apply to every
+trackbot, not only escalators:
+
+- vy &lt; −32: if the inner-bottom probe `0x3555` is not a ladder or
+  escalator (1..3), vy = −32. If it is, and the cell two pixels above
+  the sprite is a wall, vy = −32. Otherwise −33 and −61 are kept.
+- vy &gt; 32: if the cell just under the sprite (`0x3554`) is a wall,
+  vy = 32. Else if the center is 1..3, keep it. Else if `0x3554` is
+  1..3, vy = 32. Else keep it, including an open-air fall of 64 and a
+  non-wall tile under the feet (gem, belt, pad).
+
+### Floor switches
+
+`0x150C7`. Center id `0x21`..`0x23`, and `((y >> 5) - 1) mod 12` &gt; 10
+(bottom pixel of that tile), and the latch bit is clear. Store
+`id + 0xE0` into byte `[0x373E]` (low byte 1, 2, or 3) and set the
+latch. Leave the tile, or fail the alignment, and the latch clears.
+Wall buttons 9–14 are not tested. There is no extra “react to the
+switch” choice in the director. The next frame’s probes see whatever
+the signal changed.
+
+The consumer at `0x11F28` is the same signal the player’s wall buttons
+send (`0x1076D`: ids 9–10, 11–12, 13–14 → signals 1, 2, 3). It swaps
+those button ids and, on one polarity, ORs `0x80` onto tube tiles
+`0x4A`–`0x4F` whose pair matches the color (`0x12283`); the other
+polarity writes the tube id back without that bit. The port’s switch
+is `lv.flip`, which swaps 9↔10, 11↔12, 13↔14 and does not touch tubes.
+Those button ids are below 40, so the open mask does not change.
+`en.tid` would treat a mirage bit as empty, so the EXE’s tube toggle
+would change pathing. That toggle is not in the port’s switch model,
+for the player or the trackbot. The trackbot calls `lv.flip(17/18/19)`
+for tiles 33/34/35, which is the signal the port already has.
+
+### Teleports
+
+`0x15126`, shared epilogue `0x17577`. Center id 6, 7, or 8. The stun
+word `[0x373C]` must be 0; if it is not, the cooldown nibble is
+cleared and the pad is skipped. The port has no enemy-stun state
+(`pl.shield` is the player), so that gate is idle.
+
+Cooldown is the low nibble of the flags byte. Non-zero ticks once per
+frame while the center is still a pad: 1..14 increment, 15 stores 0.
+Off the pad, the nibble is cleared and the high nibble (latch) is
+kept. On a pad with cooldown 0, the bot teleports only when both
+`(x >> 5) mod 12` &lt; 2 and `(y >> 5) mod 12` &lt; 2. That zeroes the
+direction byte, sets the nibble to 1, and passes color `id - 5` to
+the epilogue. Mis-aligned on a pad with cooldown 0 does not tick and
+does not clear.
+
+The epilogue rolls up to 10 times: `rand() % count[color]`, using the
+pad table built at `0xE0A5` (each map cell 6..8 stores column+1 and
+row+1). Destination is that pair times `0x180` (384). It prefers a
+pad whose cell differs from `sar(x+192,5)/12` and `sar(y+352,5)/12`.
+If all 10 rolls are the same cell, it still moves there. Then vx = 0,
+vy = 0, x and y become the destination. The sparkle list at `0x35F0`
+and the sound flag `[0x1538]` are not ported.
+
+### What the trackbot ignores
+
+- Moss `0x5E`–`0x60`, both feet (`0x14ECC`): animation only. Frame 4
+  if vx ≥ 0, else 7. Velocity is unchanged. Not implemented.
+- Ids `0x61`–`0x63`, both feet (`0x14F11`): a Borland FPU multiply of
+  vx by the qword at `ds:0x15E4` (the `int 0x3B` / `int 0x38` bytes are
+  the emulator prefix, not real interrupts). Not one of the four
+  elements. Not implemented. The constant was not decoded.
+- Enemy stun `[0x373C]`: zeroes vx, and vy unless vy is already 64,
+  and suppresses teleport. Not implemented.
+- Wall buttons 9–14: the thinker never reads them.
+
+### Steel balls
+
+Type 2 does teleport. Same pad table, same epilogue, same velocity
+clear. This is original behaviour, not a port addition. Alignment is
+wider than the trackbot (`0x156B9`): `(y >> 5) mod 12` &lt; 2, and
+`(x >> 5) mod 12` &lt; 2 or ≥ 11. The direction byte is not cleared.
+The ball thinker rewrites vx from that byte every frame (`0x1541E`):
+below `0x40` and the foot probe clear → −59 (`0xFFC5`); otherwise the
+upper probe clear → +59 (`0x3B`); both blocked → 0. The teleport frame
+ends at vx = vy = 0, and the next think restores ±59 from the facing
+byte.
+
+The port’s ball has no direction byte. `en.st` is the bounce flash.
+Bit 16 of `en.cd` holds the sign of vx across the zeroed frame, and
+the next think writes −59 or +59 from it. A ball that stops for any
+other reason still starts right, which is the port’s existing rule.
+
+Also in the ball thinker, and not added here: its own belt
+(`0x1555D`, probe `0x354D` only; left −62 / 27 / −40, right −27 / 62 /
+40), the same `0x21`–`0x23` floor switch, and the same `0x61`–`0x63`
+float scale. The player still does not trigger floor tiles
+`0x21`–`0x23`; only the trackbot was wired to `lv.flip`.
