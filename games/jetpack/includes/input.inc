@@ -1,20 +1,28 @@
 ' input.inc
-' Menus and name entry read INKEY$ in a loop.
-' Play uses ON KEY plus SETTICK. The tick never draws.
-' mmcore KEYDOWN does not report Alt, Ctrl, Insert or Delete as held keys,
-' so jet is Space and 0, and the phaser is Enter and Z. A tap still latches
-' a short burst, because the harness key command is a tap rather than a hold.
+' Menus, dialogs and name entry read INKEY$ in a loop.
+' In play, movement and jet are the KEYDOWN held set, sampled once per
+' logic tick. Releasing a key clears the action on the next tick.
+' The phaser is the rising edge of Enter or Z (one shot per press).
+' ON KEY only drains INKEY$, so OS auto-repeat cannot drive movement.
+' mmcore KEYDOWN does not report Alt, Ctrl, Insert or Delete as held
+' keys. Jet is Space and 0. Phaser is Enter and Z.
 
 dim key.pause
 dim key.left, key.right, key.up, key.dn, key.jet, key.phase
 dim key.prevJ, key.prevD
-dim key.bL, key.bR, key.bU, key.bD, key.bJ, key.bP
-dim integer key_i
-dim string ko_k$
+dim key.wasP, key.wasQ
+dim integer key_i, key_down
 
 sub key.drain()
   do while inkey$ <> ""
   loop
+end sub
+
+sub key.sampleEdges()
+  key.wasP = 0
+  if key.isDown(K_ENTER) or key.isDown(K_Z) then key.wasP = 1
+  key.wasQ = 0
+  if key.isDown(K_ESC) or key.isDown(112) or key.isDown(80) then key.wasQ = 1
 end sub
 
 sub key.reset()
@@ -27,12 +35,8 @@ sub key.reset()
   key.phase = FALSE
   key.prevJ = FALSE
   key.prevD = FALSE
-  key.bL = 0
-  key.bR = 0
-  key.bU = 0
-  key.bD = 0
-  key.bJ = 0
-  key.bP = 0
+  key.drain()
+  key.sampleEdges()
 end sub
 
 function key.isDown(code)
@@ -42,44 +46,27 @@ function key.isDown(code)
   next key_i
 end function
 
-' once per logic frame
+' once per logic frame. Held state is KEYDOWN only.
 sub key.logic()
-  key.left = FALSE
-  key.right = FALSE
-  key.up = FALSE
-  key.dn = FALSE
+  key.drain()
+  key.left = key.isDown(K_LEFT)
+  key.right = key.isDown(K_RIGHT)
+  key.up = key.isDown(K_UP)
+  key.dn = key.isDown(K_DOWN)
   key.jet = FALSE
+  if key.isDown(K_SPACE) or key.isDown(K_0) then key.jet = TRUE
+  key_down = 0
+  if key.isDown(K_ENTER) or key.isDown(K_Z) then key_down = 1
   key.phase = FALSE
-  if key.isDown(K_LEFT) or key.bL > 0 then key.left = TRUE
-  if key.isDown(K_RIGHT) or key.bR > 0 then key.right = TRUE
-  if key.isDown(K_UP) or key.bU > 0 then key.up = TRUE
-  if key.isDown(K_DOWN) or key.bD > 0 then key.dn = TRUE
-  if key.isDown(K_SPACE) or key.isDown(K_0) or key.bJ > 0 then key.jet = TRUE
-  if key.isDown(K_ENTER) or key.isDown(K_Z) or key.isDown(90) or key.bP > 0 then key.phase = TRUE
-  if key.bL > 0 then key.bL = key.bL - 1
-  if key.bR > 0 then key.bR = key.bR - 1
-  if key.bU > 0 then key.bU = key.bU - 1
-  if key.bD > 0 then key.bD = key.bD - 1
-  if key.bJ > 0 then key.bJ = key.bJ - 1
-  if key.bP > 0 then key.bP = key.bP - 1
+  if key_down = 1 and key.wasP = 0 then key.phase = TRUE
+  key.wasP = key_down
+  key_down = 0
+  if key.isDown(K_ESC) or key.isDown(112) or key.isDown(80) then key_down = 1
+  if key_down = 1 and key.wasQ = 0 then key.pause = TRUE
+  key.wasQ = key_down
 end sub
 
-sub key.latch(k)
-  if k = K_LEFT then key.bL = 14
-  if k = K_RIGHT then key.bR = 14
-  if k = K_UP then key.bU = 14
-  if k = K_DOWN then key.bD = 14
-  if k = K_SPACE or k = K_0 or k = K_INS then key.bJ = 20
-  if k = K_ENTER or k = K_LF or k = K_Z or k = 90 or k = K_DEL then key.bP = 32
-  if k = K_ESC or k = 112 or k = 80 then key.pause = TRUE
-end sub
-
+' Play's ON KEY handler. The buffer is discarded. It never latches a move.
 sub key.onKey()
-  do
-    ko_k$ = inkey$
-    if ko_k$ = "" then
-      exit do
-    end if
-    key.latch(asc(ko_k$))
-  loop
+  key.drain()
 end sub
