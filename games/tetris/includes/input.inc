@@ -27,6 +27,11 @@ function key.isEnter(k$)
   key.isEnter = (k$ = chr$(K_ENTER) or k$ = chr$(K_LF))
 end function
 
+' Esc or P pauses play and resumes from the pause dialog
+function key.isPause(k$)
+  key.isPause = (k$ = chr$(K_ESC) or k$ = "p" or k$ = "P")
+end function
+
 function key.isQuit(k$)
   key.isQuit = (k$ = "q" or k$ = "Q")
 end function
@@ -133,9 +138,10 @@ function key.repeat()
 end function
 
 ' ---- one-shot keys (hard drop, hold, rotate): one action per physical press.
-' A key we acted on stays in key.nr() until KEYDOWN shows it released; while it is
-' still held its INKEY$ copies are only OS repeats and are ignored. Each key is
-' tracked on its own, so holding Up while pressing another key never drops again.
+' Space hard-drops, Up and X rotate clockwise, Z rotates counter-clockwise,
+' C holds. A key we acted on stays in key.nr() until KEYDOWN shows it released;
+' while it is still held its INKEY$ copies are only OS repeats and are ignored.
+' Each key is tracked on its own, so holding Up never rotates again.
 const KEY_NR = 5
 dim key.nr(KEY_NR - 1)
 
