@@ -279,6 +279,12 @@ function fld.solid(c, r)
     fld.solid = FALSE
     exit function
   end if
+  ' Floor switches 0x21-0x23 are not walls. EXE support is a foot
+  ' id >= 0x28 (file 0x1024D), so the body can overlap the plate.
+  if p_id >= 33 and p_id <= 35 then
+    fld.solid = FALSE
+    exit function
+  end if
   p_k = tf.k(p_id and 127)
   if p_k = 1 or p_k = 3 or p_k = 20 or p_k = 21 then
     fld.solid = TRUE
