@@ -1,5 +1,7 @@
 .mmcore/
 .venv/
+__pycache__/
+*.pyc
 tools/gametest/out/
 tools/gametest/drv/
 tools/gametest/croot/
