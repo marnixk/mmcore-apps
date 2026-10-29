@@ -14,11 +14,13 @@ const GE_NONE = 0, GE_NEXT = 1, GE_DEAD = 2, GE_OVER = 3, GE_TITLE = 4
 
 dim gm.level, gm.lives, gm.score, gm.fuel, gm.lifeAt, gm.frm
 dim gm.res, gm.drawing, gm.due, gm.tiles, gm.moved, gm.force, gm.first
+dim gm.vis, gm.enHid
 dim integer g_now
 
 dim pl.x, pl.y, pl.x0, pl.vx, pl.vy, pl.face, pl.hface, pl.frm
 dim pl.ground, pl.dead, pl.age, pl.gems, pl.shield, pl.lock, pl.tx, pl.ty
 dim pl.phasing, pl.jetting, pl.climbing, pl.tdir, pl.sw, pl.og, pl.oj, pl.fall
+dim pl.idC, pl.idF, pl.idR, pl.idL
 
 dim lv.dx, lv.dy, lv.doorT, lv.doorF
 dim string lv.name$, lv.line$
@@ -724,8 +726,8 @@ function sc.ice(v)
 end function
 
 sub pl.ice()
-  p_a = pl.cell(9, 12)
-  p_d = pl.cell(2, 12)
+  p_a = pl.idR
+  p_d = pl.idL
   if p_a >= 97 and p_a <= 99 then
     pl.vx = sc.ice(pl.vx)
   else
@@ -740,8 +742,8 @@ sub pl.belt()
   p_n = 0
   if key.right and key.left = 0 then p_n = 1
   if key.left and key.right = 0 then p_n = -1
-  p_a = pl.cell(9, 12)
-  p_d = pl.cell(2, 12)
+  p_a = pl.idR
+  p_d = pl.idL
   p_h = 0
   if p_a >= 114 and p_a <= 116 then p_h = 1
   if p_d >= 114 and p_d <= 116 then p_h = 1
@@ -764,10 +766,16 @@ end sub
 ' With no horizontal key and a nonzero vy, vx becomes ±32 until
 ' (x >> 5) mod 12 is 0 (0x101F3).
 sub pl.climb()
-  p_id = pl.cell(6, 6)
-  p_h = pl.cell(6, 12)
-  p_a = pl.cell(9, 12)
-  p_d = pl.cell(2, 12)
+  ' Center and both feet, shared with pl.ice and pl.belt in this tick.
+  ' pl.control calls climb before walk, and walk calls ice then belt.
+  pl.idC = pl.cell(6, 6)
+  pl.idF = pl.cell(6, 12)
+  pl.idR = pl.cell(9, 12)
+  pl.idL = pl.cell(2, 12)
+  p_id = pl.idC
+  p_h = pl.idF
+  p_a = pl.idR
+  p_d = pl.idL
   p_f = 0
   if p_id >= 1 and p_id <= 3 then p_f = 1
   if p_h >= 1 and p_h <= 3 then
@@ -2147,6 +2155,25 @@ sub spr.hide(n)
 end sub
 
 sub spr.put(n, fr, kind, x, y, w, h, layer)
+  ' Same pose and rectangle, and the back page was not rebuilt: the
+  ' pixels from last time are still there. A tile flush sets gm.force.
+  if gm.force = 0 then
+    if spr.on(n) = 1 then
+      if spr.fr(n) = fr then
+        if spr.kind(n) = kind then
+          if spr.x(n) = x then
+            if spr.y(n) = y then
+              if spr.w(n) = w then
+                if spr.h(n) = h then
+                  exit sub
+                end if
+              end if
+            end if
+          end if
+        end if
+      end if
+    end if
+  end if
   if x < -w or y < -h or x > scr.W or y > scr.H then
     spr.hide(n)
     exit sub
@@ -2194,14 +2221,16 @@ sub gm.sprites()
   x = lay.ox + (pl.x - 384) * lay.tile \ 384
   y = lay.oy + (pl.y - 384) * lay.tile \ 384
   spr.put(1, pl.frm, 0, x, y, lay.tile, lay.tile, 3)
-  for i = 0 to 19
-    if i < en.n then
-      x = lay.ox + (en.x(i) - 384) * lay.tile \ 384
-      y = lay.oy + (en.y(i) - 384) * lay.tile \ 384
-      spr.put(2 + i, en.fr(i), 1, x, y, lay.tile, lay.tile, 2)
-    else
+  if en.n < gm.enHid then
+    for i = en.n to gm.enHid - 1
       spr.hide(2 + i)
-    end if
+    next i
+  end if
+  gm.enHid = en.n
+  for i = 0 to en.n - 1
+    x = lay.ox + (en.x(i) - 384) * lay.tile \ 384
+    y = lay.oy + (en.y(i) - 384) * lay.tile \ 384
+    spr.put(2 + i, en.fr(i), 1, x, y, lay.tile, lay.tile, 2)
   next i
   x = lay.ox + (lv.dx - 1) * lay.tile
   y = lay.oy + (lv.dy - 1) * lay.tile
@@ -2229,6 +2258,7 @@ sub gm.step()
     if pl.age >= 48 then gm.res = GE_DEAD
     key.prevJ = key.jet
     key.prevD = key.dn
+    gm.vis = TRUE
     exit sub
   end if
   pl.x0 = pl.x
@@ -2247,6 +2277,7 @@ sub gm.step()
   pl.anim()
   key.prevJ = key.jet
   key.prevD = key.dn
+  gm.vis = TRUE
 end sub
 
 sub gm.tick()
@@ -2287,15 +2318,21 @@ sub gm.draw()
   gm.drawing = TRUE
   page write PG_BACK
   if gm.tiles then gm.hideAll()
+  if fld.n <> 0 then gm.force = TRUE
   fld.flush()
   if gm.tiles then gm.force = TRUE
   gm.tiles = FALSE
   if hud.dirty then hud.draw()
   hud.dirty = FALSE
-  gm.sprites()
-  if gm.moved then sprite move
-  gm.moved = FALSE
-  gm.force = FALSE
+  ' Sprites are already on the back page. Redraw only after a logic
+  ' tick or a tile rebuild. Quiet presents leave the display alone.
+  if gm.vis or gm.force then
+    gm.sprites()
+    if gm.moved then sprite move
+    gm.moved = FALSE
+    gm.vis = FALSE
+    gm.force = FALSE
+  end if
   scr.flush()
   gm.drawing = FALSE
 end sub
@@ -2352,6 +2389,8 @@ end function
 
 sub gm.play()
   gm.res = GE_NONE
+  gm.enHid = 0
+  gm.vis = FALSE
   gm.drawing = FALSE
   gm.tiles = FALSE
   gm.moved = FALSE
