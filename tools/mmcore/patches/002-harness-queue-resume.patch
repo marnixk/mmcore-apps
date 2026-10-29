@@ -1,0 +1,49 @@
+diff --git a/native/sdl_harness.c b/native/sdl_harness.c
+index 2953bf7..fe10eb4 100644
+--- a/native/sdl_harness.c
++++ b/native/sdl_harness.c
+@@ -275,28 +275,34 @@ static void hs_parse_line(char *line)
+ 	}
+ }
+ 
+-/* Read any newly appended bytes and enqueue their complete lines. */
++/* Read newly appended lines. Stop while two queue slots remain so the next
++ * poll continues at the same file position. One line can enqueue two steps
++ * (`click`). Reading through EOF used to drop every line past HS_QUEUE_MAX. */
+ static void hs_read_new(void)
+ {
+ 	int c;
+ 
+ 	if (!s_fp)
+ 		return;
+-	while ((c = fgetc(s_fp)) != EOF)
++	/* `click` enqueues two steps; leave room for both. Stop before the queue
++	 * is full so the file position stays on the next unread line. */
++	while (s_queued <= HS_QUEUE_MAX - 2)
+ 	{
+-		if (c == '\n')
++		while ((c = fgetc(s_fp)) != EOF && c != '\n')
+ 		{
+-			s_partial[s_partial_n] = 0;
+-			hs_parse_line(s_partial);
+-			s_partial_n = 0;
++			if (c != '\r' && s_partial_n + 1 < sizeof s_partial)
++				s_partial[s_partial_n++] = (char)c;
+ 		}
+-		else if (c != '\r')
++		if (c == EOF)
+ 		{
+-			if (s_partial_n + 1 < sizeof s_partial)
+-				s_partial[s_partial_n++] = (char)c;
++			/* Keep a partial line in s_partial; the next poll continues it. */
++			clearerr(s_fp);
++			break;
+ 		}
++		s_partial[s_partial_n] = 0;
++		s_partial_n = 0;
++		hs_parse_line(s_partial);
+ 	}
+-	clearerr(s_fp);
+ }
+ 
+ /* ---- execution --------------------------------------------------------- */

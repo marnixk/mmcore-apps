@@ -85,3 +85,9 @@ inside games. `tools/mmcore/patches/001-harness-during-run.patch` adds one
 `sdl_harness_poll()` call to `sdl_poll_input()` (already invoked from
 `mmb_check_break` on each program line and during `PAUSE`). If upstream merges an
 equivalent fix, drop the patch.
+
+`tools/mmcore/patches/002-harness-queue-resume.patch` stops the harness from
+discarding script lines past the 256-step queue. `PAUSE` drains many steps per
+millisecond, so a profile that has to reach a later frame (tetris title is a
+few thousand statements in) depends on that patch. Rebuild mmcore after pulling
+it.

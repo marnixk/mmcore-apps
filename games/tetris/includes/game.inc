@@ -1,8 +1,9 @@
 ' game.inc - the play loop: gravity, lock delay, moves, SRS rotation, hold,
 ' soft drop, hard drop, line clears, scoring, levels and the HUD.
 '
-' Controls: Left/Right move (DAS/ARR), Down soft drop (held), Up hard drop,
-' X rotate clockwise, Z rotate counter-clockwise, Space or C hold, Esc pause.
+' Controls: Left/Right move (DAS/ARR), Down soft drop (held), Space hard drop,
+' Up or X rotate clockwise, Z rotate counter-clockwise, C hold, Esc or P pause.
+' One rotate, hard drop or hold per physical press (key.once). Q quits from pause.
 '
 ' Scoring (modern guideline): 1/2/3/4 lines = 100/300/500/800 x level,
 ' soft drop 1 point per cell, hard drop 2 points per cell. Difficulty sets the lines per level
@@ -394,7 +395,7 @@ end sub
 
 ' ---- one game; returns when it is over or the player quit
 sub game.run(lv)
-  local k, k$, t0, rk, n$, gs, ge
+  local k, k$, t0, t1, rk, n$, gs, ge
   gm.lv = lv
   gm.level = 1
   gm.lines = 0
@@ -440,20 +441,32 @@ sub game.run(lv)
       elseif k = K_DOWN then
         gm.softPress()
       elseif k = K_UP then
-        if key.once(k, K_UP) then gm.hardDrop()
+        if key.once(k, K_UP) then gm.rotate(0)
       elseif k = K_SPACE then
-        if key.once(k, K_SPACE) then gm.doHold()
+        if key.once(k, K_SPACE) then gm.hardDrop()
       elseif k = asc("x") or k = asc("X") then
         if key.once(k, asc("x")) then gm.rotate(0)
       elseif k = asc("z") or k = asc("Z") then
         if key.once(k, asc("z")) then gm.rotate(1)
       elseif k = asc("c") or k = asc("C") then
         if key.once(k, asc("c")) then gm.doHold()
-      elseif k = K_ESC then
+      elseif key.isPause(k$) then
         if gm.dirty then gm.drawWell()
         t0 = timer
         gm.quit = dlg.pause()
         if not gm.quit then
+          ' a resume key still held must not open the dialog again
+          t1 = timer
+          do
+            if timer - t1 >= 2500 then exit do
+            if not key.held(K_ESC) then
+              if not key.held(asc("p")) then
+                if not key.held(asc("P")) then exit do
+              end if
+            end if
+            k$ = inkey$
+            pause 5
+          loop
           t0 = timer - t0
           gm.fallT = gm.fallT + t0
           if gm.lockT <> 0 then gm.lockT = gm.lockT + t0
@@ -487,7 +500,7 @@ sub game.run(lv)
   ' a short guard, then drop the keys still buffered from play
   pause 700
   key.drain()
-  ' a key still held from play (e.g. a Space hold just before topping out)
+  ' a key still held from play (e.g. Space still down after a hard drop)
   ' only counts once it has been released and pressed again
   gs = key.held(K_SPACE)
   ge = key.held(K_ENTER)

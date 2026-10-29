@@ -20,7 +20,7 @@ end sub
 
 ' pause dialog with the controls. returns TRUE when the player quits (Q)
 function dlg.pause()
-  local s = scr.sc, w, h, x, y, ry, tx, k$, kw
+  local s = scr.sc, w, h, x, y, ry, tx, k$, kw, holdP, holdE
   w = 300 * s
   h = 232 * s
   x = (scr.W - w) \ 2
@@ -39,34 +39,48 @@ function dlg.pause()
   kw = ui.keycap(x + 28 * s, ry, "", 3)
   txt "SOFT DROP", tx, ry + 4 * s, F_CREAM
   ry = ry + 20 * s
-  kw = ui.keycap(x + 28 * s, ry, "", 2)
+  kw = ui.keycap(x + 28 * s, ry, "SPACE", -1)
   txt "HARD DROP", tx, ry + 4 * s, F_CREAM
   ry = ry + 20 * s
-  kw = ui.keycap(x + 28 * s, ry, "X", -1)
+  kw = ui.keycap(x + 28 * s, ry, "", 2)
+  kw = ui.keycap(x + 28 * s + kw + 3 * s, ry, "X", -1)
   txt "ROTATE RIGHT", tx, ry + 4 * s, F_CREAM
   ry = ry + 20 * s
   kw = ui.keycap(x + 28 * s, ry, "Z", -1)
   txt "ROTATE LEFT", tx, ry + 4 * s, F_CREAM
   ry = ry + 20 * s
-  kw = ui.keycap(x + 28 * s, ry, "SPACE", -1)
-  kw = ui.keycap(x + 28 * s + kw + 3 * s, ry, "C", -1)
+  kw = ui.keycap(x + 28 * s, ry, "C", -1)
   txt "HOLD PIECE", tx, ry + 4 * s, F_CREAM
   ry = ry + 20 * s
   kw = ui.keycap(x + 28 * s, ry, "ESC", -1)
+  kw = ui.keycap(x + 28 * s + kw + 3 * s, ry, "P", -1)
   txt "PAUSE / RESUME", tx, ry + 4 * s, F_CREAM
   ry = ry + 20 * s
   kw = ui.keycap(x + 28 * s, ry, "Q", -1)
   txt "QUIT TO MENU", tx, ry + 4 * s, F_CREAM
   ui.divider(x + 20 * s, y + h - 34 * s, w - 40 * s)
-  txtC "ESC TO RESUME  -  Q TO QUIT", x + w \ 2, y + h - 22 * s, F_GOLD
+  txtC "ESC OR P TO RESUME  -  Q TO QUIT", x + w \ 2, y + h - 22 * s, F_GOLD
   scr.present()
+  ' drop keys already queued, then ignore the opener until it is released
+  ' so OS auto-repeat does not resume on the same press
+  key.drain()
+  holdP = key.held(asc("p"))
+  if holdP = 0 then holdP = key.held(asc("P"))
+  holdE = key.held(K_ESC)
   dlg.pause = FALSE
   do
+    if holdP then
+      holdP = key.held(asc("p"))
+      if holdP = 0 then holdP = key.held(asc("P"))
+    end if
+    if holdE then holdE = key.held(K_ESC)
     k$ = inkey$
     if k$ = "" then
       pause 5
     elseif k$ = chr$(K_ESC) then
-      exit do
+      if holdE = 0 then exit do
+    elseif (k$ = "p" or k$ = "P") then
+      if holdP = 0 then exit do
     elseif key.isQuit(k$) then
       dlg.pause = TRUE
       exit do
