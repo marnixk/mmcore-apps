@@ -1,0 +1,57 @@
+name: Package dist apps
+
+# Rebuild dist/*.app when games or the packager change on master, then
+# commit the archives back. The bot commit only touches dist/ and is marked
+# [skip ci]. dist/ is also outside the path filter, so a dist-only push
+# does not start another run.
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "games/**"
+      - "tools/package/**"
+      - ".github/workflows/package-dist.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: package-dist-master
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Build dist and commit when bytes change
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3; do
+            git fetch origin master
+            git checkout -B master origin/master
+            bash tools/package/build-dist.sh
+            git add -A -- dist
+            if git diff --cached --quiet; then
+              echo "dist/ unchanged"
+              exit 0
+            fi
+            git commit -m "Update packaged games in dist/ [skip ci]"
+            if git push origin master; then
+              echo "pushed dist/ update"
+              exit 0
+            fi
+            echo "push rejected, retry ${attempt}"
+            git reset --hard origin/master
+          done
+          echo "failed to push dist/ update" >&2
+          exit 1

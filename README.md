@@ -2,6 +2,15 @@
 
 Apps and games for mmcore.
 
+## Packages
+
+`bash tools/package/build-dist.sh` writes `dist/<folder>.app` for every game.
+Each file is a ZIP store in the layout mmcore's `PACKAGE` wizard writes
+(`PACKAGE.INF` with `name`, `main=MAIN.BAS`, `title`, and `author`), so
+`RUN "name.app"` can mount it. The script does not run mmcore. Pushes to
+`master` that change `games/` rebuild `dist/` in GitHub Actions and commit
+the archives back when the bytes change.
+
 ## Games
 
 Games for mmcore (MMBasic, Colour Maximite 2 style). Each game lives in its
