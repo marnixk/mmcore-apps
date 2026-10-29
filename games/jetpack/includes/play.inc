@@ -18,7 +18,7 @@ dim integer g_now
 
 dim pl.x, pl.y, pl.x0, pl.vx, pl.vy, pl.face, pl.hface, pl.frm
 dim pl.ground, pl.dead, pl.age, pl.gems, pl.shield, pl.lock, pl.tx, pl.ty
-dim pl.phasing, pl.jetting, pl.climbing, pl.tdir
+dim pl.phasing, pl.jetting, pl.climbing, pl.tdir, pl.sw, pl.og, pl.oj, pl.fall
 
 dim lv.dx, lv.dy, lv.doorT, lv.doorF
 dim string lv.name$, lv.line$
@@ -30,7 +30,7 @@ dim mt.x(7), mt.y(7), mt.tm(7), mt.cl(7), mt.hid(7)
 
 dim en.n
 dim en.ty(19), en.x(19), en.y(19), en.vx(19), en.vy(19), en.fr(19), en.st(19)
-dim en.pr(11), en.cd(19), en.latch(19)
+dim en.pr(11), en.cd(19), en.latch(19), en.dir(19)
 dim float en.rf
 
 dim sp.on, sp.x, sp.y
@@ -132,7 +132,11 @@ sub lv.oneEn(s$)
   en.fr(en.n) = 0
   en.cd(en.n) = 0
   en.latch(en.n) = 0
-  if ty = 2 then en.vx(en.n) = 59
+  en.dir(en.n) = 0
+  if ty = 2 then
+    en.vx(en.n) = 59
+    en.dir(en.n) = 64
+  end if
   if ty = 4 then en.st(en.n) = 1
   en.n = en.n + 1
 end sub
@@ -251,6 +255,10 @@ sub lv.load(n)
   pl.jetting = FALSE
   pl.climbing = FALSE
   pl.tdir = 0
+  pl.sw = 0
+  pl.og = 0
+  pl.oj = 0
+  pl.fall = 0
   lv.doorT = 0
   lv.doorF = 0
   mt.n = 0
@@ -268,6 +276,12 @@ function fld.solid(c, r)
   end if
   p_id = lv.id(c, r)
   if p_id >= 128 then
+    fld.solid = FALSE
+    exit function
+  end if
+  ' Floor switches 0x21-0x23 are not walls. EXE support is a foot
+  ' id >= 0x28 (file 0x1024D), so the body can overlap the plate.
+  if p_id >= 33 and p_id <= 35 then
     fld.solid = FALSE
     exit function
   end if
@@ -312,7 +326,7 @@ sub fld.blit(c, r)
   if cell >= 0 then
     blit cell * lay.tile, lay.syMelt, dx, dy, lay.tile, lay.tile, PG_SHEET
   else
-    if id >= 128 then id = 0
+    if id >= 128 then id = id and 127
     blit (id mod 20) * lay.tile, (id \ 20) * lay.tile, dx, dy, lay.tile, lay.tile, PG_SHEET
   end if
   lv.ch(c, r) = 0
@@ -677,50 +691,194 @@ sub pl.jet()
   if pl.vy < -64 then pl.vy = -64
 end sub
 
-sub pl.walk()
-  p_a = 0
-  if pl.ground then
-    p_c = (pl.x - 192) \ 384
-    p_r = pl.y \ 384
-    if p_c >= 0 and p_r >= 0 and p_c <= 25 and p_r <= 15 then
-      p_id = lv.id(p_c, p_r)
-      if p_id < 128 then
-        if tf.k(p_id) = 20 then p_a = -60
-        if tf.k(p_id) = 21 then p_a = 60
-      end if
-    end if
+' Tile under a pixel offset from the sprite's top-left. Offsets are
+' the EXE probe adds (player x is [0x34D3], y is [0x34D1]).
+' Id >= 128 is empty, same as the center probe at 0xF9EF.
+function pl.cell(px, py)
+  pl.cell = 0
+  p_x0 = pl.x - 384 + px * 32
+  p_y0 = pl.y - 384 + py * 32
+  if p_x0 < 0 or p_y0 < 0 then
+    exit function
   end if
+  p_c = p_x0 \ 384
+  p_r = p_y0 \ 384
+  if p_c > 25 or p_r > 15 then
+    exit function
+  end if
+  p_id = lv.id(p_c, p_r)
+  if p_id >= 128 then
+    exit function
+  end if
+  pl.cell = p_id
+end function
+
+' ds:0x15E4 is the IEEE double 0.6. FIST of n*0.6, nearest.
+function sc.ice(v)
+  p_a = v * 3
+  if p_a < 0 then
+    sc.ice = -((2 - p_a) \ 5)
+  else
+    sc.ice = (p_a + 2) \ 5
+  end if
+end function
+
+sub pl.ice()
+  p_a = pl.cell(9, 12)
+  p_d = pl.cell(2, 12)
+  if p_a >= 97 and p_a <= 99 then
+    pl.vx = sc.ice(pl.vx)
+  else
+    if p_d >= 97 and p_d <= 99 then pl.vx = sc.ice(pl.vx)
+  end if
+end sub
+
+' Either foot, 0x10582 and 0x1062A. Input is the key, not vx.
+' Left belt: against -60, with +25, stand -40.
+' Right belt: with +60, against -25, stand +40.
+sub pl.belt()
+  p_n = 0
+  if key.right and key.left = 0 then p_n = 1
+  if key.left and key.right = 0 then p_n = -1
+  p_a = pl.cell(9, 12)
+  p_d = pl.cell(2, 12)
+  p_h = 0
+  if p_a >= 114 and p_a <= 116 then p_h = 1
+  if p_d >= 114 and p_d <= 116 then p_h = 1
+  if p_h = 1 then
+    pl.vx = -40
+    if p_n < 0 then pl.vx = -60
+    if p_n > 0 then pl.vx = 25
+  end if
+  p_h = 0
+  if p_a >= 117 and p_a <= 119 then p_h = 1
+  if p_d >= 117 and p_d <= 119 then p_h = 1
+  if p_h = 1 then
+    pl.vx = 40
+    if p_n > 0 then pl.vx = 60
+    if p_n < 0 then pl.vx = -25
+  end if
+end sub
+
+' 0xFF1B. Ids 1..3 are climbable. Id 2 and id 3 use their own vy.
+' With no horizontal key and a nonzero vy, vx becomes ±32 until
+' (x >> 5) mod 12 is 0 (0x101F3).
+sub pl.climb()
+  p_id = pl.cell(6, 6)
+  p_h = pl.cell(6, 12)
+  p_a = pl.cell(9, 12)
+  p_d = pl.cell(2, 12)
+  p_f = 0
+  if p_id >= 1 and p_id <= 3 then p_f = 1
+  if p_h >= 1 and p_h <= 3 then
+    if p_a >= 1 and p_a <= 3 then p_f = 1
+    if p_d >= 1 and p_d <= 3 then p_f = 1
+  end if
+  if p_f = 0 then
+    exit sub
+  end if
+  pl.climbing = TRUE
+  p_n = 0
+  if key.dn and key.up = 0 then p_n = 1
+  if key.up and key.dn = 0 then p_n = -1
+  p_k = 1
+  if p_id = 2 or p_a = 2 or p_d = 2 then p_k = 2
+  if p_k = 1 then
+    if p_id = 3 or p_a = 3 or p_d = 3 then p_k = 3
+  end if
+  if p_k = 2 then
+    pl.vy = -25
+    if p_n < 0 then pl.vy = -64
+    if p_n > 0 then pl.vy = 20
+  end if
+  if p_k = 3 then
+    pl.vy = 25
+    if p_n > 0 then pl.vy = 64
+    if p_n < 0 then pl.vy = -20
+  end if
+  if p_k = 1 then pl.vy = p_n * 45
+  pl.vx = 0
   if key.left and key.right = 0 then
     pl.hface = 1
     pl.face = 1
-    if p_a > 0 then
-      pl.vx = -25
-    else
-      pl.vx = -55
-    end if
+    pl.vx = -55
   end if
   if key.right and key.left = 0 then
     pl.hface = 0
     pl.face = 0
-    if p_a < 0 then
-      pl.vx = 25
+    pl.vx = 55
+  end if
+  if pl.vx = 0 and pl.vy <> 0 then
+    p_n = (pl.x \ 32) mod 12
+    if p_n < 0 then p_n = p_n + 12
+    p_h = pl.cell(11, 11)
+    p_a = pl.cell(0, 11)
+    if p_n >= 6 and p_h >= 1 and p_h <= 3 then
+      pl.vx = 32
     else
-      pl.vx = 55
+      if p_n >= 1 and p_a >= 1 and p_a <= 3 then pl.vx = -32
     end if
   end if
-  if key.left = 0 and key.right = 0 then pl.vx = p_a
+end sub
+
+sub pl.walk()
+  if key.left and key.right = 0 then
+    pl.hface = 1
+    pl.face = 1
+  end if
+  if key.right and key.left = 0 then
+    pl.hface = 0
+    pl.face = 0
+  end if
   if pl.ground then
+    pl.fall = 0
+    pl.vx = 0
+    if key.left and key.right = 0 then pl.vx = -55
+    if key.right and key.left = 0 then pl.vx = 55
     pl.vy = 0
   else
-    pl.vy = pl.vy + 5
-    if pl.vy > 64 then pl.vy = 64
-    if pl.vx > 20 then pl.vx = 20
-    if pl.vx < -20 then pl.vx = -20
+    ' 0x1030B: the frame a walk leaves the floor clears vx and
+    ' sets vy to 64. Later fall frames add 6, cap 64.
+    ' Horizontal keys add 5 and then decay by 3, clamped to ±20
+    ' (0x103AC, 0x10407). Walk speed is not carried into the fall.
+    ' A jet hop is state 2, not this path, so its vx is left alone.
+    p_f = 0
+    if pl.og <> 0 and pl.oj = 0 then
+      pl.vx = 0
+      pl.vy = 64
+      pl.fall = 1
+      p_f = 1
+    end if
+    if pl.fall = 0 then
+      pl.vy = pl.vy + 6
+      if pl.vy > 64 then pl.vy = 64
+    else
+      if p_f = 0 then
+        pl.vy = pl.vy + 6
+        if pl.vy > 64 then pl.vy = 64
+      end if
+      if key.right and key.left = 0 then pl.vx = pl.vx + 5
+      if key.left and key.right = 0 then pl.vx = pl.vx - 5
+      if pl.vx > 20 then pl.vx = 20
+      if pl.vx < -20 then pl.vx = -20
+      if pl.vx > 3 then
+        pl.vx = pl.vx - 3
+      else
+        if pl.vx < -3 then
+          pl.vx = pl.vx + 3
+        else
+          pl.vx = 0
+        end if
+      end if
+    end if
   end if
+  pl.ice()
+  pl.belt()
 end sub
 
 sub pl.control()
   pl.feet()
+  pl.oj = pl.jetting
   pl.phasing = FALSE
   pl.jetting = FALSE
   pl.climbing = FALSE
@@ -742,21 +900,19 @@ sub pl.control()
     pl.align()
     exit sub
   end if
-  if pl.onLadder() and (key.up or key.dn) then
-    pl.climbing = TRUE
-    pl.vx = 0
-    pl.vy = 0
-    if key.up then pl.vy = -45
-    if key.dn then pl.vy = 45
-    if key.left then pl.vx = -45
-    if key.right then pl.vx = 45
+  pl.climb()
+  if pl.climbing then
+    pl.og = 1
     exit sub
   end if
   if key.jet and gm.fuel > 0 then
+    pl.fall = 0
     pl.jet()
+    pl.og = 0
     exit sub
   end if
   pl.walk()
+  pl.og = pl.ground
 end sub
 
 sub pl.moveX()
@@ -946,6 +1102,42 @@ sub lv.flip(k)
       end if
     next p_c
   next p_r
+  ' Tube mirage. EXE 0x11F28: the pair 0x4A+2*(signal-1) is plain
+  ' (state 1) or already OR 0x80 (state 2). Plain becomes mirage;
+  ' mirage is written back without the bit. en.tid and fld.solid
+  ' already treat id >= 128 as empty, so the tube opens.
+  p_d = 74
+  if k = 18 then p_d = 76
+  if k = 19 then p_d = 78
+  p_f = 0
+  for p_r = 0 to 15
+    for p_c = 0 to 25
+      if p_f = 0 then
+        p_id = lv.id(p_c, p_r)
+        p_h = p_id and 127
+        if p_h = p_d or p_h = p_d + 1 then
+          p_f = 1
+          if p_id >= 128 then p_f = 2
+        end if
+      end if
+    next p_c
+  next p_r
+  if p_f <> 0 then
+    for p_r = 0 to 15
+      for p_c = 0 to 25
+        p_id = lv.id(p_c, p_r)
+        p_h = p_id and 127
+        if p_h = p_d or p_h = p_d + 1 then
+          if p_f = 2 then
+            lv.id(p_c, p_r) = p_h
+          else
+            lv.id(p_c, p_r) = p_h or 128
+          end if
+          fld.touch(p_c, p_r)
+        end if
+      next p_c
+    next p_r
+  end if
   gm.tiles = TRUE
 end sub
 
@@ -982,6 +1174,27 @@ sub pl.teleport(k)
       end if
     next p_c
   next p_r
+end sub
+
+' Player floor switch, 0x106D0. Center id 0x21-0x23, x pixels >= 9,
+' y pixels >= 11, latch [bp-0x2F]. Signal is id+0xE0 (1, 2, or 3).
+sub pl.floor()
+  if pl.phasing or pl.lock > 0 then
+    exit sub
+  end if
+  p_id = pl.cell(6, 6)
+  p_a = pl.x \ 32
+  p_d = pl.y \ 32
+  if p_id >= 33 and p_id <= 35 and p_a >= 9 and p_d >= 11 then
+    if pl.sw = 0 then
+      if p_id = 33 then lv.flip(17)
+      if p_id = 34 then lv.flip(18)
+      if p_id = 35 then lv.flip(19)
+      pl.sw = 1
+    end if
+  else
+    pl.sw = 0
+  end if
 end sub
 
 sub pl.use()
@@ -1289,23 +1502,52 @@ sub en.cap(i)
   end if
 end sub
 
+' Floor switch 0x21-0x23. Latch is bit 0x10 of the flags byte.
+' Alignment is ((y >> 5) - 1) mod 12, except the homer, which
+' does not decrement first (file 0x173CC).
+'   type 3 spring: remainder < 4 (0x159C5)
+'   type 5 spikes: remainder > 6 (0x16492)
+'   type 8 homer: (y >> 5) mod 12 > 6 (0x173D2)
+'   types 1, 2, 4, 6: remainder > 10
+' Type 7 has no floor-switch test. Leaving the window clears
+' the latch and keeps the cooldown nibble (and al, 0x0F).
 sub en.sw(i)
-  p_id = en.pr(0)
+  p_k = en.ty(i)
+  if p_k = 7 then
+    exit sub
+  end if
+  p_id = en.tid(en.x(i) - 192, en.y(i) - 192)
+  p_f = 0
   if p_id >= 33 and p_id <= 35 then
-    p_n = en.sar5(en.y(i)) - 1
-    p_n = p_n mod 12
-    if p_n < 0 then p_n = p_n + 12
-    if p_n > 10 then
-      if en.latch(i) = 0 then
-        if p_id = 33 then lv.flip(17)
-        if p_id = 34 then lv.flip(18)
-        if p_id = 35 then lv.flip(19)
-        en.latch(i) = 1
+    if p_k = 8 then
+      p_n = en.sar5(en.y(i)) mod 12
+      if p_n < 0 then p_n = p_n + 12
+      if p_n > 6 then p_f = 1
+    else
+      p_n = en.sar5(en.y(i)) - 1
+      p_n = p_n mod 12
+      if p_n < 0 then p_n = p_n + 12
+      if p_k = 3 then
+        if p_n < 4 then p_f = 1
+      else
+        if p_k = 5 then
+          if p_n > 6 then p_f = 1
+        else
+          if p_n > 10 then p_f = 1
+        end if
       end if
-      exit sub
     end if
   end if
-  en.latch(i) = 0
+  if p_f = 1 then
+    if (en.cd(i) and 16) = 0 then
+      if p_id = 33 then lv.flip(17)
+      if p_id = 34 then lv.flip(18)
+      if p_id = 35 then lv.flip(19)
+      en.cd(i) = en.cd(i) or 16
+    end if
+    exit sub
+  end if
+  en.cd(i) = en.cd(i) and 15
 end sub
 
 sub en.pad(i)
@@ -1354,23 +1596,24 @@ sub en.pad(i)
   en.y(i) = (p_r2 + 1) * 384
   en.vx(i) = 0
   en.vy(i) = 0
-  en.cd(i) = 1
+  ' EXE 0x151A5: keep the high nibble, set the cooldown nibble to 1.
+  en.cd(i) = (en.cd(i) and 240) or 1
 end sub
 
 sub en.gate(i, wide)
   p_id = en.pr(0)
   if p_id < 6 or p_id > 8 then
-    en.cd(i) = en.cd(i) and 16
+    en.cd(i) = en.cd(i) and 240
     exit sub
   end if
   p_h = en.cd(i) and 15
   if p_h <> 0 then
-    p_bit = en.cd(i) and 16
+    ' EXE 0x151EF increments the whole flags byte. A nibble of 15
+    ' stores 0 (0x151E4), which also clears the latch bit.
     if p_h = 15 then
-      en.cd(i) = p_bit
+      en.cd(i) = 0
     else
-      en.cd(i) = p_h + 1
-      if p_bit <> 0 then en.cd(i) = en.cd(i) or 16
+      en.cd(i) = en.cd(i) + 1
     end if
     exit sub
   end if
@@ -1389,13 +1632,8 @@ sub en.gate(i, wide)
   if p_a = 0 then
     exit sub
   end if
-  p_bit = 0
   if wide = 0 then en.st(i) = 0
-  if wide <> 0 then
-    if en.vx(i) < 0 then p_bit = 16
-  end if
   en.pad(i)
-  if p_bit <> 0 then en.cd(i) = en.cd(i) or 16
 end sub
 
 sub en.track(i)
@@ -1582,6 +1820,22 @@ sub en.track(i)
       en.fr(i) = 4
     end if
   end if
+  ' Moss 0x5E-0x60, both feet (0x14ECC): frame only.
+  if en.pr(5) >= 94 and en.pr(5) <= 96 then
+    if en.pr(7) >= 94 and en.pr(7) <= 96 then
+      if en.vx(i) >= 0 then
+        en.fr(i) = 4
+      else
+        en.fr(i) = 7
+      end if
+    end if
+  end if
+  ' Ice 0x61-0x63, both feet. Qword at ds:0x15E4 is 0.6.
+  if en.pr(5) >= 97 and en.pr(5) <= 99 then
+    if en.pr(7) >= 97 and en.pr(7) <= 99 then
+      en.vx(i) = sc.ice(en.vx(i))
+    end if
+  end if
   en.belt(i)
   en.cap(i)
   en.sw(i)
@@ -1602,14 +1856,58 @@ sub en.think(i)
     p_k = 1
   end if
   if p_k = 2 then
-    if en.vx(i) = 0 then
-      en.vx(i) = 59
-      if (en.cd(i) and 16) <> 0 then en.vx(i) = -59
-      en.cd(i) = en.cd(i) and 15
-    end if
-    en.vy(i) = en.vy(i) + 5
-    if en.vy(i) > 64 then en.vy(i) = 64
     en.probes(i)
+    ' Unsupported (0x153BF): probes 0x354D and 0x354E are neither a
+    ' wall nor a ladder. vy = 64 and vx stays 0 so the ball falls
+    ' straight. The direction byte is not cleared.
+    p_a = 0
+    if en.pr(3) < 40 and (en.pr(3) < 1 or en.pr(3) > 3) then
+      if en.pr(4) < 40 and (en.pr(4) < 1 or en.pr(4) > 3) then p_a = 1
+    end if
+    if p_a = 1 then
+      en.vx(i) = 0
+      en.vy(i) = 64
+    else
+      ' 0x153EF / 0x1541E. dir >= 64 is the port's start-right facing.
+      if en.pr(5) >= 40 then en.dir(i) = 64
+      if en.pr(5) < 40 and en.pr(2) >= 40 then en.dir(i) = 0
+      if en.dir(i) < 64 and en.pr(5) < 40 then
+        en.vx(i) = -59
+      else
+        if en.pr(2) < 40 then
+          en.vx(i) = 59
+        else
+          en.vx(i) = 0
+        end if
+      end if
+      en.vy(i) = en.vy(i) + 5
+      if en.vy(i) > 64 then en.vy(i) = 64
+    end if
+    ' Ice then belt, probe 0x354D only (pr 3 = pixel 12,0).
+    if en.pr(3) >= 97 and en.pr(3) <= 99 then en.vx(i) = sc.ice(en.vx(i))
+    if en.pr(3) >= 114 and en.pr(3) <= 116 then
+      if en.vx(i) < 0 then
+        en.vx(i) = -62
+      else
+        if en.vx(i) > 0 then
+          en.vx(i) = 27
+        else
+          en.vx(i) = -40
+        end if
+      end if
+    end if
+    if en.pr(3) >= 117 and en.pr(3) <= 119 then
+      if en.vx(i) > 0 then
+        en.vx(i) = 62
+      else
+        if en.vx(i) < 0 then
+          en.vx(i) = -27
+        else
+          en.vx(i) = 40
+        end if
+      end if
+    end if
+    en.sw(i)
     en.gate(i, 1)
     en.move(i, TRUE)
     if en.st(i) = 0 and en.vy(i) = 0 then en.st(i) = 4
@@ -1623,6 +1921,7 @@ sub en.think(i)
   if p_k = 3 then
     if en.vy(i) = 0 then en.vy(i) = -50
     p_w = en.vy(i)
+    en.sw(i)
     en.move(i, TRUE)
     if en.vy(i) = 0 then
       if p_w > 0 then
@@ -1654,6 +1953,7 @@ sub en.think(i)
     p_y0 = en.y(i)
     p_c2 = en.vx(i)
     p_r2 = en.vy(i)
+    en.sw(i)
     en.move(i, TRUE)
     if p_c2 <> 0 and en.x(i) = p_x0 then en.st(i) = (en.st(i) + 1) mod 4
     if p_r2 <> 0 and en.y(i) = p_y0 then en.st(i) = (en.st(i) + 1) mod 4
@@ -1678,6 +1978,7 @@ sub en.think(i)
     else
       en.vy(i) = 20
     end if
+    en.sw(i)
     en.x(i) = en.x(i) + en.vx(i)
     p_hit = en.blocked(en.x(i), en.y(i))
     if p_hit then
@@ -1700,6 +2001,7 @@ sub en.think(i)
     if p_d = 3 or p_d = 4 or p_d = 5 then en.vx(i) = -11
     if p_d = 1 or p_d = 2 or p_d = 3 then en.vy(i) = -11
     if p_d = 5 or p_d = 6 or p_d = 7 then en.vy(i) = 11
+    en.sw(i)
     en.move(i, TRUE)
     en.fr(i) = 33 + ((gm.frm \ 20) mod 8)
   end if
@@ -1752,6 +2054,7 @@ sub en.think(i)
         en.st(i) = 1
       end if
     end if
+    en.sw(i)
     en.move(i, TRUE)
     if p_hit and en.vy(i) >= 0 then en.st(i) = 0
     if en.st(i) = 1 and en.vy(i) < 0 then
@@ -1936,6 +2239,7 @@ sub gm.step()
     pl.tube()
   end if
   pl.pickups()
+  pl.floor()
   pl.use()
   mt.step()
   en.step()
