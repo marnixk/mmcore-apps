@@ -11,6 +11,12 @@ and is built beside this repo (not edited from here).
   `bash tools/mmcore/build-mmcore.sh`
 - Validate a game: `tools/gametest/smoke.sh games/<name>` (needs a smoke profile in
   `tools/gametest/profiles/<name>.body.hs`)
+- Package games (no mmcore binary): `bash tools/package/build-dist.sh` writes
+  `dist/<folder>.app`. The ZIP store matches mmcore `PACKAGE` (see
+  `tools/package/pack_app.py`). `.github/workflows/package-dist.yml` runs that
+  script on a push to `master` that touches `games/` or the packager, and
+  commits `dist/` back only when the bytes change (`[skip ci]`, and `dist/`
+  is outside the path filter).
 
 ## Game build standards
 
