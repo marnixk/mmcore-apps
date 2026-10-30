@@ -458,18 +458,23 @@ sub game.run(lv)
         t0 = timer
         gm.quit = dlg.pause()
         if not gm.quit then
-          ' a resume key still held must not open the dialog again
+          ' a resume key still held must not open the dialog again, and a Q
+          ' still held from the dialog must not hold a piece: wait for them
+          ' to be released, dropping their repeats
           t1 = timer
           do
             if timer - t1 >= 2500 then exit do
             if not key.held(K_ESC) then
               if not key.held(asc("p")) then
-                if not key.held(asc("P")) then exit do
+                if not key.held(asc("P")) then
+                  if not key.held(asc("q")) then exit do
+                end if
               end if
             end if
             k$ = inkey$
             pause 5
           loop
+          key.drain()
           t0 = timer - t0
           gm.fallT = gm.fallT + t0
           if gm.lockT <> 0 then gm.lockT = gm.lockT + t0

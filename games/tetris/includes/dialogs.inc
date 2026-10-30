@@ -20,7 +20,7 @@ end sub
 
 ' pause dialog with the controls. returns TRUE when the player quits (Q)
 function dlg.pause()
-  local s = scr.sc, w, h, x, y, ry, tx, k$, kw, holdP, holdE, holdQ
+  local s = scr.sc, w, h, x, y, ry, tx, k$, kw, holdP, holdE, holdQ, qUp
   w = 300 * s
   h = 232 * s
   x = (scr.W - w) \ 2
@@ -63,14 +63,16 @@ function dlg.pause()
   scr.present()
   ' drop keys already queued, then ignore the opener until it is released
   ' so OS auto-repeat does not resume on the same press. Q is the hold key
-  ' during play: a Q still held from play is ignored until it is released,
-  ' so its OS repeats do not quit
+  ' during play: a Q still held from play is ignored until it is released
+  ' (and for a moment after, for a repeat still in the buffer), so its OS
+  ' repeats do not quit
   key.drain()
   holdP = key.held(asc("p"))
   if holdP = 0 then holdP = key.held(asc("P"))
   holdE = key.held(K_ESC)
   holdQ = key.held(asc("q"))
   if holdQ = 0 then holdQ = key.held(asc("Q"))
+  qUp = timer - KEY_SAME
   dlg.pause = FALSE
   do
     if holdP then
@@ -81,6 +83,7 @@ function dlg.pause()
     if holdQ then
       holdQ = key.held(asc("q"))
       if holdQ = 0 then holdQ = key.held(asc("Q"))
+      if holdQ = 0 then qUp = timer
     end if
     k$ = inkey$
     if k$ = "" then
@@ -90,7 +93,7 @@ function dlg.pause()
     elseif (k$ = "p" or k$ = "P") then
       if holdP = 0 then exit do
     elseif key.isQuit(k$) then
-      if holdQ = 0 then
+      if holdQ = 0 and timer - qUp >= KEY_SAME then
         dlg.pause = TRUE
         exit do
       end if
