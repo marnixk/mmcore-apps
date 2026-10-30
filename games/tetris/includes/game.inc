@@ -2,8 +2,11 @@
 ' soft drop, hard drop, line clears, scoring, levels and the HUD.
 '
 ' Controls: Left/Right move (DAS/ARR), Down soft drop (held), Space hard drop,
-' Up or X rotate clockwise, Z rotate counter-clockwise, C hold, Esc or P pause.
+' Up or X rotate clockwise, Z rotate counter-clockwise, Q hold, Esc or P pause.
 ' One rotate, hard drop or hold per physical press (key.once). Q quits from pause.
+'
+' Q is both the hold key and the pause dialog's quit key: a Q still held when the
+' dialog opens does not quit it, and a Q held when play resumes does not hold.
 '
 ' Scoring (modern guideline): 1/2/3/4 lines = 100/300/500/800 x level,
 ' soft drop 1 point per cell, hard drop 2 points per cell. Difficulty sets the lines per level
@@ -448,8 +451,8 @@ sub game.run(lv)
         if key.once(k, asc("x")) then gm.rotate(0)
       elseif k = asc("z") or k = asc("Z") then
         if key.once(k, asc("z")) then gm.rotate(1)
-      elseif k = asc("c") or k = asc("C") then
-        if key.once(k, asc("c")) then gm.doHold()
+      elseif k = asc("q") or k = asc("Q") then
+        if key.once(k, asc("q")) then gm.doHold()
       elseif key.isPause(k$) then
         if gm.dirty then gm.drawWell()
         t0 = timer
@@ -471,7 +474,7 @@ sub game.run(lv)
           gm.fallT = gm.fallT + t0
           if gm.lockT <> 0 then gm.lockT = gm.lockT + t0
           gm.sd = FALSE
-          key.reset()
+          key.resume()
           gm.redrawAll()
         end if
       end if
