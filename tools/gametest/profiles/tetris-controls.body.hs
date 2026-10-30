@@ -1,4 +1,4 @@
-# Guideline controls. TH_LOG=1 writes th.log. Space hard-drops, Up rotates, C holds, P pauses.
+# Guideline controls. TH_LOG=1 writes th.log. Space hard-drops, Up rotates, Q holds, P pauses, Q quits from the pause dialog.
 # Quoted space: harness text strips a leading space.
 wait 0
 wait 0
@@ -9608,7 +9608,7 @@ wait 0
 wait 0
 wait 0
 wait 0
-text c
+text q
 wait 40
 wait 0
 wait 0

@@ -76,8 +76,8 @@ _GAME = [
         "        end if\n",
     ),
     (
-        "        if key.once(k, asc(\"c\")) then gm.doHold()\n",
-        "        if key.once(k, asc(\"c\")) then\n"
+        "        if key.once(k, asc(\"q\")) then gm.doHold()\n",
+        "        if key.once(k, asc(\"q\")) then\n"
         "          gm.doHold()\n"
         "          gm.trace(\"HOLD\")\n"
         "        end if\n",

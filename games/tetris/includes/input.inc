@@ -139,8 +139,9 @@ end function
 
 ' ---- one-shot keys (hard drop, hold, rotate): one action per physical press.
 ' Space hard-drops, Up and X rotate clockwise, Z rotates counter-clockwise,
-' C holds. A key we acted on stays in key.nr() until KEYDOWN shows it released;
-' while it is still held its INKEY$ copies are only OS repeats and are ignored.
+' Q holds (in the pause dialog Q quits instead). A key we acted on stays in
+' key.nr() until KEYDOWN shows it released; while it is still held its INKEY$
+' copies are only OS repeats and are ignored.
 ' Each key is tracked on its own, so holding Up never rotates again.
 const KEY_NR = 5
 dim key.nr(KEY_NR - 1)
@@ -169,4 +170,20 @@ sub key.nrPoll()
       if not key.held(key.nr(i)) then key.nr(i) = 0
     end if
   next i
+end sub
+
+' after the pause dialog: forget held-key state, but mark the one-shot keys
+' that are still held as used, so their OS repeats do nothing until they are
+' released (a Q held through the dialog must not hold a piece on resume)
+sub key.resume()
+  key.reset()
+  key.markHeld(K_UP, 0)
+  key.markHeld(K_SPACE, 1)
+  key.markHeld(asc("x"), 2)
+  key.markHeld(asc("z"), 3)
+  key.markHeld(asc("q"), 4)
+end sub
+
+sub key.markHeld(kd, slot)
+  if key.held(kd) then key.nr(slot) = kd
 end sub
