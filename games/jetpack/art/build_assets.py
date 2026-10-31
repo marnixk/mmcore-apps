@@ -142,6 +142,15 @@ def build_sheet(k: int, screen: tuple[int, int]) -> tuple[Image.Image, dict]:
     y = 0
     terrain = flatten(nn(real_grid([real.tile(t, transparent=False) for t in range(120)], 20), k), False)
     paste(sheet, terrain, 0, y)
+    # Conveyor arrow phases. The DOS game rotates palette 251-254 every
+    # 3 IRQ ticks (four captured steps). Bake each belt id 114-119 at
+    # sheet column 20+phase, row (id-114), beside the terrain block.
+    phases = Image.new("RGBA", (4 * 12, 6 * 12), (0, 0, 0, 0))
+    for phase in range(4):
+        pal = real.palette(phase)
+        for t in range(6):
+            phases.paste(real.tile(114 + t, transparent=False, pal=pal), (phase * 12, t * 12))
+    paste(sheet, flatten(nn(phases, k), False), 20 * 12 * k, y)
     info = {"syTile": y, "tw": terrain.width, "th": terrain.height}
     y += terrain.height
     player = flatten(nn(real_grid([real.player(f) if real.has_player(f) else None for f in range(96)], 24), k), True)
