@@ -20,7 +20,6 @@ dim integer g_now
 dim pl.x, pl.y, pl.x0, pl.vx, pl.vy, pl.face, pl.hface, pl.frm
 dim pl.ground, pl.dead, pl.age, pl.gems, pl.shield, pl.lock, pl.tx, pl.ty
 dim pl.phasing, pl.jetting, pl.climbing, pl.tdir, pl.sw, pl.og, pl.oj, pl.fall
-dim pl.idC, pl.idF, pl.idR, pl.idL
 
 dim lv.dx, lv.dy, lv.doorT, lv.doorF
 dim string lv.name$, lv.line$
@@ -34,6 +33,9 @@ dim en.n
 dim en.ty(19), en.x(19), en.y(19), en.vx(19), en.vy(19), en.fr(19), en.st(19)
 dim en.pr(11), en.cd(19), en.latch(19), en.dir(19)
 dim float en.rf
+
+dim cv.n
+dim cv.c(127), cv.r(127)
 
 dim sp.on, sp.x, sp.y
 
@@ -103,6 +105,13 @@ sub lv.storeRow(rowpair, s$)
     r = rowpair * 2 + (i \ 26)
     lv.id(c, r) = b
     lv.ch(c, r) = 0
+    if b >= 114 and b <= 119 then
+      if cv.n < 128 then
+        cv.c(cv.n) = c
+        cv.r(cv.n) = r
+        cv.n = cv.n + 1
+      end if
+    end if
   next i
 end sub
 
@@ -135,10 +144,6 @@ sub lv.oneEn(s$)
   en.cd(en.n) = 0
   en.latch(en.n) = 0
   en.dir(en.n) = 0
-  if ty = 2 then
-    en.vx(en.n) = 59
-    en.dir(en.n) = 64
-  end if
   if ty = 4 then en.st(en.n) = 1
   en.n = en.n + 1
 end sub
@@ -222,6 +227,7 @@ end sub
 
 sub lv.load(n)
   local row
+  cv.n = 0
   open "data/levels.dat" for input as #1
   line input #1, lv.line$
   for lv.i = 0 to n
@@ -295,6 +301,21 @@ function fld.solid(c, r)
   end if
 end function
 
+' Same as fld.solid, except a ladder or escalator is not a wall.
+' The player walks into that column and climbs. Balls still land
+' on an escalator through fld.solid.
+function pl.blocks(c, r)
+  pl.blocks = fld.solid(c, r)
+  if pl.blocks = FALSE then
+    exit function
+  end if
+  if c < 0 or r < 0 or c > 25 or r > 15 then
+    exit function
+  end if
+  p_id = lv.id(c, r)
+  if p_id >= 1 and p_id <= 3 then pl.blocks = FALSE
+end function
+
 function bod.hit(x, y)
   bod.hit = TRUE
   if x < 384 or y < 384 then
@@ -329,7 +350,13 @@ sub fld.blit(c, r)
     blit cell * lay.tile, lay.syMelt, dx, dy, lay.tile, lay.tile, PG_SHEET
   else
     if id >= 128 then id = id and 127
-    blit (id mod 20) * lay.tile, (id \ 20) * lay.tile, dx, dy, lay.tile, lay.tile, PG_SHEET
+    ' Palette steps of this belt, baked at column 20+phase, row id-114.
+    if id >= 114 and id <= 119 then
+      p_n = (gm.frm \ 3) mod 4
+      blit (20 + p_n) * lay.tile, (id - 114) * lay.tile, dx, dy, lay.tile, lay.tile, PG_SHEET
+    else
+      blit (id mod 20) * lay.tile, (id \ 20) * lay.tile, dx, dy, lay.tile, lay.tile, PG_SHEET
+    end if
   end if
   lv.ch(c, r) = 0
   if fld.mark <> 0 then scr.mark(dx, dy, lay.tile, lay.tile)
@@ -348,6 +375,12 @@ sub fld.touch(c, r)
   end if
   fld.q(fld.n) = c + r * 26
   fld.n = fld.n + 1
+end sub
+
+sub cv.mark()
+  for p_i = 0 to cv.n - 1
+    fld.touch(cv.c(p_i), cv.r(p_i))
+  next p_i
 end sub
 
 sub fld.flush()
@@ -632,8 +665,6 @@ sub pl.faceKeys()
 end sub
 
 sub pl.align()
-  p_x0 = pl.x
-  p_y0 = pl.y
   p_c = (pl.x - 1) \ 384
   if p_c < 0 then p_c = 0
   if p_c > 25 then p_c = 25
@@ -647,8 +678,6 @@ sub pl.align()
       if pl.x < p_w then pl.x = p_w
     end if
   end if
-  p_hit = bod.hit(pl.x, p_y0)
-  if p_hit then pl.x = p_x0
   p_r = (pl.y - 1) \ 384
   if p_r < 0 then p_r = 0
   if p_r > 15 then p_r = 15
@@ -662,8 +691,6 @@ sub pl.align()
       if pl.y < p_w then pl.y = p_w
     end if
   end if
-  p_hit = bod.hit(pl.x, pl.y)
-  if p_hit then pl.y = p_y0
 end sub
 
 sub pl.jet()
@@ -693,26 +720,21 @@ sub pl.jet()
   if pl.vy < -64 then pl.vy = -64
 end sub
 
-' Tile under a pixel offset from the sprite's top-left. Offsets are
-' the EXE probe adds (player x is [0x34D3], y is [0x34D1]).
-' Id >= 128 is empty, same as the center probe at 0xF9EF.
-function pl.cell(px, py)
-  pl.cell = 0
-  p_x0 = pl.x - 384 + px * 32
-  p_y0 = pl.y - 384 + py * 32
-  if p_x0 < 0 or p_y0 < 0 then
+function pl.tile(c, r)
+  pl.tile = 0
+  if c < 0 or r < 0 or c > 25 or r > 15 then
     exit function
   end if
-  p_c = p_x0 \ 384
-  p_r = p_y0 \ 384
-  if p_c > 25 or p_r > 15 then
-    exit function
-  end if
-  p_id = lv.id(p_c, p_r)
+  p_id = lv.id(c, r)
   if p_id >= 128 then
     exit function
   end if
-  pl.cell = p_id
+  pl.tile = p_id
+end function
+
+function pl.climbId(tid)
+  pl.climbId = 0
+  if tid >= 1 and tid <= 3 then pl.climbId = 1
 end function
 
 ' ds:0x15E4 is the IEEE double 0.6. FIST of n*0.6, nearest.
@@ -725,64 +747,62 @@ function sc.ice(v)
   end if
 end function
 
-sub pl.ice()
-  p_a = pl.idR
-  p_d = pl.idL
-  if p_a >= 97 and p_a <= 99 then
-    pl.vx = sc.ice(pl.vx)
-  else
-    if p_d >= 97 and p_d <= 99 then pl.vx = sc.ice(pl.vx)
-  end if
+sub pl.ice(gid)
+  if gid >= 97 and gid <= 99 then pl.vx = sc.ice(pl.vx)
 end sub
 
-' Either foot, 0x10582 and 0x1062A. Input is the key, not vx.
-' Left belt: against -60, with +25, stand -40.
-' Right belt: with +60, against -25, stand +40.
-sub pl.belt()
+' The one tile under the centre column. Left belt: against -60,
+' with +25, stand -40. Right belt: with +60, against -25, stand +40.
+sub pl.belt(gid)
   p_n = 0
   if key.right and key.left = 0 then p_n = 1
   if key.left and key.right = 0 then p_n = -1
-  p_a = pl.idR
-  p_d = pl.idL
-  p_h = 0
-  if p_a >= 114 and p_a <= 116 then p_h = 1
-  if p_d >= 114 and p_d <= 116 then p_h = 1
-  if p_h = 1 then
+  if gid >= 114 and gid <= 116 then
     pl.vx = -40
     if p_n < 0 then pl.vx = -60
     if p_n > 0 then pl.vx = 25
   end if
-  p_h = 0
-  if p_a >= 117 and p_a <= 119 then p_h = 1
-  if p_d >= 117 and p_d <= 119 then p_h = 1
-  if p_h = 1 then
+  if gid >= 117 and gid <= 119 then
     pl.vx = 40
     if p_n > 0 then pl.vx = 60
     if p_n < 0 then pl.vx = -25
   end if
 end sub
 
-' 0xFF1B. Ids 1..3 are climbable. Id 2 and id 3 use their own vy.
-' With no horizontal key and a nonzero vy, vx becomes ±32 until
-' (x >> 5) mod 12 is 0 (0x101F3).
+' Ids 1..3 in the centre column are climbable. Id 2 and id 3 keep
+' their own vy. Up beside a ladder walks at 55 until the sprite is
+' centred on that column, then climbs. No pixel probe, no snap on exit.
 sub pl.climb()
-  ' Center and both feet, shared with pl.ice and pl.belt in this tick.
-  ' pl.control calls climb before walk, and walk calls ice then belt.
-  pl.idC = pl.cell(6, 6)
-  pl.idF = pl.cell(6, 12)
-  pl.idR = pl.cell(9, 12)
-  pl.idL = pl.cell(2, 12)
-  p_id = pl.idC
-  p_h = pl.idF
-  p_a = pl.idR
-  p_d = pl.idL
+  p_c = (pl.x - 192) \ 384
+  p_r = (pl.y - 192) \ 384
+  p_b = pl.tile(p_c, p_r)
+  p_h = pl.tile(p_c, pl.y \ 384)
+  p_id = p_b
   p_f = 0
-  if p_id >= 1 and p_id <= 3 then p_f = 1
-  if p_h >= 1 and p_h <= 3 then
-    if p_a >= 1 and p_a <= 3 then p_f = 1
-    if p_d >= 1 and p_d <= 3 then p_f = 1
-  end if
+  if pl.climbId(p_id) = 1 then p_f = 1
+  if pl.climbId(p_h) = 1 then p_f = 1
   if p_f = 0 then
+    if pl.ground and key.up and key.dn = 0 and key.left = 0 and key.right = 0 then
+      p_a = 0
+      p_b = pl.tile(p_c - 1, p_r)
+      if pl.climbId(p_b) = 1 then p_a = -1
+      if p_a = 0 then
+        p_b = pl.tile(p_c + 1, p_r)
+        if pl.climbId(p_b) = 1 then p_a = 1
+      end if
+      if p_a <> 0 then
+        pl.climbing = TRUE
+        pl.vy = 0
+        pl.vx = p_a * 55
+        if p_a < 0 then
+          pl.hface = 1
+          pl.face = 1
+        else
+          pl.hface = 0
+          pl.face = 0
+        end if
+      end if
+    end if
     exit sub
   end if
   pl.climbing = TRUE
@@ -790,9 +810,34 @@ sub pl.climb()
   if key.dn and key.up = 0 then p_n = 1
   if key.up and key.dn = 0 then p_n = -1
   p_k = 1
-  if p_id = 2 or p_a = 2 or p_d = 2 then p_k = 2
+  if p_id = 2 or p_h = 2 then p_k = 2
   if p_k = 1 then
-    if p_id = 3 or p_a = 3 or p_d = 3 then p_k = 3
+    if p_id = 3 or p_h = 3 then p_k = 3
+  end if
+  pl.vx = 0
+  if key.left and key.right = 0 then
+    pl.hface = 1
+    pl.face = 1
+    pl.vx = -55
+  end if
+  if key.right and key.left = 0 then
+    pl.hface = 0
+    pl.face = 0
+    pl.vx = 55
+  end if
+  if pl.vx = 0 and p_n <> 0 then
+    p_w = (p_c + 1) * 384
+    if pl.x <> p_w then
+      if pl.x < p_w then
+        pl.vx = 32
+        if pl.x + pl.vx > p_w then pl.vx = p_w - pl.x
+      else
+        pl.vx = -32
+        if pl.x + pl.vx < p_w then pl.vx = p_w - pl.x
+      end if
+      pl.vy = 0
+      exit sub
+    end if
   end if
   if p_k = 2 then
     pl.vy = -25
@@ -805,28 +850,6 @@ sub pl.climb()
     if p_n < 0 then pl.vy = -20
   end if
   if p_k = 1 then pl.vy = p_n * 45
-  pl.vx = 0
-  if key.left and key.right = 0 then
-    pl.hface = 1
-    pl.face = 1
-    pl.vx = -55
-  end if
-  if key.right and key.left = 0 then
-    pl.hface = 0
-    pl.face = 0
-    pl.vx = 55
-  end if
-  if pl.vx = 0 and pl.vy <> 0 then
-    p_n = (pl.x \ 32) mod 12
-    if p_n < 0 then p_n = p_n + 12
-    p_h = pl.cell(11, 11)
-    p_a = pl.cell(0, 11)
-    if p_n >= 6 and p_h >= 1 and p_h <= 3 then
-      pl.vx = 32
-    else
-      if p_n >= 1 and p_a >= 1 and p_a <= 3 then pl.vx = -32
-    end if
-  end if
 end sub
 
 sub pl.walk()
@@ -880,8 +903,9 @@ sub pl.walk()
       end if
     end if
   end if
-  pl.ice()
-  pl.belt()
+  p_id = pl.tile((pl.x - 192) \ 384, pl.y \ 384)
+  pl.ice(p_id)
+  pl.belt(p_id)
 end sub
 
 sub pl.control()
@@ -923,67 +947,65 @@ sub pl.control()
   pl.og = pl.ground
 end sub
 
+' Centre column only. A solid there is a wall. The sprite may overlap
+' a curved neighbour; that neighbour is not a rail to slide along.
 sub pl.moveX()
-  p_x0 = pl.x
-  pl.x = pl.x + pl.vx
-  p_hit = bod.hit(pl.x, pl.y)
-  if p_hit = 0 then
+  if pl.vx = 0 then
     exit sub
   end if
-  p_n = 0
-  if pl.vx > 0 then
-    do while p_n < 24
-      p_hit = bod.hit(pl.x, pl.y)
-      if p_hit = 0 then
-        exit do
-      end if
-      pl.x = pl.x - 16
-      p_n = p_n + 1
-    loop
-  else
-    do while p_n < 24
-      p_hit = bod.hit(pl.x, pl.y)
-      if p_hit = 0 then
-        exit do
-      end if
-      pl.x = pl.x + 16
-      p_n = p_n + 1
-    loop
+  pl.x = pl.x + pl.vx
+  if pl.x < 384 then
+    pl.x = 384
+    pl.vx = 0
   end if
-  if p_n >= 24 then pl.x = p_x0
-  pl.vx = 0
+  if pl.x > 9984 then
+    pl.x = 9984
+    pl.vx = 0
+  end if
+  p_c = (pl.x - 192) \ 384
+  p_r = (pl.y - 192) \ 384
+  if pl.blocks(p_c, p_r) then
+    if pl.vx > 0 then
+      pl.x = p_c * 384 + 191
+    else
+      pl.x = (p_c + 1) * 384 + 192
+    end if
+    pl.vx = 0
+  end if
 end sub
 
+' Ground is the tile under the centre column. Ceiling is the tile
+' above the sprite in that same column. Landing clamps to the tile
+' edge and does not walk back along a corner.
 sub pl.moveY()
-  p_y0 = pl.y
-  pl.y = pl.y + pl.vy
-  p_hit = bod.hit(pl.x, pl.y)
-  if p_hit = 0 then
+  if pl.vy = 0 then
     exit sub
   end if
-  p_n = 0
-  if pl.vy >= 0 then
-    do while p_n < 24
-      p_hit = bod.hit(pl.x, pl.y)
-      if p_hit = 0 then
-        exit do
-      end if
-      pl.y = pl.y - 16
-      p_n = p_n + 1
-    loop
-    if p_n < 24 then pl.ground = TRUE
-  else
-    do while p_n < 24
-      p_hit = bod.hit(pl.x, pl.y)
-      if p_hit = 0 then
-        exit do
-      end if
-      pl.y = pl.y + 16
-      p_n = p_n + 1
-    loop
+  pl.y = pl.y + pl.vy
+  if pl.y < 384 then
+    pl.y = 384
+    pl.vy = 0
   end if
-  if p_n >= 24 then pl.y = p_y0
-  pl.vy = 0
+  if pl.y > 6144 then
+    pl.y = 6144
+    pl.vy = 0
+  end if
+  p_c = (pl.x - 192) \ 384
+  if pl.vy > 0 then
+    p_r = pl.y \ 384
+    if pl.blocks(p_c, p_r) then
+      pl.y = p_r * 384
+      pl.vy = 0
+      pl.ground = TRUE
+    end if
+  end if
+  if pl.vy < 0 then
+    p_r = (pl.y - 384) \ 384
+    if pl.blocks(p_c, p_r) then
+      pl.y = (p_r + 2) * 384
+      pl.vy = 0
+    end if
+  end if
 end sub
 
 sub pl.take(c, r)
@@ -1184,16 +1206,13 @@ sub pl.teleport(k)
   next p_r
 end sub
 
-' Player floor switch, 0x106D0. Center id 0x21-0x23, x pixels >= 9,
-' y pixels >= 11, latch [bp-0x2F]. Signal is id+0xE0 (1, 2, or 3).
+' Player floor switch. Centre-column tile 0x21-0x23.
 sub pl.floor()
   if pl.phasing or pl.lock > 0 then
     exit sub
   end if
-  p_id = pl.cell(6, 6)
-  p_a = pl.x \ 32
-  p_d = pl.y \ 32
-  if p_id >= 33 and p_id <= 35 and p_a >= 9 and p_d >= 11 then
+  p_id = pl.tile((pl.x - 192) \ 384, (pl.y - 192) \ 384)
+  if p_id >= 33 and p_id <= 35 then
     if pl.sw = 0 then
       if p_id = 33 then lv.flip(17)
       if p_id = 34 then lv.flip(18)
@@ -1264,8 +1283,9 @@ sub pl.tube()
           if p_d = 1 then pl.x = pl.x - 64
           if p_d = 2 then pl.y = pl.y - 64
           if p_d = 3 then pl.y = pl.y + 64
-          p_hit = bod.hit(pl.x, pl.y)
-          if p_hit then
+          p_c = (pl.x - 192) \ 384
+          p_r = (pl.y - 192) \ 384
+          if fld.solid(p_c, p_r) then
             pl.x = p_x0
             pl.y = p_y0
           end if
@@ -1857,89 +1877,210 @@ sub en.track(i)
   en.y(i) = en.y(i) + en.vy(i)
 end sub
 
+' Tile clamp. A full-step revert leaves a 64-unit fall hovering
+' above the floor, so the step stops on the tile edge instead.
+sub en.slide(i)
+  en.x(i) = en.x(i) + en.vx(i)
+  if en.x(i) < 384 then
+    en.x(i) = 384
+    en.vx(i) = 0
+  end if
+  if en.x(i) > 9984 then
+    en.x(i) = 9984
+    en.vx(i) = 0
+  end if
+  p_c = (en.x(i) - 192) \ 384
+  p_r = (en.y(i) - 192) \ 384
+  if fld.solid(p_c, p_r) then
+    if en.vx(i) >= 0 then
+      en.x(i) = p_c * 384 + 191
+    else
+      en.x(i) = (p_c + 1) * 384 + 192
+    end if
+    en.vx(i) = 0
+  end if
+  en.y(i) = en.y(i) + en.vy(i)
+  if en.y(i) < 384 then
+    en.y(i) = 384
+    en.vy(i) = 0
+  end if
+  if en.y(i) > 6144 then
+    en.y(i) = 6144
+    en.vy(i) = 0
+  end if
+  p_c = (en.x(i) - 192) \ 384
+  if en.vy(i) > 0 then
+    p_r = en.y(i) \ 384
+    if fld.solid(p_c, p_r) then
+      en.y(i) = p_r * 384
+      en.vy(i) = 0
+    end if
+  end if
+  if en.vy(i) < 0 then
+    p_r = (en.y(i) - 384) \ 384
+    if fld.solid(p_c, p_r) then
+      en.y(i) = (p_r + 2) * 384
+      en.vy(i) = 0
+    end if
+  end if
+end sub
+
+' Steel ball, file 0x1527A. Probes are its own, from the sprite
+' top-left: (6,11) pad, (12,11) right, (1,12) and (10,12) support,
+' (-1,11) foot. Support empty means fall at 64. The direction byte
+' starts at 0 (0xE4BE), not forced right.
+sub en.ball(i)
+  p_x0 = en.x(i) - 384
+  p_y0 = en.y(i) - 384
+  en.pr(0) = en.tid(p_x0 + 192, p_y0 + 352)
+  p_a = en.tid(p_x0 + 384, p_y0 + 352)
+  p_d = en.tid(p_x0 + 32, p_y0 + 384)
+  p_h = en.tid(p_x0 + 320, p_y0 + 384)
+  p_f = en.tid(p_x0 - 32, p_y0 + 352)
+  p_b = 0
+  if p_d < 40 and (p_d < 1 or p_d > 3) then
+    if p_h < 40 and (p_h < 1 or p_h > 3) then p_b = 1
+  end if
+  if p_b = 1 then
+    en.vx(i) = 0
+    en.vy(i) = 64
+    en.fr(i) = 3
+  else
+    ' Direction advances only while supported (file 0x1527A).
+    en.dir(i) = en.dir(i) + 1
+    if en.dir(i) >= 256 then en.dir(i) = 0
+    p_n = en.dir(i) mod 64
+    if p_n = 63 then
+      if en.dir(i) < 64 then
+        en.dir(i) = 0
+      else
+        en.dir(i) = 64
+      end if
+    end if
+    if p_f >= 40 then en.dir(i) = 64
+    if p_f < 40 and p_a >= 40 then en.dir(i) = 0
+    if en.dir(i) < 64 and p_f < 40 then
+      en.vx(i) = -59
+    else
+      if p_a < 40 then
+        en.vx(i) = 59
+      else
+        en.vx(i) = 0
+      end if
+    end if
+    en.vy(i) = 0
+    p_n = (en.dir(i) \ 2) mod 3
+    if p_n < 0 then p_n = p_n + 3
+    if en.dir(i) < 64 then
+      en.fr(i) = 2 - p_n
+    else
+      en.fr(i) = p_n
+    end if
+  end if
+  if p_d >= 97 and p_d <= 99 then en.vx(i) = sc.ice(en.vx(i))
+  if p_d >= 114 and p_d <= 116 then
+    if en.vx(i) < 0 then
+      en.vx(i) = -62
+    else
+      if en.vx(i) > 0 then
+        en.vx(i) = 27
+      else
+        en.vx(i) = -40
+      end if
+    end if
+  end if
+  if p_d >= 117 and p_d <= 119 then
+    if en.vx(i) > 0 then
+      en.vx(i) = 62
+    else
+      if en.vx(i) < 0 then
+        en.vx(i) = -27
+      else
+        en.vx(i) = 40
+      end if
+    end if
+  end if
+  en.sw(i)
+  en.gate(i, 1)
+  ' Probes already decided vx. Do not also reject the centre cell:
+  ' the belt carries the ball along under a wall the centre overlaps.
+  en.x(i) = en.x(i) + en.vx(i)
+  if en.x(i) < 384 then en.x(i) = 384
+  if en.x(i) > 9984 then en.x(i) = 9984
+  en.y(i) = en.y(i) + en.vy(i)
+  if en.y(i) < 384 then
+    en.y(i) = 384
+    en.vy(i) = 0
+  end if
+  if en.y(i) > 6144 then
+    en.y(i) = 6144
+    en.vy(i) = 0
+  end if
+  if en.vy(i) > 0 then
+    p_c = (en.x(i) - 192) \ 384
+    p_r = en.y(i) \ 384
+    if fld.solid(p_c, p_r) then
+      en.y(i) = p_r * 384
+      en.vy(i) = 0
+    end if
+  end if
+end sub
+
+' Spring, file 0x157CA. dir 0 falls at +50, dir 1 rises at -50.
+' Hitting the floor sets 10 and counts to 14, then 1. Hitting the
+' ceiling sets 20 and counts to 24, then 0. Other values hold still.
+sub en.spring(i)
+  p_x0 = en.x(i) - 384
+  p_y0 = en.y(i) - 384
+  en.pr(0) = en.tid(p_x0 + 192, p_y0 + 128)
+  p_a = en.tid(p_x0 + 192, p_y0 - 32)
+  p_id = en.tid(p_x0 + 192, p_y0 + 256)
+  p_d = en.dir(i) \ 10
+  if p_d >= 1 then
+    p_n = en.dir(i) mod 10
+    if p_n = 4 then
+      en.dir(i) = 2 - p_d
+    else
+      en.dir(i) = en.dir(i) + 1
+    end if
+    en.vx(i) = 0
+    en.vy(i) = 0
+  else
+    en.vx(i) = 0
+    if en.dir(i) = 0 then
+      if p_id >= 40 then
+        en.dir(i) = 10
+        en.fr(i) = 12
+        en.vy(i) = 0
+      else
+        en.vy(i) = 50
+        en.fr(i) = 13 + ((en.y(i) \ 200) and 1)
+      end if
+    end if
+    if en.dir(i) = 1 then
+      if p_a >= 40 then
+        en.dir(i) = 20
+        en.fr(i) = 15
+        en.vy(i) = 0
+      else
+        en.vy(i) = -50
+        en.fr(i) = 13 + ((en.y(i) \ 200) and 1)
+      end if
+    end if
+  end if
+  en.sw(i)
+  en.gate(i, 0)
+  en.slide(i)
+end sub
+
 sub en.think(i)
   p_k = en.ty(i)
   if p_k = 1 then
     en.track(i)
     p_k = 1
   end if
-  if p_k = 2 then
-    en.probes(i)
-    ' Unsupported (0x153BF): probes 0x354D and 0x354E are neither a
-    ' wall nor a ladder. vy = 64 and vx stays 0 so the ball falls
-    ' straight. The direction byte is not cleared.
-    p_a = 0
-    if en.pr(3) < 40 and (en.pr(3) < 1 or en.pr(3) > 3) then
-      if en.pr(4) < 40 and (en.pr(4) < 1 or en.pr(4) > 3) then p_a = 1
-    end if
-    if p_a = 1 then
-      en.vx(i) = 0
-      en.vy(i) = 64
-    else
-      ' 0x153EF / 0x1541E. dir >= 64 is the port's start-right facing.
-      if en.pr(5) >= 40 then en.dir(i) = 64
-      if en.pr(5) < 40 and en.pr(2) >= 40 then en.dir(i) = 0
-      if en.dir(i) < 64 and en.pr(5) < 40 then
-        en.vx(i) = -59
-      else
-        if en.pr(2) < 40 then
-          en.vx(i) = 59
-        else
-          en.vx(i) = 0
-        end if
-      end if
-      en.vy(i) = en.vy(i) + 5
-      if en.vy(i) > 64 then en.vy(i) = 64
-    end if
-    ' Ice then belt, probe 0x354D only (pr 3 = pixel 12,0).
-    if en.pr(3) >= 97 and en.pr(3) <= 99 then en.vx(i) = sc.ice(en.vx(i))
-    if en.pr(3) >= 114 and en.pr(3) <= 116 then
-      if en.vx(i) < 0 then
-        en.vx(i) = -62
-      else
-        if en.vx(i) > 0 then
-          en.vx(i) = 27
-        else
-          en.vx(i) = -40
-        end if
-      end if
-    end if
-    if en.pr(3) >= 117 and en.pr(3) <= 119 then
-      if en.vx(i) > 0 then
-        en.vx(i) = 62
-      else
-        if en.vx(i) < 0 then
-          en.vx(i) = -27
-        else
-          en.vx(i) = 40
-        end if
-      end if
-    end if
-    en.sw(i)
-    en.gate(i, 1)
-    en.move(i, TRUE)
-    if en.st(i) = 0 and en.vy(i) = 0 then en.st(i) = 4
-    if en.st(i) > 0 then
-      en.fr(i) = 3
-      en.st(i) = en.st(i) - 1
-    else
-      en.fr(i) = 2 - ((gm.frm \ 2) mod 3)
-    end if
-  end if
-  if p_k = 3 then
-    if en.vy(i) = 0 then en.vy(i) = -50
-    p_w = en.vy(i)
-    en.sw(i)
-    en.move(i, TRUE)
-    if en.vy(i) = 0 then
-      if p_w > 0 then
-        en.vy(i) = -50
-      else
-        en.vy(i) = 50
-      end if
-    end if
-    en.fr(i) = 13 + ((en.y(i) \ 200) and 1)
-  end if
+  if p_k = 2 then en.ball(i)
+  if p_k = 3 then en.spring(i)
   if p_k = 4 then
     if en.st(i) = 0 then
       en.vx(i) = 0
@@ -2002,16 +2143,32 @@ sub en.think(i)
     en.fr(i) = 16 + ((en.x(i) \ 32) mod 3)
   end if
   if p_k = 6 then
-    p_d = ((gm.frm \ 8) + i) mod 8
+    if en.dir(i) < 1 or en.dir(i) > 8 then en.dir(i) = 1
+    if (gm.frm mod 8) = 0 then
+      en.rf = rnd
+      if int(en.rf * 10) = 0 then
+        en.dir(i) = 1
+      else
+        en.rf = rnd
+        if int(en.rf * 2) = 0 then
+          en.dir(i) = en.dir(i) - 1
+        else
+          en.dir(i) = en.dir(i) + 1
+        end if
+        if en.dir(i) < 1 then en.dir(i) = 8
+        if en.dir(i) > 8 then en.dir(i) = 1
+      end if
+    end if
+    p_d = en.dir(i)
     en.vx(i) = 0
     en.vy(i) = 0
-    if p_d = 0 or p_d = 1 or p_d = 7 then en.vx(i) = 11
-    if p_d = 3 or p_d = 4 or p_d = 5 then en.vx(i) = -11
-    if p_d = 1 or p_d = 2 or p_d = 3 then en.vy(i) = -11
-    if p_d = 5 or p_d = 6 or p_d = 7 then en.vy(i) = 11
+    if p_d = 1 or p_d = 2 or p_d = 8 then en.vx(i) = 11
+    if p_d = 4 or p_d = 5 or p_d = 6 then en.vx(i) = -11
+    if p_d = 2 or p_d = 3 or p_d = 4 then en.vy(i) = -11
+    if p_d = 6 or p_d = 7 or p_d = 8 then en.vy(i) = 11
     en.sw(i)
     en.move(i, TRUE)
-    en.fr(i) = 33 + ((gm.frm \ 20) mod 8)
+    en.fr(i) = 33 + ((p_d - 1) mod 8)
   end if
   if p_k = 7 then
     if abs(pl.x - en.x(i)) < 80 then
@@ -2271,6 +2428,7 @@ sub gm.step()
   pl.pickups()
   pl.floor()
   pl.use()
+  if (gm.frm mod 3) = 0 then cv.mark()
   mt.step()
   en.step()
   lv.doorStep()
