@@ -38,7 +38,19 @@ DEV_FILES = {
     "assets.txt",
     "screenshot.png",
     "layout.txt",
+    "package.inf",
 }
+
+INF_KEY_ORDER = (
+    "name",
+    "main",
+    "title",
+    "author",
+    "category",
+    "version",
+    "summary",
+    "minver",
+)
 
 
 def crc32(data: bytes) -> int:
@@ -377,14 +389,37 @@ def game_title(root: str, game: str) -> str:
     return game
 
 
-def package_inf(game: str, title: str) -> bytes:
+def parse_inf_fields(text: str) -> dict[str, str]:
+    fields: dict[str, str] = {}
+    for line in text.splitlines():
+        if not line or "=" not in line:
+            continue
+        key, val = line.split("=", 1)
+        fields[key] = val
+    return fields
+
+
+def package_inf(game: str, title: str, folder: str | None = None) -> bytes:
     title = clean_field(title) or game
-    lines = [
-        f"name={game}.APP",
-        "main=MAIN.BAS",
-        f"title={title}",
-        f"author={AUTHOR}",
-    ]
+    fields: dict[str, str] = {
+        "name": f"{game}.APP",
+        "main": "MAIN.BAS",
+        "title": title,
+        "author": AUTHOR,
+    }
+    inf_path = os.path.join(folder, "PACKAGE.INF") if folder else ""
+    if folder and os.path.isfile(inf_path):
+        with open(inf_path, encoding="utf-8") as fh:
+            folder_fields = parse_inf_fields(fh.read())
+        for key, val in folder_fields.items():
+            if key in ("name", "main"):
+                continue
+            fields[key] = val
+    ordered: list[str] = [k for k in INF_KEY_ORDER if k in fields]
+    for key in sorted(fields):
+        if key not in INF_KEY_ORDER:
+            ordered.append(key)
+    lines = [f"{k}={fields[k]}" for k in ordered]
     return ("".join(line + "\n" for line in lines)).encode("utf-8")
 
 
@@ -392,7 +427,7 @@ def build_app(folder: str, dest: str, game: str, title: str) -> tuple[bytes, boo
     entries = collect(folder, dest)
     if not has_main(entries):
         raise SystemExit(f"{game}: no main.bas (PACKAGE requires MAIN.BAS)")
-    entries.append(("PACKAGE.INF", package_inf(game, title)))
+    entries.append(("PACKAGE.INF", package_inf(game, title, folder)))
     blob = zip_store(entries)
     parse_zip(blob)
     os.makedirs(os.path.dirname(os.path.abspath(dest)), exist_ok=True)
@@ -413,7 +448,12 @@ def build_app(folder: str, dest: str, game: str, title: str) -> tuple[bytes, boo
     return blob, changed
 
 
-def check_app(path: str, game: str | None = None, title: str | None = None) -> None:
+def check_app(
+    path: str,
+    game: str | None = None,
+    title: str | None = None,
+    folder: str | None = None,
+) -> None:
     with open(path, "rb") as fh:
         blob = fh.read()
     entries = parse_zip(blob)
@@ -438,14 +478,24 @@ def check_app(path: str, game: str | None = None, title: str | None = None) -> N
             raise SystemExit(f"{path}: PACKAGE.INF missing {key}")
     if fields["main"] != "MAIN.BAS":
         raise SystemExit(f"{path}: main field is {fields['main']!r}")
-    if fields["author"] != AUTHOR:
-        raise SystemExit(f"{path}: author field is {fields['author']!r}")
     if game is not None and fields["name"] != f"{game}.APP":
         raise SystemExit(f"{path}: name field is {fields['name']!r}")
-    if title is not None and fields["title"] != clean_field(title):
-        raise SystemExit(
-            f"{path}: title field is {fields['title']!r}, expected {title!r}"
-        )
+    if game is not None and title is not None:
+        if folder is None:
+            folder = os.path.join(os.path.dirname(os.path.dirname(path)), "games", game)
+            if not os.path.isdir(folder):
+                folder = None
+        if folder is not None:
+            want = package_inf(game, title, folder).decode("utf-8")
+            if inf != want:
+                raise SystemExit(f"{path}: PACKAGE.INF mismatch")
+        else:
+            if fields["title"] != clean_field(title):
+                raise SystemExit(
+                    f"{path}: title field is {fields['title']!r}, expected {title!r}"
+                )
+            if fields["author"] != AUTHOR:
+                raise SystemExit(f"{path}: author field is {fields['author']!r}")
     prev = -1
     for name, _data, meta in entries:
         if meta["local"] < prev:
@@ -462,13 +512,16 @@ def cmd_pack(args: argparse.Namespace) -> None:
     title = args.title or game_title(root, game)
     dest = args.out or os.path.join(root, "dist", game + ".app")
     _blob, changed = build_app(folder, dest, game, title)
-    check_app(dest, game, title)
+    check_app(dest, game, title, folder)
     state = "wrote" if changed else "unchanged"
     print(f"{state} {os.path.relpath(dest, root)}  title={title}")
 
 
 def cmd_check(args: argparse.Namespace) -> None:
-    check_app(args.app, args.game, args.title)
+    folder = None
+    if args.game and args.root:
+        folder = os.path.join(os.path.abspath(args.root), "games", args.game)
+    check_app(args.app, args.game, args.title, folder)
     print(f"ok {args.app}")
 
 
@@ -562,6 +615,7 @@ def main(argv: list[str]) -> None:
 
     check = sub.add_parser("check")
     check.add_argument("--app", required=True)
+    check.add_argument("--root")
     check.add_argument("--game")
     check.add_argument("--title")
     check.set_defaults(func=cmd_check)

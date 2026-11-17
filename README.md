@@ -11,6 +11,37 @@ Each file is a ZIP store in the layout mmcore's `PACKAGE` wizard writes
 `master` that change `games/` rebuild `dist/` in GitHub Actions and commit
 the archives back when the bytes change.
 
+Optional per-game `games/<name>/PACKAGE.INF` is merged when packing (packer
+still sets `name` and `main`). Include an `INFO/` folder in the game tree to
+ship hub icons, screenshots, and about text inside the archive.
+
+## Hub (hub.mmcore.dev)
+
+The public mmcore HUB loads a static catalogue from
+[https://hub.mmcore.dev/](https://hub.mmcore.dev/) (`index.json` plus copied
+`.app` packages and extracted `info/` assets). Sources are `dist/*.app` from
+this repo and optional `community/*.app` submissions (see
+[community/README.md](community/README.md)).
+
+Build locally:
+
+```bash
+python3 -m unittest discover -s tools/hub -p "test_*.py" -v
+python3 tools/hub/build_index.py --root . --out site
+```
+
+GitHub Actions (`.github/workflows/hub-index.yml`) runs on pushes to
+`master`/`main` that touch games, dist, community, or the hub tools; on pull
+requests (validation only); after `package-dist.yml` finishes; and via
+`workflow_dispatch`. It runs tests, builds `site/`, and deploys to Cloudflare
+Pages project **mmcore-hub** (`hub.mmcore.dev`) when repository secrets
+`CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` are set. Until then the
+workflow uploads `site/` as an artifact and logs a notice instead of failing.
+
+One-time Cloudflare setup: create a Pages project named `mmcore-hub`, attach
+custom domain `hub.mmcore.dev`, and add the two secrets above (API token with
+Pages edit permission for the account).
+
 ## Games
 
 Games for mmcore (MMBasic, Colour Maximite 2 style). Each game lives in its

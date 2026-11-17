@@ -6,3 +6,5 @@ tools/gametest/out/
 tools/gametest/drv/
 tools/gametest/croot/
 dist/*.app.tmp
+site/
+site-test-out/

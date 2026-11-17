@@ -1,0 +1,77 @@
+name: Hub index
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - "games/**"
+      - "dist/**"
+      - "community/**"
+      - "tools/hub/**"
+      - "tools/package/**"
+      - ".github/workflows/hub-index.yml"
+  pull_request:
+    paths:
+      - "community/**"
+      - "games/**"
+      - "dist/**"
+      - "tools/hub/**"
+      - "tools/package/**"
+      - ".github/workflows/hub-index.yml"
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Package dist apps"]
+    types: [completed]
+
+concurrency:
+  group: hub-index-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: >-
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Test hub index builder
+        run: python3 -m unittest discover -s tools/hub -p "test_*.py" -v
+
+      - name: Build site
+        run: python3 tools/hub/build_index.py --root . --out site
+
+      - name: Deploy to Cloudflare Pages
+        if: >-
+          github.event_name != 'pull_request' &&
+          secrets.CLOUDFLARE_API_TOKEN != '' &&
+          secrets.CLOUDFLARE_ACCOUNT_ID != ''
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy site --project-name=mmcore-hub --branch=main
+
+      - name: Skip deploy (secrets missing)
+        if: >-
+          github.event_name != 'pull_request' &&
+          (secrets.CLOUDFLARE_API_TOKEN == '' || secrets.CLOUDFLARE_ACCOUNT_ID == '')
+        run: |
+          echo "::notice::Cloudflare deploy skipped (CLOUDFLARE_API_TOKEN or CLOUDFLARE_ACCOUNT_ID not set). Site uploaded as workflow artifact."
+
+      - name: Upload site artifact
+        if: >-
+          github.event_name == 'pull_request' ||
+          secrets.CLOUDFLARE_API_TOKEN == '' ||
+          secrets.CLOUDFLARE_ACCOUNT_ID == ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: mmcore-hub-site
+          path: site/
+          if-no-files-found: error
