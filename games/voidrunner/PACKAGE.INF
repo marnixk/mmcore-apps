@@ -1,0 +1,7 @@
+name=voidrunner
+title=Void Runner
+author=Marnix Kok
+category=GAMES
+version=1.0.0
+summary=Tap thrust to thread asteroid gaps and laser gates as the scroll speeds up
+minver=0.313.0

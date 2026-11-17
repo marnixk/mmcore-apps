@@ -1,0 +1,7 @@
+Circuit Quest is a Chip's Challenge style puzzle set in a silicon lab. Collect every chip on the board to open the socket, then step into the exit. There are 20 levels, and each one adds an idea: keycards and doors, blocks and coolant, boots, ice, conveyors, toggle walls, traps, teleports, tanks, bombs, hidden walls, and monsters.
+
+Move with the arrow keys. P or Esc pauses. From the pause screen, R restarts the level and Q returns to the title. The title menu sets skill (Easy, Normal, Hard) and the start level, up to the furthest level already reached on that skill. Monsters step faster on the harder skills.
+
+A cleared level scores 10 points for every second left on the clock, minus 50 points for each retry, and never goes below zero. Retries are unlimited. High scores and the levels reached are kept in C:/.circuitquest. The game is silent.
+
+Circuit Quest is an original mmcore game in the style of Chip's Challenge.

@@ -1,0 +1,7 @@
+TRONIX is Xonix on a neon grid. Ride the light cycle off the claimed land, lay a wall across the open grid, and close it. Every region the orbs are not in becomes yours. Claim the target share of the grid to clear the level: 75 percent, then 80 percent from level 8.
+
+Arrow keys steer. On the open grid the cycle keeps its last direction. On claimed land it steps only when you press a key. Orbs bounce through the open grid and cut your wall. Sentinels patrol the land you have already claimed. P or Esc pauses, and Q quits from the pause screen.
+
+You start with 3 lives and can hold 6, gaining one every three levels cleared. Each percent of the grid claimed scores 30 points. Each percent past the target scores 100 more, and each life left at the clear scores 100. Easy, Normal, and Hard change how many orbs and sentinels appear and how fast the orbs move. High scores are kept in C:/.tronix. The game is silent.
+
+TRONIX is an original mmcore game in the style of Xonix.

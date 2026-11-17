@@ -1,0 +1,7 @@
+name=crystalcore
+title=Crystal Core
+author=Marnix Kok
+category=GAMES
+version=1.0.0
+summary=Swap gems in a crystal mine, match three or more, and clear 30 levels
+minver=0.313.0

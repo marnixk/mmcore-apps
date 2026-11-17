@@ -1,0 +1,7 @@
+name=sudoku
+title=Sudoku Grove
+author=Marnix Kok
+category=GAMES
+version=1.0.0
+summary=Fill a forest sudoku on Easy, Medium, or High; time and misses cost points
+minver=0.313.0

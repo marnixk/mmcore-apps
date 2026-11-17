@@ -1,0 +1,7 @@
+name=tetris
+title=Tetris
+author=Marnix Kok
+category=GAMES
+version=1.0.0
+summary=Drop tetrominoes, clear lines, and climb levels under a Soviet night sky
+minver=0.313.0

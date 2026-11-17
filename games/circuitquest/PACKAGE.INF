@@ -1,0 +1,7 @@
+name=circuitquest
+title=Circuit Quest
+author=Marnix Kok
+category=GAMES
+version=1.0.0
+summary=Collect every chip, open the socket, and exit 20 silicon-lab puzzles
+minver=0.313.0

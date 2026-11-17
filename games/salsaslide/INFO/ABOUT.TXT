@@ -1,0 +1,7 @@
+Salsa Slide is a lane game in a sunny adobe cantina. Four counters run across the room, hungry customers walk in from the doors on the left, and one cook works the pumps on the right. Slide full plates of nachos down a counter, catch the empty plates coming back, and grab the tips. Every fourth round is the Salsa Shuffle bonus.
+
+Up and Down jump the cook between the four counters. Left and Right walk along a counter. Space slides a plate while the cook is back at the pumps. P or Esc pauses. From the pause screen, R restarts and Q quits. A life is lost when a customer reaches the cook, a full plate slides off the left end, or an empty plate hits the floor. You start with 3 chef hats and can hold 5.
+
+A plate a customer catches scores 50. A customer who has had enough and leaves scores 100. Catching an empty plate scores 100, and a tip scores 500. Easy, Normal, and Hard change how quickly later rounds fill up, and any round already reached can be the start. The title menu has a How to Play screen. High scores and the rounds reached are kept in C:/.salsaslide. The game is silent.
+
+Salsa Slide is an original mmcore game in the style of Tapper.
