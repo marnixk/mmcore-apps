@@ -47,29 +47,33 @@ jobs:
       - name: Build site
         run: python3 tools/hub/build_index.py --root . --out site
 
+      - name: Check Cloudflare deploy secrets
+        if: github.event_name != 'pull_request'
+        id: cf
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -n "${CLOUDFLARE_API_TOKEN:-}" ] && [ -n "${CLOUDFLARE_ACCOUNT_ID:-}" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Cloudflare deploy skipped (CLOUDFLARE_API_TOKEN or CLOUDFLARE_ACCOUNT_ID not set). Site uploaded as workflow artifact."
+
       - name: Deploy to Cloudflare Pages
         if: >-
           github.event_name != 'pull_request' &&
-          secrets.CLOUDFLARE_API_TOKEN != '' &&
-          secrets.CLOUDFLARE_ACCOUNT_ID != ''
+          steps.cf.outputs.ready == 'true'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy site --project-name=mmcore-hub --branch=main
 
-      - name: Skip deploy (secrets missing)
-        if: >-
-          github.event_name != 'pull_request' &&
-          (secrets.CLOUDFLARE_API_TOKEN == '' || secrets.CLOUDFLARE_ACCOUNT_ID == '')
-        run: |
-          echo "::notice::Cloudflare deploy skipped (CLOUDFLARE_API_TOKEN or CLOUDFLARE_ACCOUNT_ID not set). Site uploaded as workflow artifact."
-
       - name: Upload site artifact
         if: >-
           github.event_name == 'pull_request' ||
-          secrets.CLOUDFLARE_API_TOKEN == '' ||
-          secrets.CLOUDFLARE_ACCOUNT_ID == ''
+          steps.cf.outputs.ready != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: mmcore-hub-site
