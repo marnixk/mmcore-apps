@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated": "2026-11-17T11:44:32Z",
+  "generated": "2026-11-17T20:56:59Z",
   "categories": [
     "GAMES",
     "DEMOS",
@@ -25,7 +25,7 @@
       "minver": "0.313.0",
       "size": 824704,
       "sha256": "ec1a1f909c4c22db58f3023e2e7a9a8344a59fd6c9e3e1bd222269b85b726c0d",
-      "updated": "2026-11-17T11:44:32Z",
+      "updated": "2026-11-17T20:56:59Z",
       "icon": "info/circuitquest/icon.png",
       "thumb": "info/circuitquest/thumb.png",
       "shots": [
@@ -47,7 +47,7 @@
       "minver": "0.313.0",
       "size": 686747,
       "sha256": "6c5456a2b77aaf99f9c47750b45c54317b9b24c91887cabb58cded182c422a38",
-      "updated": "2026-11-17T11:44:32Z",
+      "updated": "2026-11-17T20:56:59Z",
       "icon": "info/corecaving/icon.png",
       "thumb": "info/corecaving/thumb.png",
       "shots": [
@@ -69,7 +69,7 @@
       "minver": "0.313.0",
       "size": 1483548,
       "sha256": "a04bed268f267a1e8a06eca6cd8c6731de9fc18a77114f7ef1cba3888ce17eb3",
-      "updated": "2026-11-17T11:44:32Z",
+      "updated": "2026-11-17T20:56:59Z",
       "icon": "info/crystalcore/icon.png",
       "thumb": "info/crystalcore/thumb.png",
       "shots": [
@@ -91,7 +91,7 @@
       "minver": "0.313.0",
       "size": 987863,
       "sha256": "bf96ffe333d69d5b7b61012699614fdb278fef6ebe325ff1d32231b8d58ee4df",
-      "updated": "2026-11-17T11:44:32Z",
+      "updated": "2026-11-17T20:56:59Z",
       "icon": "info/jetpack/icon.png",
       "thumb": "info/jetpack/thumb.png",
       "shots": [
@@ -112,7 +112,7 @@
       "minver": "0.313.0",
       "size": 1104528,
       "sha256": "8db7ea6e76b2ae811efe0c48cd5cfa625fb1151f504efc2890bab118e2a0be99",
-      "updated": "2026-11-17T11:44:32Z",
+      "updated": "2026-11-17T20:56:59Z",
       "icon": "info/salsaslide/icon.png",
       "thumb": "info/salsaslide/thumb.png",
       "shots": [
@@ -134,7 +134,7 @@
       "minver": "0.313.0",
       "size": 773943,
       "sha256": "aac45252e613e8d9d45915f65be4457f010d6b7c4e379cc578736efc0568c660",
-      "updated": "2026-11-17T11:44:32Z",
+      "updated": "2026-11-17T20:56:59Z",
       "icon": "info/snake/icon.png",
       "thumb": "info/snake/thumb.png",
       "shots": [
@@ -156,7 +156,7 @@
       "minver": "0.313.0",
       "size": 859944,
       "sha256": "18736c93aa29a37212072885a2ebcea608db35fedf0353918e8a6bd5f3ea02ee",
-      "updated": "2026-11-17T11:44:32Z",
+      "updated": "2026-11-17T20:56:59Z",
       "icon": "info/sudoku/icon.png",
       "thumb": "info/sudoku/thumb.png",
       "shots": [
@@ -178,7 +178,7 @@
       "minver": "0.313.0",
       "size": 1367008,
       "sha256": "9104a900991373cae847b24d02d22ed9d3bf898584a1fb1ddbb5614ff7d25cd2",
-      "updated": "2026-11-17T11:44:32Z",
+      "updated": "2026-11-17T20:56:59Z",
       "icon": "info/tetris/icon.png",
       "thumb": "info/tetris/thumb.png",
       "shots": [
@@ -200,7 +200,7 @@
       "minver": "0.313.0",
       "size": 452739,
       "sha256": "b76f03586fd583474c5130647d6237e28115d53f61a8d63a29b2cc6a06b9a62b",
-      "updated": "2026-11-17T11:44:32Z",
+      "updated": "2026-11-17T20:56:59Z",
       "icon": "info/tronix/icon.png",
       "thumb": "info/tronix/thumb.png",
       "shots": [
@@ -222,7 +222,7 @@
       "minver": "0.313.0",
       "size": 873838,
       "sha256": "c98816b1a556082abc7371a8a47d1655421c3cc73bc2d94bdf2afe8824f0926f",
-      "updated": "2026-11-17T11:44:32Z",
+      "updated": "2026-11-17T20:56:59Z",
       "icon": "info/voidrunner/icon.png",
       "thumb": "info/voidrunner/thumb.png",
       "shots": [
