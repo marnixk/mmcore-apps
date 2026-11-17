@@ -42,7 +42,7 @@ for g in "${games[@]}"; do
     exit 1
   fi
   python3 "$PY" pack --root "$ROOT" --game "$g" --out "$DIST/$g.app"
-  python3 "$PY" check --app "$DIST/$g.app" --game "$g"
+  python3 "$PY" check --app "$DIST/$g.app" --root "$ROOT" --game "$g"
   built+=("$g")
 done
 

@@ -1,0 +1,29 @@
+name: Hub index
+
+# PR validation only. Master publishes dist/ via package-dist.yml.
+on:
+  pull_request:
+    paths:
+      - "community/**"
+      - "games/**"
+      - "dist/**"
+      - "tools/hub/**"
+      - "tools/package/**"
+      - ".github/workflows/hub-index.yml"
+      - ".github/workflows/package-dist.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Test hub index builder
+        run: python3 -m unittest discover -s tools/hub -p "test_*.py" -v
+
+      - name: Dry-run hub index build
+        run: python3 tools/hub/build_index.py --root . --dry-run

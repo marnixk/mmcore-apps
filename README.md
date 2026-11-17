@@ -11,6 +11,41 @@ Each file is a ZIP store in the layout mmcore's `PACKAGE` wizard writes
 `master` that change `games/` rebuild `dist/` in GitHub Actions and commit
 the archives back when the bytes change.
 
+Optional per-game `games/<name>/PACKAGE.INF` is merged when packing (packer
+still sets `name` and `main`). Include an `INFO/` folder in the game tree to
+ship hub icons, screenshots, and about text inside the archive.
+
+## Hub (hub.mmcore.dev)
+
+The public mmcore HUB loads a static catalogue from
+[https://hub.mmcore.dev/](https://hub.mmcore.dev/), which is this repository's
+`dist/` folder served as the site root: `dist/index.json`, `dist/<id>.app`,
+and `dist/info/<id>/` assets. Official games are packaged into `dist/` by
+`build-dist.sh`; optional `community/*.app` submissions (see
+[community/README.md](community/README.md)) are copied into `dist/` when the
+index is built.
+
+`tools/hub/build_index.py` writes `dist/index.json`, `dist/_headers`, and
+`dist/info/`. Index `generated` is the newest git commit touching
+`games/`, `community/`, or the hub/packager tools (deterministic, no
+wall-clock). Pushes to `master` that change games, community, or the builder
+run **Package dist apps** (`.github/workflows/package-dist.yml`), which
+rebuilds `.app` archives and the hub index then commits `dist/` with
+`[skip ci]` when bytes change. Pull requests run **Hub index** validation
+(tests plus `--dry-run`).
+
+Build locally:
+
+```bash
+bash tools/package/build-dist.sh
+python3 tools/hub/build_index.py --root .
+python3 -m unittest discover -s tools/hub -p "test_*.py" -v
+```
+
+Cloudflare Pages: connect this repo, **build command** none, **output
+directory** `dist`, custom domain `hub.mmcore.dev` (no wrangler deploy from
+Actions).
+
 ## Games
 
 Games for mmcore (MMBasic, Colour Maximite 2 style). Each game lives in its
