@@ -57,7 +57,7 @@ if [ "$prune" -eq 1 ]; then
         break
       fi
     done
-    if [ "$keep" -eq 0 ]; then
+    if [ "$keep" -eq 0 ] && [ -d "$ROOT/games/$base" ]; then
       rm -f "$app"
       echo "removed dist/$base.app"
     fi

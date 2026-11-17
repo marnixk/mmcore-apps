@@ -28,10 +28,14 @@ index is built.
 `tools/hub/build_index.py` writes `dist/index.json`, `dist/_headers`, and
 `dist/info/`. Index `generated` is the newest git commit touching
 `games/`, `community/`, or the hub/packager tools (deterministic, no
-wall-clock). Pushes to `master` that change games, community, or the builder
-run **Package dist apps** (`.github/workflows/package-dist.yml`), which
-rebuilds `.app` archives and the hub index then commits `dist/` with
-`[skip ci]` when bytes change. Pull requests run **Hub index** validation
+wall-clock). Pushes to `master`/`main` that touch `games/`, `community/`,
+`dist/` (including `.app` files committed without a `games/` source),
+`tools/package/`, or `tools/hub/` run **Package dist apps**
+(`.github/workflows/package-dist.yml`): game sources are repacked when
+`games/` or the packager change; the hub index is always rebuilt from
+whatever `.app` files are in `dist/` plus `community/`. The workflow commits
+`dist/` with `[skip ci]` when bytes change so its own push does not retrigger.
+Pull requests (including `community/`) run **Hub index** validation only
 (tests plus `--dry-run`).
 
 Build locally:

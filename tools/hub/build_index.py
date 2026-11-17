@@ -35,7 +35,13 @@ CATEGORIES = [
 ]
 CATEGORY_SET = set(CATEGORIES)
 
-GENERATED_PATHS = ("games", "community", "tools/hub", "tools/package")
+GENERATED_PATHS = (
+    "games",
+    "community",
+    "tools/hub",
+    "tools/package",
+    ":(glob)dist/*.app",
+)
 
 INFO_ICON = "INFO/ICON.PNG"
 INFO_THUMB = "INFO/THUMB.PNG"
@@ -361,9 +367,10 @@ def list_dist_packages(
             git_src = community_sources[app_id]
         else:
             src = game_source(repo, app_id) or game_source(repo, path.stem)
-            if src is None:
-                src = repo / "games" / path.stem
-            git_src = src
+            if src is not None:
+                git_src = src
+            else:
+                git_src = path
         packages.append((path, git_src))
     return packages
 
