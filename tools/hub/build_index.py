@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Build hub.mmcore.dev catalogue under dist/ (index.json, info/, _headers)."""
+"""Build hub.mmcore.dev catalogue under dist/ (index.json, info/, _headers).
+
+Each app entry always includes ``hero``. It is optional content: the value is
+``info/<id>/hero.png`` when the package contains ``INFO/HERO.PNG`` (640x360),
+and an empty string when that file is absent. Schema stays 1.
+"""
 
 from __future__ import annotations
 
@@ -45,6 +50,7 @@ GENERATED_PATHS = (
 
 INFO_ICON = "INFO/ICON.PNG"
 INFO_THUMB = "INFO/THUMB.PNG"
+INFO_HERO = "INFO/HERO.PNG"
 INFO_ABOUT = "INFO/ABOUT.TXT"
 INFO_SHOTS = [f"INFO/SHOT{n}.PNG" for n in range(1, 5)]
 
@@ -62,6 +68,7 @@ APP_KEYS = (
     "updated",
     "icon",
     "thumb",
+    "hero",
     "shots",
     "about",
 )
@@ -187,7 +194,7 @@ def read_zip_inf(path: Path) -> tuple[dict[str, str], dict[str, bytes]]:
             raise SystemExit(f"{path}: PACKAGE.INF is not the last zip entry")
         inf_text = zf.read("PACKAGE.INF").decode("utf-8")
         info: dict[str, bytes] = {}
-        for key in [INFO_ICON, INFO_THUMB, INFO_ABOUT, *INFO_SHOTS]:
+        for key in [INFO_ICON, INFO_THUMB, INFO_HERO, INFO_ABOUT, *INFO_SHOTS]:
             if key in names:
                 info[key] = zf.read(key)
         return parse_inf(inf_text), info
@@ -225,7 +232,13 @@ def extract_info(
 ) -> dict[str, object]:
     dest = out_info / app_id
     dest.mkdir(parents=True, exist_ok=True)
-    result: dict[str, object] = {"icon": "", "thumb": "", "shots": [], "about": ""}
+    result: dict[str, object] = {
+        "icon": "",
+        "thumb": "",
+        "hero": "",
+        "shots": [],
+        "about": "",
+    }
 
     if INFO_ICON in info:
         check_info_png(path, INFO_ICON, info[INFO_ICON], 32, 32)
@@ -236,6 +249,11 @@ def extract_info(
         check_info_png(path, INFO_THUMB, info[INFO_THUMB], 160, 90)
         (dest / "thumb.png").write_bytes(info[INFO_THUMB])
         result["thumb"] = f"info/{app_id}/thumb.png"
+
+    if INFO_HERO in info:
+        check_info_png(path, INFO_HERO, info[INFO_HERO], 640, 360)
+        (dest / "hero.png").write_bytes(info[INFO_HERO])
+        result["hero"] = f"info/{app_id}/hero.png"
 
     shots: list[str] = []
     n = 1
@@ -287,6 +305,7 @@ def app_record(
         "updated": updated,
         "icon": info_meta.get("icon", ""),
         "thumb": info_meta.get("thumb", ""),
+        "hero": info_meta.get("hero", ""),
         "shots": info_meta.get("shots", []),
         "about": info_meta.get("about", ""),
     }

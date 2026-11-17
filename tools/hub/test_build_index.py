@@ -105,6 +105,7 @@ class HubIndexTests(unittest.TestCase):
         self.assertEqual(app["file"], "alpha.app")
         self.assertEqual(app["category"], "GAMES")
         self.assertEqual(app["icon"], "info/alpha/icon.png")
+        self.assertEqual(app["hero"], "")
         self.assertEqual(app["shots"], ["info/alpha/shot1.png"])
         self.assertEqual(app["about"], "info/alpha/about.txt")
         self.assertTrue((dist / "alpha.app").is_file())
@@ -121,6 +122,7 @@ class HubIndexTests(unittest.TestCase):
         dist = self.build_dist()
         app = json.loads((dist / "index.json").read_text())["apps"][0]
         self.assertEqual(app["icon"], "")
+        self.assertEqual(app["hero"], "")
         self.assertEqual(app["shots"], [])
         self.assertEqual(app["category"], "OTHER")
 
@@ -160,6 +162,24 @@ class HubIndexTests(unittest.TestCase):
         build_index.build(self.repo, self.repo / "dist", FIXED_TIME)
         self.assertFalse((self.repo / "dist" / "info" / "old").exists())
 
+    def test_hero_extracted(self) -> None:
+        pack_game(
+            self.repo,
+            "hero",
+            "Hero Game",
+            info_files={
+                "ICON.PNG": minimal_png(32, 32),
+                "THUMB.PNG": minimal_png(160, 90),
+                "HERO.PNG": minimal_png(640, 360),
+            },
+        )
+        commit_all(self.repo)
+        dist = self.build_dist()
+        app = json.loads((dist / "index.json").read_text())["apps"][0]
+        self.assertEqual(app["hero"], "info/hero/hero.png")
+        hero = dist / "info" / "hero" / "hero.png"
+        self.assertEqual(hero.read_bytes(), minimal_png(640, 360))
+
     def test_png_warn_wrong_size(self) -> None:
         pack_game(
             self.repo,
@@ -172,6 +192,21 @@ class HubIndexTests(unittest.TestCase):
             warnings.simplefilter("always")
             self.build_dist()
         self.assertTrue(any("ICON.PNG" in str(w.message) for w in caught))
+
+    def test_hero_warn_wrong_size(self) -> None:
+        pack_game(
+            self.repo,
+            "wide",
+            "Wide",
+            info_files={"HERO.PNG": minimal_png(32, 32)},
+        )
+        commit_all(self.repo)
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            self.build_dist()
+        self.assertTrue(any("HERO.PNG" in str(w.message) for w in caught))
+        app = json.loads((self.repo / "dist" / "index.json").read_text())["apps"][0]
+        self.assertEqual(app["hero"], "info/wide/hero.png")
 
 
 class LiveRepoSmoke(unittest.TestCase):

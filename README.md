@@ -13,7 +13,8 @@ the archives back when the bytes change.
 
 Optional per-game `games/<name>/PACKAGE.INF` is merged when packing (packer
 still sets `name` and `main`). Include an `INFO/` folder in the game tree to
-ship hub icons, screenshots, and about text inside the archive.
+ship hub icons, screenshots, and about text inside the archive. `INFO/HERO.PNG`
+(640×360) is an optional wide hero; the index records it as `hero`.
 
 ## Hub (hub.mmcore.dev)
 
@@ -26,7 +27,11 @@ and `dist/info/<id>/` assets. Official games are packaged into `dist/` by
 index is built.
 
 `tools/hub/build_index.py` writes `dist/index.json`, `dist/_headers`, and
-`dist/info/`. Index `generated` is the newest git commit touching
+`dist/info/`. Schema stays `1`. Each app has `icon`, `thumb`, `shots`, and
+`about`, plus an optional `hero` string: `info/<id>/hero.png` when the package
+contains `INFO/HERO.PNG` (expected 640×360), otherwise `""`. The builder copies
+that file to `dist/info/<id>/hero.png`. Index `generated` is the newest git
+commit touching
 `games/`, `community/`, or the hub/packager tools (deterministic, no
 wall-clock). Pushes to `master`/`main` that touch `games/`, `community/`,
 `dist/` (including `.app` files committed without a `games/` source),
