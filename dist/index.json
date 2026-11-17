@@ -23,14 +23,16 @@
       "version": "1.0.0",
       "summary": "Collect every chip, open the socket, and exit 20 silicon-lab puzzles",
       "minver": "0.313.0",
-      "size": 795591,
-      "sha256": "9f3abe6255cf9baa78541ee6b4d7db91efe52fffcecf918aa514e5f5362782f5",
+      "size": 824704,
+      "sha256": "ec1a1f909c4c22db58f3023e2e7a9a8344a59fd6c9e3e1bd222269b85b726c0d",
       "updated": "2026-11-17T11:44:32Z",
       "icon": "info/circuitquest/icon.png",
       "thumb": "info/circuitquest/thumb.png",
       "shots": [
         "info/circuitquest/shot1.png",
-        "info/circuitquest/shot2.png"
+        "info/circuitquest/shot2.png",
+        "info/circuitquest/shot3.png",
+        "info/circuitquest/shot4.png"
       ],
       "about": "info/circuitquest/about.txt"
     },
@@ -43,14 +45,16 @@
       "version": "1.0.0",
       "summary": "Dig 16 caves for diamonds, dodge boulders, and reach the exit in time",
       "minver": "0.313.0",
-      "size": 631004,
-      "sha256": "97478ca66a8486bdde8d939d358cbcb6b927e6977b97e92a536746b9ed3ba3aa",
+      "size": 686747,
+      "sha256": "6c5456a2b77aaf99f9c47750b45c54317b9b24c91887cabb58cded182c422a38",
       "updated": "2026-11-17T11:44:32Z",
       "icon": "info/corecaving/icon.png",
       "thumb": "info/corecaving/thumb.png",
       "shots": [
         "info/corecaving/shot1.png",
-        "info/corecaving/shot2.png"
+        "info/corecaving/shot2.png",
+        "info/corecaving/shot3.png",
+        "info/corecaving/shot4.png"
       ],
       "about": "info/corecaving/about.txt"
     },
@@ -63,15 +67,16 @@
       "version": "1.0.0",
       "summary": "Swap gems in a crystal mine, match three or more, and clear 30 levels",
       "minver": "0.313.0",
-      "size": 1429476,
-      "sha256": "b26a4cbf944edf0e20ded933c274f9c509998b235195787dca9cc0b933c92369",
+      "size": 1483548,
+      "sha256": "a04bed268f267a1e8a06eca6cd8c6731de9fc18a77114f7ef1cba3888ce17eb3",
       "updated": "2026-11-17T11:44:32Z",
       "icon": "info/crystalcore/icon.png",
       "thumb": "info/crystalcore/thumb.png",
       "shots": [
         "info/crystalcore/shot1.png",
         "info/crystalcore/shot2.png",
-        "info/crystalcore/shot3.png"
+        "info/crystalcore/shot3.png",
+        "info/crystalcore/shot4.png"
       ],
       "about": "info/crystalcore/about.txt"
     },
@@ -84,8 +89,8 @@
       "version": "1.0.0",
       "summary": "Fly a jetpack through 100 rooms, collect every gem, and reach the door",
       "minver": "0.313.0",
-      "size": 990516,
-      "sha256": "187939ac3cd59defc746df8ca7cbe0a46dd6130be9018d264a850d93e90cfafe",
+      "size": 987863,
+      "sha256": "bf96ffe333d69d5b7b61012699614fdb278fef6ebe325ff1d32231b8d58ee4df",
       "updated": "2026-11-17T11:44:32Z",
       "icon": "info/jetpack/icon.png",
       "thumb": "info/jetpack/thumb.png",
@@ -105,14 +110,16 @@
       "version": "1.0.0",
       "summary": "Slide nacho plates down four counters, catch the empties, and grab tips",
       "minver": "0.313.0",
-      "size": 1060042,
-      "sha256": "d26ab6552f2f6ff67f6b95284b6eec70f283a53ea46f479a354df346a291e202",
+      "size": 1104528,
+      "sha256": "8db7ea6e76b2ae811efe0c48cd5cfa625fb1151f504efc2890bab118e2a0be99",
       "updated": "2026-11-17T11:44:32Z",
       "icon": "info/salsaslide/icon.png",
       "thumb": "info/salsaslide/thumb.png",
       "shots": [
         "info/salsaslide/shot1.png",
-        "info/salsaslide/shot2.png"
+        "info/salsaslide/shot2.png",
+        "info/salsaslide/shot3.png",
+        "info/salsaslide/shot4.png"
       ],
       "about": "info/salsaslide/about.txt"
     },
@@ -125,8 +132,8 @@
       "version": "1.0.0",
       "summary": "Steer through 10 garden levels and eat 10 fruits to clear each one",
       "minver": "0.313.0",
-      "size": 768940,
-      "sha256": "83a822e60ea451e1bf5c37568d8ef48bd86fb74caf81379dcbe9348d73e4faa5",
+      "size": 773943,
+      "sha256": "aac45252e613e8d9d45915f65be4457f010d6b7c4e379cc578736efc0568c660",
       "updated": "2026-11-17T11:44:32Z",
       "icon": "info/snake/icon.png",
       "thumb": "info/snake/thumb.png",
@@ -147,14 +154,16 @@
       "version": "1.0.0",
       "summary": "Fill a forest sudoku on Easy, Medium, or High; time and misses cost points",
       "minver": "0.313.0",
-      "size": 802994,
-      "sha256": "114e42e1e80e38a39e26f48bb9ddc05c8a5f54258cf10520640c735969c32845",
+      "size": 859944,
+      "sha256": "18736c93aa29a37212072885a2ebcea608db35fedf0353918e8a6bd5f3ea02ee",
       "updated": "2026-11-17T11:44:32Z",
       "icon": "info/sudoku/icon.png",
       "thumb": "info/sudoku/thumb.png",
       "shots": [
         "info/sudoku/shot1.png",
-        "info/sudoku/shot2.png"
+        "info/sudoku/shot2.png",
+        "info/sudoku/shot3.png",
+        "info/sudoku/shot4.png"
       ],
       "about": "info/sudoku/about.txt"
     },
@@ -167,8 +176,8 @@
       "version": "1.0.0",
       "summary": "Drop tetrominoes, clear lines, and climb levels under a Soviet night sky",
       "minver": "0.313.0",
-      "size": 1368275,
-      "sha256": "7e7ba27c145d6084e4cbf7691a51bb52faafb3da331481ae69a6dc99fac4e36d",
+      "size": 1367008,
+      "sha256": "9104a900991373cae847b24d02d22ed9d3bf898584a1fb1ddbb5614ff7d25cd2",
       "updated": "2026-11-17T11:44:32Z",
       "icon": "info/tetris/icon.png",
       "thumb": "info/tetris/thumb.png",
@@ -189,15 +198,16 @@
       "version": "1.0.0",
       "summary": "Ride a light cycle across the grid and claim 75 percent while dodging orbs",
       "minver": "0.313.0",
-      "size": 437080,
-      "sha256": "c137d4d8530f72238975c1f9c213e13cc69fd4f569db48535e02d1c4ea0fdf32",
+      "size": 452739,
+      "sha256": "b76f03586fd583474c5130647d6237e28115d53f61a8d63a29b2cc6a06b9a62b",
       "updated": "2026-11-17T11:44:32Z",
       "icon": "info/tronix/icon.png",
       "thumb": "info/tronix/thumb.png",
       "shots": [
         "info/tronix/shot1.png",
         "info/tronix/shot2.png",
-        "info/tronix/shot3.png"
+        "info/tronix/shot3.png",
+        "info/tronix/shot4.png"
       ],
       "about": "info/tronix/about.txt"
     },
@@ -210,14 +220,16 @@
       "version": "1.0.0",
       "summary": "Tap thrust to thread asteroid gaps and laser gates as the scroll speeds up",
       "minver": "0.313.0",
-      "size": 831314,
-      "sha256": "e34ca0fa01006bfa2168246a280cee5a8e436407b4c7b4a33853c1d2ac469e55",
+      "size": 873838,
+      "sha256": "c98816b1a556082abc7371a8a47d1655421c3cc73bc2d94bdf2afe8824f0926f",
       "updated": "2026-11-17T11:44:32Z",
       "icon": "info/voidrunner/icon.png",
       "thumb": "info/voidrunner/thumb.png",
       "shots": [
         "info/voidrunner/shot1.png",
-        "info/voidrunner/shot2.png"
+        "info/voidrunner/shot2.png",
+        "info/voidrunner/shot3.png",
+        "info/voidrunner/shot4.png"
       ],
       "about": "info/voidrunner/about.txt"
     }
