@@ -78,10 +78,9 @@ class HubIndexTests(unittest.TestCase):
     def tearDown(self) -> None:
         self.tmp.cleanup()
 
-    def build_site(self, out_name: str = "site") -> Path:
-        out = self.repo / out_name
-        build_index.build(self.repo, out, FIXED_TIME)
-        return out
+    def build_dist(self) -> Path:
+        build_index.build(self.repo, self.repo / "dist", FIXED_TIME)
+        return self.repo / "dist"
 
     def test_happy_path(self) -> None:
         pack_game(
@@ -97,28 +96,30 @@ class HubIndexTests(unittest.TestCase):
             },
         )
         commit_all(self.repo)
-        site = self.build_site()
-        data = json.loads((site / "index.json").read_text(encoding="utf-8"))
+        dist = self.build_dist()
+        data = json.loads((dist / "index.json").read_text(encoding="utf-8"))
         self.assertEqual(data["schema"], 1)
         self.assertEqual(len(data["apps"]), 1)
         app = data["apps"][0]
         self.assertEqual(app["id"], "alpha")
+        self.assertEqual(app["file"], "alpha.app")
         self.assertEqual(app["category"], "GAMES")
         self.assertEqual(app["icon"], "info/alpha/icon.png")
         self.assertEqual(app["shots"], ["info/alpha/shot1.png"])
         self.assertEqual(app["about"], "info/alpha/about.txt")
-        self.assertTrue((site / "apps" / "alpha.app").is_file())
-        about = (site / "info" / "alpha" / "about.txt").read_text(encoding="ascii")
+        self.assertTrue((dist / "alpha.app").is_file())
+        about = (dist / "info" / "alpha" / "about.txt").read_text(encoding="ascii")
         self.assertIn("Hello", about)
         self.assertIn("world's", about)
         self.assertTrue(app["sha256"])
-        self.assertEqual(app["size"], (site / "apps" / "alpha.app").stat().st_size)
+        self.assertEqual(app["size"], (dist / "alpha.app").stat().st_size)
+        self.assertTrue((dist / "_headers").is_file())
 
     def test_missing_info(self) -> None:
         pack_game(self.repo, "plain", "Plain")
         commit_all(self.repo)
-        site = self.build_site()
-        app = json.loads((site / "index.json").read_text())["apps"][0]
+        dist = self.build_dist()
+        app = json.loads((dist / "index.json").read_text())["apps"][0]
         self.assertEqual(app["icon"], "")
         self.assertEqual(app["shots"], [])
         self.assertEqual(app["category"], "OTHER")
@@ -127,26 +128,37 @@ class HubIndexTests(unittest.TestCase):
         pack_game(self.repo, "bad", "Bad", "category=ARCADE\n")
         commit_all(self.repo)
         with self.assertRaises(SystemExit):
-            self.build_site()
+            self.build_dist()
 
     def test_duplicate_id(self) -> None:
         pack_game(self.repo, "dupe", "One")
-        shutil_copy = self.repo / "community" / "dupe.app"
-        shutil_copy.write_bytes((self.repo / "dist" / "dupe.app").read_bytes())
+        shutil.copy(
+            self.repo / "dist" / "dupe.app",
+            self.repo / "community" / "dupe.app",
+        )
         commit_all(self.repo)
         with self.assertRaises(SystemExit):
-            self.build_site()
+            self.build_dist()
 
     def test_determinism(self) -> None:
         pack_game(self.repo, "zeta", "Zeta", "category=UTILITIES\n")
         pack_game(self.repo, "beta", "Beta", "category=GAMES\n")
         commit_all(self.repo)
-        a = self.build_site("site-a")
-        b = self.build_site("site-b")
-        self.assertEqual(
-            (a / "index.json").read_bytes(),
-            (b / "index.json").read_bytes(),
-        )
+        build_index.build(self.repo, self.repo / "dist", FIXED_TIME)
+        first = (self.repo / "dist" / "index.json").read_bytes()
+        build_index.build(self.repo, self.repo / "dist", FIXED_TIME)
+        second = (self.repo / "dist" / "index.json").read_bytes()
+        self.assertEqual(first, second)
+
+    def test_prune_stale_info(self) -> None:
+        pack_game(self.repo, "old", "Old")
+        commit_all(self.repo)
+        build_index.build(self.repo, self.repo / "dist", FIXED_TIME)
+        self.assertTrue((self.repo / "dist" / "info" / "old").is_dir())
+        (self.repo / "dist" / "old.app").unlink()
+        pack_game(self.repo, "new", "New")
+        build_index.build(self.repo, self.repo / "dist", FIXED_TIME)
+        self.assertFalse((self.repo / "dist" / "info" / "old").exists())
 
     def test_png_warn_wrong_size(self) -> None:
         pack_game(
@@ -158,21 +170,21 @@ class HubIndexTests(unittest.TestCase):
         commit_all(self.repo)
         with warnings.catch_warnings(record=True) as caught:
             warnings.simplefilter("always")
-            self.build_site()
+            self.build_dist()
         self.assertTrue(any("ICON.PNG" in str(w.message) for w in caught))
 
 
 class LiveRepoSmoke(unittest.TestCase):
-    def test_current_repo_builds(self) -> None:
+    def test_current_repo_dry_run(self) -> None:
         if not (REPO / "dist").is_dir():
             self.skipTest("no dist/")
-        out = REPO / "site-test-out"
-        if out.exists():
-            shutil.rmtree(out)
-        build_index.build(REPO, out, FIXED_TIME)
-        data = json.loads((out / "index.json").read_text(encoding="utf-8"))
-        self.assertGreaterEqual(len(data["apps"]), 10)
-        shutil.rmtree(out)
+        build_index.dry_run(REPO)
+
+    def test_generated_from_git(self) -> None:
+        if not (REPO / ".git").is_dir():
+            self.skipTest("not a git checkout")
+        gen = build_index.git_generated(REPO)
+        self.assertRegex(gen, r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
 
 
 if __name__ == "__main__":

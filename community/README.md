@@ -1,7 +1,8 @@
 # Community packages
 
 Prebuilt `.app` archives submitted by the community live here. The hub builder
-(`tools/hub/build_index.py`) merges them with `dist/*.app` from official games.
+(`tools/hub/build_index.py`) copies them into `dist/<id>.app` beside official
+game packages and refreshes `dist/index.json` and `dist/info/`.
 
 ## How to submit
 

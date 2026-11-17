@@ -1,17 +1,7 @@
 name: Hub index
 
+# PR validation only. Master publishes dist/ via package-dist.yml.
 on:
-  push:
-    branches:
-      - master
-      - main
-    paths:
-      - "games/**"
-      - "dist/**"
-      - "community/**"
-      - "tools/hub/**"
-      - "tools/package/**"
-      - ".github/workflows/hub-index.yml"
   pull_request:
     paths:
       - "community/**"
@@ -20,20 +10,11 @@ on:
       - "tools/hub/**"
       - "tools/package/**"
       - ".github/workflows/hub-index.yml"
+      - ".github/workflows/package-dist.yml"
   workflow_dispatch:
-  workflow_run:
-    workflows: ["Package dist apps"]
-    types: [completed]
-
-concurrency:
-  group: hub-index-${{ github.ref }}
-  cancel-in-progress: false
 
 jobs:
-  build:
-    if: >-
-      github.event_name != 'workflow_run' ||
-      github.event.workflow_run.conclusion == 'success'
+  validate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -44,38 +25,5 @@ jobs:
       - name: Test hub index builder
         run: python3 -m unittest discover -s tools/hub -p "test_*.py" -v
 
-      - name: Build site
-        run: python3 tools/hub/build_index.py --root . --out site
-
-      - name: Check Cloudflare deploy secrets
-        if: github.event_name != 'pull_request'
-        id: cf
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: |
-          if [ -n "${CLOUDFLARE_API_TOKEN:-}" ] && [ -n "${CLOUDFLARE_ACCOUNT_ID:-}" ]; then
-            echo "ready=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "ready=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Cloudflare deploy skipped (CLOUDFLARE_API_TOKEN or CLOUDFLARE_ACCOUNT_ID not set). Site uploaded as workflow artifact."
-
-      - name: Deploy to Cloudflare Pages
-        if: >-
-          github.event_name != 'pull_request' &&
-          steps.cf.outputs.ready == 'true'
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy site --project-name=mmcore-hub --branch=main
-
-      - name: Upload site artifact
-        if: >-
-          github.event_name == 'pull_request' ||
-          steps.cf.outputs.ready != 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: mmcore-hub-site
-          path: site/
-          if-no-files-found: error
+      - name: Dry-run hub index build
+        run: python3 tools/hub/build_index.py --root . --dry-run
