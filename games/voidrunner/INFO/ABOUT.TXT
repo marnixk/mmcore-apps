@@ -1,0 +1,5 @@
+Void Runner is a one-button flight through space. The ship scrolls forward on its own. One tap of Space, Up, or W fires the thruster, and gravity does the rest. Fly through the gaps between asteroid pillars and laser gates. Crystals in the gaps are optional. The scroll speeds up every 10 gaps you pass, up to a cap that depends on the skill.
+
+A crash ends the run. The score is one point per gap plus 2 points for each crystal collected. Easy, Normal, and Hard change the starting speed, how fast it ramps, the gap height, and how far the gaps can shift. P or Esc pauses, and Q quits from the pause screen. High scores are kept in C:/.voidrunner. The game is silent.
+
+Void Runner is an original mmcore game in the style of one-tap flying games.

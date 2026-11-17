@@ -10,6 +10,7 @@ game packages and refreshes `dist/index.json` and `dist/info/`.
 2. Add a `PACKAGE.INF` with at least `title`, `author`, and `category` (see
    [mmcore PACKAGE metadata](https://github.com/marnixk/mmcore/issues/1523)).
 3. Optionally add `INFO/ICON.PNG` (32×32), `INFO/THUMB.PNG` (160×90),
+   `INFO/HERO.PNG` (640×360, indexed as the optional `hero` field),
    `INFO/SHOT1.PNG`…`INFO/SHOT4.PNG`, and `INFO/ABOUT.TXT` inside the archive.
 4. Name the file `<id>.app` where `<id>` matches `^[a-z0-9_-]{1,32}$` (usually
    the lowercase package `name` without `.APP`).

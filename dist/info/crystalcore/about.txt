@@ -1,0 +1,5 @@
+Crystal Core is a match-3 puzzle in a crystal mine. Move the gold cursor with the arrow keys, pick up a gem with Space or Enter, then press an arrow to swap it with a neighbour. A line of three or more vanishes. Four in a row make a striped gem, an L or a T makes a charged gem, and five make a rainbow prism. Specials swapped together make a bigger blast.
+
+There are 30 levels, with frost, boulders, and gems chained together. Easy gives 30 percent more moves. Hard takes 15 percent off. Any level already reached can be chosen as the start, and a clear earns one to three stars from the points scored. Retries are unlimited. P or Esc pauses, and Q quits from the pause screen. High scores, stars, and the levels reached are kept in C:/.crystalcore. The game is silent.
+
+Crystal Core is an original mmcore game in the style of match-3 puzzle games.

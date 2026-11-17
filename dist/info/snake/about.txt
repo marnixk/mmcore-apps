@@ -1,0 +1,5 @@
+Snake is a garden snake game. Steer with the arrow keys and eat the fruit. Ten fruits clear a level. There are 10 garden layouts, and after the last one they repeat, each pass a little faster.
+
+You start with 3 lives. Hitting a wall or your own tail costs one. Each fruit scores 10 times the level number times the skill (Easy 1, Normal 2, Hard 3). Clearing a level adds a bonus of 50 on the same scale. Easy, Normal, and Hard also change the starting speed and how much faster each level gets. P or Esc pauses, and Q quits from the pause screen. High scores are kept in C:/.snake. The game is silent.
+
+Snake is an original mmcore game in the style of the classic snake game.

@@ -1,0 +1,7 @@
+name=jetpack
+title=Jetpack
+author=Marnix Kok
+category=GAMES
+version=1.0.0
+summary=Fly a jetpack through 100 rooms, collect every gem, and reach the door
+minver=0.313.0

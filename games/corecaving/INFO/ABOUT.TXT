@@ -1,0 +1,7 @@
+Core Caving is a Boulder Dash style digging game. Tunnel through 16 caves, lettered A to P, plus a bonus cave after every fourth. Collect enough diamonds to open the exit, then get out before the time runs out.
+
+Arrow keys move and dig. Hold Space to grab a boulder or a diamond instead of walking into it. Boulders and diamonds fall and roll. Fireflies and butterflies patrol their tunnels, magic walls turn rock into gems, and amoeba grows. P or Esc pauses. From the pause screen, R gives up the cave and Q quits.
+
+You start with 3 lives and can hold 6. Each bonus cave cleared adds a life. Diamonds score the cave's own value, plus 5 points for every second left. Easy, Normal, and Hard change the time limit, how many diamonds you need, and how fast the amoeba grows. On Easy, enemies rest every fourth frame. High scores and the caves reached are kept in C:/.corecaving. The game is silent.
+
+Core Caving is an original mmcore game in the style of Boulder Dash by Peter Liepa.

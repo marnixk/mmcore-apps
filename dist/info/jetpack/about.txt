@@ -1,0 +1,5 @@
+Jetpack is a room-by-room platform game. Fly on a jetpack, collect every gem in the room, and the exit door opens. There are 100 levels. Robots, spikes, and the other hazards of the original maps get in the way, and the jetpack burns the fuel shown in the side gutter, along with the gems still left and your lives.
+
+Arrow keys move. Space or 0 fires the jet. Enter or Z fires the phaser. Down uses a teleporter or a switch. P or Esc pauses, and Q leaves the pause screen. An extra life is awarded every 1000 points. The title menu can start on any level from 01 to 100. High scores are kept in C:/.jetpack. The game is silent.
+
+Jetpack for mmcore is a port of Jetpack (1993) by Adam Pedersen of Adept Software. The original game and its artwork remain the property of Adept Software.

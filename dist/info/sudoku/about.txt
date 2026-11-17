@@ -1,0 +1,5 @@
+Sudoku Grove is a calm forest sudoku. Fill every row, column, and box with the digits 1 to 9. The title menu offers Easy, Medium, and High.
+
+Arrow keys move the cursor, and a held arrow keeps moving. Keys 1 to 9 place a digit. 0, Delete, or Backspace clears the cell. A digit that repeats in its row, column, or box is marked as a clash and counts as a miss. Esc pauses. The score is not shown during play. It starts at 3000, 6000, or 10000 for Easy, Medium, and High, loses 2 points per second and 150 points per miss, and never falls below 100. The win screen shows the time, the misses, and the score. High scores are kept in C:/.sudoku.
+
+Sudoku Grove is an original mmcore sudoku, played in a painted forest.

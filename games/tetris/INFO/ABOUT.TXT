@@ -1,0 +1,5 @@
+Tetris is a falling-block game under a Soviet night sky. Tetrominoes drop in a well. Left and Right move the piece, Down is a soft drop, and Space is a hard drop. Up or X rotates clockwise, Z rotates counter-clockwise, using the super rotation system. Q holds the current piece and swaps in the held one. Esc or P pauses, and Q quits from the pause screen.
+
+One line scores 100 times the level, two lines 300, three lines 500, and four lines 800. A soft drop adds 1 point per row and a hard drop adds 2. Easy, Medium, and Hard level up every 15, 10, or 5 lines. The next three pieces are shown beside the well. High scores, ten per skill, are kept in C:/.tetris. The game is silent.
+
+Tetris for mmcore is an original presentation of Tetris, created by Alexey Pajitnov.

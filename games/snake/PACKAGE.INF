@@ -1,0 +1,7 @@
+name=snake
+title=Snake
+author=Marnix Kok
+category=GAMES
+version=1.0.0
+summary=Steer through 10 garden levels and eat 10 fruits to clear each one
+minver=0.313.0
